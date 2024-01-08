@@ -1,0 +1,385 @@
+﻿@model List<CORE_BOL.StallDetailVM>
+@{
+    ViewData["Title"] = "StallRenewal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Lease</a></li>
+                    <li class="breadcrumb-item active">Stall Renewal</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" asp-action="StallRenewal" method="post">
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+    <div class="card-header">
+        <h3 class="card-title">Tax Payer Search</h3>
+        <input type="hidden" id="hdnStallAllocationId" />
+
+    </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-center">CID </label>
+                <div class="col-sm-3">
+                    <input class="form-control" maxlength="11" placeholder="Search by CID" id="CIDinput" />
+                </div>
+                <label class="col-sm-2 col-form-label text-center">TTIN </label>
+                <div class="col-sm-3">
+                    <input class="form-control" placeholder="Search by TTIN" id="TTINinput" />
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-outline-success" onclick="return SearchTaxPayer();">Search</button>
+
+                </div>
+            </div>
+
+
+        </div>
+        </div>
+</form>
+<div class="card card-info"  id="taxpayerdetails" style="display: none;">
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>CID</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody id="mybody">
+        </tbody>
+    </table>
+</div>
+<div class="card card-info" id="stalldetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Stall Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Stall No</th>
+                        <th>Stall Name</th>
+                        <th>Stall Area</th>
+                        <th>Stall Location</th>
+                        <th>Billing Schedule</th>
+                        <th>Rental Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblstalldetail">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="stallallocationdetail" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Stall Allocation Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Billing Schedule</th>
+                        <th>Rental Amount</th>
+                        <th>Security Amount</th>
+                        <th>Allocation Date</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblstallallocation">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="renewstallallocation" style="display: none;">
+    <div class="card-header" style="background-color:cornflowerblue">
+        <h3 class="card-title" style="color:white">Renew Stall Allocation</h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Start Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddstartdate" type="date" />
+            </div>
+       
+            <label class="col-sm-2 col-form-label">End Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddenddate" type="date" />
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label class="col-sm-2 col-form-label">Rental Amount <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="idrentalamount"/>
+            </div>
+            <label class="col-sm-2 col-form-label">Remarks </label>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="idremarks" placeholder="Enter Remarks" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" id="SaveRenew">Save</button>
+                <button id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row" style="display: none;" id="closebutton">
+    <div class="col-sm-5">    </div>
+    <button type="button" class="btn btn-primary" id="CloseButton" style="width:100px; height:50px;">Close</button>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+
+                //Display Tax Prayer Profile
+      function SearchTaxPayer() {
+            $('#CIDinput').insertAfter(function () {
+                var Cid = $('#CIDinput').val();
+                var Ttin = $('#TTINinput').val();
+                if (Cid == Cid || Ttin == Ttin) {
+                    $('#taxpayerdetails').show(1000);
+                    $('#mybody').show(1000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetTaxPayer", "StallDetails")',
+                        data: {
+                            cid: Cid,
+                            ttin: Ttin
+                        },
+                        success: function (data) {
+                            $('#mybody').empty();
+
+
+                            $.each(data, function (key, value) {
+                                $('#taxpayerdetails').show(1000);
+                                $('#mybody').append(
+                                    '<tr>'
+                                    + '<td>' + value.fullName + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.cAddress + '</td>'
+                                    + '<td>' + value.phoneNo + '</td>'
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayStallDetail(' + value.taxPayerId + ');">View</a></b></td>'
+                                    + '</tr>');
+                            });
+                            $('#hdnTaxPayerId').val(data[0].taxPayerId);
+
+
+                        },
+                        error: function () {
+                            alert('error');
+                        }
+
+                    });
+                }
+                else {
+                    $('#mybody').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+
+                }
+            });
+        }
+        //Stall Allocation Entry
+    function displayStallDetail(taxPayerId) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetRenewalStallDetail", "StallDetails")',
+                data: {
+                    id: taxPayerId
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#tblstalldetail').empty();
+                    $('#stalldetail').show(1000);
+
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#tblstalldetail').append(
+                                '<tr>'
+                                + '<td>' + value.stallNo + '</td>'
+                                + '<td>' + value.stallName + '</td>'
+                                + '<td>' + value.stallArea + '</td>'
+                                + '<td>' + value.stallLocation + '</td>'
+                                + '<td>' + value.billingScheduleName + '</td>'
+                                + '<td>' + value.rentalAmount + '</td>'
+
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayStallAllocation(' + value.stallAllocationId + ');">Select</a></b></td>'
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#tblstalldetail').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        }
+
+    function displayStallAllocation(stallAllocationId) {
+
+        $('#hdnStallAllocationId').val(stallAllocationId);
+       // $('#stallrentdetails').show(1000);
+        //$('html,body').animate({
+        //    scrollTop: $("#stallrentdetails").offset().top
+       // }, 'slow');
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetRenewalStallAllocation", "StallDetails")',
+                    data: {
+                        id: stallAllocationId,
+                    },
+                        success: function (data) {
+                            $('#tblstallallocation').empty();
+                            $('#stallallocationdetail').show(1000);
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblstallallocation').append(
+                                    '<tr>'
+                                    + '<td>' + value.billingSchedule + '</td>'
+                                    + '<td>' + value.rentalAmount + '</td>'
+                                    + '<td>' + value.securityAmount + '</td>'
+                                    + '<td>' + value.allocationDate + '</td>'
+                                    + '<td>' + value.startDate + '</td>'
+                                    + '<td>' + value.endDate + '</td>'
+
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayStallRenewal(' + value.stallAllocationId + ');">Renew</a></b></td>'
+
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                        
+
+                        } else {
+                            $('#tblstallallocation').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+        //Save Renew
+        $("#SaveRenew").click(function () {
+
+        var myarray = [];
+            var StallPeriodVM = {};
+
+            StallPeriodVM.StallAllocationId = parseInt($("#hdnStallAllocationId").val());
+            StallPeriodVM.StartDate = $("#iddstartdate").val();
+            StallPeriodVM.EndDate = $("#iddenddate").val();
+            StallPeriodVM.Remarks = $("#idremarks").val();
+            StallPeriodVM.RevisedRent = parseInt($("#idrentalamount").val());
+
+            myarray.push(StallPeriodVM);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateRenewStallAllocation", "StallDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#renewstallallocation').hide(1000);
+                $('#closebutton').show(1000);
+                displayStallAllocation($('#hdnStallAllocationId').val());
+                    
+                $('#img').hide();
+                swal(response);
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+
+        });
+
+
+
+    function displayStallRenewal()
+    {
+        $('#iddstartdate').val('');
+        $('#iddenddate').val('');
+        $('#idremarks').val('');
+        $('#closebutton').hide(1000);
+        $('#renewstallallocation').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#renewstallallocation").offset().top
+        }, 'slow');
+        }
+
+    $('#CloseButton').click(function () {
+      
+        location.reload();
+})
+        
+    $('#btnCancel').click(function () {
+        $('#renewstallallocation').hide(1000);
+    })
+
+</script>
+

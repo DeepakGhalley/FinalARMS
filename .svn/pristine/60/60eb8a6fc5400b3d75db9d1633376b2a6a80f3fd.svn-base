@@ -1,0 +1,184 @@
+﻿@using CORE_BOL
+@model BuildingUnitDetailModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Unit Details</a></li>
+                    <li class="breadcrumb-item active">Update Building Unit Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Building Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+        <form class="form-horizontal" asp-action="Edit" method="post">
+            <input type="hidden" asp-for="BuildingUnitDetailId" />
+            <input type="hidden" asp-for="BuildingDetailId" />
+            <input type="hidden" asp-for="TaxPayerId" />
+            <input type="hidden" asp-for="LandDetailId" />
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-4">
+                    <input readonly asp-for="PlotNo" id="plotNo" class="form-control" />
+                </div>
+                <label class="col-sm-2 col-form-label">No of Unit<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" asp-for="NoOfUnit" class="form-control" placeholder="No Of Unit" required />
+                    <span asp-validation-for="NoOfUnit" class="text-danger"></span>
+                </div>
+            </div>
+          
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Use Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="BuildingUnitUseTypeId" id="BUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitUseTypeId" id="burerror" class="text-danger"></span>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" asp-for="IsRegularized" checked>
+                    <label for="IsRegularized" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsRegularized)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Class<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="BuildingUnitClassId" id="BUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitClassId" id="bucerror" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Building Unit Class<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="FloorNameId" id="FNameId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.FloorNameId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="FloorNameId" id="fnerror" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Unit Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="UnitOwnerTypeId" id="UOwnerTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="UnitOwnerTypeId" id="uoterror" class="text-danger"></span>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <input class="custom-control-input" type="checkbox" asp-for="IsMainOwner" checked>
+                    <label for="IsRegularized" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsMainOwner)
+                    </label><span style="font-weight: bold; color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Floor Area<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input type="number" asp-for="FloorArea" class="form-control" placeholder="Enter Floor Area" required />
+                    <span asp-validation-for="FloorArea" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Floor No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" asp-for="FloorNo" class="form-control" placeholder="Enter Floor number" required />
+                    <span asp-validation-for="FloorNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Flat No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="FlatNo" class="form-control" min="0" required />
+                    <span asp-validation-for="FlatNo" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">No Of Rooms<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfrooms" class="form-control" placeholder="Enter Number of rooms" required />
+                    <span asp-validation-for="NoOfrooms" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="custom-control custom-checkbox" style="display:none;">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsActive">
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return save();">Save</button>
+                    <button id="btnCancel" class="btn btn-warning" asp-action="Index">Cancel</button>
+                </div>
+            </div>
+        </form>
+        </div>
+    </div>
+<script>
+    function save() {
+        if ($('#BUseTypeId option:selected').val() == 0) {
+            $('#burerror').html('Please Select a Value!');
+            $('#BUseTypeId').focus();
+            return false;
+        }
+        else {
+            $('#burerror').html('');
+        }
+        if ($('#BUnitClassId option:selected').val() == 0) {
+            $('#bucerror').html('Please Select a Value!');
+            $('#BUnitClassId').focus();
+            return false;
+        }
+        else {
+            $('#bucerror').html('');
+        }
+        if ($('#FNameId option:selected').val() == 0) {
+            $('#fnerror').html('Please Select a Value!');
+            $('#FNameId').focus();
+            return false;
+        }
+        else {
+            $('#fnerror').html('');
+        }
+        if ($('#UOwnerTypeId option:selected').val() == 0) {
+            $('#uoterror').html('Please Select a Value!');
+            $('#UOwnerTypeId').focus();
+            return false;
+        }
+        else {
+            $('#uoterror').html('');
+        }
+
+    }
+</script>
+
+

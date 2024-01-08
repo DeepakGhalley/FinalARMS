@@ -1,0 +1,134 @@
+﻿@model CORE_BOL.Entities.TrnLandDetail
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>TrnLandDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TransactorTypeId" class="control-label"></label>
+                <select asp-for="TransactorTypeId" class="form-control" asp-items="ViewBag.TransactorTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandTransferTypeId" class="control-label"></label>
+                <select asp-for="LandTransferTypeId" class="form-control" asp-items="ViewBag.LandTransferTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LapId" class="control-label"></label>
+                <select asp-for="LapId" class="form-control" asp-items="ViewBag.LapId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DemkhongId" class="control-label"></label>
+                <select asp-for="DemkhongId" class="form-control" asp-items="ViewBag.DemkhongId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetNameId" class="control-label"></label>
+                <select asp-for="StreetNameId" class="form-control" asp-items="ViewBag.StreetNameId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandTypeId" class="control-label"></label>
+                <select asp-for="LandTypeId" class="form-control" asp-items="ViewBag.LandTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandUseSubCategoryId" class="control-label"></label>
+                <select asp-for="LandUseSubCategoryId" class="form-control" asp-items="ViewBag.LandUseSubCategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlotNo" class="control-label"></label>
+                <input asp-for="PlotNo" class="form-control" />
+                <span asp-validation-for="PlotNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandAcerage" class="control-label"></label>
+                <input asp-for="LandAcerage" class="form-control" />
+                <span asp-validation-for="LandAcerage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandValue" class="control-label"></label>
+                <input asp-for="LandValue" class="form-control" />
+                <span asp-validation-for="LandValue" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandPoolingRate" class="control-label"></label>
+                <input asp-for="LandPoolingRate" class="form-control" />
+                <span asp-validation-for="LandPoolingRate" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="StructureAvailable" /> @Html.DisplayNameFor(model => model.StructureAvailable)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlotAddress" class="control-label"></label>
+                <input asp-for="PlotAddress" class="form-control" />
+                <span asp-validation-for="PlotAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Location" class="control-label"></label>
+                <input asp-for="Location" class="form-control" />
+                <span asp-validation-for="Location" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsApproved" /> @Html.DisplayNameFor(model => model.IsApproved)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreationOn" class="control-label"></label>
+                <input asp-for="CreationOn" class="form-control" />
+                <span asp-validation-for="CreationOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedOn" class="control-label"></label>
+                <input asp-for="ModifiedOn" class="form-control" />
+                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="VacantLandTaxApplicable" class="control-label"></label>
+                <input asp-for="VacantLandTaxApplicable" class="form-control" />
+                <span asp-validation-for="VacantLandTaxApplicable" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GarbageApplicable" class="control-label"></label>
+                <input asp-for="GarbageApplicable" class="form-control" />
+                <span asp-validation-for="GarbageApplicable" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetLightApplicable" class="control-label"></label>
+                <input asp-for="StreetLightApplicable" class="form-control" />
+                <span asp-validation-for="StreetLightApplicable" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ESakorTransactionId" class="control-label"></label>
+                <input asp-for="ESakorTransactionId" class="form-control" />
+                <span asp-validation-for="ESakorTransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

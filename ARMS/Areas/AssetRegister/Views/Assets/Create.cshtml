@@ -1,0 +1,441 @@
+﻿@using CORE_BOL
+@model AssetRegisterVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Asset Register</a></li>
+                    <li class="breadcrumb-item active">Create New Asset Register</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" asp-action="Create" method="post">
+    @*data-ajax="true" data-ajax-method="post">*@
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Asset</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <label asp-for="DivisionId" id="hdndivision" class="col-sm-2 col-form-label">Division<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" id="div" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.DivisionId,"Value","Text")) " value="0">
+                    </select>
+                    <span asp-validation-for="DivisionId" id="errordivision" class="text-danger"></span>
+                </div><br /><br /><br />
+
+                <label asp-for="SectionId" class="col-sm-2 col-form-label">Section<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="SectionId" class="form-control select2" id="sec" style="width: 100%;"
+                            value="0">
+                        <option value="0">--Select One--</option>
+                    </select>
+                    <span asp-validation-for="SectionId" id="errorsection" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PrimaryAccountHeadId" class="col-sm-2 col-form-label">Primary Account Head<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" id="pri" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.PrimaryAccountHeadId,"Value","Text")) " value="0">
+                    </select>
+                    <span asp-validation-for="SectionId" id="errorprimary" class="text-danger"></span>
+                </div>
+                <label asp-for="SecondaryAccountHeadId" class="col-sm-2 col-form-label">Secondary Account Head <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="SecondaryAccountHeadId" class="form-control select2"  style="width: 100%;"
+                            value="0">
+                        <option value="0">--Select One--</option>
+                    </select>
+                    <span asp-validation-for="SecondaryAccountHeadId" id=" errorsecondary" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="TertiaryAccountHeadId" class="col-sm-2 col-form-label">Tertiary Account Head<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="TertiaryAccountHeadId" class="form-control select2" style="width: 100%;"
+                            value="0">
+                        <option value="0">--Select One--</option>
+                    </select>
+                    <span asp-validation-for="TertiaryAccountHeadId" id="errortertiary" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label"> Asset Status<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="AssetStatusId" class="form-control select2bs4" id="asi" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.AssetStatusId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="AssetStatusId" id="errorasset" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"> Asset Function <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="AssetFunctionId" class="form-control select2bs4" id="afi" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.AssetFunctionId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="AssetFunctionId" id="errorfunction" class="text-danger"></span>
+                </div>
+                <label asp-for="SupplierId" class="col-sm-2 col-form-label">Supplier</label>
+                <div class="col-sm-4">
+                    <select asp-for="SupplierId" class="form-control select2bs4" id="supp" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.SupplierId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="SupplierId" id="errorsupplier" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="LapId" class="col-sm-2 col-form-label">Lap</label>
+                <div class="col-sm-4">
+                    <select asp-for="LapId" class="form-control select2bs4" id="lapid" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LapId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="LapId" id="errolap" class="text-danger"></span>
+                </div>
+                <label asp-for="DemkhongId" class="col-sm-2 col-form-label">Demkhong</label>
+                <div class="col-sm-4">
+                    <select asp-for="DemkhongId" class="form-control select2bs4" id="demkhongid" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.DemkhongId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="DemkhongId" id="errordemkhong" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label">Area<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="AreaId" class="form-control select2bs4" id="areaid" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.AreaId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="AreaId" id="errarea" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Zone<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="ZoneId" class="form-control select2bs4" id="zoneid" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.Zone,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ZoneId" id="errozone" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Responsible Person</label>
+                <div class="col-sm-4">
+                    <input asp-for="ResponsiblePerson" class="form-control" placeholder="Responsible Person"/>
+                    <span asp-validation-for="ResponsiblePerson" class="text-danger"></span>
+                </div>
+                <label asp-for="AssetName" class="col-sm-2 col-form-label">Asset Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="AssetName" class="form-control" placeholder="Enter Asset name" required />
+                    <span asp-validation-for="AssetName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="GisCode" class="col-sm-2 col-form-label">GIS Code</label>
+                <div class="col-sm-4">
+                    <input asp-for="GisCode" class="form-control" placeholder="GIS Code" readonly/>
+                    <span asp-validation-for="GisCode" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-2 col-form-label">Received/Completion/Commission Date<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="GoodReceiveDate" type="date" class="form-control" placeholder="Goods Received Date" required/>
+                    <span asp-validation-for="GoodReceiveDate" class="text-danger"></span>
+                </div>
+                </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Received/Completion/Commission By<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="GoodReceiveBy" class="form-control select2bs4" id="grb" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.User,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="GoodReceiveBy" id="errogood" class="text-danger"></span>
+                </div>
+                <label asp-for="Remarks" class="col-sm-2 col-form-label">Remarks</label>
+                <div class="col-sm-4">
+                    <input asp-for="Remarks" class="form-control" placeholder="Remarks"/>
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label  class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-2">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+
+
+                <div class="custom-control custom-checkbox col-sm-2">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsApproved" checked>
+                    <label for="IsApproved" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsApproved)
+                    </label>
+                </div>
+
+            </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                        <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        <!-- /.card-body -->
+        <!-- /.card-footer -->
+    </div>
+</form>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    function saveme() {
+       // $('#img').show();
+        //Construction Type
+        if ($('#div option:selected').val() == 0) {
+            $('#errordivision').html('Please Select a dividion');
+            $('#div').focus();
+            return false;
+        }
+        else {
+            $('#errordivision').html('');
+        }
+
+        if ($('#sec option:selected').val() == 0) {
+            $('#errorsection').html('Please Select a section');
+            $('#sec').focus();
+            return false;
+        }
+        else {
+            $('#errorsection').html('');
+        }
+        if ($('#pri option:selected').val() == 0) {
+            $('#errorprimary').html('Please Select a Primary Account Head');
+            $('#pri').focus();
+            return false;
+        }
+        else {
+            $('#errorprimary').html('');
+        }
+
+        //if ($('#lapid option:selected').val() == 0) {
+        //    $('#errolap').html('Please Select a Lap');
+        //    $('#lapid').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errolap').html('');
+        //}
+
+        //if ($('#demkhongid option:selected').val() == 0) {
+        //    $('#errordemkhong').html('Please Select a demkhong');
+        //    $('#demkhongid').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errordemkhong').html('');
+        //}
+
+        if ($('#asi option:selected').val() == 0) {
+            $('#errorasset').html('Please Select a asset statues');
+            $('#asi').focus();
+            return false;
+        }
+        else {
+            $('#errorasset').html('');
+        }
+
+        if ($('#afi option:selected').val() == 0) {
+            $('#errorfunction').html('Please Select a asset function');
+            $('#afi').focus();
+            return false;
+        }
+        else {
+            $('#errorfunction').html('');
+        }
+
+        //if ($('#supp option:selected').val() == 0) {
+        //    $('#errorsupplier').html('Please Select a supplier');
+        //    $('#supp').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorsupplier').html('');
+        //}
+
+        if ($('#areaid option:selected').val() == 0) {
+            $('#errarea').html('Please Select a area');
+            $('#areaid').focus();
+            return false;
+        }
+        else {
+            $('#errarea').html('');
+        }
+
+        if ($('#zoneid option:selected').val() == 0) {
+            $('#errozone').html('Please Select a zone');
+            $('#zoneid').focus();
+            return false;
+        }
+        else {
+            $('#errozone').html('');
+        }
+
+        if ($('#grb option:selected').val() == 0) {
+            $('#errogood').html('Please Select a zone');
+            $('#grb').focus();
+            return false;
+        }
+        else {
+            $('#errogood').html('');
+        }
+    }
+    //For Section
+    $(function () {
+        $('#div').change(function () {
+
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSEC", "Assets")',
+                data: {
+                    id: parseInt($('#div').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#sec').empty();
+
+                    $('#sec').append(
+                        '<option value=0>--Select One--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].sectionId + '>'
+                                + data[i].sectionName
+                                + '</option>');
+                            $('#sec').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+
+    });
+
+    //For Secondary
+    $(function () {
+         $('#pri').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSED", "Assets")',
+                data: {
+                    id: parseInt($('#pri').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#SecondaryAccountHeadId').empty();
+                    $('#SecondaryAccountHeadId').append(
+                        '<option value=0>--Select One--</option>');
+                    $('#TertiaryAccountHeadId').empty();
+                    $('#TertiaryAccountHeadId').append(
+                        '<option value=0>--Select One--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].secondaryAccountHeadId + '>'
+                                + data[i].secondaryAccountHeadName
+                                + '</option>');
+                            $('#SecondaryAccountHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //For Tertiary
+    $(function () {
+        $('#SecondaryAccountHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTER", "Assets")',
+                data: {
+                    id: parseInt($('#SecondaryAccountHeadId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#TertiaryAccountHeadId').empty();
+                    $('#TertiaryAccountHeadId').append(
+                        '<option value=0>--Select One--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].tertiaryAccountHeadId + '>'
+                                + data[i].tertiaryAccountHeadName
+                                + '</option>');
+                            $('#TertiaryAccountHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+   
+
+</script>

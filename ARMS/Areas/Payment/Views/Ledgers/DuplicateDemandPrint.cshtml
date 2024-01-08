@@ -1,0 +1,541 @@
+﻿@using CORE_BOL
+@model LedgerDemandVM
+
+@{
+    ViewData["Title"] = "DuplicateDemandPrint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="">Demand</a></li>
+                    <li class="breadcrumb-item active">Duplicate Demad Print</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        @*<div class="card-header">
+            <h3 class="card-title">Select Transaction Type</h3>
+        </div>*@
+        @*<div class="card-body">
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label"> Transaction Type </label>
+                <div class="col-sm-4">
+                    <input type="hidden" id="hdntransactionType" />
+                    <select asp-for="TransactionTypeId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.Transactiontype,"Value","Text")) " value="0"></select>
+
+                </div>
+            </div>
+        </div>*@
+    </div>
+</form>
+
+
+               
+
+
+@***************************************Property Tax********************************@
+<div class="card card-info" id="divFetchlanddetailsByCID" style="display: block;">
+    <div class="card-header">
+        <h3 class="card-title">Search Property Tax Duplicate Demand Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">CID No<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idispCid" class="form-control col-6" />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">TTIN<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idispTtin" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Year <span style="font-weight:bold; color:red;">*</span> :</label>
+
+                <select id="ipyear" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+
+
+            </div>
+
+            <div class="input-group-append col-3">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchPropertytax();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="divPropertytax" style="display:none;">
+    @*style="display:none;"*@
+    <div class="card-header">
+        <h3 class="card-title">Property Details</h3>
+    </div>
+
+    <div class="card-body">
+        <table style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <b>Name:</b>&nbsp; <label id="idipfullname" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>CID:</b>&nbsp; <label id="idipcid" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Ttin:</b>&nbsp; <label id="idipttin" class="col-form-label" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>TaxPayer Type:</b>&nbsp; <label id="idiptaxpayertype" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Mobile No:</b>&nbsp; <label id="idipmobileno" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Email:</b>&nbsp; <label id="idipemail" class="col-form-label" readonly />
+                </td>
+            </tr>
+        </table>
+
+        <table id="tblLandOwnership" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Thram No </th>
+                    <th>Plot No </th>
+                    <th>Ownership Type</th>
+
+                    <th>Land Type</th>
+                    <th>Land Acerage </th>
+                    <th>PLR</th>
+                    <th>Tax Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_bodyp">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+
+
+<div id="divpropertytaxrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintp">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 130px; height: 120px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="idptransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="4"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="pqrDemandNo" style="width: 120px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Demand No:</b>&nbsp;<label id="idpdemandno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                           
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="idpdate" value="" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <b>Name:</b>&nbsp; <label id="idpname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            <b>Plot No:</b>&nbsp;<label id="idpplotno" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            <b>Thram No:</b>&nbsp; <label id="idpthramno" class="col-form-label" readonly />
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td colspan="6">
+                            <b>Phone No:</b>&nbsp;<label id="idpphone" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Cid:</b>&nbsp;<label id="idpcid" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Address:</b>&nbsp;<label id="idpaddress" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Ttin:</b>&nbsp;<label id="idpttin" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Tax For</th>
+
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblrecepit">
+                    </tbody>
+                    <tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="idpttamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <!--<table>
+                <tr>
+                    <td>
+                        <b>Payment mode:</b>&nbsp;<label id="lblppayment" class="col-form-label" readonly />
+                    </td>-->
+                    @*<td id="lblpayment"></td>*@
+                <!--</tr>
+
+            </table>-->
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Generated by:</b>&nbsp;<label id="lblpuser" value="" />
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return property();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+
+
+                       
+
+
+
+
+
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    
+
+    
+
+    //*************************** Property tax**********************************
+    function SearchPropertytax() {
+
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("FetchDuplicateDemandProperty", "Ledgers")',
+                data: {
+                    Cid: ($('#idispCid').val()),
+                    ttin: ($('#idispTtin').val()),
+                    Year: ($('#ipyear').val())
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    //var today = new Date(data[0].createdOn);
+                    //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    //$('#idmdemanddate').html(date);
+
+
+
+                    $('#idpname').html(data[0].fullName);
+                    $('#idpcid').html(data[0].cid);
+                    $('#idpttin').html(data[0].ttin);
+                    $("#idptransactiontype").html($("#hdntransactionType").val());
+
+                    $('#idpphone').html(data[0].mobileNo)
+                    $('#idpaddress').html(data[0].cAddress)
+                    $('#idpthramno').html(data[0].thramNo)
+                    $('#idpplotno').html(data[0].plotNo)
+
+                    $('#idipfullname').html(data[0].fullName);
+                    $('#idipcid').html(data[0].cid);
+                    $('#idipttin').html(data[0].ttin);
+                    $('#idiptaxpayertype').html(data[0].taxPayerType);
+                    $('#idipmobileno').html(data[0].mobileNo);
+                    $('#idipemail').html(data[0].email);
+                    $('#tbl_bodyp').empty();
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $("#divPropertytax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divPropertytax").offset().top
+                        }, 'slow');
+                        $.each(data, function (key, value) {
+                            $('#tbl_bodyp').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.plotNo+ '</td>'
+                                + '<td>' + value.landOwnershipType + '</td>'
+                                + '<td>' + value.landTypeName + '</td>'
+                                + '<td>' + value.landAcerage + '</td>'
+                                + '<td>' + value.plr + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return displayprintrecepitforproperty(' + value.demandNoId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divPropertytax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divPropertytax").show(1000);
+                        $('#tbl_body').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+
+
+
+    function displayprintrecepitforproperty(DemandNoId) {
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchdemandreceiptuser", "Ledgers")',
+                data: {
+                    DemandNoId: DemandNoId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lblpuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+         
+      $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDemandforpropertytax", "Ledgers")',
+                data: {
+                    DemandNoId: DemandNoId
+
+                },
+            success: function (data) {
+
+                $('#divpropertytaxrecepit').show();
+                    console.log(data);
+                    $('#tblrecepit').empty();
+                if (data.length > 0) {
+
+
+                    $('#idpdemandno').html(data[0].demandNo);
+                    $("#idpttamount").html(data[0].grandTotalAmount);
+                        
+
+                        var today = new Date(data[0].createdOn);
+                        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#idpdate").html(date);
+
+                        $('#pqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+                        $.each(data, function (key, value) {
+                            $('#tblrecepit').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.totalAmount + '</td>'
+
+
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+
+
+                    }
+                    else {
+                        $('#img').hide();
+
+                    $('#tblrecepit').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+        }
+
+
+   
+
+    function printPage() {
+        var dataToPrint = document.getElementById("dvPrintp");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    
+    function property() {
+        $('#divPropertytax').hide(1000);
+
+        $('#divpropertytaxrecepit').hide(1000);
+
+    }
+   
+</script>

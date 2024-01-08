@@ -1,0 +1,124 @@
+﻿@using Microsoft.AspNetCore.Http;
+
+@{
+
+    CORE_BLL.MenuBLL m_obj = new CORE_BLL.MenuBLL();
+    var p_roleid = Convert.ToInt32(Context.Session.GetInt32("RoleId"));
+
+    List<CORE_BOL.MenuViewModel> menuLst = new List<CORE_BOL.MenuViewModel>();
+    menuLst = m_obj.GetMenus(p_roleid);
+
+}
+<div id='cssmenu'>
+    <ul class="nav nav-pills nav-sidebar flex-column dropdownmenu" data-widget="treeview" role="menu" data-accordion="false">
+        <!-- Add icons to the links using the .nav-icon class
+        with font-awesome or any other icon font library -->
+        @{
+            if (Context.Session.GetInt32("user_id") != null)
+            {
+                <li class="nav-item has-treeview menu-open">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link active">
+                        <i style="color:aquamarine;" class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+
+            }
+            else
+            {
+                @*<li class="nav-item">
+                        <a asp-area="" asp-controller="Home" asp-action="CitizenServices" class="nav-link" title="Sign In to Pay Tax Online">
+                            <i style="color:aquamarine;" class="nav-icon fas fa-circle-notch"></i>
+                            <p>
+                                Thromde Services
+                            </p>
+                        </a>
+                    </li>*@
+            }
+        }
+
+
+
+        @{
+            if (menuLst != null)
+            {
+                @foreach (var item in menuLst)
+                @*@foreach (var item in Model)*@
+                {
+                    //var id = (int)item["MenuId"];
+
+                    if (item.MenuParentId == 0)
+                    {
+
+                        var submenu = menuLst.Where(n => n.MenuParentId == item.MenuId).ToList();
+                        if (submenu != null && submenu.Count > 0)
+                        {
+                            <li class="nav-item has-treeview dropdownsubmenu">
+                                <a class="nav-link" style="cursor: pointer;">
+                                    <i style="color:aquamarine;" class="nav-icon fas fa-copy"></i>
+                                    <p class="text-white">
+                                        @item.MenuName
+                                        <i class="fas fa-angle-left right"></i>
+                                        @*<span class="badge badge-info right">6</span>*@
+                                    </p>
+                                </a>
+
+                                <ul class="nav nav-treeview dropdownmenu" >
+                                    @foreach (var e in submenu)
+                                    {
+                                        <li class="nav-item" style="font-size:12px;">
+                                            <a class="nav-link" asp-area="@e.AreaName" asp-controller="@e.ControllerName" asp-action="@e.ActionName" title="@e.MenuName">
+                                                <i style="color:gold; margin-left: 5px;" class="far fa-arrow-alt-circle-right nav-icon"></i>
+                                                <p class="text-warning">@e.MenuName</p>
+
+                                            </a>
+                                        </li>
+
+                                        @*<li class="nav-item">
+                                                <i class="far fa-circle nav-icon"></i><a class="nav-link" asp-area="@e.AreaName" asp-controller="@e.ControllerName" asp-action="@e.ActionName"><p>@e.MenuName</p> </a>
+                                            </li>*@
+                                    }
+                                </ul>
+                            </li>
+
+                        }
+                        else
+                        {
+                            @*<li><a href="#"><span style="font-size : 15px; color : #555">@item.MenuName</span></a></li>*@
+                        }
+                    }
+
+
+                }
+            }
+
+        }
+
+
+    </ul>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('.dropdownsubmenu a.nav-link').on("click", function (e) {
+            
+            $(this).parent().parent().find('.dropdownmenu').hide();
+            $(this).next('ul').toggle("open");
+            e.stopPropagation();
+            //e.preventDefault();
+           
+        });
+
+    });
+
+  
+
+
+</script>

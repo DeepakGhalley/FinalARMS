@@ -1,0 +1,23 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[tblLedger] (Table)
+     Create
+       [dbo].[FK_tblLedger_ToTable_16] (Foreign Key)
+
+** Supporting actions
+     Refresh
+       [dbo].[ViewProertyTaxLedger] (View)
+       [dbo].[rptGetDailyHeadWiseDemandCollection] (Procedure)
+       [dbo].[rptGetYearlyHeadWiseDemandCollection] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)

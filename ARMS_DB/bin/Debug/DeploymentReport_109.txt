@@ -1,0 +1,21 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Rename
+       [dbo].[tblParkingFeeDemandDetail].[demandNoId] (Column)
+     Drop
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+     Alter
+       [dbo].[GetVendorDemandSchedule] (Procedure)
+
+** Supporting actions

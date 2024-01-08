@@ -1,0 +1,1557 @@
+﻿
+@model List<CORE_BOL.LandDetailModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Revenue Master</a></li>
+                        <li class="breadcrumb-item active">Land Details</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="tt alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Land Details</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <p>
+                <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New">
+                    <b>
+                        <i class="fas fa-plus"></i> Add New
+                    </b>
+                </a>
+            </p>
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-4">
+                    <label class="col-sm-3 col-form-label">Plot No: <span style="font-weight: bold; color: red;"></span></label>
+                    <input id="plotNoSearch" class="form-control col-5" />
+                </div>
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-3 col-form-label">TTIN: <span style="font-weight: bold; color: red;"></span></label>
+                    <input id="TTINCIDSearch" class="form-control col-6" />
+                </div>
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-3 col-form-label">CID: <span style="font-weight: bold; color: red;"></span></label>
+                    <input id="CIDSearch" class="form-control col-7" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displaydataDetails();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- /.content-header -->
+
+<div class="card card-info" style="display:none;" id="landdetailtbl">
+    <div class="card-header">
+        <h3 class="card-title">Land Details</h3>
+        <input type="hidden" id="newplr" />
+        <input type="hidden" id="checktotalplr" />
+        <input id="hdnLandAcreage" hidden/>
+        <input id="hdnTotalPLRtable" hidden/>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Plot No.</th>
+                    <th>Land Acreage</th>
+                    <th>Thram No</th>
+                    <th>Property Type</th>
+                    <th>Plot Address</th>
+                    <th>Location</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="card card-info" id="landdetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Existing Land Ownership Details</h3>
+        <input id="hdnplr" hidden/>
+        <input id="hdnloi" hidden/>
+       
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>TTIN</th>
+                        @*<th>CID</th>*@
+                        <th>Name</th>
+                        @*<th>Plot No</th>*@
+                        <th>Land Ownership Type</th>
+                        <th>Net Area/PLR</th>
+                        <th>Thram No</th>
+                        <th>IsApportioned</th>
+                        <th> </th>
+                        <th> </th>
+                        <th>Action</th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="landtbl">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<div class="card card-info" id="buildingOwnership" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Existing Building Ownership Details</h3>
+        <input type="hidden" id="hdnLandOwnershipId" />
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Building No</th>
+                        <th>Year of Construction</th>
+                        <th>Story type</th>
+                        <th>Buildup Area</th>
+                        <th>No of Floors</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody id="buildingtbl">
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+            <button class="btn btn-primary" onclick="return displayOtherBuildings($('#hdnLandOwnershipId').val());">Add Building Ownership</button>
+            &nbsp;
+            &nbsp;<button type="button" id="btnCancelAddBuildingOwnership" class="btn btn-warning">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="buildingDetail" style="display: none;">
+    <input type="hidden" id="hdnBuildingDetailId" />
+
+    <div class="card-header">
+        <h3 class="card-title">Building Details</h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table id="tblUnMappedBuilding" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Select</th>
+                        <th>TTIN</th>
+                        <th>Tax Payer Name</th>
+                        <th>Thram No</th>
+                        <th>Building No</th>
+                        <th>Year of Construction</th>
+                        <th>Story type</th>
+                        <th>Buildup Area</th>
+                        <th>No of Floors</th>
+                    </tr>
+                </thead>
+                <tbody id="buildingdtbl">
+                </tbody>
+            </table>
+        </div>
+        <div class="row" id="ShowButton" style="display:none;">
+            <button class="btn btn-primary " onclick=" return btnBuildingUnit();">View Building Unit</button>
+
+            @*&nbsp;
+        &nbsp;
+        &nbsp;
+        <button class="btn btn-warning" id="btnCancelBuildingSave">Cancel</button>*@
+            </div>
+        </div>
+
+</div>
+
+@* UNIT SELECTS *@
+<div class="card card-info" id="buildingunitDetail" style="display: none;">
+    <input type="hidden" id="hdnBuildingUnitDetailId" />
+
+    <div class="card-header">
+        <h3 class="card-title">Building Details</h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table id="tblUnMappedBuildingUnit" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Select</th>
+                        <th>Unit Class</th>
+                        <th>Unit Use Type</th>
+                        <th>Unit Owner Type</th>
+                        <th>Floor Name</th>
+                        <th>No Of Unit</th>
+                    </tr>
+                </thead>
+                <tbody id="buildingunitdtbl">
+                </tbody>
+            </table>
+        </div>
+        <div class="row">
+
+                <button class="btn btn-primary " id="btnSaveBuilding">Save</button>
+                &nbsp;
+                &nbsp;
+                &nbsp;
+                <button class="btn btn-warning" id="btnCancelBuildingSave">Cancel</button>
+            </div>
+    </div>
+</div>
+
+<div class="card card-info" id="dvdetails" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Add Land Ownership Details for <label id="plotno"></label></h3>
+        <input type="hidden" id="hdnLandDetailId" />
+        <input type="hidden" id="hdnTaxPayerId" />
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">CID </label>
+            <div class="col-sm-2">
+                <input class="form-control" maxlength="11" placeholder="Search by CID" id="CIDinput" />
+            </div>
+            <label class="col-sm-1 col-form-label">TTIN </label>
+            <div class="col-sm-2">
+                <input class="form-control" placeholder="Search by TTIN" id="TTINinput" />
+            </div>
+
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-outline-success" onclick="return SearchTaxPayer();">Search</button>
+
+            </div>
+        </div>
+        <hr />
+        <div class="form-group row" id="dvTaxpayerInfo">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>CID</th>
+                        <th>TTIN</th>
+
+                    </tr>
+                </thead>
+                <tbody id="mybody">
+                </tbody>
+            </table>
+        </div>
+
+        <hr />
+        <div id="dvOwnershipEntry" style="display:none;">
+
+            <input id="hdnpplr"  hidden/>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Land Ownership Type <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idiLandOwnershipTypeId" asp-items="@(new SelectList (@ViewBag.LandOwnershipTypeId,"Value","Text"))">
+                    </select>
+                </div>
+                @*</div>
+            <label class="col-sm-2 col-form-label">Land Detail <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select class="form-control" id="ld" asp-items="@(new SelectList (@ViewBag.LandDetailId,"Value","Text"))">
+                </select>
+            </div>*@
+                <label class="col-sm-2 col-form-label">IsApportioned<span style="font-weight:bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <select id="IsApportioned" class="form-control select2bs4" style="width: 100%;" onchange="myFunction()">
+                        <option value="2">--select--</option>
+                        <option value="0">Yes</option>
+                        <option value="1">No</option>
+                    </select>
+                    <span id="ISError" class="text-danger"></span>
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Thram No. <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="idsThramNo" placeholder="Enter Thram No."/>
+                </div>
+                <label class="col-sm-2 col-form-label">Remarks</label>
+                <div class="col-sm-3">
+                    <textarea id="TransferRemarks" class="form-control" placeholder="Enter Remarks"></textarea>
+                    <span class="text-danger"></span>
+                </div>
+                @*<label class="col-sm-2 col-form-label">Ownership Percentage <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" id="op" placeholder="Enter Ownership Percentage" />
+            </div>*@
+
+            </div>
+            <div id="no" class="form-group row" style="display: none;">
+
+                <label class="col-sm-2 col-form-label">Net Area/PLR<span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="NrUPLR" disabled />
+                    <span id="UPLREr" class="text-danger"></span>
+                </div>
+            </div>
+            <div id="yes" class="form-group row" style="display: none;">
+                <label class="col-sm-2 col-form-label">Net Area/PLR<span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="UPLR" required />
+                    <span id="UPLREr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="button" class="btn btn-primary" id="SaveLandOwnershipDetail">Save</button>
+                    <button type="button" id="btnCancelSaveLandOwership" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="UpdateOwnership" style="display: none;">
+    <div class="card-header">
+        <input type="hidden" id="hdnUpdateLandOwnershipId" />
+        <h3 class="card-title">Update Land Ownership</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Land Ownership Type <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <select class="form-control" id="ULandOwnershipType" asp-items="@(new SelectList (@ViewBag.LandOwnershipTypeId,"Value","Text"))">
+                </select>
+                <span id="ULandOwnershipTypeEr" class="text-danger"></span>
+            </div>
+      
+
+            <label class="col-sm-2 col-form-label">IsApportioned<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="UIsApportioned" class="form-control select2bs4" style="width: 100%;" onchange="myFunction()">
+                    @*<option value="2">--select--</option>
+                    <option value="0">Yes</option>
+                    <option value="1">No</option>*@
+                </select>
+
+            </div>
+            </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Thram No<span style="font-weight: bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="UThramNo" required />
+                <span id="UThramNoEr" class="text-danger"></span>
+            </div>
+          
+                <label class="col-sm-2 col-form-label">Net Area/PLR<span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-4">
+                    <input class="form-control" id="UpPLR" required />
+                    <span id="UPLREr" class="text-danger"></span>
+                </div>
+           
+            
+          
+        </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Remarks</label>
+                <div class="col-sm-4">
+                    <textarea id="URemarks" class="form-control" placeholder="Enter Remarks"></textarea>
+                    <span id="URemarksEr" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" onclick="return ULandOwnership();" class="btn btn-primary">Update</button>
+                    <button type="button" id="btnCancelUpdateLandOwership" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script>
+
+        function myFunction() {
+            var x = document.getElementById("IsApportioned").value;
+
+            if (x == 1) {
+
+                $('#no').show(1000);
+                $('#yes').hide(1000);
+
+            }
+
+            else {
+
+                $('#yes').show(1000);
+                $('#no').hide(1000);
+            }
+
+        }
+        $("#btnCancel").click(function () {
+            $("#dvOwnershipEntry").hide(1000); $("#dvTaxpayerInfo").hide(1000);
+            $("#CIDinput").focus();
+            $('#UpdateOwnership').hide(1000);
+        });
+    $("#btnCancelBuildingSave").click(function () {
+        $("#buildingOwnership").hide(1000);
+        $("#buildingDetail").hide(1000);
+        $("#dvdetails").show(1000);
+        $("#CIDinput").focus();
+        $('#UpdateOwnership').hide(1000);
+    });
+    $("#btnCancelSaveLandOwership").click(function () {
+        $("#buildingOwnership").hide(1000);
+        $("#buildingDetail").hide(1000);
+        $("#dvTaxpayerInfo").hide(1000);
+        $("#dvOwnershipEntry").hide(1000);
+        $("#dvdetails").show(1000);
+        $("#CIDinput").focus();
+        $('#UpdateOwnership').hide(1000);
+    });
+    $("#btnCancelAddBuildingOwnership").click(function () {
+        $("#buildingOwnership").hide(1000);
+        $("#buildingDetail").hide(1000);
+        $("#dvTaxpayerInfo").hide(1000);
+        $("#dvOwnershipEntry").hide(1000);
+        $("#dvdetails").show(1000);
+        $("#CIDinput").focus();
+        $('#UpdateOwnership').hide(1000);
+    });
+
+    function displaydataDetails() {
+        $('#landdetail').hide(1000);
+        $('#ShowButton').hide(1000);
+        $('#buildingOwnership').hide(1000);
+        $('#buildingDetail').hide(1000);
+        $('#dvdetails').hide(1000);
+        $('#dvOwnershipEntry').hide(1000);
+        $('#UpdateOwnership').hide(1000);
+         var plotno = $('#plotNoSearch').val();
+         var ttin = $('#TTINCIDSearch').val();
+        var cid = $('#CIDSearch').val();
+        if ($('#TTINCIDSearch').val() == '' && $('#CIDSearch').val() == '') {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Getdata", "LandDetails")',
+                data: {
+                    plotno: plotno
+                },
+                success: function (data) {
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+
+                        $('#hdnLandAcreage').val(data[0].landAcerage);
+                        $.each(data, function (key, value) {
+
+                            $('#landdetailtbl').show(1000);
+                            $('#tbl_body').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.plotNo + '</td>'
+                                + '<td>' + value.landAcerage + '</td>'
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.propertyType + '</td>'
+                                + '<td>' + value.plotAddress + '</td>'
+                                + '<td>' + value.location + '</td>'
+                                + '<td>'
+                                + '<a onclick="return edit(' + value.landDetailId + ');" title="EDIT"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return displayLandOwnershipType(' + value.landDetailId + ',' + value.landAcerage + ');"><i class="fas fa-plus-circle"></i> </a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return details(' + value.landDetailId + ');" title="View"><i class="fas fa-eye"></i> </a>'
+                                + '</td>'
+                                + '</tr>');
+                            $('#idsThramNo').val(data[0].thramNo);
+                        });
+                    } else {
+                        $('#tbl_body').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        swal({
+                            title: 'Invalid Plot No!',
+                            type: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+                },
+
+                error: function () {
+                    alert('error');
+                }
+
+            });
+        }
+        else if ($('#plotNoSearch').val() == '' && $('#CIDSearch').val() == '') {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Getdata1", "LandDetails")',
+                data: {
+                    ttin: ttin
+                },
+                success: function (data) {
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+
+                            $('#landdetailtbl').show(1000);
+                            $('#tbl_body').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.plotNo + '</td>'
+                                + '<td>' + value.landAcerage + '</td>'
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.propertyType + '</td>'
+                                + '<td>' + value.plotAddress + '</td>'
+                                + '<td>' + value.location + '</td>'
+                                + '<td>'
+                                + '<a onclick="return edit(' + value.landDetailId + ');" title="EDIT"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return displayLandOwnershipType(' + value.landDetailId + ');"><i class="fas fa-plus-circle"></i> </a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return details(' + value.landDetailId + ');" title="View"><i class="fas fa-eye"></i> </a>'
+                                + '</td>'
+                                + '</tr>');
+                            $('#idsThramNo').val(data[0].thramNo);
+                        });
+                    } else {
+                        $('#tbl_body').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        swal({
+                            title: 'Invalid TTIN!',
+                            type: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+
+                },
+
+                error: function () {
+                    alert('error');
+                }
+
+            });
+        }
+        else {
+             $.ajax({
+                type: "GET",
+                url: '@Url.Action("Getdata2", "LandDetails")',
+                data: {
+                    cid: cid
+                },
+                success: function (data) {
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+
+                            $('#landdetailtbl').show(1000);
+                            $('#tbl_body').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.plotNo + '</td>'
+                                + '<td>' + value.landAcerage + '</td>'
+                                + '<td>' + value.landValue + '</td>'
+                                + '<td>' + value.propertyType + '</td>'
+                                + '<td>' + value.plotAddress + '</td>'
+                                + '<td>' + value.location + '</td>'
+                                + '<td>'
+                                + '<a onclick="return edit(' + value.landDetailId + ');" title="EDIT"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return displayLandOwnershipType(' + value.landDetailId + ');"><i class="fas fa-plus-circle"></i> </a>&nbsp;&nbsp;|&nbsp;&nbsp;<a onclick="return details(' + value.landDetailId + ');" title="View"><i class="fas fa-eye"></i> </a>'
+                                + '</td>'
+                                + '</tr>');
+                            $('#idsThramNo').val(data[0].thramNo);
+
+                        });
+                    } else {
+                        $('#tbl_body').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        swal({
+                            title: 'Invalid CID!',
+                            type: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+
+                },
+
+                error: function () {
+                    alert('error');
+                }
+
+            });
+        }
+
+
+    }
+
+    function edit(id) {
+        //alert(id);
+        window.location.href = "LandDetails/Edit?id=" + id;
+    }
+
+    function details(id) {
+        //alert(id);
+        window.location.href = "LandDetails/Details?id=" + id;
+    }
+
+     //Display Tax Prayer Profile
+        function SearchTaxPayer() {
+            var plr = $('#hdnplr').val();
+            var lac = $('#hdnLandAcreage').val();
+            $('#NrUPLR').val(lac);
+
+            if ($('#CIDinput').val() == "" && $('#TTINinput').val() == "") {
+                swal("Please fill the fields", "", "error");
+                $('#CIDinput').focus();
+                return false;
+            }
+
+        $('#CIDinput').insertAfter(function () {
+            var Cid = $('#CIDinput').val();
+            var Ttin = $('#TTINinput').val();
+            if (Cid == Cid || Ttin == Ttin) {
+                //$('#dvTaxpayerInfo').show(1000);
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetTaxPayerProfile", "LandDetails")',
+                    data: {
+                        cid: Cid,
+                        ttin: Ttin
+                    },
+                    success: function (data) {
+                        $('#mybody').empty();
+
+                        if (data.length > 0) {
+
+                            $.each(data, function (key, value) {
+                                $('#dvTaxpayerInfo').show(1000);
+                                $('#mybody').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.firstName + " " + value.middleName + " " + value.lastName + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    // + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayLandDetail(' + value.taxPayerId + ');">Select</a></b></td>'
+                                    + '</tr>');
+                                //alert(value.taxPayerId);
+
+                            });
+                            $('#hdnTaxPayerId').val(data[0].taxPayerId);
+                            $('#dvTaxpayerInfo').show(1000);
+                            $('#dvOwnershipEntry').show(1000);
+                        }
+                        else {
+                            swal("No taxpayer Information found.!", "", "warning");
+                            $('#dvTaxpayerInfo').hide(1000);
+                            $('#dvOwnershipEntry').hide(1000);
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+            else {
+               //('#dvTaxpayerInfo').show(1000);
+                $('#mybody').append(
+                    '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+            }
+        });
+    }
+
+
+    //Saving LandOwnershipDetails
+    function displayLandOwnershipType(LandDetailId, PLR) {
+        $('#newplr').val(PLR);
+        $('#hdnLandDetailId').val(LandDetailId);
+
+        //$('#dvdetails').toggle(1000);
+        //$('html,body').animate({
+        //    scrollTop: $("#dvdetails").offset().top
+        //}, 'slow');
+        $('#dvdetails').show(1000);
+        $('#landdetail').hide(1000);
+        $('#ShowButton').hide(1000);
+        $('#buildingOwnership').hide(1000);
+        $('#UpdateOwnership').hide(1000);
+        $('html,body').animate({
+            scrollTop: $("#dvdetails").offset().top
+        }, 'slow');
+
+
+
+        //$('#tblOwnershipInfo').hide(1000);
+
+        $('#dvTaxpayerInfo').hide(1000);
+        $('#dvOwnershipEntry').hide(1000);
+
+
+        //$('landid').html(LandOwnershipId);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetLandOwnershipDetail", "LandDetails")',
+            data: {
+                id: parseInt(LandDetailId)
+            },
+            success: function (data) {
+
+                console.log(data);
+
+                $('#landtbl').empty();
+                //Changed from == 0 to >0
+
+                if (data.length > 0) {
+
+                    var TA = 0;
+                    var res = null;
+
+                    $.each(data, function (key, value) {
+                        $('#landdetail').show(1000);
+                        res = (value.landOwnershipTypeId == 1) ? '<a style="cursor: pointer; color: forestgreen;" onclick="return DisplayBuildingOwnershipDetail(' + value.landOwnershipId +');">Manage Building Ownership</a>' : 'No Building Ownership!';
+                        TA += value.netArea;
+                        $('#landtbl').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.ttin + '</td>'
+                            //+ '<td>' + value.cid + '</td>'
+                            + '<td>' + value.name + '</td>'
+                            //+ '<td>' + value.plotNo + '</td>'
+                            + '<td>' + value.landOwnershipType + '</td>'
+                            + '<td id="checknetarea_' + key + '">' + value.netArea + '</td>'
+                            + '<td>' + value.thramNo + '</td>'
+                            + '<td>' + value.isApp + '</td>'
+                            + '<td><a style="cursor: pointer; color: forestgreen;" title="UpdateLandOwnership" onclick="return UpdateLandOwnership(' + value.landOwnershipId + ');">Update LandOwnership</a></td>'
+                            + '<td><a style="cursor: pointer; color: forestgreen;" title="deleteLandOwnership" onclick="return deleteLandOwnership(' + value.landOwnershipId + ');">Deactivate Ownership</a></td>'
+                            + '<td>' + res + '</td>'
+
+
+                            // + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayData(' + value.costofProcurement + ',' + value.usefulLife + ');">EDIT</a></b></td>'
+                            //+ '<td data-toggle="modal" data-target="#exampleModalCenter" ><a onclick="return d(' + value.dateofProcurement + ');"><i class="fas fa-edit"></i></a></td>'
+                            //+ ',' + value.dateofCommissioning + ',' + value.usefulLife + ',' + value.procurementOrderRefNo + ',' + value.procurementOrderDate + ',' + value.costofProcurement
+                            + '</tr>');
+
+
+                    });
+
+                    $('#plotno').html(data[0].plotNo);
+                    $('#hdnTotalPLRtable').val(TA);
+                    $('#hdnplr').val(data[0].netArea);
+                    $('#hdnloi').val(data[0].landOwnershipId);
+
+                }
+                if (data.length == 0) {
+                    $('#landdetail').show(1000);
+                    $('#hdnloi').val(0);
+                    $('#landtbl').append(
+                        '<tr><td colspan="11" style="color: red;">No record found!</td></tr>');
+                }
+
+            }
+
+        });
+
+    }
+
+
+    function deleteLandOwnership(LandOwnershipId) {
+
+        var r = confirm("Are you sure you want to deactivate?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("RemoveOwnership", "LandDetails")',
+            data: {
+                LandOwnershipId: parseInt(LandOwnershipId)
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                displayLandOwnershipType($("#hdnLandDetailId").val());
+
+                if (response > 0) {
+                    $('#img').hide();
+                    swal("Successfully removed the Ownership from the selected tax payer.");
+                } else {
+
+                    swal("This land ownership can not be deleted as it is used in another transaction!!");
+                    $('#img').hide();
+                }
+
+            },
+            error: function () {
+                swal("This land ownership can not be deleted as it is used in another transaction!!");
+                $('#img').hide();
+            }
+        });
+    }
+
+    function DisplayBuildingOwnershipDetail(landownershipId) {
+        $('#hdnLandOwnershipId').val(landownershipId);
+        $('#dvdetails').hide(1000);
+        $('#ShowButton').hide(1000);
+        $('#UpdateOwnership').hide(1000);
+        $('#buildingOwnership').show(1000);
+        $("#buildingDetail").hide(1000);
+            $('html,body').animate({
+                scrollTop: $("#buildingOwnership").offset().top
+            }, 'slow');
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingOwnershipDetail", "LandDetails")',
+            data: {
+                id: parseInt(landownershipId)
+            },
+            success: function (data) {
+              //  $('#hdnBuildingDetailId').val(data[0].buildingDetailId);
+                console.log(data);
+                $('#buildingtbl').empty();
+
+                //Changed from == 0 to >0
+
+                if (data.length > 0) {
+                    $('#ShowButton').show(1000);
+                    //$('#plotno').html(data[0].plotNo);
+                    var res = null
+                    $.each(data, function (key, value) {
+                        $('#landdetail').show(1000);
+                        //res = (value.landOwnershipTypeId == 1) ? '<b><a style="cursor: pointer; color: forestgreen;" onclick="return displayBuilding('+ LandOwnershipId +');">Manage Building Ownership</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand"></a></b>';
+
+                        $('#buildingtbl').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.buildingNo + '</td>'
+                            + '<td>' + value.yearOfConstruction + '</td>'
+                            + '<td>' + value.storyType + '</td>'
+                            + '<td>' + value.buildupArea + '</td>'
+                            + '<td>' + value.numberOfFloors + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="delete" onclick="return deleteBuildingOwnership(' + value.buildingOwnershipId +');">Remove</a></b></td>'
+
+                            // + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayData(' + value.costofProcurement + ',' + value.usefulLife + ');">EDIT</a></b></td>'
+                            //+ '<td data-toggle="modal" data-target="#exampleModalCenter" ><a onclick="return d(' + value.dateofProcurement + ');"><i class="fas fa-edit"></i></a></td>'
+                            //+ ',' + value.dateofCommissioning + ',' + value.usefulLife + ',' + value.procurementOrderRefNo + ',' + value.procurementOrderDate + ',' + value.costofProcurement
+                            + '</tr>');
+
+
+                    });
+
+
+                }
+                if (data.length == 0) {
+                    $('#landdetail').show(1000);
+
+                    $('#buildingtbl').append(
+                        '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                }
+
+            }
+
+        });
+
+    }
+
+    function deleteBuildingOwnership(id) {
+        //alert(id);
+        swal(confirm("Are you sure you want to delete?", "Yes", "No", true))
+    /* .then((value) => {*/
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Delete", "LandDetails")',
+            data: {
+                id: parseInt(id)
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+                $('#img').hide();
+                swal("Successfully removed the building ownership from the selected tax payer.");
+
+                DisplayBuildingOwnershipDetail($('#hdnLandOwnershipId').val());
+            },
+            error: function () {
+                alert("error on delete.");
+                $('#img').hide();
+            }
+        });
+    }
+
+    function displayOtherBuildings(landOwnId) {
+       // alert(landOwnId);
+
+        $('#buildingDetail').show(1000);
+            $('html,body').animate({
+                scrollTop: $("#buildingDetail").offset().top
+            }, 'slow');
+
+
+             $.ajax({
+            type: "GET",
+            url: '@Url.Action("DisplayOtherBuildingDetail", "LandDetails")',
+            data: {
+                landOwnId: parseInt(landOwnId)
+            },
+            success: function (data) {
+
+                console.log(data);
+                $('#buildingdtbl').empty();
+
+                //Changed from == 0 to >0
+
+                if (data.length > 0) {
+                    //$('#plotno').html(data[0].plotNo);
+                    var res = null
+
+                    $.each(data, function (key, value) {
+                        $('#landdetail').show(1000);
+                        //res = (value.landOwnershipTypeId == 1) ? '<b><a style="cursor: pointer; color: forestgreen;" onclick="return displayBuilding('+ LandOwnershipId +');">Manage Building Ownership</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand"></a></b>';
+
+                        $('#buildingdtbl').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td><input id="id_' + key + '" type="hidden" value="' + value.buildingDetailId + '" />'
+                            + '<input id="chk_' + key + '" type="checkbox" value="' + value.buildingDetailId + '" class"=checkbox" /> <label for=chk_' + key + '> Select </label>'
+
+                            + '<td>' + value.ttin + '</td>'
+                            + '<td>' + value.taxPayerName + '</td>'
+                            + '<td>' + value.thramNo + '</td>'
+                            + '<td>' + value.buildingNo + '</td>'
+                            + '<td>' + value.yearOfConstruction + '</td>'
+                            + '<td>' + value.storyType + '</td>'
+                            + '<td>' + value.buildupArea + '</td>'
+                            + '<td>' + value.numberOfFloors + '</td>'
+
+                            // + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayData(' + value.costofProcurement + ',' + value.usefulLife + ');">EDIT</a></b></td>'
+                            //+ '<td data-toggle="modal" data-target="#exampleModalCenter" ><a onclick="return d(' + value.dateofProcurement + ');"><i class="fas fa-edit"></i></a></td>'
+                            //+ ',' + value.dateofCommissioning + ',' + value.usefulLife + ',' + value.procurementOrderRefNo + ',' + value.procurementOrderDate + ',' + value.costofProcurement
+                            + '</tr>');
+
+
+                    });
+
+
+                }
+                else {
+                    $('#ShowButton').hide(1000);
+                }
+                if (data.length == 0) {
+                    $('#landdetail').show(1000);
+
+                    $('#buildingdtbl').append(
+                        '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                }
+
+            }
+
+        });
+
+    }
+
+        $("#SaveLandOwnershipDetail").click(function () {
+            var i = 0;
+            var SumPLR = 0;
+            $("#landdetail TBODY TR").each(function () {
+                var row = $(this);
+
+                SumPLR += parseInt(row.find("TD").eq(4).html());
+                $('#checktotalplr').val(SumPLR);
+                i++;
+
+            });
+        if ($("#idiLandOwnershipTypeId").val() == "0") {
+            swal("Please select land ownership type.!")
+            $("#idiLandOwnershipTypeId").focus();
+            return false;
+        }
+        if ($("#op").val() == "") {
+            swal("Please enter ownership percentage.!")
+            $("#op").focus();
+            return false;
+        }
+        if ($("#idsThramNo").val() == "") {
+            swal("Please enter ownership thram no.!")
+            $("#idsThramNo").focus();
+            return false;
+        }
+
+        //if ($("#UPLR").val() > $("#hdnplr").val()) {
+        //    swal("You have entered more PLR the Net PLR!");
+
+        //    return false;
+        //}
+        var mp = $("#newplr").val();
+            var p = $("#UPLR").val();
+            var t = $("#checktotalplr").val();
+        var mplr = mp - p;
+
+           if ($("#IsApportioned").val() == 0) {
+
+               if ($("#UPLR").val() == "") {
+                   swal("Please enter PLR!")
+                   ;
+                   return false;
+               }
+
+            }
+        //if (mplr < 0) {
+        //    swal("Enter a Valid PLR!")
+        //    return false;
+        //    }
+            //if (mplr < t) {
+            //    swal("PLR in greater! Enter a Valid PLR!")
+            //    return false;
+            //}
+        $("#hdnpplr").val(mplr);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("CheckDuplicateLandOwnership", "LandDetails")',
+            data: {
+              LandDetailId : parseInt($("#hdnLandDetailId").val()),
+              TaxPayerId   :   parseInt($("#hdnTaxPayerId").val())
+            },
+            success: function (data) {
+                console.log(data);
+                //$('#buildingdtbl').empty
+                var pl = 0;
+                var la = 0;
+                var tpr = 0;
+                pl = parseFloat($("#UPLR").val());
+                la = parseFloat($("#hdnLandAcreage").val());
+                tpr = parseFloat($("#hdnTotalPLRtable").val());
+                var gtpr = 0;
+                gtpr = pl+tpr;
+
+                if (data.length > 0) {
+                    swal("The plot is already added to the owner. Please verify.");
+                    return false;
+                }
+
+
+                else if ($("#IsApportioned").val() == 0) {
+
+                    if (la < gtpr) {
+                        swal("Total PLR is more then the land acreage!!");
+                        return false;
+                    }
+                    else if (la > gtpr) {
+                        swal("Total PLR is less then the land acreage!!");
+                        return false;
+                    }
+
+
+
+                    else {
+                        var myarray = [];
+                        var LandOwnershipDetailsVM = {};
+                        LandOwnershipDetailsVM.LandOwnershipTypeId = parseInt($("#idiLandOwnershipTypeId").val());
+                        LandOwnershipDetailsVM.ThramNo = $("#idsThramNo").val();
+                        //LandOwnershipDetailsVM.OwnershipPercentage = parseFloat($("#op").val());
+
+                        LandOwnershipDetailsVM.LandDetailId = parseInt($("#hdnLandDetailId").val());
+                        LandOwnershipDetailsVM.TaxPayerId = parseInt($("#hdnTaxPayerId").val());
+                        LandOwnershipDetailsVM.Remarks = $("#TransferRemarks").val();
+                         LandOwnershipDetailsVM.LandOwnershipId = parseInt($("#hdnloi").val());
+                       
+                        if ($("#IsApportioned").val() == 0) {
+                            LandOwnershipDetailsVM.IA = 1;
+                            //LandOwnershipDetailsVM.PLr = parseInt($("#hdnpplr").val()); UPLR
+                            LandOwnershipDetailsVM.PLr = parseFloat($("#UPLR").val());
+                        }
+
+                        else if ($("#IsApportioned").val() == 1) {
+                            //UPLR
+                            LandOwnershipDetailsVM.IA = 0;
+                            LandOwnershipDetailsVM.PLr = parseFloat($("#NrUPLR").val());
+                        }
+                        else if ($("#IsApportioned").val() == 2) {
+                            $('#ISError').html('Please Select a value');
+                            $('#IsApportioned').focus();
+                            return false;
+
+                        }
+                        else {
+                            $('#ISError').html('');
+                        }
+                        myarray.push(LandOwnershipDetailsVM);
+
+                        var json_data = JSON.stringify(myarray);
+                        console.log(json_data);
+
+                        $('#img').show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("CreateLandOwnershipDetail", "LandDetails")',
+                            data: json_data,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                $('#landdetail').show(1000);
+                                $('#dvTaxpayerInfo').hide(1000);
+                                $('#dvOwnershipEntry').hide(1000);
+                                $('#dvdetails').hide(1000);
+                                $('#UpdateOwnership').hide(1000);
+                                displayLandOwnershipType($("#hdnLandDetailId").val(), $('#newplr').val());
+                                $('#CIDinput').val('');
+                                $('#TTINinput').val('');
+                                $('#plr').val('');
+                                // $('#idsThramNo').val('');
+                                $('#TransferRemarks').val('');
+                                $('#idiLandOwnershipTypeId').val(0).trigger('change')
+
+                                $('#img').hide();
+                                swal(response);
+                            },
+                            failure: function (response) {
+                                $('#img').hide();
+                                swal("Creation Failed");
+                            },
+                            error: function (response) {
+                                $('#img').hide();
+                                swal("Error while inserting");
+                            }
+
+                        });
+                    }
+                }//esle
+                    //else
+                else {
+                        var myarray = [];
+                        var LandOwnershipDetailsVM = {};
+                        LandOwnershipDetailsVM.LandOwnershipTypeId = parseInt($("#idiLandOwnershipTypeId").val());
+                        LandOwnershipDetailsVM.ThramNo = $("#idsThramNo").val();
+                        //LandOwnershipDetailsVM.OwnershipPercentage = parseFloat($("#op").val());
+
+                        LandOwnershipDetailsVM.LandDetailId = parseInt($("#hdnLandDetailId").val());
+                        LandOwnershipDetailsVM.TaxPayerId = parseInt($("#hdnTaxPayerId").val());
+                    LandOwnershipDetailsVM.Remarks = $("#TransferRemarks").val();
+                     LandOwnershipDetailsVM.LandOwnershipId = parseInt($("#hdnloi").val());
+                    
+
+
+                        if ($("#IsApportioned").val() == 0) {
+                            LandOwnershipDetailsVM.IA = 1;
+                            //LandOwnershipDetailsVM.PLr = parseInt($("#hdnpplr").val()); UPLR
+                            LandOwnershipDetailsVM.PLr = parseFloat($("#UPLR").val());
+                        }
+
+                        else if ($("#IsApportioned").val() == 1) {
+                            //UPLR
+                            LandOwnershipDetailsVM.IA = 0;
+                            LandOwnershipDetailsVM.PLr = parseFloat($("#NrUPLR").val());
+                        }
+                        else if ($("#IsApportioned").val() == 2) {
+                            $('#ISError').html('Please Select a value');
+                            $('#IsApportioned').focus();
+                            return false;
+
+                        }
+                        else {
+                            $('#ISError').html('');
+                        }
+                        myarray.push(LandOwnershipDetailsVM);
+
+                        var json_data = JSON.stringify(myarray);
+                        console.log(json_data);
+
+                        $('#img').show();
+
+                        $.ajax({
+                            type: "POST",
+                            url: '@Url.Action("CreateLandOwnershipDetail", "LandDetails")',
+                            data: json_data,
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            success: function (response) {
+                                $('#landdetail').show(1000);
+                                $('#dvTaxpayerInfo').hide(1000);
+                                $('#dvOwnershipEntry').hide(1000);
+                                $('#dvdetails').hide(1000);
+                                $('#UpdateOwnership').hide(1000);
+                                displayLandOwnershipType($("#hdnLandDetailId").val(), $('#newplr').val());
+                                $('#CIDinput').val('');
+                                $('#TTINinput').val('');
+                                $('#plr').val('');
+                                // $('#idsThramNo').val('');
+                                $('#TransferRemarks').val('');
+                                $('#idiLandOwnershipTypeId').val(0).trigger('change')
+
+                                $('#img').hide();
+                                swal(response);
+                            },
+                            failure: function (response) {
+                                $('#img').hide();
+                                swal("Creation Failed");
+                            },
+                            error: function (response) {
+                                $('#img').hide();
+                                swal("Error while inserting");
+                            }
+
+                        });
+
+                }//esle
+            }
+        });
+
+    });
+
+        //VIEW BUILDING UNIT
+        function btnBuildingUnit(){
+
+        var selected = new Array();
+        var ids;
+
+         $("#tblUnMappedBuilding input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+         });
+
+        if (selected.length > 0) {
+            ids = selected.join(",");
+            }
+        else {
+            swal('Please select at least one Building Detail.!');
+            $('#img').hide();
+            return false;
+        }
+                       //************************DEMAND LOOP START**********************
+
+                        $.ajax({
+            type: "GET",
+            url: '@Url.Action("ViewBuildingUnit", "LandDetails")',
+                            data: {
+                                Ids: ids
+            },
+                            success: function (data) {
+                                $('#img').hide();
+                                if (data.length > 0) {
+                                    $('#buildingunitdtbl').empty();
+                                    $('#buildingunitDetail').show(1000);
+                                    $.each(data, function (key, value) {
+                                        $('#chk1_').attr('checked', false);
+                                        $('#buildingunitdtbl').append(
+                                            '<tr>'
+                                            + '<td>' + (key + 1) + '</td>'
+                                            + '<td><input id="id1_' + key + '" type="hidden" value="' + value.buildingUnitDetailId + '" />'
+                                            + '<input id="chk1_' + key + '" type="checkbox" value="' + value.buildingUnitDetailId + '" class"=checkbox" /> <label for=chk1_' + key + '> Select </label>'
+
+                                            + '<td>' + value.buildingUnitClassName + '</td>'
+                                            + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                            + '<td>' + value.unitOwnerTypename + '</td>'
+                                            + '<td>' + value.floor + '</td>'
+                                            + '<td>' + value.noOfUnit + '</td>'
+                                            + '</tr>');
+                                    });
+                                }
+                                else {
+                                    swal("Error");
+                                }
+                            },
+                             failure: function (r) {
+                                $('#img').hide();
+                                swal("Creation Failed");
+                            },
+                            error: function (r) {
+                                $('#img').hide();
+                                swal("Error while inserting");
+                            }
+                        });
+          //************************DEMAND LOOP END**********************
+
+    }
+
+
+
+        $('#btnSaveBuilding').on('click', function () {
+
+        var r = confirm("Are you sure you want to save.?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+
+        //***********************ids start************************
+        var selected = new Array();
+        var ids;
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#tblUnMappedBuilding input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+         });
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+
+        //**********************ids end****************
+        //$('#img').show();
+
+        //SAVING BUILDING UNIT DETAILS
+        var selected1 = new Array();
+        var ids1;
+        $("#tblUnMappedBuildingUnit input[type=checkbox]:checked").each(function () {
+            selected1.push(this.value);
+        });
+
+        if (selected1.length > 0) {
+            ids1 = selected1.join(",");
+        }
+                       //************************PAYMENT MODE LOOP START**********************
+                        var myarray = [];
+
+                            var ledgobj = {};
+                        ledgobj.Ids = ids;
+                        ledgobj.landownershipId = parseInt($('#hdnLandOwnershipId').val());
+                         myarray.push(ledgobj);
+        console.log(JSON.stringify(myarray));
+
+
+        var myarray1 = [];
+
+        var ledgobj1 = {};
+            ledgobj1.landownershipId = parseInt($('#hdnLandOwnershipId').val());
+            ledgobj1.BUID = ids1;
+        myarray1.push(ledgobj1);
+        console.log(JSON.stringify(myarray1));
+                       //************************DEMAND LOOP START**********************
+
+            $.ajax({
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: '@Url.Action("CreateBuildingOwnership", "LandDetails")',
+                type: "POST",
+                data: JSON.stringify(myarray),
+                success: function (r) {
+                    $('#img').hide();
+
+                    if (r > 0) {
+                        // MakePayment(r,20);
+                        swal("Success", "Data successfully mapped", "success");
+                        $('#img').hide();
+
+                        $('#buildingDetail').hide(1000);
+                        $('#buildingunitDetail').hide(1000);
+                        DisplayBuildingOwnershipDetail($('#hdnLandOwnershipId').val());
+                    }
+                }
+            });
+                                $.ajax({
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            url: '@Url.Action("CreateBuildingUnit", "LandDetails")',
+                            type: "POST",
+                            data: JSON.stringify(myarray1),
+                            success: function (r) {
+                                    $('#img').hide();
+
+                                if (r > 0) {
+                                   // MakePayment(r,20);
+                                    swal("Success", "Data successfully mapped", "success");
+                                    $('#img').hide();
+
+                                    $('#buildingDetail').hide(1000);
+                                    $('#buildingunitDetail').hide(1000);
+                                    //DisplayBuildingOwnershipDetail($('#hdnLandOwnershipId').val());
+                                    //btnBuildingUnit();
+                                }
+                                //else {
+                                //    swal("Error saving details.");
+                                //}
+                            },
+                             failure: function (r) {
+                                $('#img').hide();
+                                swal("Creation Failed");
+                            },
+                            error: function (r) {
+                                $('#img').hide();
+                                swal("Error while inserting");
+                            }
+                        });
+
+
+                        //        else {
+                        //            swal("Error saving details.");
+                        //        }
+                        //    },
+                        //     failure: function (r) {
+                        //        $('#img').hide();
+                        //        swal("Creation Failed");
+                        //    },
+                        //    error: function (r) {
+                        //        $('#img').hide();
+                        //        swal("Error while inserting");
+                        //    }
+                        //});
+          //************************DEMAND LOOP END**********************
+
+                            });
+
+
+        function UpdateLandOwnership(landOwnershipId) {
+            $('#hdnUpdateLandOwnershipId').val(landOwnershipId);
+            $('#UpdateOwnership').show(1000);
+            $('#dvdetails').hide(1000);
+            $('#dvOwnershipEntry').hide(1000);
+            $('#buildingOwnership').hide(1000);
+            $('#buildingDetail').hide(1000);
+
+        $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetLandOwneshipForUpdate", "LandDetails")',
+            data: {
+                LandOwnershipId: parseInt(landOwnershipId)
+            },
+
+            success: function (data) {
+                $('#UIsApportioned').empty();
+                if (data.length > 0) {
+                $('#UIsApportioned').append($('<option>', { value: 2, text: '--Select--' }));
+                $('#UIsApportioned').append($('<option>', { value: true, text: 'Yes' }));
+                $('#UIsApportioned').append($('<option>', { value: false, text: 'No' }));
+                            var PLR = data[0].plr;
+                            var ThramNo = data[0].thramNo;
+                            var Remarks = data[0].remarks;
+                            var LandOwnershipTypeId = data[0].landOwnershipTypeId;
+                            var IsApportioned = data[0].isApportioned;
+                            if (IsApportioned == true) {
+                                $("#UIsApportioned option[value=" + IsApportioned + "]").prop('selected', true);
+                            }
+                            else if (IsApportioned == false) {
+                                $("#UIsApportioned option[value=" + IsApportioned + "]").prop('selected', true);
+                            }
+                            else {
+                                $("#UIsApportioned option[value=" + IsApportioned + "]").prop('selected', true);
+                            }
+                            if (LandOwnershipTypeId > 0) {
+                                $('select#ULandOwnershipType').val(LandOwnershipTypeId).change();
+                            }
+                            else {
+                                $('select#ULandOwnershipType').val(LandOwnershipTypeId).change(0);
+                            }
+
+                            $('#UpPLR').val(PLR);
+                            $('#UThramNo').val(ThramNo);
+                            $('#URemarks').val(Remarks);
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+        }
+
+        function ULandOwnership() {
+
+        var myarray = [];
+            var UpdateLandOwnership = {};
+            if ($('#UIsApportioned').val() == false) {
+                UpdateLandOwnership.IA = 1;
+            }
+            else {
+                //UPLR
+                UpdateLandOwnership.IA = 0;
+
+            }
+         UpdateLandOwnership.LandOwnershipTypeId = parseInt($("#ULandOwnershipType").val());
+         UpdateLandOwnership.Plr = parseFloat($("#UpPLR").val());
+         UpdateLandOwnership.ThramNo = $("#UThramNo").val();
+         UpdateLandOwnership.Remarks = $("#URemarks").val();
+         UpdateLandOwnership.LandOwnershipId = parseInt($("#hdnUpdateLandOwnershipId").val());
+
+
+         myarray.push(UpdateLandOwnership);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateLandOwnership", "LandDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('LandOwnership Updated Successfully!');
+                    displayLandOwnershipType($("#hdnLandDetailId").val(), $('#newplr').val());
+                    $('#UpdateOwnership').hide(1000);
+
+                }
+                else {
+                    swal('LandOwnership Updating Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+        }
+
+        $("#btnCancelUpdateLandOwership").click(function () {
+            $('#UpdateOwnership').hide(1000);
+            $('#dvdetails').show(1000);
+            $('#CIDinput').val('');
+            $('#TTINinput').val('');
+
+        });
+    </script>

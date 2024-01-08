@@ -1,0 +1,33 @@
+﻿CREATE TABLE [dbo].[mstSlab]
+(
+	[slabId] INT NOT NULL PRIMARY KEY IDENTITY, 
+    --[slabForId] INT NOT NULL, 
+    [taxId] INT NOT NULL, 
+    [slabName] VARCHAR(250) NOT NULL, 
+    [landUseSubCategoryId] INT NULL, 
+    [define1] INT NULL, 
+    [define2] INT NULL,    
+    [slabStart] DECIMAL(18, 2) NULL, 
+    [slabEnd] DECIMAL(18, 2) NULL, 
+    [constructionTypeId] INT NULL,
+    [buildingUnitUseTypeId] INT NULL, 
+    [buildingUnitClassId] INT NULL,
+    [waterLineTypeId] INT NULL, 
+    [effectiveDate] DATE NULL, 
+    [isActive] BIT NOT NULL, 
+    [createdOn] [datetime] NOT NULL,
+	[createdBy] [int] NOT NULL,
+	[modifiedOn] [datetime] NULL,
+	[modifiedBy] [int] NULL,      
+    [industryTypeId] INT NULL, 
+    [leaseActivityTypeId] INT NULL, 
+    CONSTRAINT [FK_mstSlab_ToTable] FOREIGN KEY ([taxId]) REFERENCES [mstTaxMaster]([taxId]), 
+    CONSTRAINT [FK_mstSlab_ToTable_1] FOREIGN KEY ([buildingUnitUseTypeId]) REFERENCES [mstBuildingUnitUseType]([buildingUnitUseTypeId]), 
+    CONSTRAINT [FK_mstSlab_ToTable_2] FOREIGN KEY ([buildingUnitClassId]) REFERENCES [mstBuildingUnitClass]([buildingUnitClassId]), 
+    CONSTRAINT [FK_mstSlab_ToTable_3] FOREIGN KEY ([landUseSubCategoryId]) REFERENCES [mstLandUseSubCategory]([landUseSubCategoryId]), 
+    CONSTRAINT [FK_mstSlab_ToTable_4] FOREIGN KEY ([constructionTypeId]) REFERENCES [mstConstructionType]([constructionTypeId]), 
+    CONSTRAINT [FK_mstSlab_ToTable_5] FOREIGN KEY ([waterLineTypeId]) REFERENCES [mstWaterLineType]([waterLineTypeId]), 
+    --CONSTRAINT [FK_mstSlab_ToTable_3] FOREIGN KEY ([slabForId]) REFERENCES [enumSlabFor]([slabForId]), 
+   
+
+)

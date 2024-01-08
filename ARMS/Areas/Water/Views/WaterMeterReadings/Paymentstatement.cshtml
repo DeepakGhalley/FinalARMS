@@ -1,0 +1,156 @@
+﻿@using CORE_BOL
+@model TranWaterConnectionModel
+@{
+    ViewData["Title"] = "WaterMeterReadingEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Payment Statement</a></li>
+                    <li class="breadcrumb-item active">Payment Statement</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Payment Statement</h3>
+    </div>
+    <div class="card-body">
+        <div class="row d-flex justify-content-center">
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Consumer</label>
+                <input id="ConsumerNo" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-2">
+                <label class="col-sm-4 col-form-label">From</label>
+                <select class="form-control select2bs4 col-8" id="sMonth" asp-items="@(new SelectList(ViewBag.Month, "Value", "Text"))"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-2">
+                <label class="col-sm-4 col-form-label">To</label>
+                <select class="form-control select2bs4 col-8" id="eMonth" asp-items="@(new SelectList(ViewBag.Month, "Value", "Text"))"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-2">
+                <label class="col-sm-4 col-form-label">Year</label>
+                <select id="Year" class="form-control col-sm-8 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+            </div>
+
+
+            <div class="input-group col-2 float-left">
+                <input type="button" value="Search" class="btn btn-primary col-12 " onclick="return GetReadingDetails();" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Water Meter Reading Details-->
+<div class="card card-info" id="dvWaterMeterReading" style="display:none ;">
+    <div class="card card-info" id="dvPrintEC">
+        <div class="card-header">
+            <h3 class="card-title" colspan="6" align="center">Payment Statement</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Payment For:</th>
+                        <th>Particulars</th>
+                        <th>Recepit No</th>
+                        <th>Payment Date</th>
+                        <th>Amount</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                </tbody>
+            </table>
+        </div>
+</div>
+        <button class="btn btn-warning" onclick="return printPageEC();"><i class="fas fa-print"></i>Print</button>
+    </div>
+
+    <script>
+
+        function GetReadingDetails() {
+
+            var consumer = $('#ConsumerNo').val();
+
+            var year = $('#Year').val();
+            var sMonth = $('#sMonth').val();
+            var eMonth = $('#eMonth').val();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchWater", "WaterMeterReadings")',
+                data: {
+                    consumerno: consumer,
+
+                    year: year,
+                    sMonth: sMonth,
+                    eMonth: eMonth
+                },
+                success: function (data) {
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+                        $.each(data, function (key, value) {
+                            $('#dvWaterMeterReading').show(1000);
+                            var today = new Date(data[0].connectionDate);
+                            var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+
+                            $('#tbl_body').append(
+                                '<tr class="text-center">'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.billmonth + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.receiptNo + '</td>'
+                                + '<td>' + value.connectionDate + '</td>'
+                                
+                                + '<td>' + value.totalamount + '</td>'
+
+
+                                + '</tr>');
+                        });
+                    } else {
+                        $('#dvWaterMeterReading').hide(1000);
+
+                        swal('No Record Found!');
+                    }
+                },
+                error: function () {
+                    alert('error');
+                }
+            });
+
+        }
+
+        function printPageEC() {
+            var dataToPrint = document.getElementById("dvPrintEC");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+    </script>

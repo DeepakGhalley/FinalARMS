@@ -1,0 +1,72 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblStallDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblStallDetail].[billingScheduleId] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[houseAddress] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[stallDetail] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[taxPayerId] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[terminateDate] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[terminatedBy] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[terminateReason] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[rateId] on table [dbo].[tblStallDetail] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[tblStallDetail].[stallArea] on table [dbo].[tblStallDetail] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[tblStallDetail].[stallName] on table [dbo].[tblStallDetail] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[tblStallDetail].[stallNo] on table [dbo].[tblStallDetail] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+
+** User actions
+     Rename
+       [dbo].[tblStallPeriod].[stallAllocationId] (Column)
+       [dbo].[tblStallDetail].[rentalAmount] (Column)
+     Drop
+       [dbo].[FK_tblStallDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetail_ToTable_2] (Foreign Key)
+     Table rebuild
+       [dbo].[tblStallDetail] (Table)
+     Create
+       [dbo].[tblStallAllocation] (Table)
+       Default Constraint: unnamed constraint on [dbo].[tblStallAllocation] (Default Constraint)
+       [dbo].[FK_tblStallDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallPeriod_ToTable] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblStallDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_tblStallDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+
+The column [dbo].[tblStallDetail].[billingScheduleId] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[houseAddress] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[stallDetail] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[taxPayerId] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[terminateDate] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[terminatedBy] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[terminateReason] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[rateId] on table [dbo].[tblStallDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallDetail].[stallArea] on table [dbo].[tblStallDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallDetail].[stallName] on table [dbo].[tblStallDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallDetail].[stallNo] on table [dbo].[tblStallDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column rentalAmount on table [dbo].[tblStallDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column securityAmount on table [dbo].[tblStallDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

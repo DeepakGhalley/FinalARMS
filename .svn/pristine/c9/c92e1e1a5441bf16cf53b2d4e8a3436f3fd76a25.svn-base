@@ -1,0 +1,43 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLandOwnershipDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[DF__tmp_ms_xx__isAct__61716316] (Default Constraint)
+     Table rebuild
+       [dbo].[tblLandOwnershipDetail] (Table)
+     Create
+       [dbo].[tblBuildingOwnership] (Table)
+       [dbo].[FK_tblBuildingOwnership_ToTable] (Foreign Key)
+       [dbo].[FK_tblBuildingOwnership_ToTable_1] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_12] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_12] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)

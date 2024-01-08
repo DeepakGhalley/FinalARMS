@@ -1,0 +1,137 @@
+﻿@model CORE_BOL.Entities.TblLedger
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>TblLedger</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LedgerId" />
+            <div class="form-group">
+                <label asp-for="DemandId" class="control-label"></label>
+                <select asp-for="DemandId" class="form-control" asp-items="ViewBag.DemandId"></select>
+                <span asp-validation-for="DemandId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionId" class="control-label"></label>
+                <select asp-for="TransactionId" class="form-control" asp-items="ViewBag.TransactionId"></select>
+                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxId" class="control-label"></label>
+                <select asp-for="TaxId" class="form-control" asp-items="ViewBag.TaxId"></select>
+                <span asp-validation-for="TaxId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FinancialYearId" class="control-label"></label>
+                <select asp-for="FinancialYearId" class="form-control" asp-items="ViewBag.FinancialYearId"></select>
+                <span asp-validation-for="FinancialYearId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CalendarYearId" class="control-label"></label>
+                <select asp-for="CalendarYearId" class="form-control" asp-items="ViewBag.CalendarYearId"></select>
+                <span asp-validation-for="CalendarYearId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandDetailId" class="control-label"></label>
+                <input asp-for="LandDetailId" class="form-control" />
+                <span asp-validation-for="LandDetailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TaxPayerId" class="control-label"></label>
+                <input asp-for="TaxPayerId" class="form-control" />
+                <span asp-validation-for="TaxPayerId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TotalAmount" class="control-label"></label>
+                <input asp-for="TotalAmount" class="form-control" />
+                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PaymentDate" class="control-label"></label>
+                <input asp-for="PaymentDate" class="form-control" />
+                <span asp-validation-for="PaymentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReceiptId" class="control-label"></label>
+                <input asp-for="ReceiptId" class="form-control" />
+                <span asp-validation-for="ReceiptId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReconciledOn" class="control-label"></label>
+                <input asp-for="ReconciledOn" class="form-control" />
+                <span asp-validation-for="ReconciledOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedOn" class="control-label"></label>
+                <input asp-for="ModifiedOn" class="form-control" />
+                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ApplicantId" class="control-label"></label>
+                <select asp-for="ApplicantId" class="form-control" asp-items="ViewBag.ApplicantId"></select>
+                <span asp-validation-for="ApplicantId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EcRenewalId" class="control-label"></label>
+                <select asp-for="EcRenewalId" class="form-control" asp-items="ViewBag.EcRenewalId"></select>
+                <span asp-validation-for="EcRenewalId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LandLeaseDemandDetailId" class="control-label"></label>
+                <select asp-for="LandLeaseDemandDetailId" class="form-control" asp-items="ViewBag.LandLeaseDemandDetailId"></select>
+                <span asp-validation-for="LandLeaseDemandDetailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParkingDemandDetailId" class="control-label"></label>
+                <select asp-for="ParkingDemandDetailId" class="form-control" asp-items="ViewBag.ParkingDemandDetailId"></select>
+                <span asp-validation-for="ParkingDemandDetailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StallDemandDetailId" class="control-label"></label>
+                <select asp-for="StallDemandDetailId" class="form-control" asp-items="ViewBag.StallDemandDetailId"></select>
+                <span asp-validation-for="StallDemandDetailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HouseRentDemandDetailId" class="control-label"></label>
+                <select asp-for="HouseRentDemandDetailId" class="form-control" asp-items="ViewBag.HouseRentDemandDetailId"></select>
+                <span asp-validation-for="HouseRentDemandDetailId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MiscellaneousRecordId" class="control-label"></label>
+                <select asp-for="MiscellaneousRecordId" class="form-control" asp-items="ViewBag.MiscellaneousRecordId"></select>
+                <span asp-validation-for="MiscellaneousRecordId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,484 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Occupancy Certificates</a></li>
+                        <li class="breadcrumb-item active">Occupancy Certificates</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Occupancy Certificates</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="Cid" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="Ttin" class="form-control col-6" />
+                </div>
+
+
+
+                <div class="input-group-append col-2">
+
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displaydetail();" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</form>
+
+    <div class="card card-info" style="display:none;" id="details">
+        <div class="card-header">
+            <h3 class="card-title">Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+
+                <table style="width: 100%">
+                    <tr>
+                        <td>
+                            <b>CID:</b>&nbsp; <label id="lblcid" class="col-form-label" readonly />
+                        </td>
+
+                        <td>
+                            <b>TTIN:</b>&nbsp;<label id="lblttin" value="" />
+                        </td>
+
+
+                        <td>
+                            <b>Name:</b>&nbsp;<label id="lblname" class="col-form-label" readonly />
+                        </td>
+
+                    </tr>
+                    @*<tr>
+                        <td>
+                            <b>Plot No:</b>&nbsp; <label id="lblplot" class="col-form-label" readonly />
+                        </td>
+
+                        <td>
+                            <b>Thram No:</b>&nbsp;<label id="lblthram" value="" />
+                        </td>
+
+
+                        <td>
+                            <b>Land Accerage(sq.ft):</b>&nbsp;<label id="lblland" class="col-form-label" readonly />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td>
+                            <b> Town Group:</b>&nbsp; <label id="lbltown" class="col-form-label" readonly />
+                        </td>
+
+                        <td>
+                            <b>Precinct:</b>&nbsp;<label id="lblp" value="" />
+                        </td>
+
+                    </tr>*@
+                </table>
+            </div>
+            <div class="form-group row table-responsive">
+                <table id="example1" class="table table-bordered table-striped">
+                    <thead style="background-color:mediumaquamarine">
+
+                        <tr>
+                            <th>#</th>
+                            <th>Oc Reference No</th>
+                            <th>Plot No</th>
+                            <th>Thram No</th>
+                            <th>Land Accerage(sq.ft)</th>
+
+                            <th> Building No</th>
+                            <th>Construction Type</th>
+                            <th>Building Area</th>
+
+                            <th> Unit Type</th>
+                            <th>Unit Class</th>
+                            <th>Floor Name</th>
+                            <th>Floor Number</th>
+                            <th>Valid Till Date</th>
+                            <th>Is Building OC?</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbl_body">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+<div class="card card-info" style="display:none;" id="oc">
+   
+    <div class="card-body">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 100px; height: 100px" />
+                    </td>
+
+
+                    <td align="center">
+                        <strong><b style="font-size:15px;">Thimphu Thromde</b></strong> <br />
+                        <strong><b style="font-size:15px;">Thimphu Thromde</b></strong> <br />
+                        <strong>Payment Recepit </strong>
+                    </td>
+
+
+                    <td>
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 100px; height: 100px" />
+                    </td>
+                </tr>
+            </table>
+            <hr />
+            <table style="width: 100%">
+                <tr>
+                    <td>
+                        <b>No:</b>&nbsp; <label id="lblreferenceno" class="col-form-label" readonly />
+                    </td>
+
+                    <td>
+                        <b></b> <strong> <b>Occupancy Certificate</b></strong> <hr />
+                    </td>
+
+
+                    <td>
+                        <b>Date:</b>&nbsp;<label id="lbldate" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="3">
+                        <p>
+                            This is to certify that the structure has been built in accordance with the approved drawings of the Thromde.
+                            The structure is therefore deemed fit for occupancy for the specified approved use only
+                        </p>
+                    </td>
+
+
+
+                </tr>
+            </table>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Land & Tax Payer Details</h3>
+        </div>
+        <table style="width: 100%">
+            <thead>
+
+                <tr>
+
+                    <th> Plot No</th>
+                    <th>Thram No</th>
+                    <th>Precinct </th>
+                    <th>Land Accerage(sq.ft)</th>
+                    <th> Town Group</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><label id="lblplotno"></label></td>
+                    <td><label id="lblthramno"></label></td>
+                    <td><label id="lblprecinct"></label></td>
+                    <td><label id="lbllandaccerage"></label></td>
+                    <td><label id="lbltowngroup"></label></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.no</th>
+                    <th> TTIN</th>
+                    <th> CID</th>
+                    <th>Tax Payer Name</th>
+                    <th> Land Acerage(sq.ft)</th>
+
+                </tr>
+            </thead>
+            <tbody id="tbltaxpayer">
+            </tbody>
+        </table>
+
+        <div class="card-header">
+            <h3 class="card-title">Building Details</h3>
+        </div>
+        <table style="width: 100%">
+            <thead>
+
+                <tr>
+
+                    <th> Building No</th>
+                    <th> Construction type</th>
+                    <th>Build Up Area(sq.ft) </th>
+                    <th>No of Floor</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><label id="lblbuildingno"></label></td>
+                    <td><label id="lblconstruction"></label></td>
+                    <td><label id="lblbuilduparea"></label></td>
+                    <td><label id="lblnooffloor"></label></td>
+
+                </tr>
+            </tbody>
+        </table>
+        <div class="card-header">
+            <h3 class="card-title">Building Unit Details</h3>
+        </div>
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.no</th>
+                    <th> Building Unit Type</th>
+                    <th> Unit Class</th>
+                    <th>No of Unint</th>
+                    <th> Floor Area(sq.ft)</th>
+
+                </tr>
+            </thead>
+            <tbody id="tblbuilding">
+            </tbody>
+        </table>
+
+        <table style="width: 100%">
+            <tr>
+                <td>
+                    <b>Location:</b>&nbsp; <label id="lbllocation" class="col-form-label" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Date of final Inspection:</b>&nbsp; <label id="lblinspectiondate" class="col-form-label" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <b>Remarks(if any): The building was constructed in the year of :</b>&nbsp;<label id="lblconstructedyear" class="col-form-label" readonly />
+                </td>
+
+            </tr>
+
+            <tr>
+                <td>
+                    <b>1.</b> &nbsp; &nbsp;
+                    <p>No changes of use or occupancy shall be made unless a new amended certificate is obtained.</p>
+                </td>
+                <td>
+                    <b>2.</b> &nbsp; &nbsp;
+                    <p>This certificate is valid for 12 months from the date of issue and must be renewd annually.</p>
+                </td>
+
+                <td>
+
+                    <p>Visit Yhimphu Thromde website on: www.thimphucity.bt for Thromde Services</p>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td> </td>
+                <td> </td>
+                <td>
+                    <img src="~/dist/img/tt_logo.gif"
+                         style="width: 100px; height: 100px" />
+                </td>
+            </tr>
+            <tr>
+                <td> </td>
+                <td> </td>
+                <td>
+                    <strong><b style="font-size:15px;">Executive Secretary</b></strong> <br />
+                    <strong><b style="font-size:15px;">Thimphu Thromde</b></strong> <br />
+                   
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</div>
+
+
+
+<script>
+    function displaydetail() {
+      if ($('#Ttin').val() == "" && $('#Cid').val() == "") {
+            swal('Empty Fields', '', 'error');
+            $('#Ttin').focus();
+            $('#Cid').focus();
+
+            return false;
+        }
+
+        var Ttin = $('#Ttin').val();
+        var Cid = $('#Cid').val();
+
+                $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("FetchOccupanyCertificate", "OccupancyCertificates")',
+                        data: {
+                            Ttin: Ttin,
+                            Cid: Cid
+
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            $('#tbl_body').empty();
+                        if (data.length > 0) {
+
+                            $("#lblttin").html(data[0].ttin);
+                            $("#lblcid").html(data[0].cid);
+                            $("#lblname").html(data[0].taxPayerName);
+
+                            //$("#lblplot").html(data[0].plotNo);
+                            //$("#lblthram").html(data[0].thramNo);
+                            //$("#lblland").html(data[0].landAcerage);
+                            //$("#lbltown").html(data[0].landUseCategory);
+                            //$("#lblp").html(data[0].landUseSubCategory);
+                           
+                          
+                            //if (current > date) {
+                            //    swal('Renew your OC first!!!');
+                            //    return false;
+                            //}
+
+                                $.each(data, function (key, value) {
+                                    $('#details').show(1000);
+
+                                    var today1 = new Date(value.validTillDate);
+                                    var date = today1.getFullYear() + '-' + (today1.getMonth() + 1) + '-' + today1.getDate();
+
+                                    var today = new Date();
+                                    var current = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+                                    res = /*(current > date) ? '<b style="color: red;">Expired</b>' :*/ '<b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return OccupancyCertificate(' + value.occupancyCertificateApplicationId + ');">View</a></b>';
+
+                                    $('#tbl_body').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.ocReferenceNo + '</td>'
+
+                                        + '<td>' + value.plotNo + '</td>'
+                                        + '<td>' + value.thramNo + '</td>'
+                                        + '<td>' + value.landAcerage + '</td>'
+
+                                        + '<td>' + value.buildingNo + '</td>'
+                                        + '<td>' + value.constructionType + '</td>'
+                                        + '<td>' + value.buildupArea + '</td>'
+                                       
+
+                                        + '<td>' + value.buildingUnitUseType + '</td>'
+                                        + '<td>' + value.buildingUnitClassName + '</td>'
+                                        + '<td>' + value.floorName + '</td>'
+                                        + '<td>' + value.numberOfFloors + '</td>'
+                                        + '<td>' + value.validTillDate + '</td>'
+                                        + '<td>' + value.isBuildingOc + '</td>'
+                                      
+
+                                        + '<td>' + res +'</td>'
+
+
+                                        + '</tr>');
+                                });
+                            } else {
+                                $('#tbl_body').append(
+                                    '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                                swal({
+                                    title: 'Data not found!',
+                                    type: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+
+                            }
+
+                        },
+
+                        error: function () {
+                            alert('error');
+                        }
+                    });
+    }
+
+
+    function OccupancyCertificate(occupancyCertificateApplicationId) {
+
+       $('#img').show();
+
+           
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("OccupanyCertificate", "OccupancyCertificates")',
+                    data: {
+                        OccupancyCertificateApplicationId: occupancyCertificateApplicationId,
+                       
+                    },
+                    success: function (data) {
+
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                   { Area = "Property", Controller = "OccupancyCertificates", Action = "OccupanyCertificate" })/?OccupancyCertificateApplicationId=" + occupancyCertificateApplicationId, '_blank');
+                        }
+
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+
+
+
+    }
+
+
+</script>

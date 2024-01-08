@@ -1,0 +1,9 @@
+D:\TT\Finalarms\ARMS_DB\bin\Release\ARMS_DB.dacpac
+D:\TT\Finalarms\ARMS_DB\obj\Release\ARMS_DB.dll
+D:\TT\Finalarms\ARMS_DB\obj\Release\ARMS_DB.pdb
+D:\TT\Finalarms\ARMS_DB\bin\Release\ARMS_DB.dll
+D:\TT\Finalarms\ARMS_DB\bin\Release\ARMS_DB.pdb
+D:\TT\Finalarms\ARMS_DB\obj\Release\Model.xml
+D:\TT\Finalarms\ARMS_DB\obj\Release\refactor.xml
+D:\TT\Finalarms\ARMS_DB\obj\Release\postdeploy.sql
+D:\TT\Finalarms\ARMS_DB\obj\Release\predeploy.sql

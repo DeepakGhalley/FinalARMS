@@ -1,0 +1,871 @@
+﻿@using CORE_BOL
+@model MiscellaneousRecordModel
+
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Miscellaneous Record</a></li>
+                    <li class="breadcrumb-item active">Create New Data</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" asp-action="Create" method="post">
+    @*data-ajax="true" data-ajax-method="post">*@
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Miscellaneous Record</h3>
+
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Transaction Type<span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="TransactionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.TransactionTypeId,"Value","Text")) " value="0" onchange="myFunction()"></select>
+                </div>
+                <label class="col-sm-2 col-form-label"> Tax Name <span style="font-weight: bold; color:red;">*</span> </label>
+                <div class="col-sm-3">
+                    <select asp-for="TaxId" class="form-control select2bs4" style="width: 100%;" id="TaxId" value="0">
+                        <option value="0">--Select One--</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Slab Name <span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="SlabId" class="form-control select2bs4" style="width: 100%;" id="SlabId" value="0"></select>
+
+                    <span asp-validation-for="SlabId" class="text-danger"></span>
+                </div>
+                <label asp-for="MobileNo" class="col-sm-2 col-form-label">Mobile No<span style="font-weight: bold; color:red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="MobileNo" id="idmobileno" class="form-control" required />
+                </div>
+
+            </div>
+            <div id="showrate" style="display:none;">
+                <div class="form-group row">
+                    <label asp-for="Address" class="col-sm-2 col-form-label">Address<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Address" id="idsaddress" class="form-control" required />
+                    </div>
+                    <label class="col-sm-2 col-form-label">CID<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Cid" id="idcid" class="form-control" required />
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Name" class="col-sm-2 col-form-label">Name<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Name" id="idsname" class="form-control" required />
+                    </div>
+
+                    <label asp-for="Quantity" class="col-sm-2 col-form-label">Quantity<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Quantity" class="form-control" id="quantity" OnChange="av(this)" required />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Rate</label>
+                    <div class="col-sm-3">
+                        <input id="rate" class="form-control" OnChange="av(this)" required readonly />
+
+                    </div>
+                    <label asp-for="Amount" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Amount" class="form-control" id="amount" readonly />
+
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="showrate1" style="display:none;">
+                <div class="form-group row">
+                    <label asp-for="Address" class="col-sm-2 col-form-label">Name of Establishment<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Address" id="Establishment" class="form-control" required />
+                    </div>
+                    <label class="col-sm-2 col-form-label">License No<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Cid" id="License" class="form-control" required />
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label asp-for="Name" class="col-sm-2 col-form-label">Name<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Name" id="idsnames" class="form-control" required />
+                    </div>
+
+                    <label asp-for="Quantity" class="col-sm-2 col-form-label">CID<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Quantity" class="form-control" id="cids" OnChange="av(this)" required />
+                    </div>
+
+                </div>
+                <div class="form-group row">
+
+                    <label asp-for="Amount" class="col-sm-2 col-form-label">Amount<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Amount" class="form-control" id="amounts" required />
+
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <a cursor: pointer;" class="btn btn-primary" id="SaveMiscellaneousRecordModel">Save </a>
+
+
+                    <button type="reset" id="Reset" class="btn btn-warning">Cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <!-- /.card-footer -->
+    </div>
+</form>
+
+
+<div class="card card-info" id="demandpage" style="display:none;">
+    <div class="card-body" id="printdemandpage">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 100px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Demand Receipt </strong>
+                    </td>
+                    <td></td>
+
+
+
+                    <td colspan="2">
+                        <img id="qrDemandNo" style="width: 100px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Demand Date:</b>&nbsp;<label id="demanddate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        
+
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Invoice No:</b>&nbsp;<label id="idinvoiceno" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <b>CID:</b>&nbsp; <label id="idicid" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Name:</b>&nbsp;<label id="idname" value="" />
+                    </td>
+
+
+                    <td colspan="4">
+                        <b>Mobile No:</b>&nbsp;<label id="idmmobile" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4">
+                        <b>Address:</b>&nbsp; <label id="idaddress" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="2">
+                        <b>InVoice For:</b>&nbsp;<label id="idinvoicefor" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="2">
+                        
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Slab Name</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDemand">
+                </tbody>
+                @*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+                
+               
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="lbluser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="mdemandpage" style="display:none;">
+    <div class="card-body" id="mprintdemandpage">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 100px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Demand Receipt </strong>
+                    </td>
+                    <td></td>
+
+
+
+                    <td colspan="2">
+                        <img id="mqrDemandNo" style="width: 100px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Demand Date:</b>&nbsp;<label id="mdemanddate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Invoice No:</b>&nbsp;<label id="midinvoiceno" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <b>CID:</b>&nbsp; <label id="midicid" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Name:</b>&nbsp;<label id="midname" value="" />
+                    </td>
+
+
+                    <td colspan="4">
+                        <b>Mobile No:</b>&nbsp;<label id="midmmobile" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4">
+                        <b>Address:</b>&nbsp; <label id="midaddress" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="2">
+                        <b>InVoice For:</b>&nbsp;<label id="midinvoicefor" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="2">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                      
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="mtblDemand">
+                </tbody>
+                @*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+
+
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="mlbluser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="return mok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return mprintPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    //alert('qs');
+         $(function () {
+
+             $('#TransactionTypeId').change(function () {
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("FetchRate", "MiscellaneousRecords")',
+                data: {
+                    id: parseInt($('#TransactionTypeId').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#rate').empty();
+                    if (data.length > 0) {
+                        $("#rate").val(data[0].rate);
+
+                $('#img').hide();
+                }
+                else
+                {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+                });
+
+        $(function () {
+         $('#TransactionTypeId').change(function () {
+             $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTaxByTransactionTypeId", "MiscellaneousRecords")',
+                data: {
+                    id: parseInt($('#TransactionTypeId').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#TaxId').empty();
+                    //$('#TaxId').append(
+                    //    '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].taxId + '>'
+                                + data[i].taxName
+                                + '</option>');
+                            $('#TaxId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+     });
+
+        $(function () {
+            $('#TransactionTypeId').change(function () {
+
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSlabByTaxId", "MiscellaneousRecords")',
+                data: {
+                    id: parseInt($('#TransactionTypeId').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#SlabId').empty();
+
+                //    $('#SlabId').append(
+                //'<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var newOption = $('<option value=' + data[i].slabId + '> '
+                        + data[i].slabName
+                    + '  </option>');
+                    $('#SlabId').append(newOption);
+                }
+
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+        });
+
+    function myFunction() {
+        var x = document.getElementById("TransactionTypeId").value;
+
+        if (x >= 49) {
+            $('#showrate1').show(1000);
+            $('#showrate').hide(1000);
+            $('#q').hide(1000);
+         }
+
+        else {
+            $('#showrate1').hide(1000);
+            $('#showrate').show(1000);
+            $('#q').show(1000);
+        }
+
+    }
+    $("#SaveMiscellaneousRecordModel").click(function () {
+
+        var myarray = [];
+        var MiscellaneousRecordModel = {};
+
+        var x = document.getElementById("TransactionTypeId").value;
+
+
+
+        if (x >= 49) {
+
+            MiscellaneousRecordModel.TransactionTypeId = parseInt($("#TransactionTypeId").val());
+            MiscellaneousRecordModel.TaxId = parseInt($("#TaxId").val());
+            MiscellaneousRecordModel.SlabId = parseInt($("#SlabId").val());
+            MiscellaneousRecordModel.MobileNo = $("#idmobileno").val();
+            MiscellaneousRecordModel.Name = $("#idsnames").val();
+            MiscellaneousRecordModel.Address = $("#Establishment").val();
+            MiscellaneousRecordModel.Cid = $("#cids").val();
+            MiscellaneousRecordModel.Quantity = parseInt($("#License").val());
+             MiscellaneousRecordModel.Amount = parseFloat($("#amounts").val());
+
+        }
+        else {
+            MiscellaneousRecordModel.TransactionTypeId = parseInt($("#TransactionTypeId").val());
+            MiscellaneousRecordModel.TaxId = parseInt($("#TaxId").val());
+            MiscellaneousRecordModel.SlabId = parseInt($("#SlabId").val());
+            MiscellaneousRecordModel.MobileNo = $("#idmobileno").val();
+            MiscellaneousRecordModel.Name = $("#idsname").val();
+            MiscellaneousRecordModel.Address = $("#idsaddress").val();
+            MiscellaneousRecordModel.Cid = $("#idcid").val();
+             MiscellaneousRecordModel.Quantity = parseInt($("#quantity").val());
+            MiscellaneousRecordModel.Amount = parseFloat($("#amount").val());
+        }
+
+
+
+        myarray.push(MiscellaneousRecordModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateMiscellaneousRecordModel", "MiscellaneousRecords")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+               success: function (response) {
+                   if (response > 0) {
+
+                       if (x >= 49) {
+                           swal("Data saved successfully.");
+                           $('#img').hide();
+                           mdisplaydemand(response);
+                           $('#mdisplaydemand').show(1000);
+                       }
+                       else {
+                           swal("Data saved successfully.");
+                           $('#img').hide();
+                           displaydemand(response);
+                           $('#displaydemand').show(1000);
+                       }
+
+
+
+                    } else {
+                        swal("Error saving details.");
+                        $('#img').hide();
+                    }
+
+            },
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+    });
+    function av(avSelect) {
+        var one = avSelect.form.quantity.value;
+        var two = avSelect.form.rate.value;
+        var avvy = one * two;
+        avSelect.form.amount.value = avvy;
+    }
+
+
+
+
+    function display(displayselect) {
+        //var tax = $(this).attr("value");
+        //var slab = $(this).attr("value");
+        //var t = document.getElementById('TaxId').$(this).attr("value");
+        //var s = document.getElementById('lusc').$(this).attr("value");
+        //var tax = parseInt($('#TaxId').val());
+        //var slab = parseInt($('#lusc').val());
+        var tax = displayselect.form.taxId.value;
+        var Slab = displayselect.form.SlabId.value;
+        if (slab == tax && tax == slab)
+        {
+
+            document.getElementById('showrate').style.display = "";
+        } else
+        {
+            document.getElementById('showrate').style.display = "none";
+        }
+    }
+
+
+
+     function mdisplaydemand(miscellaneousid) {
+            $('#mdemandpage').toggle(1000);
+            $('#img').hide();
+
+                 $.ajax({
+                type: "GET",
+                url: '@Url.Action("mGetDemand", "MiscellaneousRecords")',
+                data: {
+                    id: miscellaneousid
+                },
+                     success: function (data) {
+                         if (data.length > 0) {
+                             var today = new Date(data[0].createdOn);
+                             var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+
+                             $('#mdemanddate').html(date);
+                             $('#midinvoicefor').html(data[0].tax);
+                             $('#midinvoiceno').html(data[0].demandNo);
+                             $('#midname').html(data[0].name);
+                             $('#midaddress').html(data[0].address);
+
+                             $('#midicid').html(data[0].cid);
+                             $('#midmmobile').html(data[0].mobileNo);
+                             $('#mlbluser').html(data[0].user);
+                             $('#mqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+                         }
+                    $('#mtblDemand').empty();
+                    $('#img').hide();
+
+                    $.each(data, function (key, value) {
+                        $('#mtblDemand').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.tax + '</td>'
+                          
+                            + '<td style="text-align:center;">' + value.amount + '</td>'
+                            + '</tr>');
+                    });
+                         $('html,body').animate({
+                             scrollTop: $("#mdemandpage").offset().top
+                         }, 'slow');
+                    $('#mdemandDate').val(createdOn);
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+    //$(document).delegate('#rate', 'keyup', function () {
+    //    var qty = $("#quantity").val();
+    //    var rate = $("#rate").val();
+    //    $("#amount").value(Number(qty) - Number(rate));
+
+    //});
+
+
+
+        function displaydemand(miscellaneousid) {
+            $('#demandpage').toggle(1000);
+            $('#img').hide();
+
+                 $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemand", "MiscellaneousRecords")',
+                data: {
+                    id: miscellaneousid
+                },
+                     success: function (data) {
+                         if (data.length > 0) {
+                             var today = new Date(data[0].createdOn);
+                             var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+
+                             $('#demanddate').html(date);
+                             $('#idinvoicefor').html(data[0].tax);
+                             $('#idinvoiceno').html(data[0].demandNo);
+                             $('#idname').html(data[0].name);
+                             $('#idaddress').html(data[0].address);
+
+                             $('#idicid').html(data[0].cid);
+                             $('#idmmobile').html(data[0].mobileNo);
+                             $('#lbluser').html(data[0].user);
+                             $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+                         }
+                    $('#tblDemand').empty();
+                    $('#img').hide();
+
+                    $.each(data, function (key, value) {
+                        $('#tblDemand').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.slab + '</td>'
+                            + '<td style="text-align:center;">' + value.quantity + '</td>'
+                            + '<td style="text-align:center;">' + value.rate + '</td>'
+                            + '<td style="text-align:center;">' + value.amount + '</td>'
+                            + '</tr>');
+                    });
+                         $('html,body').animate({
+                             scrollTop: $("#demandpage").offset().top
+                         }, 'slow');
+                    $('#demandDate').val(createdOn);
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+
+        function printPage() {
+
+
+            var dataToPrint = document.getElementById("printdemandpage");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+    }
+    function mprintPage() {
+
+
+        var dataToPrint = document.getElementById("mprintdemandpage");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function ok() {
+        window.location.href = "MiscellaneousRecords/Index";
+     }
+</script>
+

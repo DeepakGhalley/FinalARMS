@@ -1,0 +1,108 @@
+﻿@using CORE_BOL
+@model TaxMasterVM
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Master</a></li>
+                    <li class="breadcrumb-item active">Update Tax Master</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Tax Master</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="TaxId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="DetailHeadId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="DetailHeadId" id="DetailHeadId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.DetailHeadId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="DetailHeadId" id="errorDetailHeadId" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                <label asp-for="TaxTypeClassificationId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="TaxTypeClassificationId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.TaxTypeClassificationId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="TaxTypeClassificationId" class="text-danger"></span>
+                </div>
+            </div>*@
+            <div class="form-group row">
+                <label asp-for="TaxName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="TaxName" class="form-control" placeholder="Tax Name" required/>
+                    <span asp-validation-for="TaxName" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+
+<script>
+    //Validation
+    function saveme() {
+        if ($('#DetailHeadId option:selected').val() == 0) {
+            $('#errorDetailHeadId').html('Please Select a Value');
+            $('#DetailHeadId').focus();
+            return false;
+        }
+        else {
+            $('#errorDetailHeadId').html('');
+        }
+
+    }
+</script>

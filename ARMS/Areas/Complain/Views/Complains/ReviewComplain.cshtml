@@ -1,0 +1,448 @@
+﻿@model List<CORE_BOL.ComplainDetail>
+
+@{
+    ViewData["Title"] = "ReviewComplain";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Revenue Master</a></li>
+                        <li class="breadcrumb-item active">Review Complain Details</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Review Complain Details</h3>
+        </div>
+        @* SEARCH WATER CONNECTION *@
+
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Consumer No: <span style="font-weight: bold; color: red;"></span></label>
+                    <input id="ConsumerNoSearch" class="form-control col-6" style="text-transform:uppercase" />
+                </div>
+
+                <div class="input-group-append col-3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return DisplayWaterConnection();" />
+                    @*</div>*@
+                </div>
+                @*<input type="hidden" id="TaxPayerId" />*@
+            </div>
+        </div>
+    </div>
+</form>
+
+@* DISPLAY WATER CONNECTION DETAILS *@
+
+<div class="card card-info" style="display:none;" id="waterconnectiondetails">
+    <div class="card-header">
+        <h3 class="card-title">Water Connection Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>Zone</th>
+                    <th>Consumer No</th>
+                    <th>Water Meter No</th>
+                    <th>Name</th>
+                    <th>Billing Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_waterconnection">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="complaindetails">
+    <input type="hidden" id="CDID" />
+    <div class="card-header">
+        <h3 class="card-title">Complain Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Complain Type</th>
+                    <th>Complain Status</th>
+                    <th>Instruction</th>
+                    <th>DeadLine</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_complaindetails">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="ReviewComplain">
+    <input type="hidden" id="hdnComplainDetailId" />
+    <div class="card-header">
+        <h3 class="card-title">Review Complain Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label">Remarks </label>
+            <div class="col-sm-3">
+                <textarea class="form-control" id="ReviewedRemarks" placeholder="Enter Remarks" rows="3" required></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label"></label>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary" onclick="return SaveReviewComplainDetail();">Save</button>
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="DisplayRadioButtton">
+<div class="card-body">
+    <div class="form-check">
+        <input class="form-check-input" type="radio" id="Approve" name="flexRadioDefault1" onchange=" return ApprovalComplainDetail();" value="1">
+        <label class="form-check-label col-sm-3" for="ApprovalComplain" id="ACD">
+            Approve
+        </label>
+        <input class="form-check-input" type="radio" id="Reject" name="flexRadioDefault1" onchange="return RejectComplainDetail();" value="2">
+        <label class="form-check-label" for="RejectApproval" id="RCD">
+            Reject
+        </label>
+    </div>
+</div>
+</div>
+
+<div class="card card-info" style="display:none;" id="ApprovalComplain">
+    <input type="hidden" id="AComplainDetailId" />
+    <div class="card-header">
+        <h3 class="card-title">Approval Complain Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label">Remarks </label>
+            <div class="col-sm-3">
+                <textarea class="form-control" id="ApprovalRemarks" placeholder="Enter Remarks" rows="3" required></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label"></label>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary" onclick="return SaveApprovalComplainDetail();">Save</button>
+                <button type="reset" id="btnCancel1" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="RejectComplain">
+    <input type="hidden" id="RComplainDetailId" />
+    <div class="card-header">
+        <h3 class="card-title">Reject Complain Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label">Remarks </label>
+            <div class="col-sm-3">
+                <textarea class="form-control" id="RejectRemarks" placeholder="Enter Remarks" rows="3" required></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label"></label>
+            <div class="col-sm-2">
+                <button type="submit" class="btn btn-primary" onclick="return SaveRejectComplainDetail();">Save</button>
+                <button type="reset" id="btnCancel2" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        $('input[type=radio][name=flexRadioDefault1]').change(function () {
+
+            if (this.value != null) {
+                $('#hdnComplainDetailId').val(this.value);
+            }
+        });
+    });
+
+//*************************************************************      LAND OWNERSHIP DETAILS      ********************************************************************************************
+
+    function DisplayWaterConnection() {
+        $('#CreateComplain').hide(1000);
+        $('#complaindetails').hide(1000);
+        $('#ApprovalComplain').hide(1000);
+        $('#RejectComplain').hide(1000);
+        $('#DisplayRadioButtton').hide(1000);
+        if ($('#ConsumerNoSearch').val() == "") {
+                swal('Empty Fields!', '', 'error');
+            $('#ConsumerNoSearch').focus();
+                return false;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetWaterConnection", "Complains")',
+                    data: {
+                        ConsumerNo: $('#ConsumerNoSearch').val()
+                    },
+                    success: function (data) {
+                        $('#tbl_waterconnection').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#waterconnectiondetails').show(1000);
+                                $('#tbl_waterconnection').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.zoneName + '</td>'
+                                    + '<td>' + value.consumerNo + '</td>'
+                                    + '<td>' + value.waterMeterNo + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.billingAddress + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return CreateComplainDetail(' + value.waterConnectionId + ' )" title = "CreateComplainDetail">View</a >'
+                                    + '</td>'
+                                    + '</tr>');
+
+                            });
+
+                        } else {
+                            $('#waterconnectiondetails').show(1000);
+                            $('#tbl_waterconnection').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+        }
+
+    //****************************************************     SAVE COMPLAIN DETAILS     ******************************************************************************
+    function CreateComplainDetail(waterConnectionId) {
+        $('#CDID').val(waterConnectionId);
+        $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetReviewComplainDetail", "Complains")',
+                    data: {
+                        WCID: waterConnectionId
+                    },
+                    success: function (data) {
+                        $('#tbl_complaindetails').empty();
+                        if (data.length > 0) {
+                            var res = null;
+                            $.each(data, function (key, value) {
+                                $('#complaindetails').show(1000);
+                                res = (value.complainStatusId == 1) ? '<a style="cursor: pointer; color: forestgreen;" onclick="return Review(' + value.complainDetailId + ');">Review</a>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Accept/Reject" onclick="return ApprovalReject(' + value.complainDetailId + ');">Approve/Reject</a></b>';
+
+                                $('#tbl_complaindetails').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.complainType + '</td>'
+                                    + '<td>' + value.complainStatus + '</td>'
+                                    + '<td>' + value.instruction + '</td>'
+                                    + '<td>' + value.deadLine + '</td>'
+                                    + '<td>' + res + '</td>'
+                                    + '</tr>');
+
+                            });
+
+                        } else {
+                            $('#complaindetails').show(1000);
+                            $('#tbl_complaindetails').append(
+                                '<tr><td colspan="5" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+    function Review(complainDetailId) {
+        $('#hdnComplainDetailId').val(complainDetailId);
+        $('#ReviewComplain').show(1000);
+    }
+    function SaveReviewComplainDetail() {
+    var myarray = [];
+        var ComplainDetail = {};
+
+        ComplainDetail.ComplainDetailId = parseInt($("#hdnComplainDetailId").val());
+        ComplainDetail.ComplainReviewRemarks = $("#ReviewedRemarks").val();
+
+        myarray.push(ComplainDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ReviewComplainDetail", "Complains")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Reviewed Complain Detail Saved Successfully!');
+                    $('#ReviewComplain').hide(1000);
+                    CreateComplainDetail($('#CDID').val());
+                        
+                }
+                else {
+                    swal('Reviewed Complain Detail Saving Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+    function ApprovalReject() {
+        $('#DisplayRadioButtton').show(1000);
+        $('input[name=flexRadioDefault1]').prop('checked', false);
+    }
+    function ApprovalComplainDetail() {
+        $('#ApprovalComplain').show(1000);
+        $('#RejectComplain').hide(1000);
+    }
+
+    function RejectComplainDetail() {
+        $('#RejectComplain').show(1000);
+        $('#ApprovalComplain').hide(1000);
+    }
+
+    function SaveApprovalComplainDetail() {
+    var myarray = [];
+        var ComplainDetail = {};
+
+        ComplainDetail.ComplainDetailId = parseInt($("#hdnComplainDetailId").val());
+        ComplainDetail.ComplainApprovalRemarks = $("#ApprovalRemarks").val();
+
+        myarray.push(ComplainDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ApproveComplainDetail", "Complains")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Complain Detail is Approved!');
+                    $('#ApprovalComplain').hide(1000);
+                    $('#DisplayRadioButtton').hide(1000);                    
+
+                }
+                else {
+                    swal('Complain Detail Approved Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+    function SaveRejectComplainDetail() {
+    var myarray = [];
+        var ComplainDetail = {};
+
+        ComplainDetail.ComplainDetailId = parseInt($("#hdnComplainDetailId").val());
+        ComplainDetail.ComplainRejectRemarks = $("#RejectRemarks").val();
+
+        myarray.push(ComplainDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RejectComplainDetail", "Complains")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Complain Detail is Rejected!');
+                    $('#RejectComplain').hide(1000);
+                    $('#DisplayRadioButtton').hide(1000);
+                }
+                else {
+                    swal('Complain Detail Rejection Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+</script>

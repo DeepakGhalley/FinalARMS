@@ -1,0 +1,22 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Rename
+       [dbo].[tblStallDetailDemand].[stallAllocationId] (Column)
+     Drop
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+     Alter
+       [dbo].[GetHouseRentDemandScheduleMonthly] (Procedure)
+       [dbo].[GetStallDemandScheduleMonthly] (Procedure)
+
+** Supporting actions

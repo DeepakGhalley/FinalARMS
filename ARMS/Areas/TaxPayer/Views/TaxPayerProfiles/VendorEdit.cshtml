@@ -1,0 +1,437 @@
+﻿@using CORE_BOL
+@model TaxPayerProfileModel
+@{
+    ViewData["Title"] = "VendorEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+
+    //var dzid = Model.DzongkhagId;
+    //var geid = Model.GewogId;
+    //var vilid = Model.PVillageId;
+    //var banid = Model.BankId;
+    //var bbid = Model.BankBranchId;
+    //var vtid = Model.VendorTypeId;
+
+}
+
+@*<input type="hidden" value="@dzid" id="hdnpdzid" />
+<input type="hidden" value="@geid" id="hdnpgeid" />
+<input type="hidden" value="@vilid" id="hdnpvilid" />
+<input type="hidden" value="@banid" id="hdnpbanid" />
+<input type="hidden" value="@bbid" id="hdnpbbid" />
+<input type="hidden" value="@vtid" id="hdnvtid" />*@
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Payer Profile</a></li>
+                    <li class="breadcrumb-item active">Update Tax Payer Profile</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Vendor</h3>
+    </div>
+    <form class="form-horizontal" asp-action="VendorEdit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Vendor" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="TaxPayerId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Tax Payer <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="TaxPayerTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.TaxPayerTypeId,"Value","Text"))"
+                            value="0" disabled>
+                    </select>
+                    <span asp-validation-for="TaxPayerTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">TTIN <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input readonly asp-for="Ttin" class="form-control" placeholder="Enter TTIN" />
+                    <span asp-validation-for="Ttin" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">CID</label>
+                <div class="col-sm-4">
+                    <input asp-for="Cid" class="form-control" placeholder="Enter CID"/>
+                    <span asp-validation-for="Cid" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">First Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="FirstName" class="form-control" placeholder="First Name" required />
+                    <span asp-validation-for="FirstName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Middle Name</label>
+                <div class="col-sm-4">
+                    <input asp-for="MiddleName" class="form-control" placeholder="Middle Name" />
+                    <span asp-validation-for="MiddleName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Last Name</label>
+                <div class="col-sm-4">
+                    <input asp-for="LastName" class="form-control" placeholder="Last Name" />
+                    <span asp-validation-for="LastName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Mobile No <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="MobileNo" class="form-control" placeholder="Mobile No" type="text" id="txt1" maxlength="8" />
+                    <span asp-validation-for="MobileNo" class="text-danger" id="mobile"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">EMail</label>
+                <div class="col-sm-4">
+                    <input asp-for="Email" class="form-control" placeholder="Enter Email Address" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"> Address </label>
+                <div class="col-sm-4">
+                    <textarea asp-for="CAddress" class="form-control" rows="3" placeholder="Enter Address"></textarea>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+
+    //POPULATE DROPDOWN FOR GEWOG
+     $(function () {
+         $('#DzongkhagId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulatePG", "TaxPayerProfiles")',
+                data: {
+                    id: parseInt($('#DzongkhagId').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#GewogId').empty();
+                    $('#GewogId').append(
+                        '<option value=0>--Please Select--</option>');
+                    $('#PVillageId').empty();
+                    $('#PVillageId').append(
+                        '<option value=0>--Please Select--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].gewogId + '>'
+                                + data[i].gewogName
+                                + '</option>');
+                            $('#GewogId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //POPULATE DROPDOWN FOR VILLAGE
+    $(function () {
+        $('#GewogId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulatePV", "TaxPayerProfiles")',
+                data: {
+                    id: parseInt($('#GewogId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#PVillageId').empty();
+                    $('#PVillageId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].villageId + '>'
+                                + data[i].villageName
+                                + '</option>');
+                            $('#PVillageId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //POPULATE DROPDOWN FOR BANK BRANCH
+     $(function () {
+        $('#luc').change(function () {
+
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateBB", "TaxPayerProfiles")',
+                data: {
+                id: parseInt($('#luc').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#lusc').empty();
+
+                $('#lusc').append(
+                '<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                var newOption = $('<option value=' + data[i].bankBranchId + '> '
+                    + data[i].branchName
+                    + '  </option>');
+                $('#lusc').append(newOption);
+                }
+
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+                });
+
+    //VALIDATION FOR PHONE NUMBER
+    $(function () {
+        $("#txt").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            $("#phone").html("");
+            var regex = /^[0-9]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#phone").html("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+    });
+    //VALIDATION FOR MOBILE NUMBER
+    $(function () {
+        $("#txt1").keypress(function (e) {
+            var keyCode = e.keyCode || e.which;
+            $("#mobile").html("");
+            var regex = /^[0-9]+$/;
+            var isValid = regex.test(String.fromCharCode(keyCode));
+            if (!isValid) {
+                $("#mobile").html("Only Numbers allowed.");
+            }
+            return isValid;
+        });
+
+        //AUTO POPULATE DROP DOWN FOR DZONGKHAG
+        $('#DzongkhagId').val($('#hdnpdzid').val());
+
+        //AUTO POPULATE DROPDOWN FOR GEWOG
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulatePG", "TaxPayerProfiles")',
+                data: {
+                    id: parseInt($('#hdnpdzid').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#GewogId').empty();
+                    $('#GewogId').append(
+                        '<option value=0>--Please Select--</option>');
+                    $('#PVillageId').empty();
+                    $('#PVillageId').append(
+                        '<option value=0>--Please Select--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].gewogId + '>'
+                                + data[i].gewogName
+                                + '</option>');
+                            $('#GewogId').append(newOption);
+
+                        }
+                        //alert($('#hdnpgeid').val());
+                        $('#GewogId').val($('#hdnpgeid').val());
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+        });
+
+        // AUTO POPULATE DROPDOWN FOR VILLAGE
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulatePV", "TaxPayerProfiles")',
+                data: {
+                    id: parseInt($('#hdnpgeid').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#PVillageId').empty();
+                    $('#PVillageId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].villageId + '>'
+                                + data[i].villageName
+                                + '</option>');
+                            $('#PVillageId').append(newOption);
+                        }
+
+                        $('#PVillageId').val($('#hdnpvilid').val());
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+        });
+
+        //AUTO POPULATE DROPDOWN FOR BANK
+        $('#luc').val($('#hdnpbanid').val());
+
+        //AUTO POPULATE DROPDOWN FOR BANK BRANCH
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateBB", "TaxPayerProfiles")',
+                data: {
+                    id: parseInt($('#hdnpbanid').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#lusc').empty();
+
+                $('#lusc').append(
+                '<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                var newOption = $('<option value=' + data[i].bankBranchId + '> '
+                    + data[i].branchName
+                    + '  </option>');
+                $('#lusc').append(newOption);
+                }
+
+                    $('#lusc').val($('#hdnpbbid').val());
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+    });
+</script>
+

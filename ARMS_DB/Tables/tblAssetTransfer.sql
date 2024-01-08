@@ -1,0 +1,20 @@
+﻿CREATE TABLE [dbo].[tblAssetTransfer]
+(
+	[assetTransferId] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [assetId] INT NOT NULL, 
+    [transferFromDivisionId] INT NULL, 
+    [transferFromSectionId] INT NULL, 
+    [transferToDivisionId] INT NULL, 
+    [transferToSectionId] INT NULL, 
+    [transferDate] DATETIME NULL, 
+    [remarks] VARCHAR(300) NULL,
+     [createdBy] INT NOT NULL, 
+    [createdOn] DATETIME NOT NULL, 
+    [modifiedBy] INT NULL, 
+    [modifiedOn] DATETIME NULL, 
+    [responsiblePersonFrom] VARCHAR(250) NULL, 
+    [responsiblePersonTo] VARCHAR(250) NULL, 
+    [assetTransferTypeId] INT NOT NULL, 
+    CONSTRAINT [FK_tblAssetTransfer_ToTable] FOREIGN KEY ([assetId]) REFERENCES [mstAsset]([assetId]), 
+    CONSTRAINT [FK_tblAssetTransfer_ToTable_1] FOREIGN KEY ([assetTransferTypeId]) REFERENCES [enumAssetTransferType]([assetTransferTypeId]), 
+)

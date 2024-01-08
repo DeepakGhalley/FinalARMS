@@ -1,0 +1,233 @@
+﻿@model CORE_BOL.DemandCancelVM
+@{
+    ViewData["Title"] = "DemandCancel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="DemandCancel">Demand Cancel</a></li>
+                    <li class="breadcrumb-item active">Demand Cancel</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+@* *******************************************************SEARCH DEMAND USING DEMAND NO****************************************************************************************** *@
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Search Demand</h3>
+        <input type ="hidden" id="hdnIsPaymentMade" />
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Demand No</label>
+            <div class="col-sm-3">
+                <input class="form-control" placeholder="Search by Demand No" id="DemandNoinput" />
+            </div> 
+            
+            <div class="col-sm-3">
+                <button type="button" class="btn btn-primary" onclick="return SearchDemand();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* ************************************************************DEMAND DISPLAY****************************************************************************** *@
+
+<div class="card card-info" id="DemandDetails" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Demand Details</h3>
+        <input type="hidden" id="hdnTotalDemandAmount" />
+        <input type="hidden" id="hdnDemandNoId" />
+        <input type="hidden" id="hdnDemandId" />
+        <input type="hidden" id="hdnDemandAmount" />
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>CID</th>
+                        <th>TTIN</th>
+                        <th>Name</th>
+                        <th>Tax Name</th>
+                        <th>Demand Amount</th>
+                        <th>Exemption Amount</th>
+                        <th>Total Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDemandDetails">
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-1 col-form-label">Remarks </label>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="idsremarks" placeholder="Enter Remarks" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-sm-1"></div>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary" onclick="return saveme();" style="">Save</button> &nbsp; &nbsp;
+                <button type="reset" onclick=" return btnCancel();" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+    </div>
+
+
+
+
+
+<script>
+    /********************************************************************DEMAND SEACRH*****************************************************************************************/
+
+    function SearchDemand() {
+        if ($('#DemandNoinput').val() == "") {
+                swal('Empty Fields!', '', 'error');
+            $('#DemandNoinput').focus();
+                return false;
+        }   
+        var DemandNo = $('#DemandNoinput').val();
+             $.ajax({
+               type: "GET",
+               url: '@Url.Action("GetDemandWithSearch", "DemandCancels")',
+               data: {
+                   DemandNo: DemandNo
+                        },
+                 success: function (data) {
+                         //else {
+                         $('#tblDemandDetails').empty();
+                         if (data.length > 0) {
+                             var t = 0;         
+
+                             if (data[0].isPaymentMade == true) {
+
+                                 $('#DemandDetails').hide(1000);
+                                 swal('Information', 'Already paid.', 'info');
+                                 return false;
+                             }
+
+                             else {
+                                 $.each(data, function (key, value) {
+
+                                     $('#DemandDetails').show(1000);
+                                     $('#tblDemandDetails').show(1000);
+                                     $('#tblDemandDetails').append(
+                                         '<tr>'
+                                         + '<td>' + value.cid + '</td>'
+                                         + '<td>' + value.ttin + '</td>'
+                                         + '<td>' + value.name + '</td>'
+                                         + '<td>' + value.taxName + '</td>'
+                                         + '<td>' + value.demandAmount + '</td>'
+                                         + '<td>' + value.exemptionAmount + '</td>'
+                                         + '<td>' + value.totalAmount + '</td>'
+                                         + '</tr>');
+                                     t += value.totalAmount;
+                                     $('#hdnTotalDemandAmount').val(t);
+
+                                 });
+
+                                 $('#hdnDemandId').val(data[0].demandId);
+                             }
+                                                       
+                         }
+                         else {
+                             $('#tblDemandDetails').append(
+                                 '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                     }
+
+//*******************************************************DEMAND DETAILS**********************************************************************************************
+                       
+             $.ajax({
+               type: "GET",
+               url: '@Url.Action("GetDemandDetails", "DemandCancels")',
+               data: {
+                   id: parseInt($('#hdnDemandId').val())
+                        },
+                         dataType: 'JSON',
+                        contentType: 'application/json, charset=utf-8',
+
+                 success: function (data) {
+                               if (data.length > 0) {
+                                  var demandnoid = data[0].demandNoId;
+
+                                  $('#hdnDemandNoId').val(demandnoid);
+
+                         }
+                                },
+                                error: function () {
+                                    $('#img').hide();
+                                    alert('Error occured');
+                                }
+                            });
+
+                    },
+
+                        error: function () {
+                            alert('error');
+                        }
+             });
+    }
+
+
+//*************************************************************SAVE DEMAND CANCEL*******************************************************************************
+
+    function saveme() {
+        swal(confirm("Are you sure you want to Cancel?", "Yes", "No", true))
+
+        var myarray = [];
+        var DemandCancelVM = {};
+
+        DemandCancelVM.DemandNoId = parseInt($("#hdnDemandNoId").val());
+        DemandCancelVM.TotalCancelAmount = parseFloat($("#hdnTotalDemandAmount").val());
+        DemandCancelVM.Remarks = $("#idsremarks").val();
+        DemandCancelVM.DemandId = parseInt($("#hdnDemandId").val());
+        //DemandCancelVM.DemandAmount = parseFloat($("#hdnDemandAmount").val());
+
+        myarray.push(DemandCancelVM);
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+        $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveDemandCancel", "DemandCancels")',
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response > 0) {
+                        $('#img').hide();
+                        swal("Successfully Cancelled!");
+                        setTimeout(function () {
+                            location.reload();
+                        }, 3000);
+                    } else {
+
+                        swal("Failed to Cancel!");
+                        $('#img').hide();
+                    }
+                },
+                error: function () {
+                    swal("Error occurred!");
+                    $('#img').hide();
+                }
+
+        });
+    }
+
+    function btnCancel () {
+        $('#DemandDetails').hide(1000);
+        $('#tblDemandDetails').hide(1000);
+    }
+</script>

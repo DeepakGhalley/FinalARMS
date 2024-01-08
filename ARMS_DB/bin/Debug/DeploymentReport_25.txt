@@ -1,0 +1,21 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstTaxPeriod]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstTaxPeriod] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstTaxPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPeriod_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_mstTaxPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPeriod_ToTable_1] (Foreign Key)

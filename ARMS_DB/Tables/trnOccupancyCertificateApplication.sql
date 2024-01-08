@@ -1,0 +1,32 @@
+﻿CREATE TABLE [dbo].[trnOccupancyCertificateApplication]
+(
+	[occupancyCertificateApplicationId] INT NOT NULL PRIMARY KEY IDENTITY,
+	[occupancyTypeId] INT NOT NULL,     
+    [landOwnershipId] INT NOT NULL DEFAULT 103270, 
+    [landDetailId] INT NOT NULL,    
+    [buildingDetailId] INT NOT NULL,  
+    [buildingUnitDetailId] int NULL, -- generated unit ids
+    [taxPayerId] INT NOT NULL, 
+    [dateOfFinalInspection] DATE NOT NULL, 
+    [logoSignMapId] INT NOT NULL,
+    [issueDate] DATETIME NOT NULL, 
+    [validTillDate] DATETIME NOT NULL, 
+    [ocReferenceNo] VARCHAR(300) NOT NULL, 
+    [isNewOc] BIT NOT NULL , 
+    [yr] INT NOT NULL, 
+    [sl] INT NOT NULL, 
+    [g2cApplicationNo] VARCHAR(150)  NULL, 
+    [createdBy] [int] NOT NULL,
+	[createdOn] [date] NOT NULL,
+	[modifiedBy] [int] NULL,
+	[modifiedOn] [datetime] NULL,  
+   
+    [isBuildingOC] BIT NOT NULL DEFAULT 1, 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable] FOREIGN KEY ([occupancyTypeId]) REFERENCES [enumOccupancyType]([occupancyTypeId]), 
+    --CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_1] FOREIGN KEY ([buildingUnitDetailId]) REFERENCES [mstBuildingUnitDetail]([buildingUnitDetailId]), 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_2] FOREIGN KEY ([buildingDetailId]) REFERENCES [mstBuildingDetail]([buildingDetailId]), 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_3] FOREIGN KEY ([taxPayerId]) REFERENCES [mstTaxPayerProfile]([taxPayerId]), 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_4] FOREIGN KEY ([landDetailId]) REFERENCES [mstLandDetail]([landDetailId]), 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_6] FOREIGN KEY ([logoSignMapId]) REFERENCES [mstLogoSignMap]([logoSignMapId]), 
+    CONSTRAINT [FK_trnOccupancyCertificateApplication_ToTable_5] FOREIGN KEY ([landOwnershipId]) REFERENCES [tblLandOwnershipDetail]([landOwnershipId]), 
+)

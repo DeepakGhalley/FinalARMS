@@ -1,0 +1,20 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Rename
+       [dbo].[mstBuildingDetail].[storyTypeId] (Column)
+     Drop
+       [dbo].[FK_mstBuildingDetail_ToTable_13] (Foreign Key)
+     Create
+       [dbo].[enumStoryType] (Table)
+       [dbo].[FK_mstBuildingDetail_ToTable_13] (Foreign Key)
+
+** Supporting actions

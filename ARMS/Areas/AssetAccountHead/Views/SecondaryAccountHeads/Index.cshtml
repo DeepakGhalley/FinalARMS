@@ -1,0 +1,119 @@
+﻿@model List<CORE_BOL.SecondaryAccountHeadModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="#">Asset Master</a></li>
+                    <li class="breadcrumb-item active">Secondary Account Head</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Secondary Account Head Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New User"><b><i class="fas fa-plus"></i> Add New </b> </a>
+        </p>
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th> Account Head Name</th>
+                    <th> Account Head Code</th>
+                    <th> Accout Head Symbol</th>
+                    <th> Accout Head Description</th>
+                    <th>Primary Account Head</th>
+                    <th>IsActive</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sl = 1; }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @sl
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondaryAccountHeadName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondaryAccountHeadCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondaryAccountHeadDescription)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SecondaryAccountHeadSymbol)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PrimaryAccountHeadName)
+                        </td>
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.IsActive)
+                        </td>
+
+
+                        <td style="text-align:center;">
+                            <a asp-action="Edit" asp-route-id="@item.SecondaryAccountHeadId" title="EDIT"><i class="fas fa-edit"></i></a>
+                        </td>
+                    </tr>
+                    sl++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+
+</script>
+

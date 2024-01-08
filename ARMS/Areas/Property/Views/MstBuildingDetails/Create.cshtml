@@ -1,0 +1,248 @@
+﻿@model CORE_BOL.Entities.MstBuildingDetail
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>MstBuildingDetail</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="LandDetailId" class="control-label"></label>
+                <select asp-for="LandDetailId" class ="form-control" asp-items="ViewBag.LandDetailId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildingNo" class="control-label"></label>
+                <input asp-for="BuildingNo" class="form-control" />
+                <span asp-validation-for="BuildingNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildupArea" class="control-label"></label>
+                <input asp-for="BuildupArea" class="form-control" />
+                <span asp-validation-for="BuildupArea" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PlinthArea" class="control-label"></label>
+                <input asp-for="PlinthArea" class="form-control" />
+                <span asp-validation-for="PlinthArea" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfUnits" class="control-label"></label>
+                <input asp-for="NoOfUnits" class="form-control" />
+                <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberOfFloors" class="control-label"></label>
+                <input asp-for="NumberOfFloors" class="form-control" />
+                <span asp-validation-for="NumberOfFloors" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GarbagServiceAccessibilityId" class="control-label"></label>
+                <select asp-for="GarbagServiceAccessibilityId" class ="form-control" asp-items="ViewBag.GarbagServiceAccessibilityId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StreetLightAccessibilityId" class="control-label"></label>
+                <select asp-for="StreetLightAccessibilityId" class ="form-control" asp-items="ViewBag.StreetLightAccessibilityId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyCertificateNo" class="control-label"></label>
+                <input asp-for="OccupancyCertificateNo" class="form-control" />
+                <span asp-validation-for="OccupancyCertificateNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConstructionTypeId" class="control-label"></label>
+                <select asp-for="ConstructionTypeId" class ="form-control" asp-items="ViewBag.ConstructionTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="YearOfConstruction" class="control-label"></label>
+                <input asp-for="YearOfConstruction" class="form-control" />
+                <span asp-validation-for="YearOfConstruction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyCertificateIssued" class="control-label"></label>
+                <input asp-for="OccupancyCertificateIssued" class="form-control" />
+                <span asp-validation-for="OccupancyCertificateIssued" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyCertificateIssueDate" class="control-label"></label>
+                <input asp-for="OccupancyCertificateIssueDate" class="form-control" />
+                <span asp-validation-for="OccupancyCertificateIssueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterConnection" class="control-label"></label>
+                <input asp-for="WaterConnection" class="form-control" />
+                <span asp-validation-for="WaterConnection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SewerageConnection" class="control-label"></label>
+                <input asp-for="SewerageConnection" class="form-control" />
+                <span asp-validation-for="SewerageConnection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Attic" class="control-label"></label>
+                <input asp-for="Attic" class="form-control" />
+                <span asp-validation-for="Attic" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StructureCategoryId" class="control-label"></label>
+                <select asp-for="StructureCategoryId" class ="form-control" asp-items="ViewBag.StructureCategoryId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="StructureTypeId" class="control-label"></label>
+                <select asp-for="StructureTypeId" class ="form-control" asp-items="ViewBag.StructureTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="MaterialTypeId" class="control-label"></label>
+                <select asp-for="MaterialTypeId" class ="form-control" asp-items="ViewBag.MaterialTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="ArchFeature" class="control-label"></label>
+                <input asp-for="ArchFeature" class="form-control" />
+                <span asp-validation-for="ArchFeature" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Roofing" class="control-label"></label>
+                <input asp-for="Roofing" class="form-control" />
+                <span asp-validation-for="Roofing" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoofingTypeId" class="control-label"></label>
+                <select asp-for="RoofingTypeId" class ="form-control" asp-items="ViewBag.RoofingTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TraditionalPainting" class="control-label"></label>
+                <input asp-for="TraditionalPainting" class="form-control" />
+                <span asp-validation-for="TraditionalPainting" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BuildingColourId" class="control-label"></label>
+                <select asp-for="BuildingColourId" class ="form-control" asp-items="ViewBag.BuildingColourId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="BoundaryTypeId" class="control-label"></label>
+                <select asp-for="BoundaryTypeId" class ="form-control" asp-items="ViewBag.BoundaryTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Plantation" class="control-label"></label>
+                <input asp-for="Plantation" class="form-control" />
+                <span asp-validation-for="Plantation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterTankLocationId" class="control-label"></label>
+                <select asp-for="WaterTankLocationId" class ="form-control" asp-items="ViewBag.WaterTankLocationId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="NumberDisplayed" class="control-label"></label>
+                <input asp-for="NumberDisplayed" class="form-control" />
+                <span asp-validation-for="NumberDisplayed" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ParkingSlotId" class="control-label"></label>
+                <select asp-for="ParkingSlotId" class ="form-control" asp-items="ViewBag.ParkingSlotId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FireExtingusher" class="control-label"></label>
+                <input asp-for="FireExtingusher" class="form-control" />
+                <span asp-validation-for="FireExtingusher" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterSupplyAccessibilityId" class="control-label"></label>
+                <select asp-for="WaterSupplyAccessibilityId" class ="form-control" asp-items="ViewBag.WaterSupplyAccessibilityId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoadAccess" class="control-label"></label>
+                <input asp-for="RoadAccess" class="form-control" />
+                <span asp-validation-for="RoadAccess" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DrainToStormWaterDrain" class="control-label"></label>
+                <input asp-for="DrainToStormWaterDrain" class="form-control" />
+                <span asp-validation-for="DrainToStormWaterDrain" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfFinalInspection" class="control-label"></label>
+                <input asp-for="DateOfFinalInspection" class="form-control" />
+                <span asp-validation-for="DateOfFinalInspection" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyAlteredOn" class="control-label"></label>
+                <input asp-for="OccupancyAlteredOn" class="form-control" />
+                <span asp-validation-for="OccupancyAlteredOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyAlteredBy" class="control-label"></label>
+                <input asp-for="OccupancyAlteredBy" class="form-control" />
+                <span asp-validation-for="OccupancyAlteredBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OccupancyReferenceId" class="control-label"></label>
+                <input asp-for="OccupancyReferenceId" class="form-control" />
+                <span asp-validation-for="OccupancyReferenceId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvanceInfoFedBy" class="control-label"></label>
+                <input asp-for="AdvanceInfoFedBy" class="form-control" />
+                <span asp-validation-for="AdvanceInfoFedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AdvanceInfoInfoFedOn" class="control-label"></label>
+                <input asp-for="AdvanceInfoInfoFedOn" class="form-control" />
+                <span asp-validation-for="AdvanceInfoInfoFedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remarks" class="control-label"></label>
+                <input asp-for="Remarks" class="form-control" />
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModificationRemarks" class="control-label"></label>
+                <input asp-for="ModificationRemarks" class="form-control" />
+                <span asp-validation-for="ModificationRemarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModificationReasonId" class="control-label"></label>
+                <input asp-for="ModificationReasonId" class="form-control" />
+                <span asp-validation-for="ModificationReasonId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionId" class="control-label"></label>
+                <input asp-for="TransactionId" class="form-control" />
+                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedBy" class="control-label"></label>
+                <input asp-for="CreatedBy" class="form-control" />
+                <span asp-validation-for="CreatedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedOn" class="control-label"></label>
+                <input asp-for="CreatedOn" class="form-control" />
+                <span asp-validation-for="CreatedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedBy" class="control-label"></label>
+                <input asp-for="ModifiedBy" class="form-control" />
+                <span asp-validation-for="ModifiedBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ModifiedOn" class="control-label"></label>
+                <input asp-for="ModifiedOn" class="form-control" />
+                <span asp-validation-for="ModifiedOn" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

@@ -1,0 +1,60 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblDemand]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[DF_tblDemand_isCancelled] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isPay__7207BD92] (Default Constraint)
+     Table rebuild
+       [dbo].[tblDemand] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+     Create
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+     Refresh
+       [dbo].[rptDefaulterPropertyList] (Procedure)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptGetDailyHeadWiseDemandCollection] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbycalyear] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbytofromdate] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)

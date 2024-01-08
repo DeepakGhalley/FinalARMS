@@ -1,0 +1,291 @@
+﻿@*@model IEnumerable<CORE_BOL.Entities.MstBank>*@
+@model List<CORE_BOL.RevenueTransferVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Income statement</a></li>
+                    <li class="breadcrumb-item active">Income statement Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Income statement  Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+
+       
+        <div class="card-header">
+            <h3 class="card-title">Enter Opening Date to check</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-6">
+                    <label class="col-sm-3 col-form-label">Opening Date  <span style="font-weight: bold; color: red;"></span></label>
+                    <input id="idop" class="form-control col-6" type="date"/>
+                </div>
+
+
+                <div class="input-group-append col-6">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <button class="btn btn-primary" onclick="return functionchecK();">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+        <div id="Info" style="display: none;">
+            <input id="Onlineamount"/>
+            <input id="mannualamount"/>
+            <input id="transferamount"/>
+            <input id="OBamount"/>
+            
+            <table id="example1" class="table table-bordered table-striped">
+                <thead>
+
+                    <tr>
+
+                        <th>Particular</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+                <tr><td align="right"><b>Opening Balance(OB)</b></td><td><label id="OB" class="col-form-label" readonly /> </td></tr>
+                <tr><td align="right"><b>Opening Date</b></td><td><label id="OD" class="col-form-label" readonly /> </td></tr>
+                <tr><td align="right"><b>Revenue Collected:(From opening date till current date(RC))</b></td><td><label id="Rc" class="col-form-label" readonly /> </td></tr>
+                <tr><td align="right"><b>Total Revenue(TR):(OB)+(RC)</b></td><td><label id="TR" class="col-form-label" readonly /> </td></tr>
+                <tr><td align="right"><b>Net Balance(NB):(TR -TT)</b></td><td><label id="NB" class="col-form-label" readonly /> </td></tr>
+            </table>
+        </div>
+    </div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    function functionchecK() {
+
+        alert("in");
+
+        $('#Info').show(1000);
+
+
+
+        var today = new Date($("#idop").val());
+        var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2)
+        let text1 = date.toString();
+        var sdate = text1;
+
+        var today1 = new Date($("#idop").val());
+        var date1 = ("0" + today1.getDate()).slice(-2) + '/' + ("0" + (today1.getMonth() + 1)).slice(-2) + '/' + today1.getFullYear() 
+        let text = date1.toString();
+        var edate = text;
+        var ma = 0;
+        var ta = 0;
+        var oa = 0;
+        var ob = 0;
+        var Arc = 0;
+        var Trc = 0;
+        var Anb = 0;
+
+        //online
+            $.ajax({
+            type: "GET",
+           url: '@Url.Action("Online", "RevenueTransfers")',
+            data: {
+                StartDate: sdate,
+
+
+            },
+            dataType: "json",
+                success: function (data) {
+                    $('#img1').hide();
+                    console.log(data);
+                    $('#Onlineamount').html('');
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#Onlineamount').append(
+                                "  Nu.  " + value.totalAmount.toFixed(2) + ""
+                            );
+
+                        });
+
+                    }
+                    else {
+                        $('#img1').hide();
+                      alert('error');
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+                $('#img1').hide();
+            }
+            });
+
+        //transfer
+         $.ajax({
+            type: "GET",
+           url: '@Url.Action("transfer", "RevenueTransfers")',
+            data: {
+                StartDate: sdate,
+
+
+            },
+            dataType: "json",
+                success: function (data) {
+                    $('#img1').hide();
+                    console.log(data);
+                    $('#transferamount').html('');
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#transferamount').append(
+                                "  Nu.  " + value.totalAmount.toFixed(2) + ""
+                            );
+
+                        });
+
+                    }
+                    else {
+                        $('#img1').hide();
+                      alert('error');
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+                $('#img1').hide();
+            }
+         });
+
+        //openingbalance
+              $.ajax({
+            type: "GET",
+           url: '@Url.Action("openingbalance", "RevenueTransfers")',
+            data: {
+                StartDate: sdate,
+
+
+            },
+            dataType: "json",
+                success: function (data) {
+                    $('#img1').hide();
+                    console.log(data);
+                    $('#OBamount').html('');
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#OBamount').append(
+                                "  Nu.  " + value.totalAmount.toFixed(2) + ""
+                            );
+
+                        });
+
+                    }
+                    else {
+                        $('#img1').hide();
+                      alert('error');
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+                $('#img1').hide();
+            }
+              });
+
+        // mannual
+             $.ajax({
+            type: "GET",
+           url: '@Url.Action("mannual", "RevenueTransfers")',
+            data: {
+                StartDate: sdate,
+
+
+            },
+            dataType: "json",
+                success: function (data) {
+                    $('#img1').hide();
+                    console.log(data);
+                    $('#mannualamount').html('');
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#mannualamount').append(
+                                "  Nu.  " + value.totalAmount.toFixed(2) + ""
+                            );
+
+                        });
+
+                    }
+                    else {
+                        $('#img1').hide();
+                      alert('error');
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+                $('#img1').hide();
+            }
+             });
+
+       
+
+        ma = $("#mannualamount").val();
+        ta = $("#transferamount").val();
+        oa = $("#Onlineamount").val();
+        ob = $("#OBamount").val();
+        ob = $("#OBamount").val();
+        Arc = parseFloat(ma) + parseFloat(oa);
+        Trc = parseFloat(ob) + parseFloat(Arc);
+        Anb = parseFloat(Trc) - parseFloat(ta);
+
+        
+        $("#OB").html(ob);
+        $("#RC").html(Arc);
+        $("#TR").html(Trc);
+        $("#NB").html(Anb);
+
+       
+        $("#OD").html(edate);
+       
+    }
+
+
+</script>

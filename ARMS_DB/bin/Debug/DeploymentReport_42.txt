@@ -1,0 +1,25 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblPaymentLeger]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[tblPaymentLeger] (Table)
+     Create
+       [dbo].[FK_tblPaymentLeger_ToTable_3] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_2] (Foreign Key)

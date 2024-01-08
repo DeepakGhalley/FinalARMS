@@ -1,0 +1,681 @@
+﻿@model List<CORE_BOL.ECRenewalDetailModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">EC_Renewal Details</a></li>
+                    <li class="breadcrumb-item active">EC-Renewal Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search EC Renewal Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID/License No</label>
+                    <input id="cid_lincenseNo" class="form-control col-6" />                  
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Applicant Name</label>
+                    <input id="applicant" class="form-control col-6" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayApplicantDetail();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="ec_applicant">
+    <div class="card-header">
+        <h3 class="card-title">Applicant Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>CID</th>
+                        <th>Licence No</th>
+                        <th>Applicant Name</th>
+                        <th>Address</th>
+                        <th>Contact No</th>
+                        <th>Post Box No</th>
+                        <th>Fax No</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tblec_applicant">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="ECDetails" style="display: none;">
+    <div class="card-header">
+        <input type="hidden" id="hdnApplicant" />
+        <h3 class="card-title">Environment Clearance Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Activity Type</th>
+                        <th>Industry Type</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Project Status</th>
+                        <th>Approval Status</th>
+                        <th>Action</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tblECDetails">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="renew_ec" style="display: none;">
+    <div class="card-header">
+        <input type="hidden" id="hdnECDetailId" />
+        <input type="hidden" id="GActivityTypeId" />
+        <input type="hidden" id="GIndustryTypeId" />
+        <input type="hidden" id="GQuantity" />
+        <h3 class="card-title">Renewal EC Details</h3>
+    </div>
+
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>EC Use Type</th>
+                    <th>valid Up to</th>
+                    <th>Calendar Year</th>
+                    <th>EC RefNo</th>
+                    <th>Amount</th>
+                    <th>Remarks</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="my_Body">
+            </tbody>
+        </table>      
+    </div>
+</div>
+
+<div class="card card-info" id="renew_ec_entry" style="display: none;">
+    <div class="card-header">
+        <input type="hidden" id="hdnECRenewalID" />
+        <h3 class="card-title">Renew EC</h3>
+    </div>
+
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Renew Up To<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="date" id="RenewUpTo" class="form-control" required />
+                <span id="RenewUpToEr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Remarks</label>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="Remarks" placeholder="Enter Remarks" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-primary" onclick="return SaveRenew();">Save</button>
+                <button id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="ViewECDemand" style="display:none;">
+    <div class="card-body" id="toprint">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td>
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 120px; height: 100px" />
+                    </td>
+
+                    <td>
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>EC Renewal Demand Recepit </strong>
+                    </td>
+
+                    <td>
+                        <img id="qrDemandNo" style="width: 120px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td>
+                        <b>Demand No:</b>&nbsp;<label id="lblDemandNo" value="" />
+                    </td>
+                    <td>
+                        <b>Activity Type:</b> <label id="lblActivityType" value="" />
+
+                    </td>
+                    <td>
+                        <b>Demand Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>CID:</b>&nbsp;<label id="lblCID" class="col-form-label" readonly />
+                    </td>
+
+                    <td>
+                        <b>License No:</b>&nbsp;<label id="lblLicenseNo" class="col-form-label" readonly />
+                    </td>
+
+                    <td>
+                        <b>Name:</b>&nbsp;<label id="lblName" value="" />
+                    </td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <b>Address:</b>&nbsp;<label id="lblAddress" class="col-form-label" readonly />
+                    </td>
+                    <td>
+                        <b>Start Date:</b>&nbsp;<label id="lblSDate" class="col-form-label" readonly />
+                    </td>
+
+                    <td>
+                        <b>End Date:</b>&nbsp;<label id="lblEDate" class="col-form-label" readonly />
+                    </td>
+                </tr>
+
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblECViewDemand">
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="lblUser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script>
+
+//**********************************************APPLICANT DETAILS***********************************************************************************
+
+        function displayApplicantDetail() {
+            $('#ECDetails').hide(1000);
+            $('#renew_ec').hide(1000);
+            $('#renew_ec_entry').hide(1000);
+     var CIDLicenceNo = $('#cid_lincenseNo').val();
+     var ApplicantName = $('#applicant').val();
+
+        if ($('#CIDLicenseNoInput').val() == "" && $('#ApplicantNameInput').val() == "") {
+            swal('Empty Fields!', '', 'error');
+            $('#CIDLicenseNoInput').focus();
+            $('#ApplicantNameInput').focus();
+            return false;
+            }
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetEcRenewal", "ECRenewalDetails")',
+                        data: {
+                            cid: CIDLicenceNo,
+                            applicantname: ApplicantName
+                        },
+                        success: function (data) {
+                            $('#tblec_applicant').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#ec_applicant').show(1000);
+                                    $('#tblec_applicant').append(
+                                        '<tr>'
+                                        + '<td>' + value.cid + '</td>'
+                                        + '<td>' + value.licenceNo + '</td>'
+                                        + '<td>' + value.applicantName + '</td>'
+                                        + '<td>' + value.address + '</td>'
+                                        + '<td>' + value.contactNo + '</td>'
+                                        + '<td>' + value.postBoxNo + '</td>'
+                                        + '<td>' + value.faxNo + '</td>'
+                                        + '<td>'
+                                        + '<a style = "color: blue; cursor: pointer;" onclick = "return ViewECDetails(' + value.applicantId + ' )" title = "View EC Details" >View</a >'
+                                        + '</td>'
+                                        + '</tr>');
+                                });
+                            }
+                            else {
+                                $('#ec_applicant').show(1000);
+                                $('#tblec_applicant').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                        error: function () {
+                            alert('error');
+                        }
+        });
+    }
+
+//********************************************************VIEW EC DETAILS******************************************************************************
+
+    function ViewECDetails(applicantId) {
+        $('#hdnApplicant').val(applicantId);
+        $('#renew_ec').hide(1000);
+        $('#renew_ec_entry').hide(1000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetECDetails", "ECRenewalDetails")',
+                        data: {
+                            ApplicantId: parseInt(applicantId)
+                        },
+                        success: function (data) {
+                            $('#tblECDetails').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    const d = new Date(value.startDate);
+                                    const SDate = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear()
+
+                                    const e = new Date(value.endDate);
+                                    const EDate = ("0" + e.getDate()).slice(-2) + '/' + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + e.getFullYear()
+
+                                    $('#ECDetails').show(1000);
+                                    $('#tblECDetails').append(
+                                        '<tr>'
+                                        + '<td>' + value.projectName + '</td>'
+                                        + '<td>' + value.activityType + '</td>'
+                                        + '<td>' + value.industryTypeName + '</td>'
+                                        + '<td>' + SDate + '</td>'
+                                        + '<td>' + EDate + '</td>'
+                                        + '<td>' + value.projectStatusName + '</td>'
+                                        + '<td>' + value.approvalStatusName + '</td>'
+                                        + '<td>'
+                                        //+ '<a style = "color:#007bff; cursor: pointer;" onclick = "return RenewEC(' + value.ecDetailId + ',\'' + EDate + '\' )" title = "Renew" > Renew</a >'
+                                        + '<a style = "color:#007bff; cursor: pointer;" onclick = "return ViewRenewal(' + value.ecDetailId + ',' + value.ecActivityTypeId + ',' + value.industryTypeId + ',' + value.quantity + ')" title = "View Renewal" >View Renewal</a >'
+                                        + '</td>'
+                                        + '</tr>');
+                                });
+                            }
+                            else {
+                                $('#ECDetails').show(1000);
+                                $('#tblECDetails').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                        error: function () {
+                            alert('error');
+                        }
+        });
+    }
+
+//********************************************************RENEW EC DETAILS******************************************************************************
+
+        function ViewRenewal(ecDetailId, ecActivityTypeId, industryTypeId, quantity) {
+            $('#GActivityTypeId').val(ecActivityTypeId);
+            $('#GIndustryTypeId').val(industryTypeId);
+            $('#GQuantity').val(quantity);
+            $('#renew_ec_entry').hide(1000);
+            $('#hdnECDetailId').val(ecDetailId);
+            $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetECRenewalDetails", "ECRenewalDetails")',
+                        data: {
+                            ECDetailId: ecDetailId
+                        },
+                        success: function (data) {
+                            $('#my_Body').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    const d = new Date(value.validUpTo);
+                                    const VUT = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear()
+                                    $('#renew_ec').show(1000);
+                                    $('#my_Body').append(
+                                        '<tr>'
+                                        + '<td>' + value.eCdUSeTypeName + '</td>'
+                                        + '<td>' + VUT + '</td>'
+                                        + '<td>' + value.calendarYear + '</td>'
+                                        + '<td>' + value.ecRefNo + '</td>'
+                                        + '<td>' + value.amount + '</td>'
+                                        + '<td>' + value.remarks + '</td>'
+                                        + '<td>'
+                                        + '<a style = "color:#007bff; cursor: pointer;" onclick = "return Renew(' + value.ecRenewalId + ',\'' + value.endDate + '\' )" title = "Renew" >Renew</a >'
+                                        + '</td>'
+                                        + '</tr>');
+                                });
+                            }
+                            else {
+                                $('#renew_ec').show(1000);
+                                $('#my_Body').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                        error: function () {
+                            alert('error');
+                        }
+        });
+        }
+
+        function Renew(ecRenewalId, endDate) {
+            var today = new Date();
+            var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+            const e = new Date(endDate);
+            const EDate = ("0" + e.getDate()).slice(-2) + '/' + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + e.getFullYear()
+            if (EDate == date || EDate > date) {
+                swal('EC is Valid till' + ' ' + EDate);
+                return false;
+            }
+            else {
+            $('#renew_ec_entry').show(1000);
+        }
+            $('#hdnECRenewalID').val(ecRenewalId);
+            //$('#hdnDemandNoID').val(demandNoId);
+            $('#RenewUpTo').val('');
+            $('#Remarks').val('');
+            }
+
+        function SaveRenew() {
+
+            var myarray = [];
+            var ECRenewalDetailModel = {};
+            ECRenewalDetailModel.ValidUpTo = $('#RenewUpTo').val();
+            ECRenewalDetailModel.Remarks = $('#Remarks').val();
+            ECRenewalDetailModel.EcRenewalId = parseInt($('#hdnECRenewalID').val());
+            ECRenewalDetailModel.EcDetailId = parseInt($('#hdnECDetailId').val());
+            myarray.push(ECRenewalDetailModel);
+
+                    var json_data = JSON.stringify(myarray);
+                console.log(json_data);
+                $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveECRenewal", "ECRenewalDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //$('#hdnDemandNoID').val(response);
+                if (response > 0) {
+                    var myarray1 = [];
+        var GenerateEC = {};
+
+        GenerateEC.EcRenewalId = parseInt($('#hdnECRenewalID').val());
+        GenerateEC.EcActivityTypeId = parseInt($('#GActivityTypeId').val());
+        GenerateEC.IndustryTypeId = parseInt($('#GIndustryTypeId').val());
+        GenerateEC.ApplicantId = parseInt($('#hdnApplicant').val());
+        GenerateEC.Quantity = parseInt($('#GQuantity').val());
+        GenerateEC.EcDetailId = parseInt($('#hdnECDetailId').val());
+
+        myarray1.push(GenerateEC);
+
+        var json_data = JSON.stringify(myarray1);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("GenerateECDemand", "ECRenewalDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetECDemand", "ECRenewalDetails")',
+                data: {
+                    DemandNoId: response
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tblECViewDemand').empty();
+                    if (data.length > 0) {
+
+                        var datec = data[0].demandDate;
+                        const c = new Date(datec);
+                        const CreatedDate = ("0" + c.getDate()).slice(-2) + "/" + ("0" + (c.getMonth() + 1)).slice(-2) + '/' + c.getFullYear()
+
+                        var sdate = data[0].startDate;
+                        const s = new Date(sdate);
+                        const StartDate = ("0" + s.getDate()).slice(-2) + "/" + ("0" + (s.getMonth() + 1)).slice(-2) + '/' + s.getFullYear()
+
+                        var edate = data[0].endDate;
+                        const e = new Date(edate);
+                        const EndDate = ("0" + e.getDate()).slice(-2) + "/" + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + e.getFullYear()
+
+
+
+                        $("#lblName").html(data[0].applicantName);
+                        $("#lblCID").html(data[0].cid);
+                        $("#lblActivityType").html(data[0].activityType);
+                        $("#lblLicenseNo").html(data[0].licenceNo);
+                        $("#lblAddress").html(data[0].address);
+                        $("#lblDemandDate").html(CreatedDate);
+                        $("#lblDemandNo").html(data[0].demandNo);
+                        $("#lblSDate").html(StartDate);
+                        $("#lblEDate").html(EndDate);
+
+                        $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                        $.each(data, function (key, value) {
+                            $('#tblECViewDemand').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.totalAmount+ '</td>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                       
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#ViewECDemand").show(1000);
+                        $('#tblDemand').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+
+            $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetUserName", "ECRenewalDetails")',
+                    data: {
+                        DemandNoId: response
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+
+                            $("#lblUser").html(data[0].userName);
+                        }
+                    },
+
+                });
+                    //ViewECDetails($('#hdnApplicant').val());
+                    //swal('EC Generated Sucessfully!');
+                    //displayLandOwnershipType($('#hdnLandDetailId').val());
+                    //$('#UpdateOwnership').hide(1000);
+                }
+                else {
+                    swal('EC Generation Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+                    //Renew($('#hdnECRenewalID').val());
+                    swal('EC Renewed Successfully!');
+                    $('html,body').animate({
+                        scrollTop: $("#ViewECDemand").offset().top
+                    }, 'slow');
+                    $('#renew_ec_entry').hide(1000);
+                    $('#ViewECDemand').show(1000);
+
+                }
+                else {
+                    swal('EC Renewal Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+        }
+
+        function printPage() {
+            var dataToPrint = document.getElementById("toprint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function ok() {
+            location.reload();
+
+        }
+
+        $('#btnCancel').click(function () {
+            $('#renew_ec_entry').hide(1000);
+        })
+    </script>

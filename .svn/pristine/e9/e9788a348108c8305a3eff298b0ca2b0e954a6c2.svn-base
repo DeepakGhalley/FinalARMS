@@ -1,0 +1,56 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstLandServiceType]
+       [dbo].[mstLandDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[DF__tmp_ms_xx__isSub__4A58F394] (Default Constraint)
+     Table rebuild
+       [dbo].[mstLandServiceType] (Table)
+       [dbo].[mstLandDetail] (Table)
+     Alter
+       [dbo].[rptDailyPaymentWiseDemandCollection] (Procedure)
+       [dbo].[rptIndividualReceiptWiseCollection] (Procedure)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_trnLandFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+     Create
+       [dbo].[FK_trnLandFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+     Refresh
+       [dbo].[ViewProertyTaxLedger] (View)

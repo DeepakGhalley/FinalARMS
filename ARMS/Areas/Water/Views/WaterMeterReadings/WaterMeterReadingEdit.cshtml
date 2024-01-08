@@ -1,0 +1,288 @@
+﻿@using CORE_BOL
+@model WaterMeterReadingModel
+@{
+    ViewData["Title"] = "WaterMeterReadingEdit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Transaction</a></li>
+                    <li class="breadcrumb-item active">Water Meter Reading Edit</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Water Meter Reading Edit</h3>
+    </div>
+    <div class="card-body">
+        <div class="row d-flex justify-content-center">
+            <div class="input-group d-flex justify-content-center col-4">
+                <label class="col-sm-4 col-form-label">Consumer</label>
+                <input id="ConsumerNo" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Year</label>
+                <select id="Year" class="form-control col-sm-8 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Month</label>
+                <select id="Month" class="form-control col-sm-4 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Month,"Value","Text")) " value="0"></select>
+            </div>
+            <div class="input-group col-2 float-left">
+                <input type="button" value="Search" class="btn btn-primary col-12 " onclick="return GetReadingDetails();" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Water Meter Reading Details-->
+<div class="card card-info" id="dvWaterMeterReading" style="display:none ;">
+    <div class="card-header">
+        <h3 class="card-title">Water Meter Reading</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Water Connection Status</th>
+                    <th>Water Meter Type</th>
+                    <th>Standard Consumption</th>
+                    <th>Water Line Type</th>
+                    <th>Billing Address</th>
+                    @*<th>Reading</th>*@
+                    <th>Mobile No</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Edit Water Meter Reading-->
+<div class="card card-info" id="dvWaterMeterReadingEdit" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Water Meter Reading Edit</h3>
+        <input type="hidden" id="hdnIsPaymentMade" />
+    </div>
+    <div class="card-body">
+        <div class="card-body">
+            <input id="hdnWaterMeterReadingId" type="hidden" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+
+
+                <label asp-for="PreviousReadingDate" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input id="PreviousReadingDate" type="date" class="form-control" placeholder="Previous Reading Date" />
+                    <span asp-validation-for="PreviousReadingDate" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ReadingDate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input id="ReadingDate" type="date" class="form-control" placeholder="Reading Date" />
+                    <span asp-validation-for="ReadingDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Previous Reading </label>
+                <div class="col-sm-3">
+                    <input id="pReading" type="number" class="form-control" placeholder="Enter Reading" />
+                   
+                </div>
+
+                <label class="col-sm-2 col-form-label">Current Reading</label>
+                <div class="col-sm-3">
+                    <input id="cReading" type="number" class="form-control" placeholder="Enter Reading" />
+                    
+                </div>
+
+
+            </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <button type="button" id="UpdateWaterMeterReading" class="btn btn-primary" onclick="return saveme();">Save</button>
+                        <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+<script>
+    function GetReadingDetails() {
+
+        var consumer = $('#ConsumerNo').val();
+        var month = $('#Month').val();
+        var year = $('#Year').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetMeterReadingDetails", "WaterMeterReadings")',
+            data: {
+                consumerno: consumer,
+                month: month,
+                year: year
+            },
+            success: function (data) {
+                $('#tbl_body').empty();
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+                        $('#dvWaterMeterReading').show(1000);
+                        $('#tbl_body').append(
+                            '<tr class="text-center">'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.waterConnectionStatusName + '</td>'
+                            + '<td>' + value.waterMeterTypeName + '</td>'
+                            + '<td>' + value.standardConsumption + '</td>'
+                            + '<td>' + value.waterLineTypeName + '</td>'
+                            + '<td>' + value.billingAddress + '</td>'
+                            + '<td>' + value.primaryMobileNo + '</td>'
+                            + '<td>'
+                            + '<a style = "color: #007bff; cursor: pointer;" title = "Save" onclick = "return EditMeterReading(' + value.waterMeterReadingId + ',\'' + value.reading + '\',\'' + value.previousReading + '\',\'' + value.previousReadingDate + '\',\'' + value.readingDate + '\',' + value.transactionId +');" > <i class="fas fa-edit"></i> </a >'
+                            + '</td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#dvWaterMeterReading').hide(1000);
+
+                    swal('No Record Found!');
+                }
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+
+    }
+
+    //EDIT WATER METER READING
+    function EditMeterReading(waterMeterReadingId, previousReading,Reading,previousReadingDate, readingDate, transactionId) {
+        $('#hdnWaterMeterReadingId').val(waterMeterReadingId);
+        $('#pReading').val(previousReading);
+        $('#cReading').val(Reading);
+        //alert(transactionId);
+        //Validation (if transactionid != null then edit isn't allowed)
+        if (transactionId != null) {
+            swal('Transaction has been already updated.!');
+            return false;
+        } else {
+            $('#dvWaterMeterReadingEdit').show(1000);
+
+        }
+
+          $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetWaterMeterPayment", "WaterMeterReadings")',
+            data: {
+                id: parseInt($('#hdnWaterMeterReadingId').val())
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+                    var ispaymentmade = data[0].IsPaymentMade;
+
+                    $('#hdnIsPaymentMade').val(ispaymentmade);
+
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });
+        //Displaying Date
+        const c = new Date(previousReadingDate);
+        const PRDate = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+
+        const v = new Date(readingDate);
+        const RDate = v.getFullYear() + '-' + ("0" + (v.getMonth() + 1)).slice(-2) + '-' + ("0" + v.getDate()).slice(-2)
+
+
+        $('#ReadingDate').val(RDate);
+        $('#PreviousReadingDate').val(PRDate);
+
+        if ($('#hdnIsPaymentMade').val() == true) {
+            swal('Payment Already Made!');
+            return false;
+        }
+
+        $('#UpdateWaterMeterReading').click(function () {
+            var myarray = [];
+            var WaterMeterReadingModel = {};
+
+            WaterMeterReadingModel.PreviousReadingDate = $('#PreviousReadingDate').val();
+            WaterMeterReadingModel.ReadingDate = $('#ReadingDate').val();
+            WaterMeterReadingModel.WaterMeterReadingId = parseInt($('#hdnWaterMeterReadingId').val());
+            WaterMeterReadingModel.Reading = parseInt($('#cReading').val());
+            WaterMeterReadingModel.PreviousReading = parseInt($('#pReading').val());
+
+            myarray.push(WaterMeterReadingModel);
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("EditMeterReading", "WaterMeterReadings")',
+                data: JSON.stringify(myarray),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response > 0) {
+                        swal("Reading Updated successfully.");
+                        $('#img').hide();
+                        
+                        setTimeout(function () {
+                            $('.alert').fadeOut(1000);
+                        }, 5000);
+                        $('#dvWaterMeterReadingEdit').hide(1000);
+                        $('#dvWaterMeterReading').hide(1000);
+                    }
+                    else {
+                        alert("Error saving payment details.");
+                        $('#img').hide();
+                    }
+
+                },
+                failure: function () {
+                    $('#img').hide();
+                    swal("Creation Failed");
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    swal("Error while inserting");
+                }
+            });
+            });
+
+    }
+</script>

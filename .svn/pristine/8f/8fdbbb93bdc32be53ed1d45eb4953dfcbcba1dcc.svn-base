@@ -1,0 +1,1330 @@
+﻿@model List<CORE_BOL.FullPropertyTransferModel>
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Land Transaction</a></li>
+                    <li class="breadcrumb-item active">Full Property Transfer</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Fetch Details From eSakor & Thimphu Thromde</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group d-flex justify-content-center">
+                <label class="col-sm-2 col-form-label">Plot No<span style="font-weight: bold; color: red;">*</span></label>
+                <input id="Transactioninput" class="form-control col-sm-4" value="TA1-413" />
+                <div class="input-group-append">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Fetch" class="btn btn-primary" onclick="return fetchPropertyDetails();" id="btnFetchTransaction" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Tab Links-->
+<div class="row" id="FPT_details" style="display:none;">
+    <input type="hidden" id="hdnTransactionId" />
+    <div class="col-md-12">
+        <div class="card card-tabs">
+            <div class="card-header p-0 pt-1" style="background-color:#17A2B8;">
+                <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tbProperty_Details" data-toggle="pill" href="#property_Details" role="tab" aria-controls="Property_Details" aria-selected="true" style="color:black;">Property Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tbtransferor" data-toggle="pill" href="#Transferor" role="tab" aria-controls="transferor" aria-selected="false" style="color:black;">Transferor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tbTransferee" data-toggle="pill" href="#transferee" role="tab" aria-controls="Transferee" aria-selected="false" style="color:black;">Transferee</a>
+                    </li>
+                    @*<li class="nav-item">
+                            <a class="nav-link" id="tbOtherDetails" data-toggle="pill" href="#Other_Details" role="tab" aria-controls="OtherDetails" aria-selected="false" style="color:black;">Other Details</a>
+                        </li>*@
+                    <li class="nav-item">
+                        <a class="nav-link" id="tbtaxDetails" data-toggle="pill" href="#Tax_Details" role="tab" aria-controls="taxDetails" aria-selected="false" style="color:black;">Tax Details</a>
+                    </li>
+                </ul>
+            </div>
+
+
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-five-tabContent">
+                    <!--Property Details-->
+                    <div class="tab-pane fade show active" id="property_Details" role="tabpanel" aria-labelledby="custom-tabs-five-overlay-tab">
+                        <form>
+                            <div class="card-body">
+                                <label style="font-size:25px;">Property Details</label>
+                                @*FOR SAVING PURPOSE*@
+                                <input type="hidden" id="hdnLandOwnershipId" />
+                                <input type="hidden" id="hdnLandDetailId" />
+                                <input type="hidden" id="hdnLapId" />
+                                <input type="hidden" id="hdnDemkhongId" />
+                                <input type="hidden" id="hdnPropertyTypeId" />
+                                <input type="hidden" id="hdnLandUseSubCategoryId" />
+                                <input type="hidden" id="hdnPlotNo" />
+                                <input type="hidden" id="hdnLandAcerage" />
+                                <input type="hidden" id="hdnLandValue" />
+                                <input type="hidden" id="hdnLandPoolingRate" />
+                                <input type="hidden" id="hdnStructureAvailable" />
+                                <input type="hidden" id="hdnVacantLandTaxApplicable" />
+                                <input type="hidden" id="hdnGarbageApplicable" />
+                                <input type="hidden" id="hdnStreetLightApplicable" />
+                                <input type="hidden" id="hdnIsSubdivided" />
+                                <input type="hidden" id="hdnThramNo" />
+                                <input type="hidden" id="hdnCID" />
+                                <input type="hidden" id="hdnTTIN" />
+                                <input type="hidden" id="hdnPLr" />
+                                <input type="hidden" id="hdnLandOwnershipType" />
+                                @*<input type="hidden" id="hdnIsSubdivided" />*@
+
+
+                                @*FOR SAVING PURPOSE END*@
+
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label style="font-size:20px;">eSakor Land Details</label>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Owner CID</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAownerCid" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Owner Name</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAownerName" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAplotId" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Thram No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAThramNo" readonly class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Sub Precinct</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAlandTypeOrPrecinct" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Precinct Code</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAPrecinctCode" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Ownership Type</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAOwnershipType" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot Area</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dAArea" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Demkhong Name</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dADemkhong" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lap Name</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dALapName" readonly class="form-control" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    @**********************************************************************************************@
+                                    <div class="col-6">
+                                        <label style="font-size:20px;">Thromde Land Details</label>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLplotId" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Thram No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLThramNo" readonly class="form-control" />
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Sub Precinct</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLlandTypeOrPrecinct" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Precinct Code</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLPrecinctCode" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Ownership Type</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLOwnershipType" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot Area</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLArea" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Demkhong Name</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLDemkhong" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Lap Name</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="dLLapName" readonly class="form-control" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                @*FOR JOINT OWNERS LIST*@
+                            <div class="row">
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label style="font-size:20px;">eSakor Land Ownership Details</label>
+                                            <table id="tbleSakorJointOwnerList" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sl.No</th>
+                                                        <th>CID</th>
+                                                        <th>Name</th>
+                                                        <th>Thram No</th>
+                                                        <th>PLR</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="bodyEsakorlist">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <input id="btnCheckProperty" type="button" class="btn btn-primary" value="Check Details" />
+
+                                        </div>
+                                       
+                                    </div>                                    
+                                </div>
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <label style="font-size:20px;">Thromde Land Ownership Details</label>
+                                            <table id="tblLocalLandOwnership" class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>#</th>
+                                                        <th>CID</th>
+                                                        <th>Name</th>
+                                                        <th>Thram No</th>
+                                                        <th>PLR</th>
+                                                        <th>Select To Deactivate</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="localJointOwnerList">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input id="btnDeactivate" type="button" class="btn btn-primary" value="Deactivate" />
+                                           
+                                        </div>
+                                    </div>
+                                </div>
+
+                                        @*********************************************************************************@
+
+
+                                    </div>
+                            <div class="row">
+                                <div class="col-3">
+                                    <input type="text" id="hdnTA" />
+                                </div>
+                                
+                            </div>
+
+                            <div class="row">
+                                
+                                <div class="col-6">
+                                    <input id="btnUpdateProperty" type="button" class="btn btn-primary" value="Update Ownerships" />
+                                </div>
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+
+                    <!--Transferor Details-->
+                    <div class="tab-pane fade" id="Transferor" role="tabpanel" aria-labelledby="transferor">
+                        <div class="form-group row">
+                            <table id="tblransferor" class="table table-bordered table-striped">
+                                <thead style="background-color:mediumaquamarine">
+                                    <tr>
+                                        <th>Owner CID</th>
+                                        <th>Owner Name</th>
+                                        <th>Plot No</th>
+                                        <th>Thromde</th>
+                                        <th>Thromde Village</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tranferrorDetail">
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+
+                    <!--Transferee Details-->
+                    <div class="tab-pane fade" id="transferee" role="tabpanel" aria-labelledby="Transferee">
+                        <div class="form-group row">
+                            <table id="tblransferee" class="table table-bordered table-striped">
+                                <thead style="background-color:mediumaquamarine">
+                                    <tr>
+                                        <th>Owner CID</th>
+                                        <th>Owner Name</th>
+                                        <th>Plot No</th>
+                                        <th>Thromde</th>
+                                        <th>Thromde Village</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tranfereeDetail">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!--Other Details-->
+                    <!--<div class="tab-pane fade" id="Other_Details" role="tabpanel" aria-labelledby="Other_Details">
+                        <form>
+                            <div class="card-body">
+                                <div class="form-group row">
+                                    <div class="col-2">
+                                        <label>LAP</label>
+                                    </div>
+                                    <div class="col-3">
+                                        <select id="LapId" class="form-control select2" style="width: 100%;"
+                                                value="0">-->
+                    @*<option value="0">--Please select--</option>*@
+                    <!--</select>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Demkhong</label>
+                        </div>
+                        <div class="col-3">
+                            <select id="DemkhongId" class="form-control select2" style="width: 100%;"
+                                    value="0">
+                                <option value="0">--Please select--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Precinct</label>
+                        </div>
+                        <div class="col-3">
+                            <select id="PricintId" class="form-control select2" style="width: 100%;"
+                                    value="0">
+                                <option value="0">--Please select--</option>
+                            </select>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Sub Precinct</label>
+                        </div>
+                        <div class="col-3">
+                            <select id="SubPricintId" class="form-control select2" style="width: 100%;"
+                                    value="0">
+                                <option value="0">--Please select--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Street Name</label>
+                        </div>
+                        <div class="col-3">
+                            <select id="StreetNameId" class="form-control select2" style="width: 100%;"
+                                    value="0">
+                                <option value="0">--Please select--</option>
+                            </select>
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Land Type</label>
+                        </div>
+                        <div class="col-3">
+                            <select id="LandTypeId" class="form-control select2" style="width: 100%;"
+                                    value="0">
+                                <option value="0">--Please select--</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Ownership %</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="dOwnershipPercentage" class="form-control" />
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Land Pooling %</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="dLandPoolPercentage" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Garbage Tax Available</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="gtAvailable" class="form-control" />
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Stree Light Available</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="dslAvailable" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Garbage Tax Available</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="gtAvailable" class="form-control" />
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Stree Light Available</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="dslAvailable" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Plot Address</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="PlotAddress" class="form-control" />
+                        </div>
+                        <div class="col-1">
+                        </div>
+                        <div class="col-2">
+                            <label>Plot Location</label>
+                        </div>
+                        <div class="col-3">
+                            <input id="PlotLocation" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Vacant Tax Applicable</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="custom-control custom-checkbox">
+                                &nbsp;&nbsp; <input id="VacantLandTax" class="custom-control-input" type="checkbox" checked>
+                                <label for="VacantLandTax" class="custom-control-label">-->
+                    @*  @Html.DisplayNameFor(model => model.IsActive)*@
+                    <!--</label>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-2">
+                        <label>Street Light Applicable</label>
+                    </div>
+                    <div class="col-3">
+                        <div class="custom-control custom-checkbox">
+                            &nbsp;&nbsp; <input id="StreetLight" class="custom-control-input" type="checkbox" checked>
+                            <label for="StreetLight" class="custom-control-label">-->
+                    @*  @Html.DisplayNameFor(model => model.IsActive)*@
+                    <!--</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label>Structure Available</label>
+                        </div>
+                        <div class="col-3">
+                            <div class="custom-control custom-checkbox">
+                                &nbsp;&nbsp; <input id="StructureAvailable" class="custom-control-input" type="checkbox" checked>
+                                <label for="StructureAvailable" class="custom-control-label">-->
+                    @*  @Html.DisplayNameFor(model => model.IsActive)*@
+                    <!--</label>
+                        </div>
+                    </div>
+                    <div class="col-1">
+                    </div>
+                    <div class="col-2">
+                        <label></label>
+                    </div>
+                    <div class="col-3">-->
+                    @* <input id="PlotLocation" class="form-control" />*@
+                    <!--</div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-2">
+                            <label></label>
+                        </div>
+                        <div class="col-3">
+
+                        </div>
+                        <div class="col-1">
+                            <input id="btnSaveOthersNext" type="button" class="btn btn-primary" value="Save & Next" />-->
+                    @*onclick="return saveMe();"*@
+                    <!--&nbsp;&nbsp;&nbsp;&nbsp;
+
+                                    </div>
+                                    <div class="col-2">
+                                        <button type="button" class="btn btn-danger" onclick="return CancelSave();">Cancel</button>
+                                    </div>
+                                    <div class="col-3">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>-->
+                    <!--Tax Details-->
+                    <div class="tab-pane fade" id="Tax_Details" role="tabpanel" aria-labelledby="taxDetails">
+                        <form>
+                            <div class="card-body">
+                                <label style="font-size:25px;">Tax Details</label>
+                                <div class="row">
+                                    <div class="col-3">
+                                        &nbsp;&nbsp;<label>Transfer Fees</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="dTransferFee" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        &nbsp;&nbsp;<label>Plot Sub-Division Fees</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="dsubdivisionFee" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        &nbsp;&nbsp;<label>Lag Thram Change</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="dlagthramFee" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                        &nbsp;&nbsp;<label>Total Payable</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="dtotalPayable" readonly class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        &nbsp;&nbsp;
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-3">
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="btnGenerateDemand" type="button" class="btn btn-primary" value="Update" />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button type="button" class="btn btn-danger" onclick="return CancelSave();">Cancel</button>
+                                    </div>
+                                </div>
+                                <!--<div class="row">
+                                <div class="col-12 d-flex justify-content-end">-->
+                                @*<button  class="btn btn-primary" onclick="return saveMe();">Update</button>*@
+
+                                <!--</div>
+                                </div>-->
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+    function RegisterTaxPayer() {
+        return window.location.href = ("eSakors/RedirectToTaxPayer");
+    }
+
+
+    function displayTab() {
+        $('#Transactioninput').insertAfter(function () {
+            var transactionid = parseInt($('#Transactioninput').val());
+            //var transactionid = 1;
+            if (transactionid > 0) {
+                $('#FPT_details').show(1000);
+            }
+        });
+    }
+    function fetchPropertyDetails() {
+        $('#img').show();
+
+        //SelectListLap();
+        //DISPLAY MAIN OWNERS LAND DETAIL FROM ESAKOR
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetTransactionDetailByPlotNo", "eSakors")',
+            data: {
+                PlotNo: ($('#Transactioninput').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    //return false;
+                    $('#tranferrorDetail').empty();
+                    $('#tranfereeDetail').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+                        $('#img').hide();
+                        $('#FPT_details').show(1000);
+                        //PLOT DETAILS
+
+                        var ownerCid = data[0].ownerCid;
+                        var ownerName = data[0].ownerName;
+                        $('#hdnCID').val(ownerCid);
+
+                        var landTypeOrPrecinct = data[0].landTypeOrPrecinct;
+                        var precinctCode = data[0].precinctCode;
+                        var ownershipType = data[0].ownershipType;
+                        var thramNumber = data[0].thramNumber;
+                        var plotID = data[0].plotId;
+                        var plotNetArea =parseFloat(data[0].plotNetArea);
+                        var dzongkhagOrThromde = data[0].dzongkhagOrThromde;
+                        var gewogOrThromdeVillage = data[0].gewogOrThromdeVillage;
+                        var demkhongName = data[0].demkhongName;
+                        var lapName = data[0].lapName;
+                        //*********************************LOCAL LAND DETAILS BELOW
+                        //alert(plotNetArea)
+
+                        //*********************************API ESAKRO LAND DETAILS BELOW
+
+                        $('#dAownerName').val(ownerName);
+                        $('#dAownerCid').val(ownerCid);
+                        $('#dAplotId').val(plotID);
+                        $('#dAThramNo').val(thramNumber);
+                        $('#dAOwnershipType').val(ownershipType);
+                        $('#dAlandTypeOrPrecinct').val(landTypeOrPrecinct);
+                        $('#dAPrecinctCode').val(precinctCode);
+                        $('#dAThromdeName').val(dzongkhagOrThromde);
+                        $('#dAThromdeVillage').val(gewogOrThromdeVillage);
+                        $('#dAArea').val(plotNetArea);
+                        $('#dADemkhong').val(demkhongName);
+                        $('#dALapName').val(lapName);
+
+                        //GET LOCAL PLOT DETAILS
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetPlotDetailsByPlotNo", "eSakors")',
+                            data: {
+                                PlotNo: ($('#Transactioninput').val())
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                //return false;
+                                if (data.length > 0) {
+                                    //alert(data[0].landAcerage);
+                                    $('#FPT_details').show(1000);
+
+                                      //*********************************LOCAL LAND DETAILS BELOW
+
+                                    var LlandUseSubCategory = data[0].landUseCategoryDescription;
+                                    var LprecinctCode = data[0].landUseSubCategory;
+                                    var LlandOwnershipType = data[0].landOwnershipType;
+                                    var LthramNumber = data[0].thramNo;
+                                    var LplotId= data[0].plotNo;
+                                    var LLandAcerage = parseFloat(data[0].landAcerage);
+                                    var demkhongName = data[0].demkhongName;
+                                    var lapName = data[0].lapName;
+
+                                    $('#dLplotId').val(LplotId);
+                                    $('#dLThramNo').val(LthramNumber);
+                                    $('#dLOwnershipType').val(LlandOwnershipType);
+                                    $('#dLlandTypeOrPrecinct').val(LlandUseSubCategory);
+                                    $('#dLPrecinctCode').val(LprecinctCode);
+                                    $('#dLArea').val(LLandAcerage);
+                                    $('#dLDemkhong').val(demkhongName);
+                                    $('#dLLapName').val(lapName);
+
+                                }
+                            }
+                        });
+
+                        //DISPLAY JOINT OWNER LIST esakro
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetLandJointOwersByPlotId", "eSakors")',
+            data: {
+                PlotNo: ($('#Transactioninput').val())
+                },
+                success: function (data) {
+                    console.log(data);
+                    //return false;
+                    $('#bodyEsakorlist').empty();
+                    if (data.length > 0) {
+                        $('#img').hide();
+                    //    var ownerCid = data[0].ownerCid;
+                    //    var ownerName = data[0].ownerName;
+
+                    //return false;
+
+                         //transferror
+                        var transferrorResult = null; var transfereeResult = null
+                        $.each(data, function (key, value) {
+
+                            transferrorResult = (value.jointOwnerCID > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+                            $('#bodyEsakorlist').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td style="display:none;"><input type="hidden" id="hdnjointOwnerCID_' + key + '" value="' + value.jointOwnerCID + '"/><input type="hidden" id="hdnjointOwnerName_' + key + '" value="' + value.jointOwnerName + '"/><input type="hidden" id="hdnthramNumber_' + key + '" value="' + value.thramNumber + '"/></td>'
+                                + '<td>' + value.jointOwnerCID + '</td>'
+                                + '<td>' + value.jointOwnerName + '</td>'
+                                + '<td>' + value.thramNumber + '</td>'
+                                + '<td ><input type="number" id="txtjointOwnerPLR_' + key + '" value="' + "544.5" + '"/></td>'
+                                //put 0.00 as default value
+                                + '</tr>');
+                        });
+                    }
+                    else {
+                        $('#img').hide();
+                        alert("No records found.!")
+                        $('#bodyEsakorlist').empty();
+                        $('#bodyEsakorlist').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                        $('#img').hide();
+                        $('#bodyEsakorlist').empty();
+                        $('#bodyEsakorlist').append(
+                            '<tr><td colspan="3" style="color: red;">Error occured</td></tr>');
+                    alert('Error occured');
+                    }
+         });
+
+                        //**************************LAND OWNERSHIP DETAILS LOCAL**************************
+                          $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetLocalLandOwnershipByPlotId", "eSakors")',
+            data: {
+                PlotNo: ($('#Transactioninput').val())
+                },
+                success: function (data) {
+                    console.log(data);
+                    //return false;
+                    $('#localJointOwnerList').empty();
+
+                    if (data.length > 0) {
+                        $('#img').hide();
+                        //PLOT DETAILS
+                         //transferror
+                        //var localJointOwnerList = null;
+                        $.each(data, function (key, value) {
+
+                            //transferrorResult = (value.Cid > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+                            $('#localJointOwnerList').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td style="display:none;"><input type="hidden" id="hdnjointOwnerCID_' + key + '" value="' + value.cid + '" /><input type="hidden" id="hdntaxPayerName_' + key + '" value="' + value.taxPayerName + '" /></td>'
+                                + '<td>' + value.cid + '</td>'
+                                + '<td>' + value.taxPayerName + '</td>'
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.pLr + '</td>'
+                                + '<td><input type="checkbox" id="chkSelect_' + key + '" value="' + value.landOwnershipId + '"/><label for=chkSelect_' + key + '>&nbsp; Select </label></td>'
+
+                                + '</tr>');
+                        });
+                    }
+                    else {
+                        $('#img').hide();
+                        //location.reload();
+                        alert("No records found.!")
+                        /*    $('#FPT_details').hide(1000);*/
+                        $('#localJointOwnerList').empty();
+                        $('#tranferrorDetail').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                        $('#img').hide();
+                        /*  $('#FPT_details').hide(1000);*/
+                        $('#localJointOwnerList').empty();
+                        $('#tranferrorDetail').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                        alert('Error occured');
+                    }
+        });
+                        return false;
+
+                         //transferror
+                        var transferrorResult = null; var transfereeResult = null
+                        $.each(data, function (key, value) {
+
+                            transferrorResult = (value.LandOwnershipId > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+                            $('#tranferrorDetail').append(
+                                '<tr>'
+                               // + '<td style=display:none>' +  + '</td>'
+                                + '<td><input type="hidden" id="hdnTransferrorTpid_' + key + '" value="' + value.taxPayerId + '" />' + value.ownerCID + '</td>'
+                                + '<td>' + value.ownerName + '</td>'
+                                + '<td>' + value.plotID + '</td>'
+                                + '<td>' + value.thromde + '</td>'
+                                + '<td>' + value.thromdeVillage + '</td>'
+                                + '<td>' + transferrorResult+' </td>'
+                                + '</tr>');
+                        });
+                        //transferee
+                        $.each(data, function (key, value) {
+                            transfereeResult = (value.LandOwnershipId > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+
+                            $('#tranfereeDetail').append(
+                                '<tr>'
+                                + '<td style="display:none;"><input type="hidden" id="hdnTransfereeTpid_' + key + '" value="' + value.taxPayerId + '" />'
+                                + value.ownerCID + '</td>'
+                                + '<td>' + value.ownerName + '</td>'
+                                + '<td>' + value.plotID + '</td>'
+                                + '<td>' + value.thromde + '</td>'
+                                + '<td>' + value.thromdeVillage + '</td>'
+                                + '<td>' + transfereeResult + ' </td>'
+                                + '</tr>');
+                        });
+                        //Thromde plot details
+                        /* function SelectListLap() {*/
+                                $.ajax({
+                                        type: "Get",
+                                        url: '@Url.Action("GetTransferorProperty", "eSakors")',
+                                        data: {
+                                            PlotNo: plotID,
+                                            Cid: ownerCID
+                                        },
+                                        success: function (data) {
+                                                    console.log(data);
+
+                                                    if (data.length > 0) {
+                                                                            //PLOT DETAILS DISPLAY
+                                                                          //  $('#LapId').empty();
+                                                                           $('#hdnLandOwnershipId').val(data[0].landOwnershipId);
+                                                                            $('#hdnLandDetailId').val(data[0].landDetailId);
+                                                                            $('#hdnLapId').val(data[0].lapId);
+                                                                            $('#hdnDemkhongId').val(data[0].demkhongId);
+                                                                            $('#hdnPropertyTypeId').val(data[0].propertyTypeId);
+                                                                            $('#hdnLandUseSubCategoryId').val(data[0].landUseSubCategoryId);
+                                                                            $('#hdnLandValue').val(data[0].landValue);
+                                                                            $('#hdnLandPoolingRate').val(data[0].landPoolingRate);
+                                                                            $('#hdnStructureAvailable').val(data[0].structureAvailable);
+                                                                            $('#hdnVacantLandTaxApplicable').val(data[0].vacantLandTaxApplicable);
+                                                                            $('#hdnGarbageApplicable').val(data[0].garbageApplicable);
+                                                                            $('#hdnStreetLightApplicable').val(data[0].streetLightApplicable);
+                                                                            $('#hdnIsSubdivided').val(data[0].isSubdivided);
+                                                        $('#hdnLandOwnershipType').val(data[0].landOwnershipTypeId);
+
+                                                        $('#plotId').val(data[0].plotId);
+                                                        $('#dThramNo').val(data[0].thramNumber);
+                                                        $('#dLusc').val(data[0].landUseSubCategory);
+
+                                                        $('#dArea').val(data[0].pLr);
+
+                                                        $('#dOwnershipType').val(data[0].landTypeOrPrecinct);
+                                                        $('#dDemkhong').val(data[0].precinctCode);
+
+                                                                            $('#dLapName').val(data[0].lapName);
+
+                                                                         }
+                                                                    else {
+                                                                        //$('#img').hide();
+                                                                          }
+
+                                                            },
+                                                            error: function () {
+                                                                //$('#img').hide();
+                                                                alert('Error occured');
+                                                           }
+                                       });
+                            //}
+                    }
+                    else {
+                        $('#img').hide();
+                        //location.reload();
+                        alert("No records found.!")
+                        $('#FPT_details').hide(1000);
+                        $('#tranferrorDetail').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                        $('#img').hide();
+                        $('#FPT_details').hide(1000);
+                    alert('Error occured');
+                    }
+        });
+
+
+
+    }
+
+    function CancelSave() {
+        $('#FPT_details').hide(1000);
+    }
+
+    $("#btnCheckProperty").click(function () {
+        var cid = ($('#dAownerCid').val());
+
+        $('#img').show();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("CheckTaxpayerRegistration", "eSakors")',
+            data: {
+                cid: cid
+            },
+            success: function (data) {
+                $('#img').hide();
+                //console.log(data);
+                if (data.length > 0) {
+                    //IF TAXPAYER IS FOUND
+                    console.log("data length is: " + data.length);
+                    //console.log("area is: " + TotalArea.totalArea);
+                    var esakorarray = [];var i = 0;
+                    $('#tbleSakorJointOwnerList > tbody  > tr ').each(function () {
+
+                        var PMobj = {};
+
+                        PMobj.PlotNo = $('#Transactioninput').val();
+                        PMobj.ThramNo = ($("#hdnthramNumber_" + i).val());
+                        PMobj.Cid = ($("#hdnjointOwnerCID_" + i).val());
+                        PMobj.TaxPayerName = ($("#hdnjointOwnerName_" + i).val());
+                        PMobj.Plr = parseFloat($("#txtjointOwnerPLR_" + i).val());
+
+                        esakorarray.push(PMobj);
+                        i++;
+                    });
+                    console.log("esakor array :" + esakorarray);
+                    var json_data = JSON.stringify(esakorarray);
+                    console.log("esakor json data:" + json_data);
+                    //SEND LIST OF CID AND REGISTER IF NOT EXIST
+
+                    @*$.ajax({
+                        contentType: "application/json; charset=utf-8",
+                        type: "POST",
+                        url: '@Url.Action("CheckTaxPayersAndLandOwnership", "eSakors")',
+                        data: JSON.stringify(esakorarray),
+                        success: function (obj) {
+                            console.log("return cids:"+obj[0].cid);
+                        }
+                    });*@
+                                        $.ajax({
+                                            contentType: "application/json; charset=utf-8",
+                                            //dataType: "json",
+                                            url: '@Url.Action("CheckTaxPayersAndLandOwnership", "eSakors")',
+                                            type: "POST",
+                                            data: JSON.stringify(esakorarray),
+                                            success: function (obj) {
+                                                console.log(obj[0].totalArea);
+                                                console.log(obj[0].cid);
+                                                $('#hdnTA').val(obj[0].totalArea);
+
+                                                if (obj[0].cid == "0") {
+                                                    swal("Session expired, please login and try again.");
+                                                }
+                                                else if (obj[0].cid == "00"){
+                                                    swal("Multiple ownership found please check your land ownership.");
+                                                }
+                                                else if (obj[0].cid == null) {
+                                                    swal("Checking successfully completed.");
+                                                }
+                                                else {
+                                                    alert("Please register the following CID number(s) before proceddding Further:" + obj[0].cid);
+
+                                                }
+
+                                                return false;
+                                            }
+                                        });
+
+                }
+                else {
+                    // IF THE TAXPAYER IS NOT FOUND
+                    alert(' NOT exists');
+                }
+            }
+            ,
+            error: function () {
+                $('#img').hide();
+                alert('Error occured, please try again later.');
+            }
+        });
+        $('#img').hide();
+
+    });
+
+    $("#btnUpdateProperty").click(function () {
+         if ($('#hdnTA').val() == "") {
+             swal('Please check property before updating.');
+             return false;
+         }
+
+        $('#img').show();
+
+                    //IF TAXPAYER IS FOUND
+                    //console.log("data length is: " + data.length);
+                    //console.log("area is: " + TotalArea.totalArea);
+        var PMobjmain = {};
+                    var esakorarray = []; var i = 0; 
+       
+
+        $('#tbleSakorJointOwnerList > tbody  > tr ').each(function () {
+            var PMobj = {};
+                        PMobj.PlotNo = $('#Transactioninput').val();
+                        PMobj.ThramNo = ($("#hdnthramNumber_" + i).val());
+                        PMobj.Cid = ($("#hdnjointOwnerCID_" + i).val());
+                        PMobj.TaxPayerName = ($("#hdnjointOwnerName_" + i).val());
+                        PMobj.Plr = parseFloat($("#txtjointOwnerPLR_" + i).val());
+                        PMobj.TotalArea = parseFloat($("#hdnTA").val());
+                        esakorarray.push(PMobj);
+                        i++;
+        });
+        //main owner
+
+        PMobjmain.PlotNo = $('#dAplotId').val();
+        PMobjmain.ThramNo = ($("#dAThramNo").val());
+        PMobjmain.Cid = ($("#dAownerCid").val());
+        PMobjmain.TaxPayerName = ($("#dAownerName").val());
+        PMobjmain.Plr = parseFloat($("#dAArea").val());
+        PMobjmain.TotalArea = parseFloat($("#hdnTA").val());
+        //end main owner
+        esakorarray.push(PMobjmain);
+
+
+                    console.log("esakor array :" + esakorarray);
+                    var json_data = JSON.stringify(esakorarray);
+                    console.log("esakor json data:" + json_data);
+                    //SEND LIST OF CID AND REGISTER IF NOT EXIST
+
+                                        $.ajax({
+                                            contentType: "application/json; charset=utf-8",
+                                            //dataType: "json",
+                                            url: '@Url.Action("RegisterTaxPayersIfNotExists", "eSakors")',
+                                            type: "POST",
+                                            data: JSON.stringify(esakorarray),
+                                            success: function (obj) {
+                                                console.log(obj[0].totalArea);
+                                                console.log(obj[0].cid);
+                                                $('#hdnTA').val(obj[0].totalArea);
+
+                                                if (obj[0].cid == "0") {
+                                                    swal("Session expired, please login and try again.");
+                                                }
+                                                else if (obj[0].cid == "00"){
+                                                    swal("Multiple ownership found please check your land ownership.");
+                                                }
+                                                else if (obj[0].cid == null) {
+                                                    swal("Checking successfully completed.");
+                                                                // local
+                                                 //**************************LAND OWNERSHIP DETAILS LOCAL**************************
+                        $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetLocalLandOwnershipByPlotId", "eSakors")',
+                        data: {
+                            PlotNo: ($('#Transactioninput').val())
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                //return false;
+                                $('#localJointOwnerList').empty();
+
+                                if (data.length > 0) {
+                                    $('#img').hide();
+                                    //PLOT DETAILS
+                                     //transferror
+                                    //var localJointOwnerList = null;
+                                    $.each(data, function (key, value) {
+
+                                        //transferrorResult = (value.Cid > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+                                        $('#localJointOwnerList').append(
+                                            '<tr>'
+                                            + '<td>' + (key + 1) + '</td>'
+                                            + '<td style="display:none;"><input type="hidden" id="hdnjointOwnerCID_' + key + '" value="' + value.cid + '" /><input type="hidden" id="hdntaxPayerName_' + key + '" value="' + value.taxPayerName + '" /></td>'
+                                            + '<td>' + value.cid + '</td>'
+                                            + '<td>' + value.taxPayerName + '</td>'
+                                            + '<td>' + value.thramNo + '</td>'
+                                            + '<td>' + value.pLr + '</td>'
+                                            + '<td><input type="checkbox" id="chkSelect_' + key + '" value="' + value.landOwnershipId + '"/><label for=chkSelect_' + key + '>&nbsp; Select </label></td>'
+
+                                            + '</tr>');
+                                    });
+                                }
+                                else {
+                                    $('#img').hide();
+                                    //location.reload();
+                                    alert("No records found.!")
+                                    /*    $('#FPT_details').hide(1000);*/
+                                    $('#localJointOwnerList').empty();
+                                    $('#tranferrorDetail').append(
+                                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                                }
+
+                            },
+                                error: function () {
+                                    $('#img').hide();
+                                    /*  $('#FPT_details').hide(1000);*/
+                                    $('#localJointOwnerList').empty();
+                                    $('#tranferrorDetail').append(
+                                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                                    alert('Error occured');
+                                }
+                                      });
+                                                // end
+                                                }
+                                                else {
+                                                    alert("Please register the following CID number(s) before proceddding Further:" + obj[0].cid);
+
+                                                }
+                                            }
+                                        });
+
+
+        $('#img').hide();
+
+    });
+
+
+    $("#btnDeactivate").click(function () {
+        var selected = new Array();
+        var ids;
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#tblLocalLandOwnership input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+        else {
+            swal('Please select at least one to update.!');
+            return false;
+        }
+        //SEND landownershipids
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("DeactivateLandOwnerships", "eSakors")',
+                            data: {
+                                LandOwnershipIds: ids
+                                  },
+                            success: function (data) {
+                                $('#img').hide();
+                                console.log("response:" + data.length);
+                                if (data > 0) {
+                                    swal("Data successfully updated.");
+                                               // local
+                                                 //**************************LAND OWNERSHIP DETAILS LOCAL**************************
+                                      $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetLocalLandOwnershipByPlotId", "eSakors")',
+                        data: {
+                            PlotNo: ($('#Transactioninput').val())
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                //return false;
+                                $('#localJointOwnerList').empty();
+
+                                if (data.length > 0) {
+                                    $('#img').hide();
+                                    //PLOT DETAILS
+                                     //transferror
+                                    //var localJointOwnerList = null;
+                                    $.each(data, function (key, value) {
+
+                                        //transferrorResult = (value.Cid > 0) ? '' : '<b><a onclick="return RegisterTaxPayer();" style="cursor: pointer; color: forestgreen;" title="Register Tax Payer">Register</a></b>'
+                                        $('#localJointOwnerList').append(
+                                            '<tr>'
+                                            + '<td>' + (key + 1) + '</td>'
+                                            + '<td style="display:none;"><input type="hidden" id="hdnjointOwnerCID_' + key + '" value="' + value.cid + '" /><input type="hidden" id="hdntaxPayerName_' + key + '" value="' + value.taxPayerName + '" /></td>'
+                                            + '<td>' + value.cid + '</td>'
+                                            + '<td>' + value.taxPayerName + '</td>'
+                                            + '<td>' + value.thramNo + '</td>'
+                                            + '<td>' + value.pLr + '</td>'
+                                            + '<td><input type="checkbox" id="chkSelect_' + key + '" value="' + value.landOwnershipId + '"/><label for=chkSelect_' + key + '>&nbsp; Select </label></td>'
+
+                                            + '</tr>');
+                                    });
+                                }
+                                else {
+                                    $('#img').hide();
+                                    //location.reload();
+                                    alert("No records found.!")
+                                    /*    $('#FPT_details').hide(1000);*/
+                                    $('#localJointOwnerList').empty();
+                                    $('#tranferrorDetail').append(
+                                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                                }
+
+                            },
+                                error: function () {
+                                    $('#img').hide();
+                                    /*  $('#FPT_details').hide(1000);*/
+                                    $('#localJointOwnerList').empty();
+                                    $('#tranferrorDetail').append(
+                                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                                    alert('Error occured');
+                                }
+                                      });
+                                                // end
+                                }
+                            }
+                        });
+    });
+
+
+
+
+    function SelectListLap() {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SelectListLap", "eSakors")',
+                data: {
+                    //AssetAttributeId: parseInt(assetattribute_id)
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#LapId').empty();
+                   // $('#LapId').append('<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '> '
+                            + data[i].text
+                        + ' </option>');
+                        $('#LapId').append(newOption);
+                    }
+                }
+                else {
+                    //$('#img').hide();
+                }
+
+                },
+                error: function () {
+                    //$('#img').hide();
+                    alert('Error occured');
+                }
+                });
+
+    }
+
+</script>

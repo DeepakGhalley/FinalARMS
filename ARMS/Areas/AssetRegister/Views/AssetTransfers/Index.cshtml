@@ -1,0 +1,708 @@
+﻿@using CORE_BOL
+@model AssetTransferVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Asset</a></li>
+                    <li class="breadcrumb-item active">Asset Transfer</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Primary Head<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select class="form-control select2" id="PrimaryHeadId" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.PrimaryHead, "Value", "Text")) " value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Secondary Head</label>
+                <div class="col-sm-3">
+                    <select id="SecondaryHeadId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.SecondaryHead, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Tertiary Head</label>
+                <div class="col-sm-3">
+                    <select id="TertiaryHeadId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.TertiaryHead, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Division</label>
+                <div class="col-sm-3">
+                    <select id="DivisionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Division, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Section</label>
+                <div class="col-sm-3">
+                    <select id="SectionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Section, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Asset Name</label>
+                <div class="col-sm-3">
+                    <input id="AssetNameInput" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Asset Status</label>
+            <div class="col-sm-3">
+                <select asp-for="AssetStatusId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.AssetStatus, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="AssetStatusId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Zone</label>
+            <div class="col-sm-3">
+                <select asp-for="DemkhongId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.Demkhong, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="DemkhongId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Area</label>
+            <div class="col-sm-3">
+                <select asp-for="LapId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.Lap, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="LapId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-3">
+                <input type="button" value="Search" class="btn btn-block btn-primary " onclick="return Search();" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_assetdetails" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Asset Details</h3>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Asset Code</th>
+                        <th>Asset Name</th>
+                        <th>Asset Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_asset">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_assettransfertype" style="display:none;">
+        <input type="hidden" id="HDNAssetId" />
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Asset Transfer Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="AssetTransferId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.AssetTransfer, "Value", "Text"))" onchange="myfunction();"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_assettransfer" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Asset Transfer </h3>
+            <input type="hidden" id="hdnAssetId" />
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transfer from division<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="TransferFromDivisionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Division, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-3 col-form-label">Transfer from Section<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="TransferFromSectionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Section, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transfer to division<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="TransferToDivisionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Division, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-3 col-form-label">Transfer to Section<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="TransferToSectionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Section, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transfer Date</label>
+                <div class="col-sm-3">
+                    <input id="transferdate" class="form-control" type="date" />
+                </div>
+                <label class="col-sm-3 col-form-label">Remarks</label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" id="idremarks" rows="2"></textarea>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-primary" id="SaveAssetTransfer">Save</button>
+                    <button type="reset" onclick="return Close();" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="tbl_assetpersontransfer" style="display:none;">
+<div class="card-header">
+    <h3 class="card-title">Asset Transfer </h3>
+</div>
+<div class="card-body">
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label">Transfer From<span style="font-weight: bold; color: red;">*</span></label>
+        <div class="col-sm-3">
+            <input asp-for="ResponsiblePersonFrom" class="form-control" placeholder="Responsible Person From" />
+            <span asp-validation-for="ResponsiblePersonFrom" class="text-danger"></span>
+        </div>
+        <label class="col-sm-3 col-form-label">Transfer To<span style="font-weight: bold; color: red;">*</span></label>
+        <div class="col-sm-3">
+            <input asp-for="ResponsiblePersonTo" class="form-control" placeholder="Responsible Person To" />
+            <span asp-validation-for="ResponsiblePersonTo" class="text-danger"></span>
+            </div>
+        </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transfer Date</label>
+                <div class="col-sm-3">
+                    <input id="persontransferdate" class="form-control" type="date" />
+                </div>
+                <label class="col-sm-3 col-form-label">Remarks</label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" id="persondremarks" rows="2"></textarea>
+                </div>
+            </div>
+    <hr />
+    <div class="form-group row">
+        <div class="col-sm-3"></div>
+        <div class="col-sm-3">
+            <button type="button" class="btn btn-primary" id="SaveAssetTransferForPerson">Save</button>
+            <button type="reset" id="btnCancel" class="btn btn-warning" onclick="return Close1();">Cancel</button>
+        </div>
+    </div>
+    </div>
+    </div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    //DROPDOWN FOR SECONDARYACCOUNTHEAD
+     $(function () {
+         $('#PrimaryHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSecondaryAccountHead", "AssetTransfers")',
+                data: {
+                    id: parseInt($('#PrimaryHeadId').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#SecondaryHeadId').empty();
+                    $('#SecondaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+                    $('#TertiaryHeadId').empty();
+                    $('#TertiaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].secondaryAccountHeadId + '>'
+                                + data[i].secondaryAccountHeadName
+                                + '</option>');
+                            $('#SecondaryHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //DROPDOWN FOR TERTIARYACCOUNTHEAD
+    $(function () {
+        $('#SecondaryHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTertiaryAccountHead", "AssetTransfers")',
+                data: {
+                    id: parseInt($('#SecondaryHeadId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#TertiaryHeadId').empty();
+                    $('#TertiaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].tertiaryAccountHeadId + '>'
+                                + data[i].tertiaryAccountHeadName
+                                + '</option>');
+                            $('#TertiaryHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //POPULATE FOR SECTION
+      $(function () {
+          $('#DivisionId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateDivision", "AssetTransfers")',
+                data: {
+                    id: parseInt($('#DivisionId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#SectionId').empty();
+                    $('#SectionId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].sectionId + '>'
+                                + data[i].sectionName
+                                + '</option>');
+                            $('#SectionId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+      });
+
+    //SEARCH ASSET
+    function Search() {
+        $('#tbl_assettransfertype').hide(1000);
+        $('#tbl_assettransfer').hide(1000);
+        $('#tbl_assetpersontransfer').hide(1000);
+
+        if ($('#PrimaryHeadId').val() == "" && $('#SecondaryHeadId').val() == "" && $('#AssetStatusId').val() == "" &&
+            $('#TertiaryHeadId').val() == "" && $('#DivisionId').val() == "" && $('#SectionId').val() == "" &&
+            $('#DemkhongId').val() == "" && $('#LapId').val() == "" && $('#AssetNameInput').val() == "")
+        {
+            swal('Empty Fields!', '', 'error');
+            $('#PrimaryHeadId').focus();
+            $('#SecondaryHeadId').focus();
+            $('#AssetStatusId').focus();
+            $('#TertiaryHeadId').focus();
+            $('#DivisionId').focus();
+            $('#SectionId').focus();
+            $('#DemkhongId').focus();
+            $('#LapId').focus();
+            $('#AssetNameInput').focus();
+
+            return false;
+        }
+
+        var PrimaryHead = $('#PrimaryHeadId').val();
+        var SecondaryHead = $('#SecondaryHeadId').val();
+        var AssetStatus = $('#AssetStatusId').val();
+        var TertiaryHead = $('#TertiaryHeadId').val();
+        var Division = $('#DivisionId').val();
+        var Section = $('#SectionId').val();
+        var Lap = $('#LapId').val();
+        var Demkhong = $('#DemkhongId').val();
+        var AssetName = $('#AssetNameInput').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SearchAsset", "AssetTransfers")',
+            data: {
+                primaryhead: PrimaryHead,
+                secondaryhead: SecondaryHead,
+                assetstatus: AssetStatus,
+                tertiaryhead: TertiaryHead,
+                division: Division,
+                section: Section,
+                assetname: AssetName,
+                lap: Lap,
+                demkhong: Demkhong
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#tbl_assetdetails').show(1000);
+                $('#tbl_asset').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_asset').append(
+                            '<tr>'
+                            + '<td>' + value.assetCode + '</td>'
+                            + '<td>' + value.assetName + '</td>'
+                            + '<td>' + value.assetStatus + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayAssetDetails(' + value.assetId + ');">Select</a></b></td>'
+                            + '</tr>');
+
+                        //$('#hdnAssetId').val(data[0].assetId);
+
+                    });
+                } else {
+                    $('#tbl_asset').append(
+                        '<tr><td colspan="5" style="color: red;">No record found!</td></tr>');
+
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+    function displayAssetDetails(assetId) {
+                $('#HDNAssetId').val(assetId);
+        $('#AssetTransferId').val(0).trigger('change')
+
+                $('#hdnAssetId').val(assetId);
+        $('#tbl_assettransfertype').show(1000);
+                $('html,body').animate({
+                    scrollTop: $("#tbl_assettransfertype").offset().top
+                }, 'slow');
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAssetDetails", "AssetTransfers")',
+            data: {
+                id: assetId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+                    var primaryhead = data[0].primaryAccountHead;
+                    var secondaryhead = data[0].secondaryAccountHead;
+                    var tertiaryhead = data[0].tertiaryAccountHead;
+                    var section = data[0].section;
+                    var division = data[0].division;
+                    var assetname = data[0].assetName;
+                    var lap = data[0].lap;
+                    var demkhong = data[0].demkhong;
+                    var assetfunction = data[0].assetFunction;
+                    var assetstatus = data[0].assetStatus;
+                    var remarks = data[0].remarks;
+                    var personresponsible = data[0].responsiblePerson;
+
+                    $('#primaryheadid').val(primaryhead);
+                    $('#secondaryheadid').val(secondaryhead);
+                    $('#tertiaryheadid').val(tertiaryhead);
+                    $('#divisionid').val(section);
+                    $('#sectionid').val(division);
+                    $('#assetname').val(assetname);
+                    $('#lapid').val(lap);
+                    $('#demkhongid').val(demkhong);
+                    $('#assetfuntionid').val(assetfunction);
+                    $('#assetstatusid').val(assetstatus);
+                    $('#remarks').val(remarks);
+                    $('#personresponsible').val(personresponsible);
+
+
+                } else {
+                    swal('no data');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+     });
+            }
+
+        $("#SaveAssetTransfer").click(function () {
+        var myarray = [];
+        var AssetTransferVM = {};
+
+            AssetTransferVM.AssetId = parseInt($("#hdnAssetId").val());
+            AssetTransferVM.TransferFromDivisionId = parseInt($("#TransferFromDivisionId").val());
+            AssetTransferVM.TransferFromSectionId = parseInt($("#TransferFromSectionId").val());
+            AssetTransferVM.TransferToDivisionId = parseInt($("#TransferToDivisionId").val());
+            AssetTransferVM.TransferToSectionId = parseInt($("#TransferToSectionId").val());
+            AssetTransferVM.AssetTransferTypeId = parseInt($("#AssetTransferId").val());
+            AssetTransferVM.TransferDate = $("#transferdate").val();
+            AssetTransferVM.Remarks = $("#idremarks").val();
+
+            myarray.push(AssetTransferVM);
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveAssetTransfer", "AssetTransfers")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                $('#tbl_assettransfer').hide(1000);
+                $('#tbl_assettransfertype').hide(1000);
+                $('#tbl_assetdetails').show(1000);
+                $('#TransferToDivisionId').val(0).trigger('change')
+                $('#TransferToSectionId').val(0).trigger('change')
+                $('#idremarks').val('');
+                $('#transferdate').val('');
+                swal(response);
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal({
+                    title: 'Record Creation Failed!',
+                    type: 'error',
+                    confirmButtonText: 'OK'
+                });            }
+
+        });
+        });
+
+    $("#SaveAssetTransferForPerson").click(function () {
+        var myarray = [];
+        var AssetTransferVM = {};
+
+            AssetTransferVM.AssetId = parseInt($("#hdnAssetId").val());
+            AssetTransferVM.AssetTransferTypeId = parseInt($("#AssetTransferId").val());
+            AssetTransferVM.ResponsiblePersonFrom = $("#ResponsiblePersonFrom").val();
+            AssetTransferVM.ResponsiblePersonTo = $("#ResponsiblePersonTo").val();
+            AssetTransferVM.TransferDate = $("#persontransferdate").val();
+            AssetTransferVM.Remarks = $("#persondremarks").val();
+
+            myarray.push(AssetTransferVM);
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveAssetTransfer", "AssetTransfers")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#tbl_assettransfertype').hide(1000);
+                $('#tbl_assetdetails').show(1000);
+                $('#img').hide();
+                $('#tbl_assetpersontransfer').hide(1000);
+                $('#ResponsiblePersonTo').val('');
+                $('#persontransferdate').val('');
+                $('#persondremarks').val('');     
+                swal(response);
+
+            },
+            failure: function (response) {
+                $('#img').hide();                 
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal({
+                    title: 'Record Creation Failed!',
+                    type: 'error',
+                    confirmButtonText: 'OK'
+                });            }
+
+        });
+        });
+
+            function Close() {
+                $('#tbl_assettransfer').hide(1000);
+    }
+    function Close1() {
+        $('#tbl_assetpersontransfer').hide(1000);
+    }
+
+            function myfunction() {
+                var x = document.getElementById("AssetTransferId").value;
+
+                if (x == 1) {
+                    $('#tbl_assettransfer').show(1000);
+                    $('#tbl_assetpersontransfer').hide(1000);
+                    $('#TransferToDivisionId').val(0).trigger('change')
+                    $('#TransferToSectionId').val(0).trigger('change')
+                    $('#idremarks').val('');
+                    $('#transferdate').val('');
+
+                    $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAssetDetails", "AssetTransfers")',
+            data: {
+                id: parseInt($('#HDNAssetId').val())
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+
+                    var section = data[0].sectionId;
+                    var division = data[0].divisionId;
+
+                    if (section > 0) {
+                        $('select#TransferFromSectionId').val(section).change();
+                    }
+                    else {
+                        $('select#TransferFromSectionId').val(section).change(0);
+                    }
+                    if (section > 0) {
+                        $('select#TransferFromDivisionId').val(division).change();
+                    }
+                    else {
+                        $('select#TransferFromDivisionId').val(division).change(0);
+                    }
+
+                }
+            },
+     });
+                }
+
+                else if (x == 2) {
+                    $('#ResponsiblePersonTo').val('');
+                    $('#persontransferdate').val('');
+                    $('#persondremarks').val('');  
+                    $('#tbl_assetpersontransfer').show(1000);
+                    $('#tbl_assettransfer').hide(1000);
+
+                    $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAssetDetails", "AssetTransfers")',
+            data: {
+                id: parseInt($('#HDNAssetId').val())
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+
+                    var ResponsiblePerson = data[0].responsiblePersonFrom;
+
+                    $('#ResponsiblePersonFrom').val(ResponsiblePerson);
+
+                }
+            },
+     });
+                }
+            }
+</script>
+
+

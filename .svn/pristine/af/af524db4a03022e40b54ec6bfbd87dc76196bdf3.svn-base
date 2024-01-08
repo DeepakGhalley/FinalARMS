@@ -1,0 +1,493 @@
+﻿@model List<CORE_BOL.WaterMeterReadingModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="BillGenerate">Water Bill Generate</a></li>
+                    <li class="breadcrumb-item active">Water Transaction</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="row ">
+                <div class="input-group col-4">
+                    <label class="col-sm-6 col-form-label">Consumer No</label>
+                    <input class="form-control col-sm-6" id="id_consumerno" />
+                </div>
+                <div class="input-group col-4">
+                    <label class="col-sm-6 col-form-label">Meter No</label>
+                    <input class="form-control col-sm-6" id="id_meterno" />
+                </div>
+                <div class="input-group-append col-4">
+                    <input type="button" value="search" class="btn btn-primary" onclick="return displayDetails();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div id="tblBillGenerate" style="display:none;">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Water Connection Details</h3>
+        </div>
+        <div class="form-group row card-body">
+            <table class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Meter No</th>
+                        <th>Consumer No</th>
+                        <th>Billing Address</th>
+                        <th>Water Connection Type</th>
+                        <th>Meter Type</th>
+                        <th>Line Type</th>
+                        <th>Standard Consumption</th>
+                        <th>Sewerage</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="myBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div id="tblReadingDetails" style="display:none;">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Water Meter Reading Details</h3>
+        </div>
+        <div class="form-group row card-body">
+            <table class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Reading Date</th>
+                        <th>Curr. Reading</th>
+                        <th>Prev. Reading</th>
+                        <th>No of units</th>
+                        <th>Standard Consumption</th>
+                        <th>Connection Type</th>
+                        <th>Meter Type</th>
+                        <th>Line Type</th>
+                        <th>Sewerage</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_Body">
+                </tbody>
+            </table>
+        </div>
+        
+    </div>
+</div>
+
+<div class="card card-info" id="dvReadingInfo" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Meter Reading Details</h3>
+    </div>
+    <div class="card-body">
+        <input type="hidden" id="WaterMeterReadingId" value="" />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Consumer No:</label>
+            <div class="col-sm-2">
+                <lable id="consumerNo" class="col-form-label font-weight-normal"></lable>
+            </div>
+            <label class="col-sm-2 col-form-label">Meter No:</label>
+            <div class="col-sm-2">
+                <label id="MeterNo" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Connection Type:</label>
+            <div class="col-sm-2">
+                <label id="WaterConnection" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Water Meter Type:</label>
+            <div class="col-sm-2">
+                <label id="MeterType" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Water Line Type:</label>
+            <div class="col-sm-2">
+                <label id="LineType" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Connection Satus:</label>
+            <div class="col-sm-2">
+                <label id="WaterConnectionStatus" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Zone:</label>
+            <div class="col-sm-2">
+                <label id="Zone" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Zone Reader:</label>
+            <div class="col-sm-2">
+                <label id="ZoneReader" class="col-form-label font-weight-normal"></label>
+            </div>
+            @*<label class="col-sm-2 col-form-label">Read By:</label>
+        <div class="col-sm-2">
+            <label id="ReadBy" class="col-form-label"></label>
+        </div>*@
+
+            <label class="col-sm-2 col-form-label">Billing Address:</label>
+            <div class="col-sm-2">
+                <label id="BAddress" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Previous Reading:</label>
+            <div class="col-sm-2">
+                <label id="PReading" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Previous Reading Date:</label>
+            <div class="col-sm-2">
+                <label id="PRDate" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Current Reading:</label>
+            <div class="col-sm-2">
+                <label id="CReading" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Current Reading Date:</label>
+            <div class="col-sm-2">
+                <label id="CRDate" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">No of Unit:</label>
+            <div class="col-sm-2">
+                <label id="NoOfUnits" class="col-form-label font-weight-normal"></label>
+            </div>
+            <label class="col-sm-2 col-form-label">Consumption:</label>
+            <div class="col-sm-2">
+                <label id="Consumption" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Sewerage:</label>
+            <div class="col-sm-2">
+                <label id="Sewerage" class="col-form-label font-weight-normal"></label>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Mobile No:</label>
+            <div class="col-sm-2">
+                <label id="MobileNo" class="col-form-label font-weight-normal"></label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <button type="button" class="btn btn-primary" id="Generate">Generate</button>
+                <button type="button" id="btnCancel" class="btn btn-warning" onclick="cancel();">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+
+        <script>
+            function displayReadingInfo(WaterMeterReadingId) {
+                $('#WaterMeterReadingId').val(WaterMeterReadingId);
+                $('#dvReadingInfo').show(1000);
+                $('html,body').animate({
+                    scrollTop: $("#dvReadingInfo").offset().top
+                }, 'slow');
+
+
+
+            $.ajax({
+            type: "GET",
+            url: '@Url.Action("getReadingInfo", "WaterMeterReadings")',
+            data: {
+                id: WaterMeterReadingId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+                success: function (data) {
+                if (data.length > 0) {
+                    var WaterConnectionName = data[0].waterConnectionName;
+                    var WaterLineTypeName = data[0].waterLineTypeName;
+                    var WaterConnectionStatusName = data[0].waterConnectionStatusName;
+                    var WaterMeterTypeName = data[0].waterMeterTypeName;
+                    var ZoneName = data[0].zoneName;
+                    var ZoneReader = data[0].zoneReader;
+                    var PreviousReading = data[0].previousReading;
+                    var PreviousReadingDate = data[0].previousReadingDate;
+                    var ConsumerNo = data[0].consumerNo;
+                    var WaterMeterNo = data[0].waterMeterNo;
+                    var NoOfUnit = data[0].noOfUnit;
+                    var ReadBy = data[0].readBy;
+                    var BillingAddress = data[0].billingAddress;
+                    var Consumption = data[0].consumption;
+                    var Reading = data[0].reading;
+                    var ReadingDate = data[0].readingDate;
+                    var Sewerage = data[0].sewerage;
+                    var MobileNo = data[0].primaryMobileNo;
+
+
+                    //Displaying Date
+                    const d = new Date(PreviousReadingDate);
+                    const PRDate = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
+
+                    const e = new Date(ReadingDate);
+                    const CRDate = e.getFullYear() + '-' + ("0" + (e.getMonth() + 1)).slice(-2) + '-' + ("0" + e.getDate()).slice(-2)
+
+
+                    $('#consumerNo').text(ConsumerNo);
+                    $('#MeterNo').text(WaterMeterNo);
+                    $('#MeterType').text(WaterMeterTypeName);
+                    $('#WaterConnection').text(WaterConnectionName);
+                    $('#LineType').text(WaterLineTypeName);
+                    $('#WaterConnectionStatus').text(WaterConnectionStatusName);
+                    $('#Zone').text(ZoneName);
+                    $('#ZoneReader').text(ZoneReader);
+                    $('#ReadBy').text(ReadBy);
+                    $('#PReading').text(PreviousReading);
+                    $('#PRDate').text(PRDate);
+                    $('#CReading').text(Reading);
+                    $('#CRDate').text(CRDate);
+                    $('#NoOfUnits').text(NoOfUnit);
+                    $('#Consumption').text(Consumption);
+                    $('#Sewerage').text(Sewerage);
+                    $('#BAddress').text(BillingAddress);
+                    $('#MobileNo').text(MobileNo);
+
+                } else {
+                    swal('no data');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });
+
+            }
+            $("#btnCancel").click(function () {
+                $('#dvReadingInfo').hide(1000);
+                $('#tblReadingDetails').hide(1000);
+                $('#tblBillGenerate').hide(1000);
+                $('#id_consumerno').focus();
+
+
+            });
+
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    //Display Water Connection Details
+    function displayDetails() {
+        $('#tblBillGenerate').hide(1000);
+        $('#id_consumerno').insertAfter(function () {
+            var ConsumerNo = $('#id_consumerno').val();
+            var MeterNo = $('#id_meterno').val();
+
+            if (ConsumerNo == ConsumerNo || MeterNo == MeterNo) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("fetchWaterConnectionByConsumerNo", "WaterMeterReadings")',
+                    data: {
+                        consumerNo: ConsumerNo,
+                        waterMeterNo: MeterNo
+                    },
+                    success: function (data) {
+                        console.log(data);
+                        $('#myBody').empty();
+
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblBillGenerate').show(1000);
+                                $('html,body').animate({
+                                    scrollTop: $("#tblBillGenerate").offset().top
+                                }, 'slow');
+                                $('#myBody').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.waterMeterNo + '</td>'
+                                    + '<td>' + value.consumerNo + '</td>'
+                                    + '<td>' + value.billingAddress + '</td>'
+                                    + '<td>' + value.waterConnectionName + '</td>'
+                                    + '<td>' + value.waterMeterTypeName + '</td>'
+                                    + '<td>' + value.waterLineTypeName + '</td>'
+                                    + '<td>' + value.standardConsumption + '</td>'
+                                    + '<td>' + value.sewerage + '</td>'
+                                    + '<td>' + value.isActive + '</td>'
+                                    + '<td><b><a style="color: forestgreen; cursor: pointer;" title="select" onclick="return displayReadingDetails(' + value.waterConnectionId + ',' + value.checkStatus +');"> select </a></b></td>'
+                                    + '</tr>');
+                            });
+                        }
+                        else {
+                            $('#tblBillGenerate').hide(1000);
+                            swal({
+                                title: 'Please Enter valid Data',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+            } else {
+                swal({
+                    title: 'Fields cannot be empty!',
+                    type: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        });
+    }
+
+    //display water meter reading detaails
+            function displayReadingDetails(WaterConnectionId, checkStatus) {
+                if (checkStatus == false) {
+                    swal('Water Connection is InActive!');
+                    return false;
+                }
+                else {
+                   $.ajax({
+            type: "GET",
+            url: '@Url.Action("fetchReadinfById", "WaterMeterReadings")',
+            data: {
+                id: WaterConnectionId
+            },
+            success: function (data) {
+                console.log(data);
+                $('#tbl_Body').empty();
+
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+                        $('#tblReadingDetails').show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#tblReadingDetails").offset().top
+                        }, 'slow');
+                        //Displaying Date
+                        const d = new Date(value.readingDate);
+                        const readingDate = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
+
+                        $('#tbl_Body').append(
+                             '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + readingDate + '</td>'
+                            + '<td>' + value.reading + '</td>'
+                            + '<td>' + value.previousReading + '</td>'
+                            + '<td>' + value.noOfUnit + '</td>'
+                            + '<td>' + value.standardConsumption + '</td>'
+                            + '<td>' + value.waterConnectionName + '</td>'
+                            + '<td>' + value.waterMeterTypeName + '</td>'
+                            + '<td>' + value.waterLineTypeName + '</td>'
+                            + '<td>' + value.sewerage + '</td>'
+                            + '<td hidden> <input type="text" id="hdnwaterMeterReadingId_' + key + '" class="form-control waterMeterReadingId" value=' + value.waterMeterReadingId + ' /> </td>'
+                            + '<td><b><a style="color: forestgreen; cursor: pointer;" title="select" onclick="return displayReadingInfo(' + value.waterMeterReadingId + ');"> select </a></b></td>'
+
+                            + '</tr>');
+                    });
+                }
+                else {
+                    swal({
+                        title: 'No reading details found to generate the bill.!',
+                        type: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            },
+            error: function () {
+                alert('error');
+            }
+        });
+                }
+
+    }
+        //Generating Demand
+    $("#Generate").click(function () {
+
+            var myarray = [];
+            var WaterMeterReadingModel = {};
+        WaterMeterReadingModel.WaterMeterReadingId = parseInt($("#WaterMeterReadingId").val());
+        myarray.push(WaterMeterReadingModel);
+
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GenerateDemand", "WaterMeterReadings")',
+                data: JSON.stringify(myarray),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    if (response > 0) {
+                        swal("Bill generated successfully.");
+                        $('#img').hide();
+                        $("#tblReadingDetails").hide(1000);
+                        $("#dvReadingInfo").hide(1000);
+                        setTimeout(function () {
+                            $('.alert').fadeOut(1000);
+                            //location.reload();
+                        }, 5000);
+                    }
+                    else {
+                        alert("Error saving payment details.");
+                        $('#img').hide();
+                    }
+
+                },
+                failure: function () {
+                    $('#img').hide();
+                    swal("Creation Failed");
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    swal("Error while inserting");
+                }
+            });
+    });
+        </script>
+

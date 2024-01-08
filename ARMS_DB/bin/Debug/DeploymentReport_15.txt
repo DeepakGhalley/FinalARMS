@@ -1,0 +1,60 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblStallAllocation]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblStallAllocation].[hasSecurityDeposit] on table [dbo].[tblStallAllocation] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[tblStallAllocation].[rateId] on table [dbo].[tblStallAllocation] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[tblStallDetail].[rateId] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[rentalAmount] is being dropped, data loss could occur.
+       The column [dbo].[tblStallDetail].[securityAmount] is being dropped, data loss could occur.
+
+** User actions
+     Rename
+       [dbo].[tblHouseRentDemandDetail].[houseAllocationId] (Column)
+       [dbo].[tblHouseRentPeriod].[houseAllocationId] (Column)
+     Drop
+       unnamed constraint on [dbo].[tblStallAllocation] (Default Constraint)
+       [dbo].[FK_tblHouseRentPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallDetail_ToTable_2] (Foreign Key)
+     Table rebuild
+       [dbo].[tblStallAllocation] (Table)
+     Alter
+       [dbo].[tblStallDetail] (Table)
+     Create
+       [dbo].[tblHouseAllocation] (Table)
+       [dbo].[tblHouseDetail] (Table)
+       Default Constraint: unnamed constraint on [dbo].[tblHouseAllocation] (Default Constraint)
+       [dbo].[FK_tblHouseRentPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblStallPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblStallPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_2] (Foreign Key)
+
+The column [dbo].[tblStallAllocation].[hasSecurityDeposit] on table [dbo].[tblStallAllocation] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallAllocation].[rateId] on table [dbo].[tblStallAllocation] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallDetail].[rateId] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[rentalAmount] is being dropped, data loss could occur.
+The column [dbo].[tblStallDetail].[securityAmount] is being dropped, data loss could occur.
+

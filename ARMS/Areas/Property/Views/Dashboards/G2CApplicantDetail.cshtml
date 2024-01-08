@@ -1,0 +1,89 @@
+﻿@*@model CORE_BOL.G2CApplicantModel*@
+
+@{
+    ViewData["Title"] = "G2CApplicantDetail";
+    Layout = null;
+}
+
+<div class="card card-info" style="display:block;" id="dvApplicantDetail">
+    <div class="card-header">
+        <h3 class="card-title">G2C Applicant Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table id="example1" class="table table-bordered table-striped">
+
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Service ID </th>
+                        <th>Application ID </th>
+                        <th>Applicant_CID_No </th>
+                        <th>Applicant_Full_Name </th>
+                        <th>Applicant_Mobile_No</th>
+                        <th>Applicant_Email_Id</th>
+                        <th>Plot_No</th>
+                        <th>Thram_No</th>
+                        <th>Type Of Plot</th>
+
+                    </tr>
+                </thead>
+            
+
+          
+                <tbody id="tbl_body">
+                    <tr>
+
+                        <td>
+                            <label id="lblService_Id" value="@ViewBag.ApplicantList.Service_Id">@ViewBag.ApplicantList.Service_Id</label>
+                        </td>
+                        <td>
+                            <label id="lblApplication_Id" value="@ViewBag.ApplicantList.Application_Id">@ViewBag.ApplicantList.Application_Id</label>
+                        </td>
+                        <td>
+                            <label id="lblApplicant_CID_No" value="@ViewBag.ApplicantList.Applicant_CID_No">@ViewBag.ApplicantList.Applicant_CID_No</label>
+                        </td>
+                        <td>
+                            <label id="lblApplicant_Full_Name" value="@ViewBag.ApplicantList.Applicant_Full_Name">@ViewBag.ApplicantList.Applicant_Full_Name</label>
+                        </td>
+                        <td>
+                            <label id="lblApplicant_Mobile_No" value="@ViewBag.ApplicantList.Applicant_Mobile_No">@ViewBag.ApplicantList.Applicant_Mobile_No</label>
+                        </td>
+                        <td>
+                            <label id="lblApplicant_Email_Id" value="@ViewBag.ApplicantList.Applicant_Email_Id">@ViewBag.ApplicantList.Applicant_Email_Id</label>
+                        </td>
+                        <td>
+                            <label id="lblPlot_No" value="@ViewBag.ApplicantList.Plot_No">@ViewBag.ApplicantList.Plot_No</label>
+                        </td>
+                        <td>
+                            <label id="lblThram_No" value="@ViewBag.ApplicantList.Thram_No">@ViewBag.ApplicantList.Thram_No</label>
+                        </td>
+                        <td>
+                            <label id="lblType_Of_Plot" value="@ViewBag.ApplicantList.Type_Of_Plot">@ViewBag.ApplicantList.Type_Of_Plot</label>
+                        </td>
+
+                    </tr>
+
+                    
+            </tbody>
+            </table>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-6">
+            </div>
+            <div class="input-group d-flex justify-content-center col-6">
+                <div class="input-group-append col-3">
+                    &nbsp;
+                    <input id="btnProceedToPay" type="button" value="Proceed To Pay" class="btn btn-primary" />
+                </div>
+
+                <div class="input-group-append col-2">
+                    &nbsp;   &nbsp;
+                    <input id="btnCancelProceed" type="button" value="Cancel" class="btn btn-warning" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

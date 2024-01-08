@@ -1,0 +1,26 @@
+﻿<body style="width:100%" onload="autoSubmit()">
+    <form id="form1" action="@ViewBag.PaymentGateway" method="POST">
+        <input type="hidden" value="@ViewBag.bfs_benfBankCode" name="bfs_benfBankCode" />
+        <input type="hidden" value="@ViewBag.BenificiaryID" name="bfs_benfId" />
+        <input type="hidden" value="@ViewBag.bfs_benfTxnTime" name="bfs_benfTxnTime" />
+        <input type="hidden" value="@ViewBag.bfs_msgType" name="bfs_msgType" />
+        <input type="hidden" value="@ViewBag.bfs_orderNo" name="bfs_orderNo" />
+        <input type="hidden" value="@ViewBag.bfs_paymentDesc" name="bfs_paymentDesc" />
+        <input type="hidden" value="@ViewBag.bfs_remitterEmail" name="bfs_remitterEmail" />
+        <input type="hidden" value="@ViewBag.bfs_txnAmount" name="bfs_txnAmount" />
+        <input type="hidden" value="@ViewBag.bfs_txnCurrency" name="bfs_txnCurrency" />
+        <input type="hidden" value="@ViewBag.bfs_version" name="bfs_version" />
+        <input type="hidden" value="@ViewBag.bfs_checkSum" name="bfs_checkSum" />
+        <input hidden type="submit" value="Pay via BFS Secure" id="payment-gate-way-post">
+
+    </form>
+</body>
+<script>
+    function autoSubmit() {
+        //$('#img').show();
+        $('#loader').show();
+        $('form#form1').submit();
+        $('#loader').show();
+    }
+
+</script>

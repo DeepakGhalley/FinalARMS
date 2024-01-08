@@ -1,0 +1,237 @@
+﻿@model List<CORE_BOL.TaxPayerProfileModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Revenue Master</a></li>
+                    <li class="breadcrumb-item active">Tax Payer Profile Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">VENDOR</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1">
+                        <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist" style="cursor:pointer">
+                            <li class="nav-item">
+                                <a asp-action="Index" class="nav-link" role="tab">Individual</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-action="Organisation" class="nav-link" role="tab">Organisation</a>
+                            </li>
+                            <li class="nav-item">
+                                <a asp-action="Vendor" class="nav-link active" role="tab">Vendor</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <p>
+                            <a asp-action="CreateVendor" class="btn btn-outline-danger btn-lg" title="Add New User"><b><i class="fas fa-plus"></i> Add New </b> </a>
+                        </p>
+                    </div>
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--search-->
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            @*<div class="input-group d-flex justify-content-center col-3">
+            <label class="col-sm-3 col-form-label">CID<span style="font-weight: bold; color: red;"></span></label>
+            <input id="cid" class="form-control col-6" />
+        </div>*@
+            <div class="input-group d-flex justify-content-center col-4">
+                <label class="col-sm-3 col-form-label">TTIN<span style="font-weight: bold; color: red;"></span></label>
+                <input id="ttin" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-4">
+                <label class="col-sm-3 col-form-label">Name<span style="font-weight: bold; color: red;"></span></label>
+                <input id="name" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                <button class="btn btn-primary" onclick="return SearchDetailsVendor();">Search</button>
+            </div>
+            <div class="input-group-append col-2">
+                <button class="btn btn-primary" onclick="return SearchDetailsVendorAll();">Show All</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Vendor Details-->
+<div class="card card-info" id="tbl_Vendor" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Vendor Details</h3>
+    </div>
+
+    <div class="card-body">
+        <table id="example7" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl No</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile</th>
+                    <th>Email</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<script>
+
+    //Showing Details
+    function SearchDetailsVendor() {
+        if ($('#ttin').val() == "" && $('#name').val() == "") {
+            swal('Empty Fields', '', 'error');
+            //$('#cid').focus();
+            $('#ttin').focus();
+            $('#name').focus();
+            return false;
+        }
+
+           // var cid = $('#cid').val();
+            var ttin = $('#ttin').val();
+            var name = $('#name').val();
+
+                $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("fetchVendor", "TaxPayerProfiles")',
+                        data: {
+                            //cid: cid,
+                            ttin: ttin,
+                            name: name,
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            $('#tbl_body').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#tbl_Vendor').show(1000);
+
+                                    $('#tbl_body').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.ttin + '</td>'
+                                        + '<td>' + value.cid + '</td>'
+                                        + '<td>' + value.name + '</td>'
+                                        + '<td>' + value.mobileNo + '</td>'
+                                        + '<td>' + value.email + '</td>'
+                                        + '<td><b><a style = "color: #007bff; cursor: pointer;" onclick = "return vEdit(' + value.taxPayerId + ' )" title = "VendorEdit" > <i class="fas fa-edit"></i> </a ></b></td>'
+                                        + '</tr>');
+                                });
+                            } else {
+                                $('#tbl_body').append(
+                                    '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                                swal({
+                                    title: 'Please Enter valid Value!',
+                                    type: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+
+                        },
+
+                        error: function () {
+                        alert('error');
+                        }
+                 });
+    }
+
+    function SearchDetailsVendorAll() {
+
+                $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("fetchVendorAll", "TaxPayerProfiles")',
+                        data: {
+                            
+                        },
+                        dataType: "json",
+                        success: function (data) {
+                            $('#tbl_body').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#tbl_Vendor').show(1000);
+
+                                    $('#tbl_body').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.ttin + '</td>'
+                                        + '<td>' + value.cid + '</td>'
+                                        + '<td>' + value.name + '</td>'
+                                        + '<td>' + value.mobileNo + '</td>'
+                                        + '<td>' + value.email + '</td>'
+                                        + '<td><b><a style = "color: #007bff; cursor: pointer;" onclick = "return vEdit(' + value.taxPayerId + ' )" title = "VendorEdit" > <i class="fas fa-edit"></i> </a ></b></td>'
+                                        + '</tr>');
+                                });
+                            } else {
+                                $('#tbl_body').append(
+                                    '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                                swal({
+                                    title: 'Please Enter valid Value!',
+                                    type: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+
+                        },
+
+                        error: function () {
+                        alert('error');
+                        }
+                 });
+    }
+
+    //end
+
+    function vEdit(id) {
+
+        window.location.href = "VendorEdit?id=" + id;
+    }
+
+</script>

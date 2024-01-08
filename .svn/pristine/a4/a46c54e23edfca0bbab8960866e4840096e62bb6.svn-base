@@ -1,0 +1,371 @@
+﻿@*@using CORE_BOL
+    @model WaterMeterReadingModel*@
+
+
+@{
+    ViewData["Title"] = "OnlinePropertyTaxPayment";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+@*<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="CitizenServices">Citizen Services</a></li>
+                    <li class="breadcrumb-item active">Online Property Tax Payment</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Property Tax Payment</h3>
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+        <div class="form-group row">
+            <label class="col-sm-0 col-form-label">TTIN <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="ttin" class="form-control" />
+            </div>
+            <label class="col-sm-1 col-form-label"> </label>
+            <label class="col-sm-0 col-form-label">CID <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="cid" class="form-control" />
+            </div>
+            <label class="col-sm-1 col-form-label"> </label>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" onclick="return GetDemandWithSearch();">Search</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!--Demand Details-->
+<div class="card card-info" style="display:none;" id="dvDemand">
+    <div class="card-header">
+        <h3 class="card-title">Property Tax Payment</h3>
+    </div>
+    <br/>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">TTIN</label>
+        <div class="col-sm-4">
+            <input class="form-control" readonly id="IDttin" />
+        </div>
+        <label class="col-sm-2 col-form-label">CID</label>
+        <div class="col-sm-4">
+            <input class="form-control" readonly id="IDCid" />
+        </div>
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label">Name</label>
+        <div class="col-sm-4">
+            <input class="form-control" readonly id="IDName" />
+        </div>
+        <label class="col-sm-2 col-form-label">Email</label>
+        <div class="col-sm-4">
+            <input class="form-control" readonly id="IDemail" />
+        </div>
+    </div>
+    <input type="hidden" id="hdnTransactionTypeId" />
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Demand No </th>
+                    <th>Demand Amount </th>
+                    <th>Exemption Amount</th>
+                    <th>Total Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+        <hr />
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-9">
+
+            </div>
+            <div class="form-group row">
+                <button class="btn btn-primary mx-3" onclick="return GetDemandDetail();">Proceed</button>
+                <button class="btn btn-warning" onclick="return Cancel1();">Cancel</button>
+            </div>
+            @*<div class="input-group d-flex justify-content-center col-3">
+                    <div class="input-group-append col-2">
+                        &nbsp;  <input id="btnProceed" type="button" value="Proceed" class="btn btn-primary mx-3" onclick="return GetDemandDetail();" />
+                    </div>
+                </div>*@
+        </div>
+
+    </div>
+</div>
+
+<!--Search Info-->
+<div class="card card-info" id="dvDemandDetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Property Tax Payment View</h3>
+    </div>
+    <div class="card-body">
+
+
+
+        <table id="table1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Demand No </th>
+                    <th>Tax Name </th>
+                    <th>Demand Amount </th>
+                    <th>Exemption Amount</th>
+                    <th>Penalty Amount</th>
+                    <th>Total Amount</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body2">
+            </tbody>
+        </table>
+        <br />
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Net Payable Amount(Nu.):</label>
+            @*<input id="total" class="form-control col-sm-2" readonly />*@
+
+            <input id="total" class="form-control col-sm-2" readonly />
+            @*<input hidden asp-for="DemandIds" class="form-control col-sm-2" readonly />*@
+        </div>
+        <br />
+        <br />
+        <div class="form-group row">
+            <button type="submit" class="btn btn-primary"><i class="far fa-credit-card"></i> Submit Payment</button> &nbsp;
+            <button class="btn btn-warning" onclick="Cancel1();">Cancel</button>
+        </div>
+        <br />
+        <div class="form-group row" id="payFrame" style="display:none;">
+            @*<div id="frame"></div>*@
+
+            <iframe src="PaymentGateWayRedirect" height="1000" width="1000" title="Iframe Example"></iframe>
+        </div>
+
+    </div>
+</div>
+
+
+<script>
+    function payTax() {
+        $('#payFrame').show(1000);
+    }
+    function Cancel1() {
+        $('#dvDemand').hide(1000);
+        $('#dvDemandDetail').hide(1000);
+    }
+
+    function Cancel() {
+        $('#dvDemandDetail').hide(1000);
+        $('#dvDemand').hide(1000);
+    }
+
+    function GetDemandWithSearch() {
+        if ($("#ttin").val() == "" && $("#cid").val()) {
+            swal("Enter a Value");
+            $("#ttin").focus();
+
+            return false;
+        }
+        //swal($("#demandNo").val());
+        $('#img').show();
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemandWithSearch", "Home")',
+                data: {
+                    ttin: ($("#ttin").val()),
+                    cid: ($("#cid").val()),
+
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tbl_body').empty();
+                    //Changed from == 0 to >0
+                    
+                    if (data.length > 0) {
+                        var Name = data[0].name;
+                        $('#IDName').val(Name);
+                        var Cid = data[0].cid;
+                        $('#IDCid').val(Cid);
+                        var Ttin = data[0].ttin;
+                        $('#IDttin').val(Ttin);
+                        var Email = data[0].email;
+                        $('#IDemail').val(Email);
+
+                        $("#dvDemand").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemand").offset().top
+                        }, 'slow');
+                        $.each(data, function (key, value) {
+                            $('#tbl_body').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.demandNo + '</td>'
+                                + '<td>' + value.demandAmount + '</td>'
+                                + '<td>' + value.exemptionAmount + '</td>'
+                                + '<td>' + value.totalAmount + '</td>'
+                                + '<td><input id="id_' + key + '" type="hidden" value="' + value.demandNoId +'" />'
+                                + '<input id="chk_' + key + '" type="checkbox" value="' + value.demandNoId +'" class"=checkbox" /> <label for=chk_' + key +'> Select </label>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#dvDemand").show(1000);
+                        $('#tbl_body').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+
+    function GetDemandDetail() {
+        var selected = new Array();
+        var ids;
+
+
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#example1 input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+        else {
+            swal('Please select at least one Demand No to pay.!');
+            return false;
+        }
+
+
+       $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemandDetail", "Home")',
+                data: {
+                    id: ids
+
+                },
+            success: function (data) {
+              ;
+                $("#dvPaymentModeDetail").hide(1000);
+                console.log(data);
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+                        $("#dvDemandDetail").show(1000);
+
+                        $("#hdnPaymentAmount").val(data[0].grandTotalAmount );
+                        $("#hdnTransactionTypeId").val(data[0].transactionTypeId);
+                        //$("#hdnGrandPenaltyAmount").val(data[0].totalPenaltyAmount);
+                        var tpenalty = 0;
+                        var gttlamt = 0;
+                        var dttlamt = 0;
+
+                        $('#tbl_body2').empty();
+                        $.each(data, function (key, value) {
+                            var exmpamt = value.exemptionAmount;
+                            if (value.exemptionAmount == null) {
+                                exmpamt = 0;
+                            }
+                            var ttlamt = 0;
+                            ttlamt = value.totalAmount + value.totalPenaltyAmount;
+                            tpenalty += value.totalPenaltyAmount;
+
+                            dttlamt += value.demandAmount;
+
+                            gttlamt += ttlamt;
+
+                            $("#hdnGrandTotalAmount").val(gttlamt.toFixed(0));
+                            $("#total").val(gttlamt.toFixed(0));
+                            $('#tbl_body2').append(
+                                    '<tr>' + '<td>' + (key + 1) + '</td>'
+                                    + '<td style="display:none;"><input id="demandId_' + key + '" type="hidden" value="' + value.demandId + '" /><input id="transactionId_' + key + '" type="hidden" value="' + value.transactionId + '" /><input id="taxId_' + key + '" type="hidden" value="' + value.taxId + '" /><input id="financialYearId_' + key + '" type="hidden" value="' + value.financialYearId + '" /><input id="calendarYearId_' + key + '" type="hidden" value="' + value.calendarYearId + '" /><input id="totalAmount_' + key + '" type="hidden" value="' + value.totalAmount + '" /></td>'
+                                    + '<td>' + value.demandNo + '</td>'
+                                    + '<td>' + value.taxName + '</td>'
+                                    + '<td>' + value.demandAmount + '</td>'
+                                    + '<td>' + exmpamt + '</td>'
+                                    + '<td>' + value.totalPenaltyAmount.toFixed(2) + '</td>'
+                                    + '<td>' + ttlamt.toFixed(2) + '</td>'
+                                    + '<td style="display:none;">'
+                                    + '<input id="chkDemand_' + key + '" type="checkbox" value="' + value.demandId + '" class"=checkbox" checked /> <label for=chkDemand_' + key + '> Select </label>'
+                                    + '</td>'
+                                    + '</tr>');
+
+                        });
+                        $('#img').hide();
+                        $('#tbl_body2').append('<tr>' + '<td colspan="3" align="Right" ><b> Total : </b></td><td>' + dttlamt + '</td><td></td><td><b>' + tpenalty.toFixed(2) + '</b></td> <td><b>' + gttlamt.toFixed(2) + '</b></td> </td>' +
+                           /* '<td colspan="1" style="font-weight:bold;"> <label id="lblGrandTotal" value="" ></label></td>'*/
+                            + '</tr>');
+
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemandDetail").offset().top
+                        }, 'slow');
+
+                        $("#lblGrandTotal").html($("#hdnGrandTotalAmount").val());
+
+                    }
+                    else {
+                        $('#tbl_body2').empty();
+                        $('#img').hide();
+                        $("#dvDemandDetail").show(1000);
+                        $('#tbl_body2').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+        });
+
+   }
+
+             
+    
+
+
+</script>

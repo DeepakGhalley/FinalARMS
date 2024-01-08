@@ -1,0 +1,293 @@
+﻿@using CORE_BOL
+@model SlabVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Master</a></li>
+                    <li class="breadcrumb-item active">Create New Data</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" asp-action="Create" method="post">
+    @*data-ajax="true" data-ajax-method="post">*@
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Slab</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <label asp-for="TransactionTypeID" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="TransactionTypeID" id="TransactionTypeID" onchange="return display();" id="TaxClass" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.TransactionTypeID,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="TransactionTypeID" id="errorTransactionTypeID" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="TaxId" class="col-sm-2 col-form-label">Tax<span style="font-weight: bold; color: red;"></span></label>
+                <div class="col-sm-5">
+                    <select asp-for="TaxId" asp-items="@(new SelectList (@ViewBag.TaxName,"Value","Text")) " id="TaxId" class="form-control select2bs4" onchange="showme(this);" id="TaxId" style="width: 100%;"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="TaxId" id="errorTaxId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="LandUseSubCategoryId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="LandUseSubCategoryId" id="LandUseSubCategoryId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandUseSubCategory,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="LandUseSubCategoryId" id="errorLandUseSubCategoryId" class="text-danger"></span>
+                </div>
+            </div>
+           
+            <div style="display: none;" id="displayData">
+                <div class="form-group row">
+                    <label asp-for="SlabName" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="SlabName" class="form-control" placeholder="Slab Name" required/>
+                        <span asp-validation-for="SlabName" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Define1" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="Define1" class="form-control" placeholder="Define 1" />
+                        <span asp-validation-for="Define1" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Define2" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="Define2" class="form-control" placeholder="Define 2" />
+                        <span asp-validation-for="Define2" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" id="sstart">
+                    <label asp-for="SlabStart" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="SlabStart" class="form-control" placeholder="Slab Start" />
+                        <span asp-validation-for="SlabStart" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" id="send">
+                    <label asp-for="SlabEnd" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <input asp-for="SlabEnd" class="form-control" placeholder="Slab End" />
+                        <span asp-validation-for="SlabEnd" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" id="buildingUnit">
+                    <label asp-for="ConstructionTypeId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <select asp-for="ConstructionTypeId" id="ConstructionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionType,"Value","Text")) " value="0"></select>
+                        <span asp-validation-for="ConstructionTypeId" id="errorConstructionTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="form-group row" id="buildingUnit">
+                    <label asp-for="BuildingUnitUseTypeId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <select asp-for="BuildingUnitUseTypeId" id="BuildingUnitUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                        <span asp-validation-for="BuildingUnitUseTypeId" id="errorBuildingUnitUseTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row" id="buildingUnitClass">
+                    <label asp-for="BuildingUnitClassId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-5">
+                        <select asp-for="BuildingUnitClassId" id="BuildingUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                        <span asp-validation-for="BuildingUnitClassId" id="errorBuildingUnitClassId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+                    <div class="custom-control custom-checkbox">
+                        &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                        <label for="IsActive" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.IsActive)
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+
+<script>
+    //validation
+    function saveme() {
+        //Transaction Type
+        if ($('#TransactionTypeID option:selected').val() == 0) {
+            $('#errorTransactionTypeID').html('Please Select a Value');
+            $('#TransactionTypeID').focus();
+            return false;
+        }
+        else {
+            $('#errorTransactionTypeID').html('');
+        }
+
+        //Tax
+        if ($('#TaxId option:selected').val() == 0) {
+            $('#errorTaxId').html('Please Select a Value');
+            $('#TaxId').focus();
+            return false;
+        }
+        else {
+            $('#errorTaxId').html('');
+        }
+
+        //Land Use Sub Category
+        //if ($('#LandUseSubCategoryId option:selected').val() == 0) {
+        //    $('#errorLandUseSubCategoryId').html('Please Select a Value');
+        //    $('#LandUseSubCategoryId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorLandUseSubCategoryId').html('');
+        //}
+
+        //Construction Type
+        //if ($('#ConstructionTypeId option:selected').val() == 0) {
+        //    $('#errorConstructionTypeId').html('Please Select a Value');
+        //    $('#ConstructionTypeId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorConstructionTypeId').html('');
+        //}
+
+        ////Building unit use type
+        //if ($('#BuildingUnitUseTypeId option:selected').val() == 0) {
+        //    $('#errorBuildingUnitUseTypeId').html('Please Select a Value');
+        //    $('#BuildingUnitUseTypeId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorBuildingUnitUseTypeId').html('');
+        //}
+
+        ////Building Unit Class
+        //if ($('#BuildingUnitClassId option:selected').val() == 0) {
+        //    $('#errorBuildingUnitClassId').html('Please Select a Value');
+        //    $('#BuildingUnitClassId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorBuildingUnitClassId').html('');
+        //}
+
+    }
+
+
+    $(function () {
+        $('#TaxClass').change(function () {
+
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTAX", "Slabs")',
+                data: {
+                    id: parseInt($('#TaxClass').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#TaxId').empty();
+
+                    //$('#TaxId').append('<option value=0>--Select One--</option>');
+
+                if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '>'
+                            + data[i].text
+                            + '</option>');
+                        $('#TaxId').append(newOption);
+                    }
+
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+    });
+
+    function display() {
+        $('#displayData').show(1000);
+
+    }
+
+    function showme(select) {
+
+        if (select.value == 3) {
+            $('#buildingUnit').hide(1000);
+            $('#buildingUnitClass').hide(1000);
+            $('#sstart').hide(1000);
+            $('#send').hide(1000);
+        } else {
+            $('#buildingUnit').show(1000);
+            $('#buildingUnitClass').show(1000);
+            $('#sstart').show(1000);
+            $('#send').show(1000);
+        }
+    }
+</script>

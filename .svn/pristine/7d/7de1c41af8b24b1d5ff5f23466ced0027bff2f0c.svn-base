@@ -1,0 +1,25 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblLandLease].[endDate] is being dropped, data loss could occur.
+       The column [dbo].[tblLandLease].[taxPeriodId] is being dropped, data loss could occur.
+
+** User actions
+     Drop
+       [dbo].[FK_tblLandLease_ToTable_5] (Foreign Key)
+     Alter
+       [dbo].[tblLandLease] (Table)
+     Create
+       [dbo].[tblLandLeasePeriod] (Table)
+       [dbo].[FK_tblLandLeasePeriod_ToTable] (Foreign Key)
+
+** Supporting actions
+
+The column [dbo].[tblLandLease].[endDate] is being dropped, data loss could occur.
+The column [dbo].[tblLandLease].[taxPeriodId] is being dropped, data loss could occur.
+

@@ -1,0 +1,52 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstWaterConnection]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[DF__tmp_ms_xx__noOfU__006AEB82] (Default Constraint)
+     Table rebuild
+       [dbo].[mstWaterConnection] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblInaccessibleWaterMeterDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblInaccessibleWaterMeterDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+     Refresh
+       [dbo].[View_ReadingSeet] (View)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptGetWaterConsumption] (Procedure)
+       [dbo].[rptMissedOutReadingReport] (Procedure)
+       [dbo].[rptMonthlyMeterReader] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterCollection] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)

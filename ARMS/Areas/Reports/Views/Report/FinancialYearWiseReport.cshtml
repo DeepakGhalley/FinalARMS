@@ -1,0 +1,108 @@
+﻿
+    @*@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers*@
+
+    @{
+        ViewData["Title"] = "FinancialYearWiseReport";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+    @*@model Byte[]
+
+        @{
+            ViewData["Title"] = "Index";
+            Layout = "~/Views/Shared/_Layout.cshtml";
+        }*@
+
+
+    <form class="form-horizontal" method="get">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0 text-dark"></h1>
+                    </div><!-- /.col -->
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a asp-action="FinancialYearWiseReport">Report</a></li>
+                            <li class="breadcrumb-item active">Year Wise Demand Collection</li>
+                        </ol>
+                    </div><!-- /.col -->
+                </div><!-- /.row -->
+            </div><!-- /.container-fluid -->
+        </div>
+        <!-- /.content-header -->
+
+
+        <div class="card card-info">
+            @if (TempData["msg"] != null)
+            {
+                <div class="alert alert-success alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                    <p>@TempData["msg"]</p>
+                </div>
+            }
+
+            <div class="card-header">
+                <h3 class="card-title">Year Wise Demand Collection</h3>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body">
+               <hr />
+                <div class="form-group row">
+                    <div class="col-sm-3"></div>
+                    <label class="col-sm-2 col-form-label"> Financial Year </label>
+                    <div class="col-sm-4">
+                        <input type="hidden" id="hdntransactionType" />
+                        <select id="FinancialYearId" class="form-control select2" style="width: 100%;"
+                                asp-items="@(new SelectList (@ViewBag.FinancialYear,"Value","Text")) " value="0"></select>
+
+                    </div>
+                
+                    <div class="input-group-append col-2">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </form>
+
+
+    <script>
+
+        function PrintReport() {
+            var FinancialYearId = $('#FinancialYearId').val();
+
+           
+            var cyear = ($('#FinancialYearId option:selected').text());
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintYearHeadWiseDemandCollection", "Report")',
+                    data: {
+                        FinancialYearId: FinancialYearId,
+                        cyear: cyear
+                    },
+                    success: function (data) {
+
+                        if (data.length > 0) {
+                            window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report", Action = "PrintYearHeadWiseDemandCollection" })/?FinancialYearId=" + $("#FinancialYearId").val() + "&cyear=" + cyear, '_blank');
+
+                        }
+                    },
+
+                    error: function () {
+                        alert('error');
+                        }
+
+
+                });
+
+
+    }
+
+
+    </script>

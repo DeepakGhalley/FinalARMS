@@ -1,0 +1,326 @@
+﻿@using CORE_BOL
+@model ParkingFeeVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Parking Fees</a></li>
+                    <li class="breadcrumb-item active">Create New Data</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search Parking Fee</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="cid" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="ttin" class="form-control col-6" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayParkingFeeMonthlyDemand();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="parkingfeediv">
+    <div class="card-header">
+        <h3 class="card-title">Tax payer Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="parkingfeedemandtbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!-- /.content-header -->
+<form class="form-horizontal" asp-action="Create" method="post" id="parkingfeebody" style="display:none;">
+    @*data-ajax="true" data-ajax-method="post">*@
+
+    <div class="card card-info" >
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Parking Fees</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div>
+                <div class="form-group row">
+                    <label asp-for="BillingScheduleId" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <select class="form-control select2bs4" style="width: 100%;" value="0" disabled>
+                            <option>Monthly</option>
+                        </select>
+                        @*<span asp-validation-for="BillingScheduleId" class="text-danger"></span>*@
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Parking Zone <span style="font-weight:bold; color:red;">*</span></label>
+                    <div class="col-sm-10">
+                        <select asp-for="ParkingZoneId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ParkingZoneId,"Value","Text")) " value="0"></select>
+                        <span asp-validation-for="ParkingZoneId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <input asp-for="TaxPayerId" id="hdnTaxPayer" hidden />
+
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Installment Amount <span style="font-weight:bold; color:red;">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="InstallmentAmount" type="number" class="form-control" placeholder="Enter Installment Amount" />
+                        <span asp-validation-for="InstallmentAmount" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Remarks" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Remarks" class="form-control" placeholder="Enter Remarks" />
+                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">Start Date<span style="font-weight:bold; color:red;">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="StartDateD" type="date" class="form-control" id="startDate" placeholder="Start Date" />
+                        <span asp-validation-for="StartDateD" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label">End Date<span style="font-weight:bold; color:red;">*</span></label>
+                    <div class="col-sm-10">
+                        <input asp-for="EndDateD" type="date" class="form-control" id="endDate" placeholder="End Date" />
+                        <span asp-validation-for="EndDateD" class="text-danger"></span>
+                    </div>
+                </div>
+
+
+                @*
+
+        <div class="form-group row">
+            <label asp-for="TerminateReason" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="TerminateReason" class="form-control" placeholder="Terminate Reason" />
+                <span asp-validation-for="TerminateReason" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label asp-for="TerminatedBy" class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input asp-for="TerminatedBy" class="form-control" placeholder="Terminate By" />
+                <span asp-validation-for="TerminatedBy" class="text-danger"></span>
+            </div>
+        </div>*@
+
+                <div class="form-group row">
+                    <label class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary" id="validate">Save</button>
+                        <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <!-- /.card-footer -->
+</form>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+     $("#validate").click(function () {
+                  if ($('#startDate').val() >= $('#endDate').val()) {
+                      swal('Start Date should be greater than End Date');
+                      return false;
+                  }
+     });
+
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    //first
+    function displayParkingFeeMonthlyDemand() {
+        //$('#parkingfeedetailname').html(assetname);
+
+            var cid = $('#cid').val();
+            var ttin = $('#ttin').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("ParkingFeeMonthlyDemands", "ParkingfeeDetails")',
+                    data: {
+                        cid: cid,
+                        ttin: ttin
+                    },
+                    success: function (data) {
+                        $('#parkingfeedemandtbl_body').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+
+                                $('#parkingfeedemandtbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return ParkingFeeDetails(' + value.taxPayerId + ')" >Select</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                            $('#parkingfeediv').show(1000);
+
+                        } else {
+                            $('#parkingfeediv').hide(1000);
+
+                            swal(
+                               'Please Enter valid CID or TTIN!'
+                            );
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    function ParkingFeeDetails(tpid) {
+        $('#parkingfeebody').show(1000);
+        $('#hdnTaxPayer').val(tpid);
+
+    }
+
+              $("#savePeriod").click(function () {
+                  if ($('#StartDate').val() >= $('#EndDate').val()) {
+                      swal('Start Date should be greater than End Date');
+                      return false;
+                  }
+          var myarray = [];
+          var ParkingFeeVM = {};
+
+                  ParkingFeeVM.StartDate = $("#StartDate").val();
+                  ParkingFeeVM.EndDate = $("#EndDate").val();
+                  myarray.push(ParkingFeeVM);
+                  var json_data = JSON.stringify(myarray);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreatePeriod", "ParkingfeeDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                //swal("Success");
+                swal({
+                    title: 'Success',
+                    type: 'success',
+                    showConfirmButton: false,
+                })
+                setTimeout(function () {
+                    location.reload();
+                }, 1500);
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+
+      });
+
+
+
+
+</script>

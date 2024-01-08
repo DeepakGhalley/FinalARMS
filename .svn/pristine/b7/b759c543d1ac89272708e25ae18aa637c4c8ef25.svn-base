@@ -1,0 +1,90 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstBuildingDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+     Table rebuild
+       [dbo].[mstBuildingDetail] (Table)
+     Create
+       [dbo].[FK_mstBuildingDetail_ToTable_13] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_9] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_11] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_12] (Foreign Key)
+     Create
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_9] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_11] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_12] (Foreign Key)
+       [dbo].[mstBuildingDetail].[advanceInfoFedBy].[MS_Description] (Extended Property)

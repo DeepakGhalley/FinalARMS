@@ -1,0 +1,364 @@
+﻿@using CORE_BOL
+@model LandDetailModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var lcid = Model.LandUseCategoryId;
+    var lscid = Model.LandUseSubCategoryId;
+}
+
+
+<input type="hidden" value="@lcid" id="hdnplcid" />
+<input type="hidden" value="@lscid" id="hdnplscid" />
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">LandDetail</a></li>
+                    <li class="breadcrumb-item active">Revenu Master</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Land Detail</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p><input type="hidden" asp-for="LandDetailId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Plot No. <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="PlotNo" class="form-control" placeholder="Plot No." disabled/>
+                    <span asp-validation-for="PlotNo" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Land Acreage <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="LandAcerage" class="form-control" placeholder="Land Acerage" type="number" id="myNumber" />
+                    <span asp-validation-for="LandAcerage" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                <label class="col-sm-2 col-form-label">Land Value <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="LandValue" class="form-control" placeholder="Land Value" type="number" id="myNumber" required/>
+                    <span asp-validation-for="LandValue" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Land Pooling Rate <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="LandPoolingRate" class="form-control" placeholder="Land Pooling Rate" type="number" id="myNumber" required/>
+                    <span asp-validation-for="LandPoolingRate" class="text-danger"></span>
+                </div>
+            </div>*@
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Plot Address <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <textarea asp-for="PlotAddress" class="form-control" rows="3" placeholder="Enter Plot Address" required></textarea>
+            </div>
+            <label class="col-sm-2 col-form-label">Thram No<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input asp-for="ThramNo" class="form-control" placeholder="Thram No" required />
+                <span asp-validation-for="ThramNo" class="text-danger"></span>
+            </div>
+        </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Precinct <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" id="luc" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.LandUseCategory,"Value","Text")) " value="0">
+                        <option value="0">--Please select--</option>
+                    </select>
+                    <span id="errorluc" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-2 col-form-label">Street Name</label>
+                <div class="col-sm-4">
+                    <select asp-for="StreetNameId" id="StreetNameId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StreetNameId,"Value","Text"))"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="StreetNameId" id="errorStreetNameId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Sub Precinct <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="LandUseSubCategoryId" class="form-control select2" id="lusc" style="width: 100%;"
+                            value="0">
+                        <option value="0">--Please select--</option>
+                    </select>
+                    <span asp-validation-for="LandUseSubCategoryId" id="errorLandUseSubCategoryId" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-2 col-form-label">Demkhong</label>
+                <div class="col-sm-4">
+                    <select asp-for="DemkhongId" id="DemkhongId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.DemkhongId,"Value","Text"))"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="DemkhongId" id="errorDemkhongId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Land Use Type <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="LandTypeId" id="LandTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandTypeId,"Value","Text"))"
+                            value="0">
+                        <option value="0">--Please select--</option>
+                    </select>
+                    <span asp-validation-for="LandTypeId" id="errorLandTypeId" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-2 col-form-label">Lap Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="LapId" id="LapId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LapId,"Value","Text"))"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="LapId" id="errorLapId" class="text-danger"></span>
+                </div>
+            </div>           
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Property Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="PropertyTypeId" id="PropertyTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.PropertyTypeId,"Value","Text"))"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="LapId" id="errorPropertyTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            @*<div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="StructureAvailable" >
+                    <label for="StructureAvailable" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.StructureAvailable)
+                    </label>
+                </div>
+
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="VacantLandTaxApplicable" >
+                    <label for="VacantLandTaxApplicable" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.VacantLandTaxApplicable)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="GarbageApplicable" >
+                    <label for="GarbageApplicable" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.GarbageApplicable)
+                    </label>
+                </div>
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsApportioned" >
+                    <label for="IsApportioned" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsApportioned)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="StreetLightApplicable" >
+                    <label for="StreetLightApplicable" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.StreetLightApplicable)
+                    </label>
+                </div>
+            </div>*@
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <button asp-action="Index" id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <!-- /.card-footer -->
+
+    </form>
+
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+        function myFunction() {
+            var x = document.getElementById("myNumber").value;
+
+        }
+
+    $(function () {
+        $('#luc').change(function () {
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateLUSC", "LandDetails")',
+                data: {
+                id: parseInt($('#luc').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#lusc').empty();
+
+                $('#lusc').append(
+                '<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                var newOption = $('<option value=' + data[i].landUseSubCategoryId + '> '
+                    + data[i].landUseSubCategory
+                    + '  </option>');
+                $('#lusc').append(newOption);
+                }
+
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+
+        });
+         //AUTO POPULATE DROP DOWN FOR DZONGKHAG
+        $('#luc').val($('#hdnplcid').val());
+
+        //AUTO POPULATE DROPDOWN FOR GEWOG
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateLUSC", "LandDetails")',
+                data: {
+                    id: parseInt($('#hdnplcid').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#lusc').empty();
+                    $('#lusc').append(
+                        '<option value=0>--Please Select--</option>');
+                  
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].landUseSubCategoryId + '>'
+                                + data[i].landUseSubCategory
+                                + '</option>');
+                            $('#lusc').append(newOption);
+                        }
+
+                        $('#lusc').val($('#hdnplscid').val());
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+        });
+
+                });
+
+    //Validation
+    function saveme() {
+        //1.Land Use Category
+        if ($('#luc option:selected').val() == 0) {
+            $('#errorluc').html('Please Select a Value');
+            $('#luc').focus();
+            return false;
+        }
+        else {
+            $('#errorluc').html('');
+        }
+        //2.Street Name
+        //if ($('#StreetNameId option:selected').val() == 0) {
+        //    $('#errorStreetNameId').html('Please Select a Value');
+        //    $('#StreetNameId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorStreetNameId').html('');
+        //}
+        //3.Land Use Sub Category
+        if ($('#lusc option:selected').val() == 0) {
+            $('#errorLandUseSubCategoryId').html('Please Select a Value');
+            $('#lusc').focus();
+            return false;
+        }
+        else {
+            $('#errorLandUseSubCategoryId').html('');
+        }
+        //4.Demkhong 
+        //if ($('#DemkhongId option:selected').val() == 0) {
+        //    $('#errorDemkhongId').html('Please Select a Value');
+        //    $('#DemkhongId').focus();
+        //    return false;
+        //}
+        //else {
+        //    $('#errorDemkhongId').html('');
+        //}
+        //5.Land Type
+        if ($('#LandTypeId option:selected').val() == 0) {
+            $('#errorLandTypeId').html('Please Select a Value');
+            $('#LandTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorLandTypeId').html('');
+        }
+        //6.Lap
+        if ($('#LapId option:selected').val() == 0) {
+            $('#errorLapId').html('Please Select a Value');
+            $('#LapId').focus();
+            return false;
+        }
+        else {
+            $('#errorLapId').html('');
+        }
+        //7.Property Type
+        if ($('#PropertyTypeId option:selected').val() == 0) {
+            $('#errorPropertyTypeId').html('Please Select a Value');
+            $('#PropertyTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorPropertyTypeId').html('');
+        }
+
+    }
+</script>

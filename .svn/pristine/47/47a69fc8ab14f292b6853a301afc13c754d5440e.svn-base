@@ -1,0 +1,29 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblWaterMeterReading]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       unnamed constraint on [dbo].[tblWaterMeterReading] (Default Constraint)
+     Table rebuild
+       [dbo].[tblWaterMeterReading] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_4] (Foreign Key)
+     Create
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_4] (Foreign Key)

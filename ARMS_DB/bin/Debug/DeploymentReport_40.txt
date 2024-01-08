@@ -1,0 +1,71 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLedger]
+       [dbo].[tblPaymentLeger]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblLedger].[receiptId] is being dropped, data loss could occur.
+       The column [dbo].[tblPaymentLeger].[receiptYear] on table [dbo].[tblPaymentLeger] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The column [dbo].[tblPaymentLeger].[slNo] on table [dbo].[tblPaymentLeger] must be added, but the column has no default
+         value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue
+         you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+       The type for column paymentModeId in table [dbo].[tblPaymentLeger] is currently  NCHAR (10) NULL but is being changed to
+          INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type 
+         INT NOT NULL.
+       The type for column paymentModeNo in table [dbo].[tblPaymentLeger] is currently  NCHAR (10) NULL but is being changed to
+          VARCHAR (250) NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with
+         type  VARCHAR (250) NULL.
+
+** User actions
+     Rename
+       [dbo].[tblPaymentLeger].[receiptNo] (Column)
+     Table rebuild
+       [dbo].[tblLedger] (Table)
+       [dbo].[tblPaymentLeger] (Table)
+     Create
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+     Create
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+
+The column [dbo].[tblLedger].[receiptId] is being dropped, data loss could occur.
+The column [dbo].[tblPaymentLeger].[receiptYear] on table [dbo].[tblPaymentLeger] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblPaymentLeger].[slNo] on table [dbo].[tblPaymentLeger] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column amount on table [dbo].[tblPaymentLeger] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column paymentModeId on table [dbo].[tblPaymentLeger] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column paymentModeId in table [dbo].[tblPaymentLeger] is currently  NCHAR (10) NULL but is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  INT NOT NULL.
+The type for column paymentModeNo in table [dbo].[tblPaymentLeger] is currently  NCHAR (10) NULL but is being changed to  VARCHAR (250) NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  VARCHAR (250) NULL.
+

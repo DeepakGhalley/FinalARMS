@@ -1,0 +1,70 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLedger]
+       [dbo].[tblPaymentLeger]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblLedger].[receiptNo] is being dropped, data loss could occur.
+       The column [dbo].[tblLedger].[receiptId] on table [dbo].[tblLedger] must be added, but the column has no default value
+         and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must
+         either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults
+         as a deployment option.
+       The column [dbo].[tblPaymentLeger].[receiptNo] is being dropped, data loss could occur.
+       The column [dbo].[tblPaymentLeger].[receiptYear] is being dropped, data loss could occur.
+       The column [dbo].[tblPaymentLeger].[slNo] is being dropped, data loss could occur.
+       The column [dbo].[tblPaymentLeger].[receiptId] on table [dbo].[tblPaymentLeger] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+
+** User actions
+     Table rebuild
+       [dbo].[tblLedger] (Table)
+       [dbo].[tblPaymentLeger] (Table)
+     Create
+       [dbo].[tblReceipt] (Table)
+       [dbo].[FK_tblLedger_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_2] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+
+The column [dbo].[tblLedger].[receiptNo] is being dropped, data loss could occur.
+The column [dbo].[tblLedger].[receiptId] on table [dbo].[tblLedger] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblPaymentLeger].[receiptNo] is being dropped, data loss could occur.
+The column [dbo].[tblPaymentLeger].[receiptYear] is being dropped, data loss could occur.
+The column [dbo].[tblPaymentLeger].[slNo] is being dropped, data loss could occur.
+The column [dbo].[tblPaymentLeger].[receiptId] on table [dbo].[tblPaymentLeger] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

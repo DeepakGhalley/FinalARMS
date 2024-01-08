@@ -1,0 +1,104 @@
+﻿@using CORE_BOL
+@model AttributeUnitMapModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Attribute Unit Map</a></li>
+                    <li class="breadcrumb-item active">Update Attribute Unit Map</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Attribute Unit Map</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="AttributeUnitMapId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="AttributeUnitMapName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="AttributeUnitMapName" class="form-control" placeholder="Attribute Unit Map Name" />
+                    <span asp-validation-for="AttributeUnitMapName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="AttributeUnitMapDescription" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="AttributeUnitMapDescription" class="form-control" placeholder="Attribute Unit Map Description" />
+                    <span asp-validation-for="AttributeUnitMapDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="AssetAttributeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="AssetAttributeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.AssetAttribute,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="AssetAttributeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="MeasurementUnitId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="MeasurementUnitId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MeasurementUnitId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="MeasurementUnitId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+<script>
+    function saveme() {
+        $('#img').show();
+    }
+</script>

@@ -1,0 +1,1009 @@
+﻿@using CORE_BOL
+@model TaxPayerProfileModel
+
+@{
+    ViewData["Title"] = "LandLeaseMonthlyDemand";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Vendor Demand Generate</a></li>
+                    <li class="breadcrumb-item active">Land Lease Monthly Demand</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search Land Lease Monthly Demand</h3>
+        </div>
+        <div class="card-body">
+
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label">CID </label>
+                <div class="col-sm-3">
+                    <input id="cid" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label">TTIN </label>
+                <div class="col-sm-3">
+                    <input id="ttin" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row ">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayTaxPayer();" />
+                </div>
+
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="taxPayerDiv">
+    <div class="card-header">
+        <h3 class="card-title">Tax payer Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="taxPayertbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--VIEW Land Lease DETAILS-->
+<div class="card card-info" style="display:none;" id="landLease">
+    <div class="card-header">
+        <h3 class="card-title">Land Lease Details</h3>
+    </div>
+
+    <input type="hidden" id="hdnTaxPayerId" value="" />
+    <input type="hidden" id="hdnScheduleId" value="" />
+    <input type="hidden" id="hdnLandLease" value="" />
+    <input type="hidden" id="hdnAmt" value="" />
+    <input type="hidden" id="hdnStartdate" value="" />
+    <input type="hidden" id="hdnEnddate" value="" />
+    <input type="hidden" id="hdnTaxId" value="" />
+    <input type="hidden" id="hdnYear" value="" />
+    <input type="hidden" id="hdnlat" value="" />
+
+    <div class="card-body table-responsive">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>Billing Schedule</th>
+                    <th>Lease Type</th>
+                    <th>Lease Activity Type</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Lease Amount</th>
+                    <th>Shed Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyLandLease">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--VIEW Latest available start date & end date-->
+<div class="card card-info" style="display:none;" id="leasePeriod">
+    <div class="card-header">
+        <h3 class="card-title">Land Lease Demand</h3>
+    </div>
+    <div class="card-body">
+        <div class="row" style="display:none;">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Start Date</label>
+                <input id="StartDate" class="form-control col-6" disabled />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">End Date</label>
+                <input id="EndDate" class="form-control col-6" disabled />
+            </div>
+        </div>
+        <br /><br />
+
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="yearbody">
+            </tbody>
+        </table>
+
+        <br /><br />
+        <table id="tblperiod" style="display:none;" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Days</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="leasePeriodBody">
+            </tbody>
+        </table>
+        <br /><br />
+
+    </div>
+</div>
+<table id="tblp" style="display:none;" class="table table-bordered table-striped">
+    <thead style="background-color:mediumaquamarine">
+        <tr>
+            <th>#</th>
+            <th>Start Date</th>
+            <th>End Date</th>
+
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="tbllongterm">
+    </tbody>
+</table>
+
+<!--<div class="card card-info" id="landDemand" style="display:none;">
+    <div class="card-body" id="toprint">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 130px; height: 100px" />
+                    </td>
+                    <td colspan="8" style="color: #CC0000" align="center">
+                        <strong>Thimphu Thromde</strong>
+                    </td>
+                    <td colspan="2">
+                        <img id="qrDemandNo" style="width: 162px; height: 120px" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td style="height: 15px">
+                        <span>
+                        </span>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>Name:</b><label id="lblName" value="" />
+                    </td>
+                    <td colspan="2">
+                        <b>TTIN:</b> <label id="lblTTIN" value="" />
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                        <b>Demand Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+
+                    <td>
+                        &nbsp;
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>CID:</b>&nbsp; <label id="lblCID" class="col-form-label" readonly />
+                    </td>
+                    <td colspan="2">
+                        <b>Address:</b>&nbsp;<label id="lblAddress" class="col-form-label" readonly />
+                    </td>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                        <b>Demand No:</b>&nbsp;<label id="lblDemandNo" class="col-form-label" readonly />-->
+@*<input type="text" id="lblDemandNo" value="" readonly style="border:0;"/>*@
+<!--</td>
+            <td colspan="2">
+            </td>
+        </tr>
+        <tr>
+            <td colspan="4">
+            </td>
+
+            <td colspan="4">
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+<div class="form-group row">
+    <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+        <thead style="background-color:mediumaquamarine">
+            <tr>
+                <th>#</th>
+                <th>Tax Name</th>
+                <th>Amount</th>
+            </tr>
+        </thead>
+        <tbody id="tblDemand">
+        </tbody>-->
+@*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+<!--</table>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>-->
+
+<div class="card card-info" id="landDemand" style="display:none;">
+    <div class="card-body" id="toprint">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 120px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Demand Receipt </strong>
+                    </td>
+                    <td></td>
+
+
+
+                    <td colspan="2">
+                        <img id="qrDemandNo" style="width: 120px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Demand Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>TTIN:</b> <label id="lblTTIN" value="" />
+
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Demand No:</b>&nbsp;<label id="lblDemandNo" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>CID:</b>&nbsp; <label id="lblCID" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Name:</b><label id="lblName" value="" />
+                    </td>
+
+
+                    <td colspan="6">
+                        <b>Address:</b>&nbsp;<label id="lblAddress" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4">
+                        <b>Start Date</b>&nbsp; <label id="lblstart" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="2">
+                        <b>End Date:</b>&nbsp;<label id="lblend" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="2">
+                        <b>Bill For:</b>&nbsp;<label id="lblmonth" class="col-form-label" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDemand">
+                </tbody>
+                @*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="lbluser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10" style="margin-left: 10px;">
+            <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    //first
+    function displayTaxPayer() {
+        $('#img').show();
+            var cid = $('#cid').val();
+            var ttin = $('#ttin').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetTaxPayer", "LandLeases")',
+                    data: {
+                        cid: cid,
+                        ttin: ttin,
+                    },
+                    success: function (data) {
+                        $('#img').hide();
+
+                        $('#taxPayertbl_body').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+
+                                $('#taxPayertbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return displayLandLeaseDetails(' + value.taxPayerId + ')" >Select</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                            $('#taxPayerDiv').show(1000);
+                            $('html,body').animate({
+                                scrollTop: $("#taxPayerDiv").offset().top
+                            }, 'slow');
+
+                        } else {
+
+                            $('#taxPayerDiv').hide(1000);
+
+                            swal(
+                               'Please Enter valid CID or TTIN!'
+                            );
+                        }
+
+                    },
+
+                    error: function () {
+                        $('#img').hide();
+
+                        alert('error');
+                    }
+
+                });
+    }
+
+    //second
+    function displayLandLeaseDetails(taxPayerId) {
+
+        $('#hdnTaxPayerId').val(taxPayerId);
+
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("LandLeaseDetails", "LandLeases")',
+                    data: {
+                        id: taxPayerId,
+                    },
+                        success: function (data) {
+                            $('#landLease').show(1000);
+                            $('html,body').animate({
+                                scrollTop: $("#landLease").offset().top
+                            }, 'slow');
+
+                            $('#tbodyLandLease').empty();
+
+                            if (data.length > 0) {
+                                var taxId = $('#hdnTaxId').val();
+                                $.each(data, function (key, value) {
+                                    //var sdate = value.startDate;
+                                    //sdate = sdate.split(' ')[0];
+
+                                    res = (value.leaseTypeId != 3) ? '<b<a style = "color: #007bff; cursor: pointer;" onclick = "return GetYear(' + value.startDateString + ',' + value.endDateString + ',' + value.landLeaseId + ',' + value.leaseAmount + ',' + value.leaseTypeId + ');">Select</a ></b>'
+                                        : '<b<a style = "color: #007bff; cursor: pointer;" onclick = "return Getlongtermlease(' + value.landLeaseId + ',' + value.startDateString + ',' + value.endDateString +', ' + value.leaseAmount + ',' + value.leaseTypeId + ');">Select</a ></b>'
+
+                                    //    : '<b<a style = "color: #007bff; cursor: pointer;" onclick = "return Getlongtermlease(' + value.startDate + ',' + value.endDate + ',' + value.landLeaseId + ',' + value.leaseAmount + ',' + value.leaseTypeId + ',' + taxId + ');">Select</a ></b>';
+                                    $('#tbodyLandLease').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.plotNo + '</td>'
+                                        + '<td>' + value.billingScheduleName + '</td>'
+                                        + '<td>' + value.leaseType + '</td>'
+                                        + '<td>' + value.leaseActivityType + '</td>'
+                                        + '<td>' + value.startDateString + '</td>'
+                                        + '<td>' + value.endDateString + '</td>'
+                                        + '<td>' + value.leaseAmount + '</td>'
+                                        + '<td>' + value.shedAmount + '</td>'
+                                       // + '<td>'
+
+                                    //+ '<a style = "color: #007bff; cursor: pointer;" onclick = "return GetYear(' + value.startDate + ',' + value.endDate + ',' + value.parkingFeeDetailId + ',' + value.installmentAmount + ',' + value.sid + ');">Select</a >'
+
+
+                                        //+ '</td>'
+                                        + '<td>' + res + '</td>'
+                                        + '</tr>');
+                                });
+
+                            } else {
+                                $('#tbodyLandLease').append(
+                                    '<tr><td colspan="9" style="color: red;">No record found!</td></tr>');
+
+                            }
+
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+
+    //third
+    function GetYear(stDate, enDate, lid, amt, taxId) {
+        //var stDate1 = "20200101";
+        //var enDate1 = "20200322";
+        //$('#hdnParking').val(parkingFeeDetailId);
+        //$('#hdnAmt').val(amt);
+        //$('#hdnStartdate').val(stDate);
+        //$('#hdnEnddate').val(enDate);
+        //$('#hdnScheduleId').val(sid);
+        $('#tblperiod').hide();
+        $('#landDemand').hide();
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetYear", "LandLeases")',
+                    data: {
+                        startDate: stDate,
+                        endDate: enDate
+                        },
+
+                        success: function (data) {
+
+                            //var taxId = data[0].leaseTypeId;
+                            if (taxId == 1) {
+                                $('#hdnTaxId').val(61);
+                            }
+                            else if (taxId == 2) {
+                                $('#hdnTaxId').val(20);
+                            }
+                            else {
+                                $('#hdnTaxId').val(21);
+
+                            }
+
+                            if (data.length > 0) {
+                                console.log(data);
+
+                            $('#StartDate').val(stDate);
+                                $('#EndDate').val(enDate);
+                                $('#yearbody').empty();
+
+                                $.each(data, function (key, value) {
+
+                                    $('#yearbody').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.year + '</td>'
+                                    + '<td>'
+                                        + '<a style = "color: #007bff; cursor: pointer;" onclick = "return GetVendorDemandSchedule(' + stDate + ',' + lid + ',' + enDate + ',' + amt + ',' + value.year + ',' + $('#hdnTaxId').val() +');" >Select</a >'
+                                    + '</td>'
+
+                            + '</tr>');
+
+                                });
+                                $('#leasePeriod').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#leasePeriod").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    function Getlongtermlease(landLeaseId,sdate, edate, leaseAmount, leaseTypeId) {
+        //console.log();
+
+
+        $('#hdnLandLease').val(landLeaseId);
+            $('#hdnAmt').val(leaseAmount);
+        $('#hdnStartdate').val(sdate);
+        $('#hdnEnddate').val(edate);
+
+        $('#img').show();
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetLongTermLandLease", "LandLeases")',
+                    data: {
+                        Id: landLeaseId,
+                        StartDate: sdate,
+                        EndDate: edate,
+
+
+                        },
+
+                        success: function (data) {
+                            $('#tblp').show();
+                            $('html,body').animate({
+                                scrollTop: $("#tblp").offset().top
+                            }, 'slow');
+
+                            $('#img').hide();
+                            if (data.length > 0) {
+                                //$('#StartDate').val(sdate);
+                                //$('#EndDate').val(edate);
+
+                                $('#tbllongterm').empty();
+                                var res = null
+                                $.each(data, function (key, value) {
+                                    var year = value.demandYear;
+
+                                    $('#hdnYear').val(year);
+                                    //    res = (value.generateStatus != null) ? value.generateStatus : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return displayWaterDetails(' + value.id + ');">Generate</a></b>';
+
+                                    var today = new Date(value.dateData);
+                                    var sData = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                                    var todays = new Date(value.eDate);
+                                    var edate = ("0" + todays.getDate()).slice(-2) + '/' + ("0" + (todays.getMonth() + 1)).slice(-2) + '/' + todays.getFullYear()
+                                    res = (value.demandNoId != null) ? '<b><a style="cursor: pointer; color: forestgreen;" title="View Demand" onclick="return displayDemand(' + value.demandNoId + ',\'' + value.demandYear + '\');">View</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return GenerateDemandlongterm(' + value.landLeaseId + ',' + value.days + ',' + value.demandYear + ',' + leaseAmount + ',\'' + edate + '\');">Generate</a></b>';
+                                    $('#tbllongterm').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + sData + '</td>'
+                                        + '<td>' + edate + '</td>'
+                                        + '<td>' + res + '</td>'
+
+                                         + '</tr>');
+
+                                });
+                               /* $("#lblmonth").html(data[0].month);*/
+                                //$('#tblp').show();
+                                //$('html,body').animate({
+                                //    scrollTop: $("#tbllongterm").offset().top
+                                //}, 'slow');
+                            } else {
+                                $('#img').hide();
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    function GetVendorDemandSchedule(stDate, landLeaseId, enDate, amt,yr, taxId) {
+        //var stDate1 = "20200101";
+        //var enDate1 = "20200322";
+        $('#hdnLandLease').val(landLeaseId);
+        $('#hdnAmt').val(amt);
+        $('#hdnStartdate').val(stDate);
+        $('#hdnEnddate').val(enDate);
+        $('#hdnYear').val(yr);
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetVendorDemandSchedule", "LandLeases")',
+                    data: {
+                        id: landLeaseId,
+                        startDate: stDate,
+                        endDate: enDate,
+                        yr: yr
+
+                        },
+
+                        success: function (data) {
+                            if (data.length > 0) {
+                                console.log(data);
+
+                                $('#StartDate').val(stDate);
+                                $('#EndDate').val(enDate);
+                                var res = null
+                                $('#leasePeriodBody').empty();
+
+                                $.each(data, function (key, value) {
+                                    res = (value.generateStatus != null) ? value.generateStatus : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return displayWaterDetails(' + value.id + ');">Generate</a></b>';
+                                    res = (value.demandNoId != null) ? '<b><a style="cursor: pointer; color: forestgreen;" title="View Demand" onclick="return displayDemand(' + value.demandNoId + ',\'' + value.month +'\');">View</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return GenerateDemand(' + value.id + ',' + value.days + ',' + value.monthId + ',' + value.year + ',' + amt + ',' + taxId + ',' + value.totalDays +');">Generate</a></b>';
+
+                                    $('#leasePeriodBody').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.year + '</td>'
+                                    + '<td>' + value.month + '</td>'
+                                    + '<td>' + value.days + '</td>'
+                                    + '<td>' + res + '</td>'
+
+                            + '</tr>');
+
+                                });
+                                $("#lblmonth").html(data[0].month);
+                                $('#tblperiod').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#tblperiod").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    function GenerateDemandlongterm(landLeaseId, days, year, amount, edate) {
+
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GenerateDemand", "LandLeases")',
+                    data: {
+                        landLeaseId: parseInt(landLeaseId),
+                        pDays: parseInt(days),
+                        pMonth: 12,
+                        pYear: parseInt(year),
+                        Amount: parseFloat(amount),
+                        taxPayerId: parseInt($('#hdnTaxPayerId').val()),
+                        taxId: 20,
+                        ScheduleId: 3,
+                        totalDays: parseInt(days),
+                        IDate: edate
+                        },
+
+                        success: function (data) {
+                            //if (data.length > 0) {
+                            swal({
+                                title: 'Success',
+                                text: "Demand generated successfully please click on view to see the demand details",
+                                type: 'success',
+                            })
+                            //parameter with input field values
+                            Getlongtermlease($('#hdnLandLease').val(),$('#hdnStartdate').val(), $('#hdnEnddate').val(), $('#hdnAmt').val(), $('#hdnYear').val());
+
+                            //} else {
+                            //    swal('no data');
+                            //}
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+    //fourth
+    function GenerateDemand(landLeaseId, days, month, year, amount, taxId, totalDays) {
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GenerateDemand", "LandLeases")',
+                    data: {
+                        landLeaseId: parseInt(landLeaseId),
+                        pDays: parseInt(days),
+                        pMonth: parseInt(month),
+                        pYear: parseInt(year),
+                        Amount: parseFloat(amount),
+                        taxPayerId: parseInt($('#hdnTaxPayerId').val()),
+                        taxId: taxId,
+                        totalDays: parseInt(totalDays)
+
+                        },
+
+                        success: function (data) {
+                            //if (data.length > 0) {
+                            swal({
+                                title: 'Success',
+                                text: "Demand generated successfully please click on view to see the demand details",
+                                type: 'success',
+                            })
+                            //parameter with input field values
+                            GetVendorDemandSchedule($('#hdnLandLease').val(),$('#hdnStartdate').val(),  $('#hdnEnddate').val(), $('#hdnAmt').val(), $('#hdnYear').val(), taxId );
+
+                            //} else {
+                            //    swal('no data');
+                            //}
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    //fifth
+    function displayDemand(demandNoId, mnth) {
+        $('#landDemand').show(1000);
+        $('html,body').animate({
+            scrollTop: $("#landDemand").offset().top
+        }, 'slow');
+
+        $("#lblmonth").html(mnth);
+
+        $('#img').show();
+
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemand", "LandLeases")',
+                data: {
+                    DemandNoId: demandNoId,
+                },
+                    success: function (data) {
+                        $('#img').hide();
+
+                    console.log(data);
+                    $('#tblDemand').empty();
+                    if (data.length > 0) {
+
+                        var datec = data[0].demandDate;
+                        const c = new Date(datec);
+                        const CreatedDate = ("0" + c.getDate()).slice(-2) + "-" + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + c.getFullYear()
+
+                        var today = new Date(data[0].sStartDate);
+                        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblstart").html(date);
+
+                        var today = new Date(data[0].eEndDate);
+                        var datea = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblend").html(datea);
+
+                        $("#lblName").html(data[0].taxPayerName);
+                        $("#lblTTIN").html(data[0].ttin);
+                        $("#lbluser").html(data[0].creatorname);
+                        $("#lblCID").html(data[0].cid);
+                        $("#lblAddress").html(data[0].cAddressID);
+                        $("#lblDemandDate").html(CreatedDate);
+                        $("#lblDemandNo").html(data[0].demandNo);
+
+                        $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                        $.each(data, function (key, value) {
+                            $('#tblDemand').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.leaseAmount+ '</td>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#landDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#landDemand").show(1000);
+                        $('#tblDemand').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+        }
+
+        function printPage() {
+            var dataToPrint = document.getElementById("toprint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function ok() {
+            $("#landDemand").hide(1000);
+            $("#tblDemand").hide(1000);
+            $("#leasePeriodBody").hide(1000);
+            $("#leasePeriod").hide(1000);
+            $("#taxPayerDiv").hide(1000);
+            $("#landLease").hide(1000);
+
+        }
+</script>

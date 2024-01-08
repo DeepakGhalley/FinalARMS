@@ -1,0 +1,10 @@
+Scaffold-DbContext "Server=NARAYAN;Database=tt_db;Trusted_Connection=false;user id=sa;password=P@ssw0rd;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Entities -f
+
+
+
+https://103.80.110.239:8081/svn/TTAPP/
+
+[Required]
+        [RegularExpression("^[a-zA-Z0-9_\\.-]+@([a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,6}$", ErrorMessage = "E-mail is not valid")]
+        public string Email { get; set; }
+ 

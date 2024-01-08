@@ -1,0 +1,126 @@
+﻿@{
+    ViewData["Title"] = "MonthlyZoneWiseWaterConsumption";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="MonthlyZoneWiseWaterConsumption">Report</a></li>
+                        <li class="breadcrumb-item active">Monthly Zone Wise Water Consumption</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Monthly Zone Wise Water Consumption</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Zone</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idZone" asp-items="@(new SelectList (@ViewBag.ZoneId,"Value","Text"))">
+                    </select>
+                    <span id="Zonecheck" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-1 col-form-label">Year</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idYear" asp-items="@(new SelectList (@ViewBag.YearId,"Value","Text"))">
+                    </select>
+                    <span id="Yearcheck" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Month</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idMonth" asp-items="@(new SelectList (@ViewBag.MonthId,"Value","Text"))">
+                    </select>
+                    <span id="Monthcheck" class="text-danger"></span>
+                </div>
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input type="button" value="Search" class="btn btn-block btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+<script>
+
+       function PrintReport() {
+           if ($('#idZone').val() == "" && $('idYear').val() == "" && $('#idMonth').val() == "") {
+               swal("Fields not selected!");
+               $("#Zonecheck").focus();
+               $("#Yearcheck").focus();
+               $("#Monthcheck").focus();
+
+               return false;
+           }
+
+           var Zone = $('#idZone').val();
+           var Year = $('#idYear').val();
+           var Month = $('#idMonth').val();
+           var SZone = ($('#idZone option:selected').text());
+           var SMonth = ($('#idMonth option:selected').text());
+
+               $.ajax({
+                   type: "GET",
+                   url: '@Url.Action("PrintMonthlyZoneWiseWaterConsumption", "Report2s")',
+                   data: {
+                       ZoneId: parseInt(Zone),
+                       YearId: Year,
+                       MonthId: parseInt(Month),
+                       ZoneName: SZone,
+                       MonthName: SMonth
+                   },
+                   success: function (data) {
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                 { Area ="Reports",Controller = "Report2s", Action = "PrintMonthlyZoneWiseWaterConsumption" })/?ZoneId=" + parseInt(Zone) + "&YearId=" + Year +
+                               "&ZoneName=" + SZone + "&MonthId=" + parseInt(Month) + "&MonthName=" + SMonth, '_blank');
+
+                       }
+
+                       $('#img').hide();
+
+                   },
+                   error: function () {
+                       alert('error');
+                       $('#img').hide();
+                   }
+
+               });
+
+
+   }
+
+
+</script>

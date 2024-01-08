@@ -1,0 +1,25 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstRate]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstRate] (Table)
+     Create
+       [dbo].[ViewProertyTaxLedger] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+     Refresh
+       [dbo].[rptGetTaxRates] (Procedure)

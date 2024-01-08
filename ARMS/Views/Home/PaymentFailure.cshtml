@@ -1,0 +1,114 @@
+﻿@using CORE_BOL
+@model BfsModel
+@{
+    ViewData["Title"] = "Payment Failure";
+    if (!User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_Layout1.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+
+
+
+@{
+    @if (!User.Identity.IsAuthenticated)
+    {
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title text-primary">
+                            <i class="fas fa-bullhorn"></i>
+                            &nbsp;&nbsp;Thromde Online Services
+                        </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="callout callout-danger">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="callout callout-info">
+                                        <h5 class="text-warning"><i style="color:orange;" class="fas fa-times"></i> Payment Failure:</h5>
+                                        Your payment for water bill has failed to proceed, please try again later.
+                                    </div>
+                                    <!-- Main content -->
+                                    <div class="invoice p-3 mb-12">
+                                        <!-- title row -->
+                                        <div class="row">
+                                            <div class="col-10">
+                                                <h4>
+                                                    <img width="30" height="30" src="~/Logo/tt_logo.png" class="brand-image img-circle elevation-3" style="opacity: 1;" alt="Thromde Logo">
+                                                    Thimphu Thromde.
+                                                    <small class="float-right"><B>Date:</B> 
+                                                    <input value="@DateTime.Now" class="form-control" placeholder="Payment Date" readonly /></small>
+
+                                                </h4>
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <!-- info row -->
+                                        <div class="row invoice-info">
+
+                                            <!-- /.col -->
+                                            <div class="col-sm-12 invoice-col">
+                                                <div class="form-group row">
+                                                    <label  class="col-sm-2 col-form-label"></label>
+                                                    <div class="col-sm-10">
+                                                        <b> Payment Failure.</b>
+                                                        @*<input asp-for="BfsBfsTxnId" class="form-control" placeholder="BfsBfsTxnId" readonly />*@
+                                                    </div>
+                                                </div>
+                                                @*<div class="form-group row">
+                                                    <label asp-for="BfsOrderNo" class="col-sm-2 col-form-label"></label>
+                                                    <div class="col-sm-5">
+                                                        <input asp-for="BfsOrderNo" class="form-control" placeholder="BfsBfsTxnId" readonly />
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label asp-for="BfsTxnAmount" class="col-sm-2 col-form-label"></label>
+                                                    <div class="col-sm-5">
+                                                        <input asp-for="BfsTxnAmount" class="form-control" placeholder="BfsBfsTxnId" readonly />
+                                                    </div>
+                                                </div>*@
+                                               
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+
+
+                                        <!-- /.row -->
+                                        <!-- this row will not appear when printing -->
+                                        <div class="row no-print">
+                                            <div class="col-10">
+                                                @*<a  target="_blank" class="btn btn-default"><i class="fas fa-print"></i> Print</a>*@
+                                                <a asp-controller="Home" asp-action="OnlineWaterBillPayment" class="btn btn-success float-right">
+                                                    <i class="far fa-ok"></i> Try Again
+                                                </a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.invoice -->
+                                </div><!-- /.col -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+    }
+
+}

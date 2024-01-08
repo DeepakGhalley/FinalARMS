@@ -1,0 +1,202 @@
+﻿
+@{
+    ViewData["Title"] = "AssetListingReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="GetTaxRate">Report</a></li>
+                        <li class="breadcrumb-item active">Asset Listing Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Asset Listing Report</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-5 col-form-label">Primary Account Head<span style="font-weight: bold; color: red;"></span></label>
+                    <div class="col-sm-7">
+                        <select id="PrimaryAccountHeadId" class="form-control select2" style="width: 100%;"
+                                 asp-items="@(new SelectList (@ViewBag.PrimaryHead,"Value","Text"))" value="0"></select>
+
+                    </div>
+                </div>
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-5 col-form-label">Secondary Account Head<span style="font-weight: bold; color: red;"></span></label>
+                    <div class="col-sm-7">
+                        <select id="SecondaryAccountHeadId" class="form-control select2" style="width: 100%;"
+                                 asp-items="@(new SelectList (@ViewBag.SecondaryHead,"Value","Text"))" value="0"></select>
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-5 col-form-label">Tertiary Account Head<span style="font-weight: bold; color: red;"></span></label>
+                    <div class="col-sm-7">
+                        <select id="TertiaryAccountHeadId" class="form-control select2" style="width: 100%;"
+                                 asp-items="@(new SelectList (@ViewBag.TertiaryHead,"Value","Text"))" value="0"></select>
+
+                    </div>
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</form>
+
+
+<script>
+    //****** Cascading **********
+    //For Secondary
+    $(function () {
+        $('#SecondaryAccountHeadId').empty();
+        $('#SecondaryAccountHeadId').append(
+            '<option value=0>--Select One--</option>');
+        $('#TertiaryAccountHeadId').empty();
+        $('#TertiaryAccountHeadId').append(
+            '<option value=0>--Select One--</option>');
+        $('#PrimaryAccountHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSecondaryAccountHead", "Report")',
+                data: {
+                    id: parseInt($('#PrimaryAccountHeadId').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].secondaryAccountHeadId + '>'
+                                + data[i].secondaryAccountHeadName
+                                + '</option>');
+                            $('#SecondaryAccountHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //For Tertiary
+    $(function () {
+        $('#SecondaryAccountHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTertiaryAccountHead", "Report")',
+                data: {
+                    id: parseInt($('#SecondaryAccountHeadId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#TertiaryAccountHeadId').empty();
+                    $('#TertiaryAccountHeadId').append(
+                        '<option value=0>--Select One--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].tertiaryAccountHeadId + '>'
+                                + data[i].tertiaryAccountHeadName
+                                + '</option>');
+                            $('#TertiaryAccountHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+    //****** End of Cascading **********
+
+    function PrintReport() {
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintAssetListing", "Report")',
+                    data: {
+                        PrimaryAccountHeadId: $("#PrimaryAccountHeadId").val(),
+                        SecondaryAccountHeadId: $("#SecondaryAccountHeadId").val(),
+                        TertiaryAccountHeadId: $("#TertiaryAccountHeadId").val()
+                    },
+                    success: function (data) {
+
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report", Action = "PrintAssetListing" })/?PrimaryAccountHeadId=" + $("#PrimaryAccountHeadId").val() + "&SecondaryAccountHeadId=" + $("#SecondaryAccountHeadId").val() + "&TertiaryAccountHeadId=" + $("#TertiaryAccountHeadId").val() ,'_blank');
+
+                        }
+
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+    }
+
+</script> 

@@ -1,0 +1,241 @@
+﻿@using CORE_BOL
+@model WaterConnectionModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Connection</a></li>
+                    <li class="breadcrumb-item active">Update Water Connection</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Search Details*@
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    @*@if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }*@
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+        <div class="text-danger"></div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Plot No:</label>
+                <input id="PlotNoInput" class="form-control col-6" />
+            </div>
+
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchDetails();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@*Update Table*@
+<div class="card card-info" id="tbl_WConnection" style="display: none;">
+
+    <div class="card-header">
+        <h3 class="card-title">Update Water Connection</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <input type="hidden" asp-for="WaterConnectionId" />
+            <input type="hidden" asp-for="LandDetailId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Consumer No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConsumerNo" class="form-control" placeholder="Consumer No" readonly />
+                    <span asp-validation-for="ConsumerNo" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Water Meter No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="WaterMeterNo" class="form-control" placeholder="Enter Water Meter No" readonly />
+                    <span asp-validation-for="WaterMeterNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                @*<label class="col-sm-3 col-form-label">Plot No<span style="font-weight: bold; color: red;">*</span></label>
+        <div class="col-sm-3">
+            <select asp-for="LandDetailId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandDetailId,"Value","Text")) " value="0"></select>
+            <span asp-validation-for="LandDetailId" class="text-danger"></span>
+        </div>*@
+                <label class="col-sm-3 col-form-label">Zone<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="ZoneId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ZoneId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="ZoneId" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="OwnerTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="OwnerTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Flat No</label>
+                <div class="col-sm-3">
+                    <input asp-for="FlatNo" class="form-control" placeholder="Flat No" readonly/>
+                    <span asp-validation-for="FlatNo" class="text-danger"></span>
+                </div>  
+                <label class="col-sm-3 col-form-label">Mobile No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="PrimaryMobileNo" class="form-control" placeholder="Primary Mobile No" readonly />
+                    <span asp-validation-for="PrimaryMobileNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Water Connection Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterConnectionTypeId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="WaterConnectionTypeId" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Water Line Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterLineTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterLineTypeId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="WaterLineTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Water Meter Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterMeterTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterMeterTypeId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="WaterMeterTypeId" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Water Connection Status<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionStatusId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterConnectionStatusId,"Value","Text")) " value="0" disabled></select>
+                    <span asp-validation-for="WaterConnectionStatusId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Connection Date<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConnectionDate" type="date" class="form-control" readonly />
+                    <span asp-validation-for="ConnectionDate" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Initial Reading<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="InitialReading" class="form-control" placeholder="Initial Reading" type="number" readonly />
+                    <span asp-validation-for="InitialReading" class="text-danger"></span>
+                </div>
+                </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Standard Consumption<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="StandardCosumption" class="form-control" placeholder="Enter Standard Consumption" type="number" readonly/>
+                    <span asp-validation-for="StandardCosumption" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">No Of Units<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfUnits" class="form-control" placeholder="Secondary Mobile No" type="number" readonly/>
+                    <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Billing Address<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <textarea asp-for="BillingAddress" rows="3" class="form-control" placeholder="Enter Billing Address" readonly></textarea>
+                    <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Organization Name</label>
+                <div class="col-sm-3">
+                    <input asp-for="OrganisationName" class="form-control" placeholder="Organisation Name" readonly/>
+                    <span asp-validation-for="OrganisationName" class="text-danger"></span>
+                </div>
+            </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label">Remarks</label>
+                    <div class="col-sm-3">
+                        <textarea asp-for="Remarks" rows="3" class="form-control" placeholder="Enter Remarks" readonly></textarea>
+                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+</form>
+</div>
+
+
+<script>
+    function SearchDetails() {
+        if ($('#PlotNoInput').val() == "") {
+            swal('Empty Fields', 'Please Enter Valid Plot No', 'error');
+            $('#PlotNoInput').focus();
+            return false;
+        }
+
+        var PlotNo = $('#PlotNoInput').val();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("SearchDetails", "WaterConnections")',
+                data: {
+                    plotno: PlotNo,
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+                        $.each(data, function (key, value) {
+                            $('#tbl_WConnection').show(1000);
+
+                        });
+                    } else {
+                        $('#tbl_body').append(
+                            '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+                        swal({
+                            title: 'Please Enter valid Value!',
+                            type: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+                },
+         });
+    }
+
+</script>

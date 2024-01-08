@@ -1,0 +1,404 @@
+﻿@using CORE_BOL
+@model BfsModel
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "OnlineWaterBillPayment";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+<div class="card card-info" id="dvtop">
+
+    <div class="card-header">
+        <h3 class="card-title">Search Water Bill Details</h3>
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Consumer No <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="consumerno" class="form-control" />
+
+            </div>
+        @*</div>
+        <div class="form-group row">*@
+            @*<label class="col-sm-2 col-form-label"></label>*@
+            <div class="col-sm-3">
+                <button class="btn btn-primary" onclick="return GetDemandWithSearchWaterBill();">Search</button>
+
+                @*<a asp-area="" asp-controller="Home" asp-action="PaymentGateWayRedirect" class="btn btn-primary">Make Payment</a>*@
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<!--Demand Details-->
+<div class="card card-info" style="display:none;" id="dvDemand">
+    <div class="card-header">
+        <h3 class="card-title">View Water Demand Details</h3>
+    </div>
+    <input type="hidden" id="hdnTransactionTypeId" />
+    <div class="card-body">
+        <div class="col-12 table-responsive">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Demand No </th>
+                        <th>Demand Amount </th>
+                        <th>Exemption Amount</th>
+                        <th>Total Amount</th>
+
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-3">
+                <button class="btn btn-primary" onclick="return GetDemandDetailWaterBill();">Proceed</button>&nbsp;
+                <button class="btn btn-danger" onclick="return Cancel1();">Cancel</button>
+            </div>
+        </div>
+
+
+
+    </div>
+</div>
+
+<!--Search Info-->
+<form class="form-horizontal" asp-action="PaymentGateWayRedirect" method="post">
+    <div class="card card-info" id="dvDemandDetail" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">View Water Bill Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row" style="display: none;">
+                <label class="col-sm-2 col-form-label">Meter No</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDmeterNo" />
+                </div>
+                <label class="col-sm-2 col-form-label">Consumer No</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDconsumerNo" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12 table-responsive">
+                    <table id="tblDemands" class="table table-bordered table-striped">
+                        <thead style="background-color:mediumaquamarine">
+
+                            <tr>
+                                <th>#</th>
+                                <th>Tax Name</th>
+                                <th>Exemption Amount</th>
+                                <th>Penalty</th>
+                                <th>Demand Amount</th>
+                                <th>Total Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl_body2">
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Net Payable Amount(Nu.):</label>
+                @*<input id="total" class="form-control col-sm-2" readonly />*@
+
+                <input asp-for="BfsTxnAmount" class="form-control col-sm-2" readonly /> 
+                <input hidden asp-for="DemandIds" class="form-control col-sm-2" readonly />
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+
+                    <button type="submit" class="btn btn-primary"><i class="far fa-credit-card"></i> Submit Payment</button> &nbsp;
+                    <a class="btn btn-danger" style="color: white;" onclick="Cancel();"><i class="fas fa-times" style="color: white;"></i> Cancel</a>
+                  
+                </div>
+                <label class="col-sm-0 col-form-label"></label>
+                <div class="col-sm-2">
+                    
+
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+    <link href="~/plugins/sweetalert/sweetalert.css" rel="stylesheet" />
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/plugins/sweetalert/sweetalert.min.js"></script>
+    <!-- scripit init-->
+    <script src="~/plugins/sweetalert/sweetalert.init.js"></script>
+    <script>
+    $(document).ready(function () {
+        $('#consumerno').focus();
+    });
+    /* $('#btnPay').on('click', function () {*/
+    function FindDemandIds() {
+        $('#img').show();
+        var selected = new Array();
+        var ids;
+
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#tblDemands input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+        else {
+            swal('Please select at least one Demand No to pay.!');
+            return false;
+        }
+        $("#DemandIds").val(ids);
+        //$("#BfsTxnAmount").val($("#total").val());
+    }
+
+    function payTax1() {
+        $('#payFrame').show(1000);
+        $('html,body').animate({
+            scrollTop: $("#payFrame").offset().top
+        }, 'slow');
+
+        //document.getElementById("frame").innerHTML = "<iframe src=\"/PaymentGateWayRedirect\" height=\"200\" width=\"300\" ></iframe>";
+    }
+
+    function Cancel1() {
+        $('#dvDemand').hide(1000);
+        $('html,body').animate({
+            scrollTop: $("#dvtop").offset().top
+        }, 'slow');
+    }
+
+    function Cancel() {
+        $('#dvDemandDetail').hide(1000);
+        $('html,body').animate({
+            scrollTop: $("#dvDemand").offset().top
+        }, 'slow');
+    }
+
+    function GetDemandWithSearchWaterBill() {
+        if ($("#consumerno").val() == "" ) {
+            swal('Required','Enter consumer no.!','warning');
+            $("#consumerno").focus();
+
+            return false;
+        }
+        //swal($("#demandNo").val());
+        $('#img').show();
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemandWithSearchWaterBill", "Home")',
+                data: {
+                    ConsumerNo: ($("#consumerno").val()),
+
+            },
+                success: function (data) {
+                console.log(data);
+                    $('#tbl_body').empty();
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $("#dvDemand").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemand").offset().top
+                        }, 'slow');
+
+
+                        $.each(data, function (key, value) {
+                            $('#tbl_body').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+
+                                + '<td><input id="id_' + key + '" type="hidden" value="' + value.demandNoId + '" />'
+                                + '<input id="chk_' + key + '" type="checkbox" checked disabled value="' + value.demandNoId + '" class"=checkbox" style="display: none;" /> <label for=chk_' + key + '> </label>' + value.demandNo + '</td>'
+                                + '<td>' + value.demandAmount + '</td>'
+                                + '<td>' + value.exemptionAmount + '</td>'
+                                + '<td>' + value.totalAmount + '</td>'
+
+                                + '</tr>');
+                        });
+
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#dvDemand").hide(1000);
+                        swal('Information', 'No pending bills found!', 'info');
+                        return false;
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+
+    function GetDemandDetailWaterBill() {
+        var selected = new Array();
+        var ids;
+
+
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#example1 input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+        else {
+            swal('Please select at least one Demand No to pay.!');
+            return false;
+        }
+         $.ajax({
+            type: "GET",
+            url: '@Url.Action("FetOnlinePaymentStatus", "Home")',
+                data: {
+                    DemandNoIds: ids
+                },
+            success: function (data) {
+                console.log(data);
+                $('#tbl_body2').empty();
+                if (data.length > 0) {
+                    swal("Please visit/call Thromde to settle your incomplete payment.");
+                }
+                else {
+                  //IF NOT SUCCESS
+
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("GetWaterDemandDetail", "Home")',
+                                //url: '@Url.Action("GetDemandDetailWaterBill", "Home")',
+                                data: {
+                                    id: ids
+
+                                },
+                            success: function (data) {
+
+                                var MeterNo = data[0].meterNo;
+                                $('#IDmeterNo').val(MeterNo);
+                                var ConsumerNo = data[0].consumerNo;
+                                $('#IDconsumerNo').val(ConsumerNo);
+
+                                //fro Total Amount
+                                var total = [];
+
+                                console.log(data);
+                                $('#tbl_body2').empty();
+                                //Changed from == 0 to >0
+                                if (data.length > 0) {
+
+                                    $("#dvDemandDetail").show(1000);
+                                    $('html,body').animate({
+                                        scrollTop: $("#dvDemandDetail").offset().top
+                                    }, 'slow');
+
+                                    var tpenalty = 0;
+                                    var gttlamt = 0;
+                                    var dttlamt = 0;
+
+                                    $.each(data, function (key, value) {
+
+                                        var exmpamt = value.exemptionAmount;
+                                        if (value.exemptionAmount == null) {
+                                            exmpamt = 0;
+                                        }
+                                        var ttlamt = 0;
+                                        ttlamt = value.totalAmount + value.totalPenaltyAmount;
+                                        tpenalty += value.totalPenaltyAmount;
+
+                                        dttlamt += value.demandAmount;
+
+                                        gttlamt += ttlamt;
+
+                                        $('#tbl_body2').append(
+                                            '<tr>'
+                                            + '<td>' + (key + 1) + '</td>'
+                                            + '<td hidden><input id="id_' + key + '" type="hidden" value="' + value.demandId + '" />'
+                                            + '<input id="chk_' + key + '" type="checkbox" checked disabled value="' + value.demandId + '" class"=checkbox" style="display: none;" /> <label for=chk_' + key + '> </label>' + value.demandId + '</td>'
+
+                                            + '<td>' + value.taxName + '</td>'
+                                            + '<td>' + exmpamt + '</td>'
+                                            + '<td>' + value.totalPenaltyAmount.toFixed(2) + '</td>'
+                                            + '<td>' + value.totalAmount + '</td>'
+                                            + '<td>' + ttlamt.toFixed(2)  + '</td>'
+
+
+                                            + '</tr>');
+                                });
+                        //for Calculating Total Amount
+                        for (var i = 0; i <= data.length; i++) {
+                            total[i] = (data[i].totalAmount + data[i].totalPenaltyAmount);
+                            var sum = total.reduce(function (a, b) {
+                                return a + b;
+                            }, 0);
+
+                            $('#BfsTxnAmount').val(sum.toFixed(2));
+                            FindDemandIds();
+                            $('#img').hide();
+                        }
+
+                        //$('#tbl_body2').append('<tr>' + '<td colspan="5" align="Right" style="font-weight:bold;"> Grand Total</td>' + '<td colspan="1" style="font-weight:bold;">' + data[0].grandTotalAmount + '</td>'
+                        //    + '</tr>');
+
+                        //$('html,body').animate({
+                        //    scrollTop: $("#dvDemandDetail").offset().top
+                        //}, 'slow');
+
+                    }
+                                    else {
+                        $('#img').hide();
+                        $("#dvDemandDetail").show(1000);
+                        $('#tbl_body2').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                                },
+                                    error: function () {
+                                    $('#img').hide();
+                                    alert('Error occured');
+                                    }
+                        });
+
+                  }
+
+                 },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+         });
+        //
+
+
+
+    }
+
+
+    </script>

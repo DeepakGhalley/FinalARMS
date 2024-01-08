@@ -1,0 +1,778 @@
+﻿@*@model IEnumerable<CORE_BOL.Entities.TblLedger>*@
+@model CORE_BOL.DemandCountModel
+@using Microsoft.AspNetCore.Http;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var Role = Context.Session.GetInt32("roleid");
+}
+
+
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Payment</a></li>
+                    <li class="breadcrumb-item active">Payment</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<!-- Info boxes -->
+@{
+    if (Role == 6)
+    {
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-home"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Land & Building</span>
+                        <span class="info-box-number">
+                            @*50
+                                <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(20);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkPropertyTax" asp-action="Create" asp-route-id="20"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file-invoice-dollar"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text"> Land Transaction Fee</span>
+
+                        <span class="info-box-number">
+                            @*50
+                                <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(34);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="34"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check-circle"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Construction Approval</span>
+
+                        <span class="info-box-number">
+                            @*50
+                                <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(13);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="13"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-info elevation-1"><i class="fas fa-hammer"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Construction Approval</span>
+                        <span class="info-box-text">Application Fee</span>
+
+                        <span class="info-box-number">
+                            @*50
+                                <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(31);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="31"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+        <div class="row">
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-store"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Vendor</span>
+                        <span class="info-box-text">(House,Stall,Lease,</span>
+                        <span class="info-box-text">& Parking Fee)</span>
+                        <span class="info-box-number">
+                            @*50
+                        <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(15);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="15"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+
+
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-parking"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">UnScheduled Parking</span>
+                        <span class="info-box-number">
+                            @*50
+                        <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(42);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="42"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!-- fix for small devices only -->
+            <div class="clearfix hidden-md-up"></div>
+
+            <!-- /.col -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-list-alt"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Miscellaneous</span>
+                        <span class="info-box-number">
+                            @*50
+                        <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(10);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="10"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+            <!-- /.col -->
+            <!--      ENVIRONMENTAL CLERANCE PAYMENT          -->
+            <div class="col-12 col-sm-6 col-md-3">
+                <div class="info-box">
+                    <span class="info-box-icon bg-success elevation-1"><i class="fas fa-ec"></i></span>
+
+                    <div class="info-box-content">
+                        <span class="info-box-text">Environmental Clerance</span>
+                        <span class="info-box-number">
+                            @*50
+                        <small> No(s)</small>*@
+                        </span>   <span class="info-box-text">
+                            <small> <a href="#" onclick="return GetAllDemands(54);"> <b>View Demands</b></a></small>
+
+                        </span>
+                        <span class="info-box-text">
+                            <small> <a id="lkECFee" asp-action="Create" asp-route-id="54"><b>Make Payment</b></a></small>
+                        </span>
+
+                    </div>
+                    <!-- /.info-box-content -->
+                </div>
+                <!-- /.info-box -->
+            </div>
+        </div>
+
+    }
+    else if (Role == 45)
+    {
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-faucet"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text"> Water Bills</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(19);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="19"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-list-alt"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Miscellaneous</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(10);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="10"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-toolbox"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Water Services</span>
+                <span class="info-box-text">(New connection,shifting</span>
+                <span class="info-box-text">replacement,reconnection</span>
+                <span class="info-box-text">Sewerage Connection)</span>
+                <span class="info-box-number">
+                    @*50
+                    <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(2);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="2"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+      
+    </div>
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-toolbox"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Vacuum Tanker Services</span>
+             
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(11);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="11"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+            }
+
+            else
+            {
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-home"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Land & Building</span>
+                            <span class="info-box-number">
+                                @*50
+                                    <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(20);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkPropertyTax" asp-action="Create" asp-route-id="20"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-file-invoice-dollar"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text"> Land Transaction Fee</span>
+
+                            <span class="info-box-number">
+                                @*50
+                                    <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(34);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="landtp" asp-action="Create" asp-route-id="34"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+                <!-- fix for small devices only -->
+                <div class="clearfix hidden-md-up"></div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-check-circle"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Construction Approval</span>
+
+                            <span class="info-box-number">
+                                @*50
+                                    <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(13);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="13"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-info elevation-1"><i class="fas fa-hammer"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Construction Approval</span>
+                            <span class="info-box-text">Application Fee</span>
+
+                            <span class="info-box-number">
+                                @*50
+                                    <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(31);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="31"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+                <!-- /.col -->
+            </div>
+            <!-- /.row -->
+            <!-- Info boxes -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-faucet"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text"> Water Bills</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(19);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="19"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-parking"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">UnScheduled Parking</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(42);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="42"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-list-alt"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Miscellaneous</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(10);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="10"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!--      ENVIRONMENTAL CLERANCE PAYMENT          -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-leaf"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Environmental Clerance</span>
+                <span class="info-box-number">
+                    @*50
+                        <small> No(s)</small>*@
+                </span>   <span class="info-box-text">
+                    <small> <a href="#" onclick="return GetAllDemands(9);"> <b>View Demands</b></a></small>
+
+                </span>
+                <span class="info-box-text">
+                    <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="9"><b>Make Payment</b></a></small>
+                </span>
+
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+</div>
+
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-store"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Vendor</span>
+                            <span class="info-box-text">(House,Stall,Lease,</span>
+                            <span class="info-box-text">& Parking Fee)</span>
+                            <span class="info-box-number">
+                                @*50
+                        <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(15);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="15"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-toolbox"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Water Services</span>
+                            <span class="info-box-text">(New connection,shifting</span>
+                            <span class="info-box-text">replacement,reconnection</span>
+                            <span class="info-box-text">Sewerage Connection)</span>
+                            <span class="info-box-number">
+                                @*50
+                        <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(2);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="2"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-toolbox"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text">Vacuum Tanker Services</span>
+
+                            <span class="info-box-number">
+                                @*50
+                        <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands(11);"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a id="lkWaterCharges" asp-action="Create" asp-route-id="11"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
+
+
+            </div>
+            <!-- Info boxes -->
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-3">
+                    <div class="info-box">
+                        <span class="info-box-icon bg-secondary elevation-1"><i class="fas fa-cog"></i></span>
+
+                        <div class="info-box-content">
+                            <span class="info-box-text"> Others </span>
+                            <span class="info-box-number">
+                                @*50
+                                    <small> No(s)</small>*@
+                            </span>   <span class="info-box-text">
+                                <small> <a href="#" onclick="return GetAllDemands();"> <b>View Demands</b></a></small>
+
+                            </span>
+                            <span class="info-box-text">
+                                <small> <a asp-action="Create" asp-route-id="0"><b>Make Payment</b></a></small>
+                            </span>
+
+                        </div>
+                        <!-- /.info-box-content -->
+                    </div>
+                    <!-- /.info-box -->
+                </div>
+
+            </div>
+            }
+            }
+            <!-- /.row -->
+            <div class="card card-info" id="dvLedgerCardInfo" style="display:none;">
+                @*@if (TempData["msg"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible">
+                            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                            <p>@TempData["msg"]</p>
+                        </div>
+                    }*@
+
+                <div class="card-header">
+                    <h3 class="card-title">Demand Detail</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    @*<p>
+                            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New"><b><i class="fas fa-plus"></i> Add New</b> </a>
+                        </p><hr />*@
+                    <table id="example1" class="table table-bordered table-striped">
+                        <thead style="background-color:mediumaquamarine">
+
+                            <tr>
+                                <th>#</th>
+                                <th>Transaction Type</th>
+                                <th>Demand No </th>
+                                @*<th>Tax Name</th>*@
+                                <th>Demand Amount </th>
+                                <th>Exemption Amount</th>
+                                <th>Total Amount</th>
+                                @*<th>Exemption Letter</th>*@
+                                @*<th>Action</th>*@
+                            </tr>
+                        </thead>
+                        <tbody id="mybody">
+                            @*@{int sl = 1; }
+
+                                @foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @sl
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DemandNo)
+                                        </td>
+
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.DemandAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.TotalAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ExemptionAmount)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(modelItem => item.ExemptionLetter)
+                                        </td>
+
+                                        <td style="text-align:center;">
+                                            <a asp-action="Edit" asp-route-id="@item.DemandNoId" title="EDIT"><i class="fas fa-edit"></i></a>
+                                             </td>
+                                    </tr>
+                                    sl++;
+                                }*@
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <script>
+
+                function GetAllDemands(id) {
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetAllDemands", "Ledgers")',
+                data: {
+                    id: parseInt(id)
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#mybody').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+                        $("#dvLedgerCardInfo").show(1000);
+                        $.each(data, function (key, value) {
+
+                            $('#mybody').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.transactionType + '</td>'
+                                + '<td>' + value.demandNo + '</td>'
+                                + '<td>' + value.demandAmount + '</td>'
+                                + '<td>' + value.exemptionAmount + '</td>'
+                                + '<td>' + value.totalAmount + '</td>'
+                            //+ '<td>' + value.exemptionLetter + '</td>'
+                                + '</tr>');
+                        });
+
+                    }
+                    else {
+                        $("#dvLedgerCardInfo").show(1000);
+                        $('#mybody').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+    function WaterCharges() {
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Create", "Ledgers")',
+            data: {
+                id: 20
+            },
+            success: function (data) {
+            }
+            });
+
+       // window.location.href = "Ledgers/Create?id=" + 20;
+    }
+
+            </script>

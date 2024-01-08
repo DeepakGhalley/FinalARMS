@@ -1,0 +1,248 @@
+﻿@model IEnumerable<CORE_BOL.Entities.TblMenumap>
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<link rel="stylesheet" href="~/plugins/sweetalert2/sweetalert2.js">
+
+<div class="form-group row">
+    <label class="col-sm-2 col-form-label">Role Name <span style="font-weight: bold; color: red;">*</span></label>
+    <div class="col-sm-4">
+        <select id="RoleId" class="form-control select2" style="width: 100%;"
+                asp-items="@(new SelectList (@ViewBag.RoleId,"Value","Text")) " value="0">
+        </select>
+    </div>
+</div>
+<div id="menu_table" style="display: none;">
+    <div class="form-group row">
+        <table id="tblPermission" class="table table-bordered table-striped">
+            <thead>
+
+                <tr>
+                    <th>#</th>
+                    <th style="display: none;">ID</th>
+                    <th>Menu/Page </th>
+                    <th style="text-align: center;">Permission</th>
+                    <th style="text-align: center; display: none;">View</th>
+                    <th style="text-align: center; display: none;">Edit</th>
+                </tr>
+            </thead>
+            <tbody id="mybody" style="font-size: 12px;">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="form-group row">
+        <label class="col-sm-2 col-form-label"></label>
+        <div class="col-sm-10">
+            <input type="button" id="btnSave" class="btn btn-success" value="Update" />
+        </div>
+
+    </div>
+</div>
+
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#RoleId').val(0);
+
+
+        $('#RoleId').change(function () {
+
+            if ($('#RoleId').val() > 0) {
+
+                $('#menu_table').show(1000);
+
+                var role_id = parseInt($('#RoleId').val());
+
+                $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetMenuMap", "Permissions")',
+                data: {
+                    role_id: role_id
+                },
+                success: function (data) {
+                    $('#mybody').empty();
+
+                    $.each(data, function (key, value) {
+
+                        $('#mybody').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td style="display: none;">' + value.menu_id + '</td>'
+                            + '<td><input type = "hidden" id = "hdnmenuid_' + key + '" value = "' + value.menu_id + '" />' + value.menu_name + '</td>'
+                            + '<td style="text-align: center;"><input type="checkbox" id = "add_' + key + '" class="chkitem" value="" /><input type = "hidden" id = "hdnadd_' + key + '" value = "' + value.is_add + '" /></td>'
+                            + '<td style="text-align: center; display: none;"><input type="checkbox" id = "view_' + key + '" class="chkitem" value="" /><input type = "hidden" id = "hdnview_' + key + '" value = "' + value.is_view + '" /></td>'
+                            + '<td style="text-align: center; display: none;"><input type="checkbox" id = "edit_' + key + '" class="chkitem" value="" /><input type = "hidden" id = "hdnedit_' + key + '" value = "' + value.is_edit + '" /></td>'
+                            + '</tr>');
+
+
+                        if ($('#hdnadd_' + key).val() == 1) {
+                            $('#add_' + key).prop("checked", true);
+                        }
+                        else {
+                            $('#add_' + key).prop("checked", false);
+                        }
+
+                        if ($('#hdnview_' + key).val() == 1) {
+                            $('#view_' + key).prop("checked", true);
+                        }
+                        else {
+                            $('#view_' + key).prop("checked", false);
+                        }
+
+                        if ($('#hdnedit_' + key).val() == 1) {
+                            $('#edit_' + key).prop("checked", true);
+                        }
+                        else {
+                            $('#edit_' + key).prop("checked", false);
+                        }
+
+
+
+                    });
+
+                }
+            });
+
+
+            }
+            else
+            {
+                $('#menu_table').hide(1000);
+            }
+
+
+
+
+        });
+
+
+    });
+
+
+
+
+
+
+    $("body").on("click", "#btnSave", function () {
+
+        var menumap = []; // new Array();
+        var checked = false;
+        var _roleid;
+        var i = 0;
+
+        if ($('#RoleId').val() == 0) {
+            alert('Please select Role!');
+            $('#RoleId').focus();
+
+            $("html, body").animate({ scrollTop: 0 }, "slow");
+
+            /*$('html,body').animate({
+                scrollTop: $("#dvup").offset().top
+            }, 'slow');*/
+
+            return false;
+        }
+        else
+        {
+            _roleid = parseInt($("#RoleId").val().replace(/\"/g, ""));
+        }
+
+        $('#img').show();
+
+        //Loop through the Table rows and build a JSON array.
+
+        $("#tblPermission TBODY TR").each(function () {
+
+            var row = $(this);
+            var menus = {};
+
+            menus.RoleId = _roleid;
+
+            var menuid = $('#hdnmenuid_' + i).val();
+            menus.ChildmenuId = parseInt(menuid);
+
+            //$("input[type = 'checkbox']").each(function () {
+
+            // for add
+
+                var add = $('#add_'+i).is(":checked");
+                var a = 0;
+                if (add == true) {
+                    a = 1;
+                }
+                else { a = 0; }
+
+            // for view
+
+            var view = $('#view_' + i).is(":checked");
+            var b = 0;
+            if (view == true) {
+                b = 1;
+            }
+            else { b = 0; }
+
+
+            // for edit
+
+            var edit = $('#edit_' + i).is(":checked");
+            var c = 0;
+            if (edit == true) {
+                c = 1;
+            }
+            else { c = 0; }
+
+            menus.IsAdd = a; // row.find("TD").eq(3).val(); // Add
+            menus.IsView = b; //row.find("TD").eq(4).val(); // View
+            menus.IsEdit = c; //row.find("TD").eq(5).val(); // Edit
+
+            if (a == 1 || b == 1 || c == 1)
+            {
+                menumap.push(menus);
+            }
+            i++;
+        });
+
+        console.log(menumap);
+
+        var json_array = JSON.stringify(menumap);
+
+
+
+        //Send the JSON array to Controller using AJAX.
+        $.ajax({
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: '@Url.Action("InsertMenuPermission", "Permissions")',
+            type: "POST",
+            data: json_array,
+            async: false,
+            success: function (r) {
+                $('#img').hide();
+
+                swal(
+                    'Good job!',
+                    r + ' menu(s) assignment successful.',
+                    'success'
+                )
+
+                setTimeout(function () {
+                    $('.alert').fadeOut(1000);
+                    location.reload();
+                }, 3000);
+            }
+        });
+    });
+
+
+
+</script>
+
+

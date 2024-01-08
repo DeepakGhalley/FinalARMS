@@ -1,0 +1,465 @@
+﻿@using CORE_BOL
+@model WaterConnectionModel
+@{
+    ViewData["Title"] = "ZoneWiseBillPrint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Transaction</a></li>
+                    <li class="breadcrumb-item active">Zone Wise Bill Print</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Zone Wise Bill Print</h3>
+    </div>
+    <div class="card-body">
+        <div class="row d-flex justify-content-center">
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Zone</label>
+                <select id="Zone" class="form-control col-sm-8 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Zone,"Value","Text")) " value="0"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+
+                <label class="col-sm-4 col-form-label">Year</label>
+                <select id="Year" class="form-control col-sm-8 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+            </div>
+            @*<div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Month</label>
+                <select id="Month" class="form-control col-sm-4 select2bs4"
+                        asp-items="@(new SelectList (@ViewBag.Month,"Value","Text")) " value="0"></select>
+            </div>*@
+            <div class="input-group col-3 float-left">
+                <input type="button" value="Search" class="btn btn-primary col-5 " onclick="return generateBillDetails();" /> &nbsp;&nbsp;
+                <input type="button" value="Print" class="btn btn-primary col-5 " />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--ZONE WISE BILL-->
+<div class="card card-info" id="idZoneBillInfo" style="display:none;">
+    <div class="card-header">
+        <div class="card-title">Water & Sewerage Service Charges Bill</div>
+    </div>
+    <div class="card-body" id="IDBill" style="background-color:whitesmoke">
+        <table width="100%" style="border-collapse: collapse; font-size:10px; ">
+
+            <tr><td></td></tr>
+            <tr><td colspan="5" style="font-size: 14px;" align="center"><b>(Water & Sewerage Service Charges Bill)</b></td></tr>
+            <tr>
+                <td colspan="7"><img src="~/dist/img/tt_logo.gif" height="80px" width="80px" /></td>
+
+                <td colspan="7" align="right" ;><img id="qrDemandNo" height="80px" width="80px" /></td>
+
+                @*<td><img src="../images/thimphuthromde.png" height="50px" width="50px" /></td>*@
+            </tr>
+
+
+            <tr>
+                <td style="width:85px; font-size: 10px;" colspan="1">
+                    <strong>Bill For :</strong>
+                </td>
+                <td style="width:85px; font-size: 10px;" align="left">
+                    <Label id="lblBillFor"></Label>
+                </td>
+                <td style="width:85px; font-size: 10px;" align="left">
+                    <Label id="lblZonename"></Label>
+                </td>
+                <td align="left">
+
+                    <strong>  Meter Status:</strong>
+                </td>
+                <td>
+                    <Label id="lblmeterstatus"></Label>
+                </td>
+            </tr>
+            <tr>
+                <td style="width:85px; font-size: 10px;">
+                    <strong>  Bill No:</strong>&nbsp;&nbsp;&nbsp;
+                </td>
+                <td style="width:85px; font-size: 10px;">
+                    <Label id="lblbillno"></Label>
+                </td>
+                <td style="width:85px; font-size: 10px;">
+                </td>
+                <td style="width:85px; font-size: 10px;">
+                    <strong>  Payment Status:</strong>&nbsp;
+                </td>
+                <td>
+
+                    <Label id="lblpaymentstatus"></Label>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>   Bill Date:</strong>&nbsp;
+
+                </td>
+                <td>
+                    <Label id="lblbilldate"></Label>
+                    &nbsp;
+                </td>
+                <td></td>
+                <td>  <strong>  Due Date:</strong></td>
+                <td>
+
+                    <Label id="lblduedate"></Label>
+
+                </td>
+            </tr>
+            @*<%--
+                <tr><td colspan="5"><hr /></td></tr>--%>
+                <%--
+                <tr>
+                    <td>Name:</td>
+                    <td><Label id="lblname" ></Label> </td>
+                    <td></td>
+                    <td>Consumer No.:</td>
+                    <td><Label id="lblconsumerno" ></Label> </td>
+                </tr>--%>*@
+            <tr>
+                <td style="width:75px;"><strong> Billing Address:</strong></td>
+                <td colspan="2"><Label id="lblbillingaddress"></Label> </td>
+
+                <td><strong> Meter No:</strong></td>
+                <td><Label id="lblmeterno"></Label> </td>
+            </tr>
+            <tr>
+                <td style="width:75px;"><strong> Consumer No:</strong></td>
+                <td><Label id="lblconsumerno"></Label></td>
+
+                <td>
+                </td>
+
+                <td><strong> Category:</strong></td>
+                <td><Label id="lblcategory"></Label>[<Label id="lblNoOfUnits"></Label>  Unit(s)]</td>
+            </tr>
+            @*<%--
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>No. of Units:</td>
+                    <td><Label id="lblnoofunits" ></Label> </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td>House:</td>
+                    <td><Label id="Label8" ></Label> </td>
+                </tr>--%>*@
+
+            <!--TABLE 1-->
+            <tr>
+                <td colspan="2" width="40%" style="border:1px solid #000000; width:40%;"><b>Previous Meter Reading</b></td>
+                <td colspan="2" width="40%" style="border:1px solid #000000; width:40%;"><b>Current Meter Reading</b></td>
+                <td width="20%" style="border:1px solid #000000; width:20%;"><b>Consumption for the month (CUM)</b></td>
+
+            </tr>
+
+            <tr>
+                <td style="border:1px solid #000000; width:15%;">Reading</td>
+                <td style="border:1px solid #000000; width:15%;">Date</td>
+                <td style="border:1px solid #000000; width:15%;">Reading</td>
+                <td style="border:1px solid #000000; width:15%;">Date</td>
+                <td style="border:1px solid #000000; width:40%;"></td>
+
+            </tr>
+            <tr>
+                <td style="border:1px solid #000000; width:20%;"><Label id="lblprevreading"></Label> </td>
+                <td style="border:1px solid #000000; width:20%;"><Label id="lblprevdate"></Label></td>
+                <td style="border:1px solid #000000; width:20%;"><Label id="lblcurreading"></Label></td>
+                <td style="border:1px solid #000000; width:20%;"><Label id="lblcurdate"></Label></td>
+                <td style="border:1px solid #000000; width:20%;"><Label id="lblconsumption"></Label></td>
+
+            </tr>
+
+            <tr>
+                <td colspan="5" align="left">
+                    <table width="60%" style="border-collapse: collapse; font-size:9px;">
+                        <tr>
+                            <td colspan="2"><strong>Utility Charges</strong></td>
+
+                        </tr>
+                        @*<tr style="border:1px solid #000000;">
+                                <td align="right" style="display:none;"><Label id="lbltransactionid"></Label> </td>
+                                <td style="border:1px solid #000000;" width="15%"><strong>Water Bill for the month</strong></td>
+                                <td style="border:1px solid #000000;" width="15%"><strong>Service Charges</strong></td>
+                                <td style="border:1px solid #000000;" width="15%"><strong>Sewerage Charges</strong></td>
+                            </tr>
+                            <tbody id="mybody">
+                            </tbody>*@
+
+                        <tr style="border:1px solid #000000;">
+                            <td>1. Water Bill for the month</td>
+                            <td align="right"><Label id="lblwaterbill"></Label> </td>
+                        </tr>
+                        <tr style="border:1px solid #000000;">
+                            <td>2. Service Charges</td>
+                            <td align="right"><Label id="lblservicecharges">0.00</Label> </td>
+                        </tr>
+                        <tr style="border:1px solid #000000;">
+                            <td>3. Sewerage Charges</td>
+                            <td align="right"><Label id="lblseweragecharge"></Label> </td>
+                        </tr>
+
+                        <tr>
+                            <td><b>Total Bill for the month:</b></td>
+                            <td align="right"><b><Label id="lbltotalbill"></Label> </b></td>
+                        </tr>
+                        <tr>
+                            <td><b>Outstanding:</b></td>
+                            <td align="right"><Label id="lbloutstanding"></Label> </td>
+                        </tr>
+                        <tr>
+                            <td><b>Penalty:</b></td>
+                            <td align="right"><Label id="lblpenalty"></Label> </td>
+                        </tr>
+                        <tr><td></td></tr>
+
+                        <tr style="border:1px solid #000000;">
+                            <td><b>Net Amount Payable (Nu):</b></td>
+                            <td align="right"><b><Label class="mt-1" id="lblnetamount"></Label></b> </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+
+            <tr><td colspan="5" align="right"><b>Billing Incharge</b></td></tr>
+            <tr><td colspan="5" align="right"><b>Thimphu Thromde</b></td></tr>
+
+
+
+            <tr>
+                <td colspan="5">
+                    <p style="text-align:justify;">
+                        Please pay your bill before due date to avoid 2% penalty. Any decrepency in the bill amount, please contact Billing Cell at 334423.<br>Note:We have upgraded our water billing system to a new system where informations like owner's informations are missing. So<br>
+                        individuals are requested to update the correct information at the time of bill
+                        payment to avoid any future complication.
+                    </p>
+                </td>
+            </tr>
+
+
+            <tr>
+                <td colspan="3" align="center" style="width:49%;">
+                    <table width="100%" style="border-collapse: collapse; font-size:9px;">
+                        <tr style="border:1px solid #000000;">
+                            <td style="border:1px solid #000000;" width="35%"><strong>Charges Name</strong></td>
+                            <td style="border:1px solid #000000;" width="35%" align="right"><strong>Fixed Amount</strong></td>
+                            <td style="border:1px solid #000000;" width="35%" align="right"><strong>Percentage</strong></td>
+                        </tr>
+
+                        <tr style="border:1px solid #000000;">
+                            <td style="border:1px solid #000000;" width="35%" class="style1">Sewerage Charges</td>
+                            <td style="border:1px solid #000000;" width="35%" class="style1"></td>
+                            <td style="border:1px solid #000000;" width="35%" align="right" class="style1">50</td>
+                        </tr>
+                        <tr style="border:1px solid #000000;">
+                            <td style="border:1px solid #000000;" width="35%">Service Charges</td>
+
+                            <td style="border:1px solid #000000;" width="35%" align="right" id="idServiceCharges"></td>
+                            <td style="border:1px solid #000000;" width="35%" align="right">&nbsp;</td>
+                        </tr>
+
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td>&nbsp;</td></tr>
+                        <tr><td colspan="3"><b>Payment Status: P--Paid, N--Not Paid</b></td></tr>
+
+                    </table>
+                </td>
+
+                <td colspan="2" align="center" style="width:49%;">
+                    <table align="right" width="70%" style="border-collapse: collapse; font-size: 9px;">
+
+                        <!--Table Head-->
+                        <tr style="border:1px solid #000000;">
+                            <td style="border:1px solid #000000;" width="15%"><strong>Category</strong></td>
+                            <td style="border:1px solid #000000;" width="15%"><strong>Minimum</strong></td>
+                            <td style="border:1px solid #000000;" width="15%"><strong>Maximum</strong></td>
+                            <td style="border:1px solid #000000;" width="15%"><strong>Rate</strong></td>
+                        </tr>
+                        <tbody id="tblbody">
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<script>
+    function generateBillDetails() {
+        var Zone = $('#Zone').val();
+        var Year = $('#Year').val();
+        //var Month = $('#Month').val();
+
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("getZoneWiseBillingInfo", "WaterMeterReadings")',
+            data: {
+                zone: Zone,
+                year: Year,
+                //month: Month
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+                        $('#idZoneBillInfo').show(1000);
+
+                        var BillingAddress = value.billingAddress;
+                        var ZoneName = value.zoneName;
+                        var WaterConnectionStatusName = value.waterConnectionStatusName;
+                        var ConsumerNo = value.consumerNo;
+                        var WaterConnectionName = value.waterConnectionName;
+                        var WaterMeterNo = value.waterMeterNo;
+                        var Reading = value.reading;
+                        var ReadingDate = value.readingDate;
+                        var PreviousReading = value.previousReading;
+                        var PreviousReadingDate = value.previousReadingDate;
+                        var NoOfUnit = value.noOfUnit;
+                        var Consumption = value.consumption;
+                        var BillDate = value.billDate;
+                        var DueDate = value.duedate;
+                        var PaymentStatus = value.paymentStatus;
+                        var BillFor = value.billFor;
+                        var DemandNo = value.demandNo;
+                        var TransactionId = value.transactionId;
+
+
+                        //Displaying Date
+                        const d = new Date(ReadingDate);
+                        const RDate = d.getFullYear() + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + ("0" + d.getDate()).slice(-2)
+
+                        const e = new Date(PreviousReadingDate);
+                        const PRDate = e.getFullYear() + '/' + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + ("0" + e.getDate()).slice(-2)
+
+                        const f = new Date(BillDate);
+                        const BDate = f.getFullYear() + '/' + ("0" + (f.getMonth() + 1)).slice(-2) + '/' + ("0" + f.getDate()).slice(-2)
+
+                        const h = new Date(DueDate);
+                        const DDate = h.getFullYear() + '/' + ("0" + (h.getMonth() + 1)).slice(-2) + '/' + ("0" + h.getDate()).slice(-2)
+
+                        //Bill For
+                        const g = new Date(BillFor);
+                        const Bfor = g.toLocaleString('default', { month: 'long' }) + ',' + g.getFullYear()
+
+                        ////Due Date
+                        //const h = new Date(BillDate);
+                        //h.setDate(h.getMonth() + 1);
+                        //const DueDate = h.getFullYear() + '/' + ("0" + (h.getMonth() + 1)).slice(-2) + '/' + ("0" + h.getDate()).slice(-2)
+
+                        //const DueDate = h.setMonth(h.getMonth() + 1);
+
+                        $('#lblZonename').text(ZoneName);
+                        $('#lblmeterstatus').text(WaterConnectionStatusName);
+                        $('#lblbillingaddress').text(BillingAddress);
+                        $('#lblmeterno').text(WaterMeterNo);
+                        $('#lblconsumerno').text(ConsumerNo);
+                        $('#lblcategory').text(WaterConnectionName);
+                        $('#lblNoOfUnits').text(NoOfUnit);
+                        $('#lblprevreading').text(PreviousReading);
+                        $('#lblprevdate').text(PRDate);
+                        $('#lblcurreading').text(Reading);
+                        $('#lblcurdate').text(RDate);
+                        $('#lblconsumption').text(Consumption);
+                        $('#lblbilldate').text(BDate);
+                        $('#lblpaymentstatus').text(PaymentStatus);
+                        $('#lblBillFor').text(Bfor);
+                        $('#lblbillno').text(DemandNo);
+                        $('#lblduedate').text(DDate);
+                        $('#TransactionId').val(TransactionId);
+                    });
+                    //$('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                    //UTILITY CHARGES INFO
+            //var transactionId = $('#TransactionId').val();
+        @*$.ajax({
+            type: "GET",
+            url: '@Url.Action("GetUtilityChargesInfo", "WaterMeterReadings")',
+            data: {
+                consumerno: ConsumerNo,
+                id: transactionId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+
+                $('#mybody').empty();
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+                        //$('#mybody').append(
+                            //'<tr style="border:1px solid #000000;">'
+                            //+ '<td style="border:1px solid #000000;" width="35%" class="style1">'+ value.waterBillForTheMonth + '</td>'
+                            ////+ '<td style="border:1px solid #000000;" width="15%" class="style1">' + 0.0 + '</td>'
+                            ////+ '<td style="border:1px solid #000000;" width="15%" class="style1">' + value.sewerageAmount + '</td>'
+                            //+ '</tr>'
+                        //);
+
+                        var WaterBillForTheMonth = data[0].waterBillForTheMonth;
+                        var SewerageAmount = value.sewerageAmount;
+                        var TotalBillForTheMonth = value.totalBillForTheMonth;
+                        var OutStandingAmount = value.outStandingAmount;
+                        var PenaltyAmount = value.penaltyAmount;
+                        var NetPayableAmount = value.netPayableAmount;
+
+                        $('#lblwaterbill').text(WaterBillForTheMonth);
+                        $('#lblseweragecharge').text(SewerageAmount);
+                        $('#lbltotalbill').text(TotalBillForTheMonth);
+                        $('#lbloutstanding').text(OutStandingAmount);
+                        $('#lblpenalty').text(PenaltyAmount);
+                        $('#lblnetamount').text(NetPayableAmount);
+                    });
+                } else {
+                    swal("No Record Found!", "", "warning");
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });*@
+                } else {
+                    swal("No Record Found!", "", "warning");
+                    $('#idBillInfo').hide(1000);
+
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });
+
+
+    }
+</script>
+

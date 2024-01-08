@@ -1,0 +1,25 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstWaterLineType]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstWaterLineType] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+     Create
+       [dbo].[FK_mstWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)

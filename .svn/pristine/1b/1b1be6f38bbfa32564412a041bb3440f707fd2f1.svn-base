@@ -1,0 +1,23 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblComplainDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[tblComplainDetail] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblComplainDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_tblComplainDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_1] (Foreign Key)

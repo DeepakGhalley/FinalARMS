@@ -1,0 +1,131 @@
+﻿@model CORE_BOL.Entities.TrnWaterMeterReading
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>TrnWaterMeterReading</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TrnWaterConnectionId" class="control-label"></label>
+                <select asp-for="TrnWaterConnectionId" class ="form-control" asp-items="ViewBag.WaterConnectionId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterConnectionTypeId" class="control-label"></label>
+                <select asp-for="WaterConnectionTypeId" class ="form-control" asp-items="ViewBag.WaterConnectionTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterMeterTypeId" class="control-label"></label>
+                <select asp-for="WaterMeterTypeId" class ="form-control" asp-items="ViewBag.WaterMeterTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterLineTypeId" class="control-label"></label>
+                <select asp-for="WaterLineTypeId" class ="form-control" asp-items="ViewBag.WaterLineTypeId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="WaterConnectionStatusId" class="control-label"></label>
+                <select asp-for="WaterConnectionStatusId" class ="form-control" asp-items="ViewBag.WaterConnectionStatusId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Bucid" class="control-label"></label>
+                <input asp-for="Bucid" class="form-control" />
+                <span asp-validation-for="Bucid" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Reading" class="control-label"></label>
+                <input asp-for="Reading" class="form-control" />
+                <span asp-validation-for="Reading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PreviousReading" class="control-label"></label>
+                <input asp-for="PreviousReading" class="form-control" />
+                <span asp-validation-for="PreviousReading" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PreviousReadingDate" class="control-label"></label>
+                <input asp-for="PreviousReadingDate" class="form-control" />
+                <span asp-validation-for="PreviousReadingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReadBy" class="control-label"></label>
+                <input asp-for="ReadBy" class="form-control" />
+                <span asp-validation-for="ReadBy" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ReadingDate" class="control-label"></label>
+                <input asp-for="ReadingDate" class="form-control" />
+                <span asp-validation-for="ReadingDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NoOfUnit" class="control-label"></label>
+                <input asp-for="NoOfUnit" class="form-control" />
+                <span asp-validation-for="NoOfUnit" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Consumption" class="control-label"></label>
+                <input asp-for="Consumption" class="form-control" />
+                <span asp-validation-for="Consumption" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StandardConsumption" class="control-label"></label>
+                <input asp-for="StandardConsumption" class="form-control" />
+                <span asp-validation-for="StandardConsumption" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="IsPermanentConnection" /> @Html.DisplayNameFor(model => model.IsPermanentConnection)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Sewerage" /> @Html.DisplayNameFor(model => model.Sewerage)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="SolidWaste" /> @Html.DisplayNameFor(model => model.SolidWaste)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="Remarks" class="control-label"></label>
+                <input asp-for="Remarks" class="form-control" />
+                <span asp-validation-for="Remarks" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BillingAddress" class="control-label"></label>
+                <input asp-for="BillingAddress" class="form-control" />
+                <span asp-validation-for="BillingAddress" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TransactionId" class="control-label"></label>
+                <input asp-for="TransactionId" class="form-control" />
+                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PrimaryMobileNo" class="control-label"></label>
+                <input asp-for="PrimaryMobileNo" class="form-control" />
+                <span asp-validation-for="PrimaryMobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SecondaryMobileNo" class="control-label"></label>
+                <input asp-for="SecondaryMobileNo" class="form-control" />
+                <span asp-validation-for="SecondaryMobileNo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

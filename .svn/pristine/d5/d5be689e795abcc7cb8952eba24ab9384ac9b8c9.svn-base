@@ -1,0 +1,527 @@
+﻿@model List<CORE_BOL.StallAllocationVM>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index"> Lease</a></li>
+                    <li class="breadcrumb-item active">Stall Rent </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Stall Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New User"><b><i class="fas fa-plus"></i> Add New </b> </a> 
+            <a asp-action="StallRenewal" class="btn btn-outline-danger btn-lg" title="Extension"><b><i class="fas fa-plus"></i> Extension </b> </a>
+        </p>
+        <hr />
+
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+
+                <tr>
+                    <th>#</th>
+                    @*<th>Tax Payer </th>*@
+                    <th>TTIN</th>
+                    <th>Stall Type</th>
+                    <th>Stall Location</th>
+                    <th>Stall No</th>
+                    <th>Stall Name</th>
+                    <th>Stall Area</th>
+                    <th>Terminate Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sl = 1; }
+
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @sl
+                    </td>
+                    @*<td>
+        @Html.DisplayFor(modelItem => item.TTIN)
+        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TTIN)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StallType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StallLocation)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StallNo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StallName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StallArea)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsTerminated)
+                    </td>
+
+
+
+
+
+                    <td style="text-align:center;">
+                        <a asp-action="Edit" asp-route-id="@item.StallDetailId" title="EDIT"><i class="fas fa-edit"></i></a>&nbsp;&nbsp;
+                        &nbsp;&nbsp;|&nbsp;&nbsp;<a style="color: red;" asp-area="Stall" asp-controller="StallDetails" onclick="return validate(@item.StallAllocationId)" asp-action="Terminate" asp-route-id="@item.StallAllocationId" title="Terminate"><i class="fas fa-trash" style="color: red;"></i> Terminate</a>&nbsp;
+                        &nbsp;&nbsp;|&nbsp;&nbsp;<a style="color: #007bff; cursor: pointer;" onclick="return displayStallDetail('@item.StallDetailId')" title="Add New Stall Allocation"><i class="fas fa-plus-circle"></i> Stall Allocation </a>
+                    </td>
+                </tr>
+                    sl++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card card-info" id="stalldetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Existing Stall Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Stall No</th>
+                        <th>Stall Name</th>
+                        <th>Stall Type</th>
+                        <th>Name</th>
+                        <th>CID</th>
+                        <th>TTIN</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        
+                    </tr>
+                </thead>
+                <tbody id="tblstalldetail">
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-header">
+        <h3 class="card-title">Tax Payer</h3>
+        <input type="hidden" id="hdnStallDetailId" />
+        <input type="hidden" id="hdnTaxPayerId" />
+
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">CID </label>
+            <div class="col-sm-2">
+                <input class="form-control" maxlength="11" placeholder="Search by CID" id="CIDinput" />
+            </div>
+            <label class="col-sm-1 col-form-label">TTIN </label>
+            <div class="col-sm-2">
+                <input class="form-control" placeholder="Search by TTIN" id="TTINinput"/>
+            </div>
+
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-outline-success" onclick="return SearchTaxPayer();">Search</button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row" id="search" style="display: none;">
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>CID</th>
+                <th>TTIN</th>
+
+            </tr>
+        </thead>
+        <tbody id="mybody">
+        </tbody>
+    </table>
+</div>
+<hr />
+<div class="card card-info" id="stallallocationdetail" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Stall Allocation Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Billing Schedule</th>
+                        <th>Rental Amount</th>
+                        <th>Security Amount</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <tbody id="tblstallallocation">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card card-info" id="stallallocation" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Stall Allocation Entry</h3>
+        <input type="hidden" id="hdnStallDetailId" />
+        <input type="hidden" id="hdnStallAllocationId" />
+        <input type="hidden" id="hdnTaxPayerId" />
+        <input type="hidden" id="EndDate" />
+        <input type="hidden" id="StartDate" />
+        <input type ="hidden" id="hdnSDate" />
+        <input type="hidden" id="hdnEDate" />
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Billing schedule <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <select class="form-control select2bs4" id="idibillingschedule" style="width: 100%;" value="0" disabled>
+                    <option>Monthly</option>
+                    </select>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Allocate Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddallocatedate" placeholder="Enter Allocate Date" type="date" required />
+                <span class="text-danger" id="allocatedate"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Rental Amount <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="idfrentalamount" placeholder="Enter Rental Amount" type="number" required />
+                <span class="text-danger" id="rentalamount"></span>
+            </div>
+           
+
+            
+            <label class="col-sm-2 col-form-label">Security Amount <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="idfsecurityamount" placeholder="Enter Security Amount" type="number" required />
+                <span class="text-danger" id="securityamount"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Start Date<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddstartdate"  type="date" required/>
+                <span class="text-danger" id="startdate"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">End Date<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="idenddate" onkeyup="compare_date"; placeholder="Enter Security Amount" type="date" required />
+                <span class="text-danger" id="enddate"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Remarks </label>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="idsremarks" placeholder="Enter Remarks" rows="3"></textarea>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" id="SaveStallAllocation">Save</button>
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+    <script>
+        function validate(id) {
+            if (id == 0) {
+                swal("Please Add Stall Allocation");
+                return false;
+            }
+            if (id > 0) {
+                return true;
+            }
+        }
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+        function displayStallDetail(StallDetailId) {
+            $('#hdnStallDetailId').val(StallDetailId);
+            $('#stalldetail').show(1000);
+            $('html,body').animate({
+                scrollTop: $("#stalldetail").offset().top
+            }, 'slow');
+            $('#stallallocation').hide(1000);
+
+
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStallDetails", "StallDetails")',
+                data: {
+                    id: parseInt(StallDetailId)
+                },
+                success: function (data) {
+
+                    var EndDate = data[0].eDate;
+                    var StartDate = data[0].sDate;
+                    $('#EndDate').val(EndDate);
+                    $('#StartDate').val(StartDate);
+                    $('#tblstalldetail').empty();
+                    $.each(data, function (key, value) {
+                        const d = new Date(value.sDate);
+                        const SDate = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear()
+
+                        const e = new Date(value.eDate);
+                        const EDate = ("0" + e.getDate()).slice(-2) + '/' + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + e.getFullYear()
+
+                        $('#tblstalldetail').append(
+                            '<tr>'
+                            + '<td>' + value.stallNo + '</td>'
+                            + '<td>' + value.stallName + '</td>'
+                            + '<td>' + value.stallType + '</td>'
+                            + '<td>' + value.taxPayerName + '</td>'
+                            + '<td>' + value.cid + '</td>'
+                            + '<td>' + value.ttin + '</td>'
+                            + '<td>' + SDate + '</td>'
+                            + '<td>' + EDate + '</td>'
+                            + '</tr>');
+                    });
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+
+            });
+            $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetStartDateEndDate", "StallDetails")',
+            data: {
+                id: stallDetailId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+                    var startdate = data[0].sDate;
+                    var enddate = data[0].eDate;
+
+                    $('#hdnSDate').val(startdate);
+                    $('#hdnEDate').val(enddate);
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });
+            }
+                //Display Tax Prayer Profile
+        function SearchTaxPayer() {
+            if ($('#CIDinput').val() == "" && $('#TTINinput').val() == "") {
+                swal('Empty Fields!', '', 'error');
+                $('#CIDinput').focus();
+                $('#TTINinput').focus();
+                return false;
+            }
+                var Cid = $('#CIDinput').val();
+                var Ttin = $('#TTINinput').val();
+                    $('#stallallocationdetail').hide(1000);
+                    $('#tblstallallocation').hide(1000);
+                    $('#stallallocation').hide(1000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetTaxPayer", "StallDetails")',
+                        data: {
+                            cid: Cid,
+                            ttin: Ttin
+                        },
+                        success: function (data) {
+                            $('#mybody').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#tblstalldetail').show(1000);
+                                    $('#search').show(1000);
+                                    $('#stallallocation').show(1000);
+                                    //$('#search').show(1000);
+                                    $('html,body').animate({
+                                        scrollTop: $("#search").offset().top
+                                    }, 'slow');
+                                    $('#mybody').append(
+                                        '<tr>'
+                                        + '<td>' + value.fullName + '</td>'
+                                        + '<td>' + value.cid + '</td>'
+                                        + '<td>' + value.ttin + '</td>'
+                                        //+ '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayStallAllocation(' + value.stallDetailId + ');">View</a></b></td>'
+                                        + '</tr>');
+                                });
+                                 $('#hdnTaxPayerId').val(data[0].taxPayerId);
+                            }
+                         else {
+                                $('#mybody').append(
+                                '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                            swal({
+                                title: 'Please Enter valid Value!',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                    });
+
+                        }
+
+                    },
+
+                        error: function () {
+                            alert('error');
+                        }
+        });
+        }
+        $("#SaveStallAllocation").click(function () {
+
+            if ($('#iddstartdate').val() >= $('#idenddate').val()) {
+                swal('Start Date should be greater than End Date');
+                return false;
+            }
+
+            if ($('#hdnEDate').val() > $('#idenddate').val()) {
+                swal('Stall Already Allocated for this Date!');
+                return false;
+            }
+            if ($('#hdnEDate').val() > $('#iddstartdate').val() ) {
+                swal('Stall Already Allocated for this Date!');
+                return false;
+            }
+
+            if ($('#idfrentalamount').val() == "" ) {
+                swal('Please Enter the  Rental Amount!');
+                $('#rentalamount').focus();
+                return false;
+            }
+            if ($('#idfsecurityamount').val() == "") {
+                swal('Please Enter the Security Amount!');
+                $('#securityamount').focus();
+                return false;
+
+
+            }
+           
+              
+        var myarray = [];
+        var StallAllocationVM = {};
+
+            StallAllocationVM.StallDetailId = parseInt($("#hdnStallDetailId").val());
+            StallAllocationVM.TaxPayerId = parseInt($("#hdnTaxPayerId").val());
+            //StallAllocationVM.BillingScheduleId = parseInt($("#idibillingschedule").val());
+            StallAllocationVM.RentalAmount = parseFloat($("#idfrentalamount").val());
+            StallAllocationVM.SecurityAmount = parseFloat($("#idfsecurityamount").val());
+            StallAllocationVM.AllocationDate = $("#iddallocatedate").val();
+            StallAllocationVM.SDate = $("#iddstartdate").val();
+            StallAllocationVM.EDate = $("#idenddate").val();
+            StallAllocationVM.Remarks = $("#idsremarks").val();
+
+
+            myarray.push(StallAllocationVM);
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+        $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateStallAllocation", "StallDetails")',
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                        swal('Stall Allocated Successful!');
+                    $('#tblstallallocation').hide(1000);
+                    $('#stallallocationdetail').hide(1000);
+                    $('#stallallocationdetail').hide(1000);
+                    $('#stalldetail').show(1000);
+                    $('#stallallocation').hide(1000);
+                    $('#search').hide(1000);
+                    $('#tblstalldetail').show(1000);
+                    $('#mybody').hide(1000);
+                    $('#img').hide();
+                    displayStallDetail($('#hdnStallDetailId').val());
+                    $('#TTINinput').val(' ');
+                    //setInterval('location.reload()', 2000);
+                
+            
+                         },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+        });
+
+      
+     
+
+        $('#btnCancel').click(function () {
+            $('#stallallocation').hide(1000);
+        })
+    </script>
+

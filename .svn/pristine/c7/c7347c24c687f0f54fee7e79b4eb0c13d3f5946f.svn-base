@@ -1,0 +1,116 @@
+﻿@model List<CORE_BOL.TaxMasterVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Master</a></li>
+                    <li class="breadcrumb-item active">Tax Master Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Tax Master Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New">
+                <b>
+                    <i class="fas fa-plus"></i> Add New
+                </b>
+            </a>
+        </p><hr />
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Tax Name</th>
+                    <th>Detail Head </th>
+                   @* <th>Tax Type classification</th>*@
+                    <th>IsActive</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sl = 1; }
+
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @sl
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TaxName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DetailHeadName)
+                    </td>
+                    @*<td>
+                        @Html.DisplayFor(modelItem => item.TaxTypeClassificationName)
+                    </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.IsActive)
+                    </td>
+                    <td style="text-align:center;">
+                        <a asp-action="Edit" asp-route-id="@item.TaxId" title="EDIT"><i class="fas fa-edit"></i></a>
+                        @*&nbsp;&nbsp; | &nbsp;&nbsp;<a asp-action="Details" asp-route-id="@item.UserId" title="View"><i class="fas fa-eye"></i> </a> &nbsp;&nbsp;*@
+                        @* <a asp-action="Delete" asp-route-id="@item.UserId" title="Activate/Deactivate"><i class="fas fa-minus-circle alert-danger"></i></a>*@
+                    </td>
+                </tr>
+                    sl++;
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+
+</script>

@@ -1,0 +1,3687 @@
+﻿@using CORE_BOL
+@model LedgerDemandVM
+
+@{
+    ViewData["Title"] = "DuplicateRecepitPrint";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="DupliateRecepitPrint">Payment</a></li>
+                    <li class="breadcrumb-item active">Duplicate Receipt Print</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div>
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Select Transaction Type</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <label class="col-sm-2 col-form-label"> Transaction Type </label>
+                <div class="col-sm-4">
+                    <input type="hidden" id="hdntransactionType" />
+                    <select asp-for="TransactionTypeId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.Transactiontype,"Value","Text")) " value="0"></select>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+@***************************************land transaction fee**********************************************************@
+<div class="card card-info" id="landtransaction" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Land Transaction Fee Duplicate Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">TTIN<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="lblttin" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">CID<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="lblcid" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return landtransactionDetails();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*************************************** ENVIRONMENTAL CLERANCE **********************************************************@
+<div class="card card-info" id="ECDetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">EC Duplicate Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Applicant Name:<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="lblECName" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">CID/License No:<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="lblECCidTtin" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchECDetail();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="transactions" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Tax Payer Details</h3>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name </th>
+
+                    <th>Mobile No</th>
+                    <th>Tax Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbltransactions">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@*************************************** ENVIRONMENTAL CLERANCE **********************************************************@
+<div class="card card-info" id="divEC" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">EC Details</h3>
+    </div>
+
+    <div class="card-body">
+
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Tax Name</th>
+                    <th>Activity Type</th>
+                    <th>Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tblEC">
+            </tbody>
+        </table>
+    </div>
+</div>
+@*Water Search*@
+
+
+@*water Receipt*@
+<div class="card card-info" id="searchwater" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Water Duplicate Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Consumer No<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="iconsumerno" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-2 col-form-label">Year <span style="font-weight:bold; color:red;">*</span> :</label>
+                <div class="col-sm-6">
+                    <select id="iyear" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+
+                </div>
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchDetails();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="tbl_taxpayerdetails" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Tax Payer Details</h3>
+    </div>
+
+    <div class="card-body">
+        <table style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <b>Consumer No:</b>&nbsp; <label id="idconsumer" class="col-form-label" readonly />
+                </td>
+                <td colspan="2">
+                    <b>Meter No:</b>&nbsp;<label id="idmeter" class="col-form-label" readonly />
+                </td>
+                <td colspan="2">
+                    <b>Year:</b>&nbsp;<label id="idyear" class="col-form-label" readonly />
+                </td>
+
+            </tr>
+
+
+        </table>
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.NO</th>
+                    <th>Month</th>
+                    <th>Billing address</th>
+
+                    <th>Total Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@*print payment receipt for water*@
+<div id="divwatertaxrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintw">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td>
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 130px; height: 120px" />
+                        </td>
+                        <td colspan="6" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="lbltransactiontype" value="" /> </strong>
+                        </td>
+
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2">
+                            <img id="qrDemandNo" style="width: 120px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="idrecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @*<b>Demand NO:</b>&nbsp;<label id="iddemand" value="" />*@
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                        </td>
+                    </tr>
+                    @*<tr>
+                            <td colspan="2">
+                                <b> Billing Date:</b>&nbsp;<label id="idbilldate" value="" />
+                            </td>
+
+                        </tr>*@
+                    <tr>
+                        <td colspan="2">
+                            <b>Consumer No:</b>&nbsp; <label id="idrconsumer" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            <b>Meter No:</b>&nbsp;<label id="idrmeter" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            @*<b>Thram No:</b>&nbsp; <label id="idrthramno" class="col-form-label" readonly />*@
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td colspan="6">
+                            <b>Billing Address:</b>&nbsp;<label id="idrbillingaddress" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp;<label id="idrname" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Address:</b>&nbsp;<label id="idraddress" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Phone No:</b>&nbsp;<label id="idrphone" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Bill For</th>
+                            <th>Tax For</th>
+                            <th>Penalty Days</th>
+                            <th>Penalty Amount</th>
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblDemand">
+                    </tbody>
+                    <tr><td></td><td></td><td></td><td align="right"><b>Total :</b></td><td><label id="idpamount" value="" class="col-form-label" readonly /> </td><td><label id="idtamount" value="" class="col-form-label" readonly /> </td></tr>
+                    <tr><td></td><td></td><td> </td><td></td><td align="right"><b> Grand Total :</b></td><td><label id="idGtamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <b>Payment mode:</b>&nbsp;<label id="lblwpayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lblwuser" value="" />
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            @*<div class="form-group row">
+                    <div style="float:right;">
+                        <b> Demand Generated By: </b><label id="lblRUserName" value="" class="col-form-label" readonly />
+                    </div>
+
+                </div>*@
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return water();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPagew();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+@******************************Miscellaneous**************************************@
+<div class="card card-info" id="divsearchMiscellaneous" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Miscellaneous Duplicate Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <div class="col-sm-3"></div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-3 col-form-label">CID No<span style="font-weight:bold; color:red;">*</span>:</label>
+                <input id="iCid" class="form-control col-6" />
+            </div>
+
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchMiscellaneousDetails();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="card card-info" style="display:none;" id="divMiscellaneous">
+    <div class="card-header">
+        <h3 class="card-title">Miscellaneous Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.no</th>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>CID No.</th>
+                    <th>Mobile No.</th>
+                    <th>Quantity</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+
+                    <th>Tax</th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body1">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="divMiscellaneousrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintm">
+
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 130px; height: 120px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="lblmtransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="mqrDemandNo" style="width: 120px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="4" style="color: #CC0000" align="center">
+                            @*<b>Demand Notice</b>*@
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                        </td>
+                        <td></td>
+                        <td colspan="2">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="idmrecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <label value="" />
+                        </td>
+                        <td colspan="4">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td colspan="2">
+                            <b>Date:</b>&nbsp;<label id="idmdemanddate" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+
+                        <td>
+                            &nbsp;
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp; <label id="idmname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>CID No:</b>&nbsp;<label id="idmcid" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Mobile No:</b>&nbsp; <label id="idmmobile" class="col-form-label" readonly />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Address:</b>&nbsp;<label id="idmaddress" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Tax Name:</b>&nbsp;<label id="idmtaxname" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table border="1" style=" border-collapse: collapse; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Slab Name</th>
+                            <th>Quantity</th>
+                            <th>Rate</th>
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblDemand1">
+                    </tbody>
+                    <tr><td></td><td></td><td></td><td align="right"><b>Total Amount:</b></td><td><label id="idmtamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <b>Payment mode:</b>&nbsp;<label id="lblmpayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lblmuser" value="" />
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return miscellaneous();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+@***************************************Property Tax********************************@
+<div class="card card-info" id="divFetchlanddetailsByCID" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Property Tax Duplicate Recepit</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">CID No<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idipCid" class="form-control col-6" />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">TTIN<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idipTtin" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Year <span style="font-weight:bold; color:red;">*</span> :</label>
+
+                <select id="ipyear" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+
+
+            </div>
+
+            <div class="input-group-append col-3">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchPropertytax();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="divPropertytax" style="display:none;">
+    @*style="display:none;"*@
+    <div class="card-header">
+        <h3 class="card-title">Property Details</h3>
+    </div>
+    <div class="card-body">
+        <table style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <b>Name:</b>&nbsp; <label id="idipfullname" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>CID:</b>&nbsp; <label id="idipcid" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>TTIN:</b>&nbsp; <label id="idipttin" class="col-form-label" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>TaxPayer Type:</b>&nbsp; <label id="idiptaxpayertype" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Mobile No:</b>&nbsp; <label id="idipmobileno" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Email:</b>&nbsp; <label id="idipemail" class="col-form-label" readonly />
+                </td>
+            </tr>
+        </table>
+
+        <table id="tblLandOwnership" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Thram No </th>
+                    <th>Plot No </th>
+                    <th>Ownership Type</th>
+
+                    <th>Land Type</th>
+                    <th>Land Acerage </th>
+                    <th>PLR</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_bodyp">
+            </tbody>
+        </table>
+    </div>
+
+</div>
+
+
+
+
+<div id="divpropertytaxrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintp">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 130px; height: 120px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="idptransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="4"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="pqrDemandNo" style="width: 120px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="idprecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="idpdate" value="" />
+                        </td>
+                    </tr>
+
+                    <!--<tr>-->
+                    @*<td colspan="4">
+                            <b>Plot No:</b>&nbsp;<label id="idpplotno" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Thram No:</b>&nbsp; <label id="idpthramno" class="col-form-label" readonly />
+                        </td>*@
+
+                    @*<td colspan="3">
+                            <b>Phone No:</b>&nbsp;<label id="idpphone" class="col-form-label" readonly />
+                        </td>*@
+                    <!--</tr>-->
+                    <tr>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp; <label id="idpname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>CID:</b>&nbsp;<label id="idpcid" class="col-form-label" readonly />
+                        </td>
+
+
+                        <td colspan="4">
+                            <b>TTIN:</b>&nbsp;<label id="idpttin" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; font-size: 12px; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Tax Year</th>
+                            <th>Tax For</th>
+                            <th>Plot No</th>
+                            <th>Thram No</th>
+                            <th>Penalty Days</th>
+                            <th>Penalty Amount</th>
+
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblrecepit">
+                    </tbody>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td align="right"><b>Total:</b></td><td><label id="idpgtamount" value="" class="col-form-label" readonly /> </td><td><label id="idpttamount" value="" class="col-form-label" readonly /> </td></tr>
+                    <tr><td></td><td></td><td></td><td></td><td></td><td></td><td align="right"><b>Total Amount:</b></td><td><label id="idpGtamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <table style="font-size:12px;">
+                <tr>
+                    <td>
+                        <b>Payment mode:</b>&nbsp;<label id="lblppayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%; font-size:12px;">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lblpuser" value="" />
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return property();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPagep();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+
+@***************************************Vendor tax********************************@
+<div class="card card-info" id="divFetchvendordetailsByCID" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Vendor Tax Duplicate Recepit</h3>
+        <input type="hidden" id="HdnIsPayment" />
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">CID No<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idisvCid" class="form-control col-6" />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-3 col-form-label">TTIN<span style="font-weight: bold; color: red;"></span></label>
+                <input id="idisvTtin" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Year <span style="font-weight:bold; color:red;">*</span> :</label>
+
+                <select id="ivyear" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>
+
+
+            </div>
+
+            <div class="input-group-append col-3">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return SearchVendortax();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="divVendortax" style="display:none;">
+    @*style="display:none;"*@
+    <div class="card-header">
+        <h3 class="card-title">Vendor Details</h3>
+    </div>
+    <div class="card-body">
+        <table style="width: 100%">
+            <tr>
+                <td colspan="2">
+                    <b>Name:</b>&nbsp; <label id="idivfullname" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>CID:</b>&nbsp; <label id="idivcid" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>TTIN:</b>&nbsp; <label id="idivttin" class="col-form-label" readonly />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Address:</b>&nbsp; <label id="idvaddress" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                    <b>Mobile No:</b>&nbsp; <label id="idivmobileno" class="col-form-label" readonly />
+                </td>
+                <td colspan="2"> </td>
+                <td colspan="2">
+                </td>
+            </tr>
+        </table>
+
+        <table id="tblvendor" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Vendor Tax for </th>
+                    <th>Vendor Address</th>
+                    <th>Installment Amount </th>
+                    <th>Billing Schedule</th>
+
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_bodyv">
+            </tbody>
+
+        </table>
+    </div>
+
+</div>
+
+<div id="divVendorRecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintv">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 100px; height: 100px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="lblvtransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="vqrDemandNo" style="width: 100px; height: 100px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="lblvrecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Demand NO:</b>&nbsp;<label id="lblvdemand" value="" />
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="lblvDemandDate" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>CID:</b>&nbsp;<label id="lblvcid" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="6">
+                            <b>Name:</b>&nbsp; <label id="lblvname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            <b>TTIN:</b>&nbsp;<label id="lblvttin" class="col-form-label" readonly />
+                        </td>
+
+
+
+                    </tr>
+                    <tr>
+
+                        <td colspan="6">
+                            <b>Address:</b>&nbsp;<label id="lblvaddress" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Mobile No:</b>&nbsp;<label id="lblvmobile" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; font-size:12px; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Month</th>
+                            <th>Tax For</th>
+                            <th>Penalty Days</th>
+                            <th>Penalty Amount</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblvendorrecepit">
+                    </tbody>
+                    <tr><td></td><td></td><td></td><td align="right"><b>Total:</b></td><td><label id="lblvpamount" value="" class="col-form-label" readonly /> </td><td><label id="lblvtamount" value="" class="col-form-label" readonly /> </td></tr>
+                    <tr><td></td><td></td><td></td><td align="right"></td><td><b>Grand Total:</b></td><td><label id="lblvGGamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <table style="font-size:12px;">
+                <tr>
+                    <td>
+                        <b>Payment:</b>&nbsp;<label id="lblvpayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%; font-size:12px;">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lbluser" value="" />v
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return vendor();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPageV();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+@********************************************************************land transaction fee recepit************************************************************************************************************************************@
+
+
+<div id="divlandtransactionRecepit" style="display: none;">
+    <div class="card card-info" id="dvPrinttt">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="4">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 100px; height: 100px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="lblvtransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="ltqrDemandNo" style="width: 100px; height: 100px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="lblltrecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            @*<b>Demand NO:</b>&nbsp;<label id="lblltdemand" value="" />*@
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="lblltDemandDate" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Ttin:</b>&nbsp;<label id="lblltttin" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Cid:</b>&nbsp;<label id="lblltcid" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp; <label id="lblltname" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4">
+                            <b>Moblie No:</b>&nbsp;<label id="lblltphone" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Plot No:</b>&nbsp;<label id="lblltplot" class="col-form-label" readonly />
+                        </td>
+
+                        <td colspan="4">
+                            <b>Thram No:</b>&nbsp;<label id="lblltthram" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Tax For</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbllandtransactionrecepit">
+                    </tbody>
+                    <tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lbllttamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <table>
+                <tr>
+                    <td>
+                        <b>Payment:</b>&nbsp;<label id="lblltpayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lblltuser" value="" />v
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return vendor();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+
+@************************************************Vacuum Tanker*************************************************************************************************************@
+
+<div class="card card-info" id="vacuumtanker" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Search Vacuum Tanker Services Tax Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Demand No<span style="font-weight: bold; color: red;"></span></label>
+                <input id="lblvtsrecepitno" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Name<span style="font-weight: bold; color: red;"></span></label>
+                <input id="lblvtsname" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return GetvacuumtankerDemandWithSearch();" />
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="vacuumtankerdetails">
+    <div class="card-header">
+        <h3 class="card-title">Vaccum Tanker Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.no</th>
+                    <th>Name</th>
+                    <th>Contact Name</th>
+                    <th>No of tips</th>
+                    <th>Amount</th>
+                    <th>Mobile No</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_tanker">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="card card-info" id="demandpage" style="display:none;">
+    <div class="card-body" id="printvts">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 100px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Payment Receipt </strong>
+                    </td>
+                    <td></td>
+
+
+
+                    <td colspan="2">
+                        <img id="vtsrecepitno" style="width: 100px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Recepit Date:</b>&nbsp;<label id="demanddate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Recepit No:</b>&nbsp;<label id="idinvoiceno" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                        <b>Name:</b>&nbsp;<label id="idname" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Address:</b>&nbsp; <label id="idaddress" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="4">
+                        <b>Mobile No:</b>&nbsp;<label id="idvtsmobile" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <!--<tr>
+                    <td colspan="4">
+                        <b>Address:</b>&nbsp; <label id="idaddress" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Mobile No:</b>&nbsp;<label id="idmmobile" class="col-form-label" readonly />-->
+                @*<b>InVoice For:</b>&nbsp;<label id="idinvoicefor" class="col-form-label" readonly />*@
+                <!--</td>
+
+
+                    <td colspan="2">
+                    </td>
+                </tr>-->
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>No of trips</th>
+                        <th>Rate</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_vacuumtanker">
+                </tbody>
+                @*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+
+
+                <tr>
+                    <td colspan="2">
+                        <b>Payment:</b>&nbsp;<label id="lblvtspayment" class="col-form-label" readonly />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td colspan="4" align="right">
+                        <b>Collected by:</b>&nbsp;<label id="lblvtsuser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <a type="button" class="btn btn-primary" asp-action="Index">Go Back</a>
+            &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPagevts();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+
+@* ********************************************* ENVIRONMENTAL CLERANCE ******************************************* *@
+<div id="divECrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrintEC">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%; font-size: 12px;">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 130px; height: 120px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="idECtransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="4"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="ECqrDemandNo" style="width: 120px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            <span>
+                                <b>Receipt No:</b>&nbsp;<label id="idECrecepitno" value="" />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                        </td>
+
+                        <td colspan="2">
+                            <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="idECdate" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Demand No:</b>&nbsp; <label id="idECdemand" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>Activity Type:</b>&nbsp; <label id="idECactivity" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp; <label id="idECname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>CID:</b>&nbsp;<label id="idECcid" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4">
+                            <b>License No:</b>&nbsp;<label id="idEClicense" class="col-form-label" readonly />
+                        </td>                        
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Address:</b>&nbsp;<label id="idECaddress" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; font-size: 12px; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Tax For</th>
+                            <th>Activity Type</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblECrecepit">
+                    </tbody>
+                    <tr><td></td><td></td><td align="right"><b>Total Amount:</b></td><td><label id="idECGtamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+            <table style="font-size:12px;">
+                <tr>
+                    <td>
+                        <b>Payment mode:</b>&nbsp;<label id="lblECpayment" class="col-form-label" readonly />
+                    </td>
+                    @*<td id="lblpayment"></td>*@
+                </tr>
+
+            </table>
+            <div class="form-group row">
+                <table style="width: 100%; font-size:12px;">
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            &nbsp;
+                        </td>
+                        <td colspan="4">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                    <tr>
+
+                        <td colspan="4" align="right">
+                            <b>Collected by:</b>&nbsp;<label id="lblECuser" value="" />
+                        </td>
+                        <td colspan="4">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return EC();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPageEC();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    //************************************************ GetvacuumtankerDemandWithSearch **********************************************************************************
+        function GetvacuumtankerDemandWithSearch() {
+            if ($("#lblvtsrecepitno").val() == "" && $("#lblvtsname").val() == "") {
+                swal("Please fill atlease one field to search.!");
+                return false;
+            }
+
+             $('#img').hide();
+               $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchVacuumtanker", "Ledgers")',
+                data: {
+                    RecepitNo: ($("#lblvtsrecepitno").val()),
+                    Name: ($("#lblvtsname").val()),
+
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tbl_tanker').empty();
+
+                    if (data.length > 0) {
+
+                        $("#vacuumtankerdetails").show(1000);
+                        $.each(data, function (key, value) {
+                            $('#tbl_tanker').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.name + '</td>'
+                                + '<td>' + value.contactName + '</td>'
+                                + '<td>' + value.noOfTrips + '</td>'
+                                + '<td>' + value.amount + '</td>'
+                                + '<td>' + value.mobileNo + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayvacuumtanker(' + value.recepitId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                            //+ '<td>' + value.exemptionLetter + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#transactions").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#vacuumtankerdetails").show(1000);
+                        $('#tbl_tanker').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+        }
+      @*********************************************************** Vacuum tanker services Recepit **********************************************************@
+    function displayvacuumtanker(receiptId) {
+        $('#demandpage').toggle(1000);
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchreceiptuser", "Ledgers")',
+                data: {
+                    RecepitId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lblvtsuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+        });
+
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintPaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+
+                console.log(data);
+                $('#lblvtspayment').html('');
+
+             if (data.length > 0) {
+                        $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                         if (pmode == 'Cash') {
+
+                             $('#lblvtspayment').append(
+                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                             $('#lblvtspayment').append(
+                                "" + pmode + " Bank Name: " + value.bank + " Mode no:   " + value.paymentModeNo + " Nu. " + value.amount
+                        );
+                }
+             });
+
+                    $('#img').hide();
+
+
+                    }
+
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+    });
+              $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemand", "Ledgers")',
+                data: {
+                    id: receiptId
+                },
+                     success: function (data) {
+                         if (data.length > 0) {
+                             var today = new Date(data[0].createdOn);
+                             var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+
+                             $('#demanddate').html(date);
+                             $('#idaddress').html(data[0].address);
+                             $('#idinvoiceno').html(data[0].receipt);
+
+                             $('#lbluser').html(data[0].creatorname);
+                             $('#vtsrecepitno').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                             $('#idname').html(data[0].userName);
+
+
+                             $('#idvtsmobile').html(data[0].phoneNo);
+                         }
+                         $('#tbl_vacuumtanker').empty();
+                    $('#img').hide();
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_vacuumtanker').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.taxName + '</td>'
+                            + '<td style="text-align:center;">' + value.noOfTrips + '</td>'
+                            + '<td style="text-align:center;">' + value.rate + '</td>'
+                            + '<td style="text-align:center;">' + value.amount + '</td>'
+                            + '</tr>');
+                    });
+                         $('html,body').animate({
+                             scrollTop: $("#demandpage").offset().top
+                         }, 'slow');
+                    $('#demandDate').val(createdOn);
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+
+//************************************************land transaction*********************************************************************************
+    function landtransactionDetails() {
+        if ($("#lblttin").val() == "" && $("#lblcid").val() == "" ) {
+            swal("Please fill atlease one field to search.!");
+             return false;
+        }
+        //swal($("#demandNo").val());
+                $('#img').hide();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchLandTransactions", "Ledgers")',
+                data: {
+                    Cid: ($("#lblcid").val()),
+                    Ttin: ($("#lblttin").val())
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tbltransactions').empty();
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $("#transactions").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#transactions").offset().top
+                        }, 'slow');
+                        $("#lblltplot").html(data[0].plotNo);
+                        $("#lblltttin").html(data[0].ttin);
+                        $("#lblltcid").html(data[0].cid);
+                        $("#lblltphone").html(data[0].phoneNo);
+                        $("#lblltname").html(data[0].fullName);
+                        $.each(data, function (key, value) {
+                            $('#tbltransactions').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.ttin + '</td>'
+                                + '<td>' + value.cid + '</td>'
+                                + '<td>' + value.fullName + '</td>'
+                                + '<td>' + value.phoneNo + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displaytransactionsrecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                            //+ '<td>' + value.exemptionLetter + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#transactions").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#transactions").show(1000);
+                        $('#tbltransactions').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+    function displaytransactionsrecepit(receiptId) {
+        $('#divlandtransactionRecepit').show(1000);
+                    $('html,body').animate({
+                        scrollTop: $("#divlandtransactionRecepit").offset().top
+                    }, 'slow');
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("creatorlandtransactions", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lblltuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+    $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDuplicatePaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+        success: function (data) {
+
+            console.log(data);
+            if (data.length > 0) {
+                $('#lblltpayment').html('');
+                    $('html,body').animate({
+                        scrollTop: $("#divlandtransactionRecepit").offset().top
+                    }, 'slow');
+                     $('#lblltpayment').empty();
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                            if (pmode == 'Cash') {
+                                $('#lblltpayment').append(
+                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                                $('#lblltpayment').append(
+                                "" + pmode + " Nu. " + value.amount + " Branch Name: " + value.bank + " Cheque no:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+});
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("landtransactionRecepit", "Ledgers")',
+                data: {
+                    ReceiptId: parseInt(receiptId)
+                },
+             success: function (data) {
+               //  alert($("#hdnty").val());
+                 $("#lbltransactiontype").html($("#hdntransactionType").val());
+                 $('#tbllandtransactionrecepit').empty();
+                 var today = new Date(data[0].createdOn);
+                 var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 $("#lblltDemandDate").html(date);
+
+                 var today = new Date(data[0].billingDate);
+                 var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 $("#idbilldate").html(date);
+
+                /* $("#iddemand").html(data[0].demandNo);*/
+                 $("#lblltthram").html(data[0].thramNo);
+
+                 $("#lblltrecepitno").html(data[0].receipt);
+                 $("#lbllttamount").html(data[0].netAmount);
+
+                 $('#ltqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                 if (data.length > 0) {
+                     //$('html,body').animate({
+                     //    scrollBottom: $("#divwatertaxrecepit").offset().Bottom
+                     //}, 'slowtax
+
+
+                 $.each(data, function (key, value) {
+                     $('#tbllandtransactionrecepit').append(
+                         '<tr>'
+                         + '<td>' + (key + 1) + '</td>'
+                         + '<td>' + value.taxName + '</td>'
+                         + '<td style="text-aglin">' + value.totalAmount + '</td>'
+
+                         + '</tr>');
+
+
+
+                 });
+                 } else {
+                     $('#tbllandtransactionrecepit').append(
+                         '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                     swal({
+                         title: 'No data found!!!!',
+                         type: 'error',
+                         confirmButtonText: 'OK'
+                     });
+
+                 }
+             },
+             error: function () {
+                 alert('Payment not made!!! Make a Payment first');
+             }
+
+         });
+
+    }
+    function SearchDetails() {
+        $('#img').show();
+        $('#tbl_taxpayerdetails').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#tbl_taxpayerdetails").offset().top
+        }, 'slow');
+
+                        $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("DuplicatewaterReceiptPrint", "Ledgers")',
+                        data: {
+                            ConsumerNo: $('#iconsumerno').val(),
+                            Year: parseInt($('#iyear').val()),
+                            TransactionTypeId: parseInt($('#TransactionTypeId').val())
+                        },
+                            success: function (data) {
+                                $('#img').hide();
+                            $('#tbl_body').empty();
+                                if (data.length > 0) {
+                                    $("#idrbillingaddress").html(data[0].billingAddress);
+                                    $("#idrconsumer").html(data[0].consumerNo);
+                                    $("#idrmeter").html(data[0].waterMeterNo);
+
+
+                                    $("#idconsumer").html(data[0].consumerNo);
+                                    $("#idmeter").html(data[0].waterMeterNo);
+                                    $("#idyear").html(data[0].year);
+
+
+                                $.each(data, function (key, value) {
+                                    $('#tbl_body').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.rMonth+ '</td>'
+                                        + '<td>' + value.billingAddress + '</td>'
+
+                                        + '<td>' + value.totalamount + '</td>'
+                                        + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayledgerdata(' + value.recepitId + ');">Select</a></b></td>'
+
+                                        + '</tr>');
+                                    $('#tbl_taxpayerdetails').show(1000);
+
+                                });
+
+
+                            } else {
+                                $('#tbl_body').append(
+                                    '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                                swal({
+                                    title: 'No data found!!!!',
+                                    type: 'error',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+
+                        },
+
+                        error: function () {
+                            alert('error');
+                        }
+                    });
+
+    }
+
+    function displayledgerdata(recepitId) {
+                    $('#divwatertaxrecepit').show(1000);
+                    $('html,body').animate({
+                        scrollTop: $("#divwatertaxrecepit").offset().top
+                    }, 'slow');
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchDreceiptuser", "Ledgers")',
+                data: {
+                    ReceiptId: recepitId
+                },
+            success: function (data) {
+            console.log(data);
+                $("#lblwuser").html(data[0].creatorname);
+               // alert(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+    $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDuplicatePaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: recepitId
+                },
+        success: function (data) {
+
+            console.log(data);
+            if (data.length > 0) {
+                $('#lblwpayment').html('');
+                    $('html,body').animate({
+                        scrollTop: $("#divwatertaxrecepit").offset().top
+                    }, 'slow');
+                     $('#lblwpayment').empty();
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                            if (pmode == 'Cash') {
+                                $('#lblwpayment').append(
+                                    "" + pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                            $('#lblwpayment').append(
+                                "" + pmode + " Nu. " + value.amount + " Bank: " + value.bank + " Mode No:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+});
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("Watercharges", "Ledgers")',
+                data: {
+                    RecepitId: parseInt(recepitId)
+                },
+             success: function (data) {
+               //  alert($("#hdnty").val());
+                 $("#lbltransactiontype").html($("#hdntransactionType").val());
+                 $('#tblDemand').empty();
+                 var today = new Date(data[0].createdOn);
+                 var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 $("#lblDemandDate").html(date);
+
+                 //var today = new Date(data[0].billingDate);
+                 //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 //$("#idbilldate").html(date);
+
+                 $("#idrname").html(data[0].firstName);
+                /* $("#iddemand").html(data[0].demandNo);*/
+                 $("#idraddress").html(data[0].caddress);
+                 $("#idrphone").html(data[0].phoneNo);
+                 $("#idrecepitno").html(data[0].receipt);
+                 $("#idtamount").html(data[0].netAmount);
+                 $("#idpamount").html(data[0].totalPenaltyAmount);
+
+                 $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                 if (data.length > 0) {
+                     //$('html,body').animate({
+                     //    scrollBottom: $("#divwatertaxrecepit").offset().Bottom
+                     //}, 'slow');
+
+                     var TA = 0;
+                     var TPA = 0;
+                     var GTA = 0;
+                     $.each(data, function (key, value) {
+                         TA = value.netAmount;
+                         TPA = value.totalPenaltyAmount;
+                     $('#tblDemand').append(
+                         '<tr>'
+                         + '<td>' + (key + 1) + '</td>'
+                         + '<td>' + value.billmonth + '</td>'
+                         + '<td>' + value.taxName + '</td>'
+                         + '<td>' + value.penaltyDays + '</td>'
+                         + '<td>' + value.penaltyAmount + '</td>'
+                         + '<td>' + value.totalAmount.toFixed(2) + '</td>'
+
+                         + '</tr>');
+
+
+
+                     });
+
+                     GTA = parseFloat(TA) + parseFloat(TPA);
+                     $("#idGtamount").html(GTA.toFixed(2));
+                 } else {
+                     $('#tbl_body').append(
+                         '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                     swal({
+                         title: 'No data found!!!!',
+                         type: 'error',
+                         confirmButtonText: 'OK'
+                     });
+
+                 }
+             },
+             error: function () {
+                 alert('Payment not made!!! Make a Payment first');
+             }
+
+         });
+
+    }
+
+    //*************************** MiscellaneousDetails**********************************
+
+    function SearchMiscellaneousDetails() {
+
+        $('#Cid').insertAfter(function () {
+            var Cid = ($('#iCid').val());
+
+            if (Cid == Cid) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("fetchMiscellaneousdata", "Ledgers")',
+                    data: {
+                        Cid: Cid,
+
+                    },
+                    success: function (data) {
+                        $('#tbl_body1').empty();
+                        $('#idmname').html(data[0].name);
+                        $('#idmcid').html(data[0].cid);
+                        $('#idmmobile').html(data[0].mobileNo);
+                        $('#idmaddress').html(data[0].address);
+
+                        $('#idmtaxname').html(data[0].tax);
+                        if (data.length > 0) {
+
+                            $.each(data, function (key, value) {
+
+                                $('#divMiscellaneous').show(1000);
+                                $('#tbl_body1').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.address + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>' + value.quantity + '</td>'
+                                    + '<td>' + value.rate + '</td>'
+                                    + '<td>' + value.amount + '</td>'
+
+                                    + '<td>' + value.tax + '</td>'
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displaymiscellaneousdata(' + value.recepitId + ');">Select</a></b></td>'
+
+
+                                    + '</tr>');
+                            });
+                       } else {
+                            $('#tbl_body').append(
+                                '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                            swal({
+                                title: 'No data found!!!!',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+            else {
+                swal.fire('PLease Enter Correct CID or  Name');
+            }
+        });
+
+    }
+
+
+    function displaymiscellaneousdata(recepitId) {
+
+
+        $('#divMiscellaneousrecepit').toggle(1000);
+
+      $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchDreceiptuser", "Ledgers")',
+                data: {
+                    ReceiptId: recepitId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lblmuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDuplicatePaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: recepitId
+                },
+            success: function (data) {
+            console.log(data);
+                if (data.length > 0) {
+                    $('#lblmpayment').html('');
+                    $('html,body').animate({
+                        scrollTop: $("#divMiscellaneousrecepit").offset().top
+                    }, 'slow');
+
+                     $('#lblmpayment').empty();
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                            if (pmode == 'Cash') {
+                                $('#lblmpayment').append(
+                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                            $('#lblmpayment').append(
+                                "" + pmode + " Nu. " + value.amount+ " Branch Name: " + value.bank + " Cheque no:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+});
+                 $.ajax({
+                type: "GET",
+                url: '@Url.Action("printdemand", "Ledgers")',
+                data: {
+                    RecepitId: parseInt(recepitId)
+                },
+                     success: function (data) {
+
+                         $('#tblDemand1').empty();
+                         var today = new Date(data[0].createdOn);
+                         var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                         $('#idmdemanddate').html(date);
+                         $('#idmrecepitno').html(data[0].receipt);
+                         $("#lblmtransactiontype").html($("#hdntransactionType").val());
+                         $('#idmtamount').html(data[0].netAmount);
+
+
+                         $('#mqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+                         if (data.length > 0) {
+
+
+                             $.each(data, function (key, value) {
+                                 $('#tblDemand1').append(
+                                     +'<tr>'
+                                     + '<td>' + (key + 1) + '</td>'
+                                     + '<td>' + value.slab + '</td>'
+                                     + '<td>' + value.quantity + '</td>'
+                                     + '<td>' + value.rate + '</td>'
+                                     + '<td>' + value.amount + '</td>'
+                                     + '</tr>');
+                             });
+                         }
+                         else {
+                             $('#tbl_body').append(
+                                 '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                             swal({
+                                 title: 'No data found!!!!',
+                                 type: 'error',
+                                 confirmButtonText: 'OK'
+                             });
+                         }
+
+
+                    },
+                    error: function () {
+                        alert('Payment not made!!! Make a Payment first');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+
+    //*************************** Property tax**********************************
+    function SearchPropertytax() {
+
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("FetchlanddetailsByCID", "Ledgers")',
+                data: {
+                    Cid: ($('#idipCid').val()),
+                    ttin: ($('#idipTtin').val()),
+                    Year: ($('#ipyear').val())
+
+                },
+            success: function (data) {
+                
+                    var Cid = data[0].cid;
+                    var Ttin = data[0].ttin;
+                    var FullName = data[0].fullName;
+                    var IsApportioned = data[0].isApportioned;
+                    var LandDetailId = data[0].landDetailId;
+                if (IsApportioned == false) {
+
+                       //alert(Cid);
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("PrintNames", "Ledgers")',
+                            data: {
+                                id: LandDetailId
+                            },
+                            success: function (data) {
+                                $('#lblppayment').html('');
+                                if (data.length > 0) {
+                                    // $('#idpplotno').html(PlotNo);
+                                    $.each(data, function (key, value) {
+
+                                        $('#idpname').append(
+                                            "" + value.firstName + ","
+                                        );
+                                        $('#idpcid').append(
+                                            "" + value.cid + ","
+                                        );
+                                        $('#idpttin').append(
+                                            "" + value.ttin + ","
+                                        );
+                                    });
+
+
+
+
+                                    $('#img').hide();
+
+
+                                }
+                               
+                            },
+                            error: function () {
+                                $('#img').hide();
+                                alert('Error occured');
+                            }
+                        });
+                    }
+                    else {
+                        $("#idpcid").html(Cid);
+                        $("#idpttin").html(Ttin);
+                        $("#idpname").html(FullName);
+                        //$("#lblpphone").html(PhoneNo);
+                        //$("#idpplotno").html(PlotNo);
+                       
+                    }
+                 
+                    $("#idptransactiontype").html($("#hdntransactionType").val());
+
+                    $('#idpphone').html(data[0].mobileNo)
+
+
+                    $('#idipfullname').html(data[0].fullName);
+                    $('#idipcid').html(data[0].cid);
+                    $('#idipttin').html(data[0].ttin);
+                    $('#idiptaxpayertype').html(data[0].taxPayerType);
+                    $('#idipmobileno').html(data[0].mobileNo);
+                    $('#idipemail').html(data[0].email);
+                    $('#tbl_bodyp').empty();
+
+                    if (data.length > 0) {
+                        /*alert('if');*/
+                        $("#divPropertytax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divPropertytax").offset().top
+                        }, 'slow');
+                        
+                        $.each(data, function (key, value) {
+                            $('#tbl_bodyp').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.plotNo+ '</td>'
+                                + '<td>' + value.landOwnershipType + '</td>'
+                                + '<td>' + value.landTypeName + '</td>'
+                                + '<td>' + value.landAcerage + '</td>'
+                                + '<td>' + value.plr + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return displayprintrecepitforproperty(' + value.receiptId + ',\'' + value.thramNo + '\',\'' + value.plotNo + '\');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divPropertytax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        swal('No data found!');
+                        //alert('else');
+                        $('#img').hide();
+                        //$("#divPropertytax").show(1000);
+                        //$('#tbl_body').append(
+                        //    '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+
+
+
+    function displayprintrecepitforproperty(ReceiptId, thramNo, plotNo) {
+
+        //$('#idpthramno').html(thramNo)
+        //$('#idpplotno').html(plotNo)
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchreceiptuser", "Ledgers")',
+                data: {
+                    RecepitId: ReceiptId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lblpuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintPaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: ReceiptId
+                },
+            success: function (data) {
+                console.log(data);
+                $('#lblppayment').html('');
+                 if (data.length > 0) {
+                    $('html,body').animate({
+                        scrollTop: $("#divpropertytaxrecepit").offset().top
+                    }, 'slow');
+
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+
+                            if (pmode == 'Cash') {
+                                $('#lblppayment').append(
+                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                            $('#lblppayment').append(
+                                "" + pmode + " Nu. " + value.amount + " Branch Name: " + value.bank + " Cheque no:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+          });
+
+      $.ajax({
+                type: "GET",
+                url: '@Url.Action("Printreceiptforpropertytax", "Ledgers")',
+                data: {
+                    RecepitId: ReceiptId
+
+                },
+            success: function (data) {
+
+                $('#divpropertytaxrecepit').show();
+                    console.log(data);
+                    $('#tblrecepit').empty();
+                if (data.length > 0) {
+                    $('#idpdemandno').html(data[0].demandNo);
+                    $("#idpttamount").html(data[0].totalAmount);
+                    $("#idpgtamount").html(data[0].totalPenaltyAmount);
+                        $("#idprecepitno").html(data[0].receipt);
+
+                        var today = new Date(data[0].createdOn);
+                        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#idpdate").html(date);
+
+                        $('#pqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                            var TA = 0;
+                            var TPA = 0;
+                            var GTA = 0;
+                    $.each(data, function (key, value) {
+                        TA = value.totalAmount;
+                        TPA = value.totalPenaltyAmount;
+                            $('#tblrecepit').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.calendarYear + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.plotNo + '</td>'
+                                + '<td>' + value.thramNo + '</td>'
+                                + '<td>' + value.penaltyDays + '</td>'
+                                + '<td>' + value.penaltyAmount + '</td>'
+                                + '<td>' + value.grandTotalAmount + '</td>'
+
+
+                                + '</tr>');
+                    });
+                    GTA = parseFloat(TA) + parseFloat(TPA);
+                    $("#idpGtamount").html(GTA);
+                    $('#img').hide();
+                        $('#img').hide();
+
+
+                    }
+                    else {
+                        $('#img').hide();
+
+                    $('#tblrecepit').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+        }
+
+
+    //*************************** vendor tax**********************************
+    function SearchVendortax() {
+        //$("#lblvtransactiontype").html($("#hdntransactionType").val());
+
+        var TransactionTypeId = parseInt($('#TransactionTypeId').val());
+
+        //*******************************House************************************
+
+
+        if (TransactionTypeId == 16 ) {
+        //    if (IsPaymentMade == true) {
+        //        alert("Alert");
+        //    }
+        //    else {
+        //        alert("Error");
+        //    }
+            //alert("i am 16");
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchLandLeaseDetailByCid", "Ledgers")',
+                data: {
+                    Cid: ($('#idisvCid').val()),
+                    ttin: ($('#idisvTtin').val()),
+                    Year: parseInt($('#ivyear').val())
+
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    if (data.length > 0) {
+                    //var today = new Date(data[0].createdOn);
+                    //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    //$('#idmdemanddate').html(date);
+                    $('#lblvname').html(data[0].fullName);
+                      $('#lblvcid').html(data[0].cid);
+                    $('#lblvttin').html(data[0].ttin);
+                    $('#lblvmobile').html(data[0].phoneNo);
+                    $('#lblvemail').html(data[0].email);
+                        $('#lblvaddress').html(data[0].caddress)
+                    $('#idivfullname').html(data[0].fullName);
+                        $('#idvaddress').html(data[0].caddress)
+                    $('#idivcid').html(data[0].cid);
+                    $('#idivttin').html(data[0].ttin);
+                    $('#idivmobileno').html(data[0].phoneNo);
+                    $('#idivemail').html(data[0].email);
+
+
+
+                    $('#tbl_bodyv').empty();
+
+
+
+                        $("#divVendortax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+                        $.each(data, function (key, value) {
+
+                            $('#tbl_bodyv').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.transactionType + '</td>'
+                                + '<td>' + value.address + '</td>'
+                                + '<td>' + value.installmentAmount + '</td>'
+                                + '<td>' + value.billingSchedule + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return fetchVendorRecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divVendortax").show(1000);
+                        $('#tbl_bodyv').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+
+        }
+        else if (TransactionTypeId == 15) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchHouseDetailByCid", "Ledgers")',
+                data: {
+                    Cid: ($('#idisvCid').val()),
+                    ttin: ($('#idisvTtin').val()),
+                    Year: parseInt($('#ivyear').val())
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.length > 0) {
+                    //var today = new Date(data[0].createdOn);
+                    //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    //$('#idmdemanddate').html(date);
+                    $('#lblvname').html(data[0].fullName);
+                        $('#lblvaddress').html(data[0].caddress)
+                    $('#lblvcid').html(data[0].cid);
+                    $('#lblvttin').html(data[0].ttin);
+                    $('#lblvmobile').html(data[0].phoneNo);
+                    $('#lblvemail').html(data[0].email);
+
+                    $('#idivfullname').html(data[0].fullName);
+                        $('#idvaddress').html(data[0].caddress)
+                    $('#idivcid').html(data[0].cid);
+                    $('#idivttin').html(data[0].ttin);
+                    $('#idivmobileno').html(data[0].phoneNo);
+                    $('#idivemail').html(data[0].email);
+
+
+
+                    $('#tbl_bodyv').empty();
+
+
+
+                        $("#divVendortax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+                        $.each(data, function (key, value) {
+
+                            $('#tbl_bodyv').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.transactionType + '</td>'
+                                + '<td>' + value.address + '</td>'
+                                + '<td>' + value.installmentAmount + '</td>'
+                                + '<td>' + value.billingSchedule + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return fetchVendorRecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divVendortax").show(1000);
+                        $('#tbl_bodyv').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        }
+        else if (TransactionTypeId == 17) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchStallDetailByCid", "Ledgers")',
+                data: {
+                    Cid: ($('#idisvCid').val()),
+                    ttin: ($('#idisvTtin').val()),
+                    Year: parseInt($('#ivyear').val())
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.length > 0) {
+                    //var today = new Date(data[0].createdOn);
+                    //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    //$('#idmdemanddate').html(date);
+                    $('#lblvname').html(data[0].fullName);
+                        $('#lblvaddress').html(data[0].caddress)
+                    $('#lblvcid').html(data[0].cid);
+                    $('#lblvttin').html(data[0].ttin);
+                        $('#lblvmobile').html(data[0].phoneNo);
+                    $('#lblvemail').html(data[0].email);
+
+                    $('#idivfullname').html(data[0].fullName);
+                        $('#idvaddress').html(data[0].caddress)
+                    $('#idivcid').html(data[0].cid);
+                    $('#idivttin').html(data[0].ttin);
+                        $('#idivmobileno').html(data[0].phoneNo);
+                    $('#idivemail').html(data[0].email);
+
+
+
+                    $('#tbl_bodyv').empty();
+
+
+
+                        $("#divVendortax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+
+                        $.each(data, function (key, value) {
+
+                            $('#tbl_bodyv').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.transactionType + '</td>'
+                                + '<td>' + value.address + '</td>'
+                                + '<td>' + value.installmentAmount + '</td>'
+                                + '<td>' + value.billingSchedule + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return fetchVendorRecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>'
+                            );
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divVendortax").show(1000);
+                        $('#tbl_bodyv').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+
+        }
+        else if (TransactionTypeId == 18) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchParkingDetailByCid", "Ledgers")',
+                data: {
+                    Cid: ($('#idisvCid').val()),
+                    ttin: ($('#idisvTtin').val()),
+                    Year: parseInt($('#ivyear').val())
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.length > 0) {
+                    //var today = new Date(data[0].createdOn);
+                    //var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    //$('#idmdemanddate').html(date);
+                    $('#lblvname').html(data[0].fullName);
+                        $('#lblvaddress').html(data[0].Caddress)
+                    $('#lblvcid').html(data[0].cid);
+                    $('#lblvttin').html(data[0].ttin);
+                        $('#lblvmobile').html(data[0].phoneNo);
+                    $('#lblvemail').html(data[0].email);
+
+                    $('#idivfullname').html(data[0].fullName);
+                        $('#idvaddress').html(data[0].Caddress)
+                    $('#idivcid').html(data[0].cid);
+                    $('#idivttin').html(data[0].ttin);
+                        $('#idivmobileno').html(data[0].phoneNo);
+                    $('#idivemail').html(data[0].email);
+
+
+
+                    $('#tbl_bodyv').empty();
+
+
+
+                        $("#divVendortax").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+                        $.each(data, function (key, value) {
+
+                            $('#tbl_bodyv').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.transactionType + '</td>'
+                                + '<td>' + value.address + '</td>'
+                                + '<td>' + value.installmentAmount + '</td>'
+                                + '<td>' + value.billingSchedule + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return fetchVendorRecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divVendortax").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divVendortax").show(1000);
+                        $('#tbl_bodyv').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        }
+        else {
+            $('#img').hide();
+            alert('Select one of the Vendor');
+        }
+    }
+
+    function SearchECDetail() {
+        //****************************************************** ENVIRONMENTAL CLERANCE ********************************************************************
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchECDetail", "Ledgers")',
+                data: {
+                    Name: ($('#lblECName').val()),
+                    Cid: ($('#lblECCidTtin').val())
+
+                },
+                success: function (data) {
+                    console.log(data);
+                    if (data.length > 0) {
+                        $('#tblEC').empty();
+
+
+
+                        $("#divEC").show(1000);
+                        $('html,body').animate({
+                            scrollTop: $("#divEC").offset().top
+                        }, 'slow');
+
+                        $.each(data, function (key, value) {
+
+                            $('#tblEC').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.activityType + '</td>'
+                                + '<td>' + value.amount + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select To Generate" onclick="return fetchECRecepit(' + value.receiptId + ');">Select</a></b></td>'
+
+                                + '</td>'
+                                + '</tr>'
+                            );
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#divEC").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#divEC").show(1000);
+                        $('#tblEC').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+    }
+
+    function fetchVendorRecepit(receiptId) {
+
+
+        $('#divVendorRecepit').toggle(1000);
+
+      $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchDreceiptuser", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                     $("#lbluser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDuplicatePaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                if (data.length > 0) {
+                    $('#lblvpayment').html('');
+                    $('html,body').animate({
+                        scrollTop: $("#tblvendorrecepit").offset().top
+                    }, 'slow');
+
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                            if (pmode == 'Cash') {
+                                $('#lblvpayment').append(                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                            $('#lblvpayment').append(
+                                "" + pmode + " Nu. " + value.amount + " Branch Name: " + value.bank + " Cheque no:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+});
+               $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchVendorRecepit", "Ledgers")',
+                data: {
+                    ReceiptId: parseInt(receiptId)
+                },
+                     success: function (data) {
+
+                         $('#tblvendorrecepit').empty();
+                         var today = new Date(data[0].createdOn);
+                         var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                         $('#lblvDemandDate').html(date);
+                         $('#lblvrecepitno').html(data[0].receipt);
+                         $('#lblvdemand').html(data[0].demandNo)
+                         $("#lblvtransactiontype").html($("#hdntransactionType").val());
+                         $('#lblvtamount').html(data[0].netAmount);
+                         $('#lblvpamount').html(data[0].totalPenaltyAmount);
+
+
+                         $('#vqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                         var TA = 0;
+                         var TPA = 0;
+                         var GTA = 0;
+                         if (data.length > 0) {
+                             $.each(data, function (key, value) {
+                                 TA = value.netAmount;
+                                 TPA = value.totalPenaltyAmount;
+                                 $('#tblvendorrecepit').append(
+                                     '<tr>'
+                                     + '<td>' + (key + 1) + '</td>'
+                                     + '<td>' + value.month + '</td>'
+                                     + '<td>' + value.taxName + '</td>'
+                                     + '<td>' + value.penaltyDays + '</td>'
+                                     + '<td>' + value.penaltyAmount + '</td>'
+                                     + '<td>' + value.totalAmount + '</td>'
+
+                                     + '</tr>');
+                             });
+                             GTA = parseFloat(TA) + parseFloat(TPA);
+                             $("#lblvGGamount").html(GTA);
+                             $('#img').hide();
+                         }
+                         else {
+                             $('#tbl_body').append(
+                                 '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                             swal({
+                                 title: 'No data found!!!!',
+                                 type: 'error',
+                                 confirmButtonText: 'OK'
+                             });
+                         }
+
+
+                    },
+                    error: function () {
+                        alert('Payment not made!!! Make a Payment first');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+
+    ;
+
+ //***************************************** ENVIRONMENTAL CLERANCE **************************************************
+    function fetchECRecepit(receiptId) {
+
+        $('#divECrecepit').toggle(1000);
+
+      $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchDreceiptuser", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                $("#lblECuser").html(data[0].creatorname);
+                     $('#img').hide();
+             },
+            error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+     }
+ });
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintDuplicatePaymentModes", "Ledgers")',
+                data: {
+                    ReceiptId: receiptId
+                },
+            success: function (data) {
+            console.log(data);
+                if (data.length > 0) {
+                    $('#lblECpayment').html('');
+                    $('html,body').animate({
+                        scrollTop: $("#tblECrecepit").offset().top
+                    }, 'slow');
+
+                    $.each(data, function (key, value) {
+                        var pmode = value.paymentmode;
+                            if (pmode == 'Cash') {
+                                $('#lblECpayment').append(                                ""+ pmode + "  Nu.  " + value.amount + ","
+                        );
+                }
+                else {
+                                $('#lblECpayment').append(
+                                "" + pmode + " Nu. " + value.amount + " Branch Name: " + value.bank + " Cheque no:   " + value.paymentModeNo
+                        );
+                }
+             });
+                     $('#img').hide();
+                     }
+                    },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+});
+               $.ajax({
+                type: "GET",
+                url: '@Url.Action("fetchECRecepit", "Ledgers")',
+                data: {
+                    ReceiptId: parseInt(receiptId)
+                },
+                     success: function (data) {
+
+                         $('#tblECrecepit').empty();
+                         var today = new Date(data[0].createdOn);
+                         var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                         $('#idECdate').html(date);
+                         $('#idECrecepitno').html(data[0].receipt);
+                         $('#idECdemand').html(data[0].demandNo);
+                         $('#idECactivity').html(data[0].activityType);
+                         $('#idECname').html(data[0].applicantName);
+                         $('#idECcid').html(data[0].cid);
+                         $('#idEClicense').html(data[0].licenseNo);
+                         $('#idECaddress').html(data[0].address);
+                         $("#idECtransactiontype").html($("#hdntransactionType").val());
+
+
+                         $('#ECqrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                         var TA = 0;
+                         var GTA = 0;
+                         if (data.length > 0) {
+                             $.each(data, function (key, value) {
+                                 TA = value.netAmount;
+                                 $('#tblECrecepit').append(
+                                     '<tr>'
+                                     + '<td>' + (key + 1) + '</td>'
+                                     + '<td>' + value.taxName + '</td>'
+                                     + '<td>' + value.activityType + '</td>'
+                                     + '<td>' + value.totalAmount + '</td>'
+
+                                     + '</tr>');
+                             });
+                             GTA = parseFloat(TA);
+                             $("#idECGtamount").html(GTA);
+                             $('#img').hide();
+                         }
+                         else {
+                             $('#tbl_body').append(
+                                 '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                             swal({
+                                 title: 'No data found!!!!',
+                                 type: 'error',
+                                 confirmButtonText: 'OK'
+                             });
+                         }
+
+
+                    },
+                    error: function () {
+                        alert('Payment not made!!! Make a Payment first');
+                        $('#img').hide();
+                    }
+
+                });
+        }
+    //************************************** Select Transaction Type**************************************
+
+    $('#TransactionTypeId').change(function () {
+        //$('#img').show();
+
+        var TransactionTypeId = parseInt($('#TransactionTypeId').val());
+        //alert(TransactionTypeId);
+        //$('#TransactionTypeId option:selected').text();
+        $('#hdntransactionType').val($('#TransactionTypeId option:selected').text());
+
+
+        //Water Tax
+        if (TransactionTypeId == 19 || TransactionTypeId == 2 || TransactionTypeId == 5 || TransactionTypeId == 6 || TransactionTypeId == 7 || TransactionTypeId == 8 || TransactionTypeId == 43 || TransactionTypeId == 22) {
+            $('#searchwater').toggle(1000);
+            //var myfunction = myfunction();
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+            $('#ECDetail').hide(1000);
+
+        }
+          //Vacuum tanker
+        else if (TransactionTypeId == 11) {
+            $('#vacuumtanker').toggle(1000);
+
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+            $('#ECDetail').hide(1000);
+
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+        }
+        //Miscellaneous tax
+        else if (TransactionTypeId == 10 || TransactionTypeId == 12 ) {
+            $('#divsearchMiscellaneous').toggle(1000);
+            $('#ECDetail').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+        }
+        //Property Tax
+        else if (TransactionTypeId == 20) {
+            $('#divFetchlanddetailsByCID').toggle(1000);
+            $('#landtransaction').hide(1000);
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+            $('#ECDetail').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+
+        }
+        //Vendor tax
+        else if (TransactionTypeId == 15 || TransactionTypeId == 16 || TransactionTypeId == 17 || TransactionTypeId == 18 ) {
+            $('#divFetchvendordetailsByCID').toggle(1000);
+            $('#ECDetail').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+
+        }
+        else if (TransactionTypeId == 13 || TransactionTypeId == 31 || TransactionTypeId == 34 || TransactionTypeId == 35 || TransactionTypeId == 36 || TransactionTypeId == 37 || TransactionTypeId == 38 || TransactionTypeId == 39 || TransactionTypeId == 40 || TransactionTypeId == 41) {
+            $('#landtransaction').toggle(1000);
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+            $('#ECDetail').hide(1000);
+            $('#divEC').hide(1000);
+
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+
+        }
+
+        else if (TransactionTypeId == 9) {
+            $('#ECDetail').toggle(1000);
+            $('#divFetchvendordetailsByCID').hide(1000);
+            $('#divVendortax').hide(1000);
+            $('#divVendorRecepit').hide(1000);
+
+            $('#divsearchMiscellaneous').hide(1000);
+            $('#divMiscellaneous').hide(1000);
+            $('#divMiscellaneousrecepit').hide(1000);
+
+            $('#searchwater').hide(1000);
+            $('#tbl_taxpayerdetails').hide(1000);
+            $('#divwatertaxrecepit').hide(1000);
+
+            $('#divFetchlanddetailsByCID').hide(1000);
+            $('#divPropertytax').hide(1000);
+            $('#divtaxDetails').hide(1000);
+            $('#divpropertytaxrecepit').hide(1000);
+
+        }
+
+    });
+
+    //************************************************Print*******************************************************************
+    function printPagew() {
+        var dataToPrint = document.getElementById("dvPrintw");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPagep() {
+        var dataToPrint = document.getElementById("dvPrintp");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPage() {
+        var dataToPrint = document.getElementById("dvPrintm");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPageV() {
+        var dataToPrint = document.getElementById("dvPrintv");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPage() {
+        var dataToPrint = document.getElementById("dvPrinttt");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPagevts() {
+        var dataToPrint = document.getElementById("printvts");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    function printPageEC() {
+        var dataToPrint = document.getElementById("dvPrintEC");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+    //*********************************Ok Button***********************************
+    function water() {
+        $('#tbl_taxpayerdetails').hide(1000);
+        $('#divwatertaxrecepit').hide(1000);
+
+    }
+    function miscellaneous() {
+        $('#divMiscellaneous').hide(1000);
+        $('#divMiscellaneousrecepit').hide(1000);
+
+    }
+    function property() {
+        $('#divPropertytax').hide(1000);
+
+        $('#divpropertytaxrecepit').hide(1000);
+
+    }
+    function vendor() {
+        $('#divVendortax').hide(1000);
+        $('#divVendorRecepit').hide(1000);
+
+    }
+    function vendor() {
+        $('#divVendortax').hide(1000);
+        $('#divVendorRecepit').hide(1000);
+
+    }
+</script>

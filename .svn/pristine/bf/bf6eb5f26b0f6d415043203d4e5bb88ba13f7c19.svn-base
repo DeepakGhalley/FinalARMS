@@ -1,0 +1,207 @@
+﻿@using CORE_BOL
+@model DepositSaveVM
+
+@{
+    ViewData["Title"] = "DepositUpdate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="PaymentDeposit">Report</a></li>
+                        <li class="breadcrumb-item active">Daily Wise Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Search Payment Deposit</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Payment Mode No:<span style="font-weight: bold; color: red;">*</span></label>
+                    <input id="lblcheque" class="form-control col-6" />
+                </div>
+
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return Update();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+<div class="card card-info" id="divdeposit" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Deposit Details</h3>
+    </div>
+    <input type="hidden" id="hdnDepositId" />
+    <div class="card-body">
+        
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> Payment Mode :</label>
+            <div class="col-sm-4">
+                <input id="lblMode" class="form-control" readonly />
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Payment Mode No :</label>
+            <div class="col-sm-4">
+                <input id="lblNo" class="form-control" readonly />
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Payment Mode Date :</label>
+            <div class="col-sm-4">
+                <input id="lblDate" class="form-control" readonly />
+
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Branch Names :</label>
+            <div class="col-sm-4">
+                <input id="lblBranchName" class="form-control" readonly />
+
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"> Amount:</label>
+            <div class="col-sm-4">
+                <input id="lblAmount" class="form-control" readonly />
+
+            </div>
+        </div>
+
+        <br />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" onclick="return UpdateD();">Reject</button> &nbsp;&nbsp;
+                <button type="reset"  onclick="return btnCancel(); " class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function Update() {
+        $('#img').show();
+
+        if ($("#lblcheque").val() == "") {
+            swal("Please fill the field to search.!");
+            $("#lblcheque").focus();
+
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetDepositupdatedisplay", "Deposits")',
+            data: {
+                ChequeNo: $("#lblcheque").val()
+
+
+            },
+
+            success: function (data) {
+                $('#img').hide();
+                $('#hdnPaymentLegderId').val();
+
+                $('#divdeposit').toggle(1000);
+
+                if (data.length > 0) {
+
+                    var today = new Date(data[0].paymentModeDate);
+                    var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+
+
+                    $("#lblMode").val(data[0].paymentMode);
+                    $("#lblNo").val(data[0].paymentModeNo);
+                    $("#lblDate").val(date);
+                    $("#lblBranchName").val(data[0].branchName);
+                    $("#lblAmount").val(data[0].amount);
+
+                    var deposit = data[0].depositId;
+                    $('#hdnDepositId').val(deposit);
+                    $('#img').hide();
+                } else {
+                    alert('Error');
+                }
+
+            },
+            error: function () {
+                alert('error');
+                $('#img').hide();
+            }
+
+        });
+    }
+
+    function btnCancel() {
+        $('#divdeposit').hide(1000);
+
+    }
+
+    function UpdateD() {
+        var myarray = [];
+        var DepositVM = {};
+
+        DepositVM.DepositId = parseInt($("#hdnDepositId").val());
+        myarray.push(DepositVM);
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("Update", "Deposits")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                swal("data saved");
+                $('#img').hide();
+            },
+
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+
+     }
+
+</script>

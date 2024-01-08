@@ -1,0 +1,128 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstBuildingDetail]
+       [dbo].[trnOccupancyCertificateApplication]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[trnOccupancyCertificateApplication].[g2cApplicationNo] is being dropped, data loss could occur.
+       The column [dbo].[trnOccupancyCertificateApplication].[isUnitOC] is being dropped, data loss could occur.
+       The column [dbo].[trnOccupancyCertificateApplication].[unitOrBuildingNo] is being dropped, data loss could occur.
+       The column [dbo].[trnOccupancyCertificateApplication].[yearOfConstruction] is being dropped, data loss could occur.
+       The column [dbo].[trnOccupancyCertificateApplication].[logoSignMapId] on table
+         [dbo].[trnOccupancyCertificateApplication] must be added, but the column has no default value and does not allow NULL
+         values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default
+         value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+       The column [dbo].[trnOccupancyCertificateApplication].[ocReferenceNo] on table
+         [dbo].[trnOccupancyCertificateApplication] must be added, but the column has no default value and does not allow NULL
+         values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default
+         value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+
+** User actions
+     Drop
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+       unnamed constraint on [dbo].[mstBuildingDetail] (Default Constraint)
+     Table rebuild
+       [dbo].[mstBuildingDetail] (Table)
+       [dbo].[trnOccupancyCertificateApplication] (Table)
+     Alter
+       [dbo].[trnLandTransferDetail] (Table)
+     Create
+       [dbo].[occupancyCertificateUnitMap] (Table)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable_2] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_11] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_12] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_13] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_9] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_4] (Foreign Key)
+     Create
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_10] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_11] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_12] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_13] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable_9] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_4] (Foreign Key)
+       [dbo].[mstBuildingDetail].[advanceInfoFedBy].[MS_Description] (Extended Property)
+
+The column [dbo].[trnOccupancyCertificateApplication].[g2cApplicationNo] is being dropped, data loss could occur.
+The column [dbo].[trnOccupancyCertificateApplication].[isUnitOC] is being dropped, data loss could occur.
+The column [dbo].[trnOccupancyCertificateApplication].[unitOrBuildingNo] is being dropped, data loss could occur.
+The column [dbo].[trnOccupancyCertificateApplication].[yearOfConstruction] is being dropped, data loss could occur.
+The column [dbo].[trnOccupancyCertificateApplication].[logoSignMapId] on table [dbo].[trnOccupancyCertificateApplication] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[trnOccupancyCertificateApplication].[ocReferenceNo] on table [dbo].[trnOccupancyCertificateApplication] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column buildingDetailId on table [dbo].[trnOccupancyCertificateApplication] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

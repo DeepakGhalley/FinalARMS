@@ -1,0 +1,599 @@
+﻿@using CORE_BOL
+@model AssetMaintenanceVM
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Asset</a></li>
+                    <li class="breadcrumb-item active">Asset Maintenance</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Primary Head<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select class="form-control select2" id="PrimaryHeadId" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.PrimaryHead, "Value", "Text")) " value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Secondary Head</label>
+                <div class="col-sm-3">
+                    <select id="SecondaryHeadId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.SecondaryHead, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Tertiary Head</label>
+                <div class="col-sm-3">
+                    <select id="TertiaryHeadId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.TertiaryHead, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Division</label>
+                <div class="col-sm-3">
+                    <select id="DivisionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Division, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Section</label>
+                <div class="col-sm-3">
+                    <select id="SectionId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Section, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Asset Name</label>
+                <div class="col-sm-3">
+                    <input id="AssetNameInput" class="form-control" />
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Asset Status</label>
+            <div class="col-sm-3">
+                <select asp-for="AssetStatusId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.AssetStatus, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="AssetStatusId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Zone</label>
+            <div class="col-sm-3">
+                <select asp-for="DemkhongId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.Demkhong, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="DemkhongId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Area</label>
+            <div class="col-sm-3">
+                <select asp-for="LapId" class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList(@ViewBag.Lap, "Value", "Text"))"
+                        value="0">
+                </select>
+                <span asp-validation-for="LapId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-3">
+                <input type="button" value="Search" class="btn btn-block btn-primary " onclick="return Search();" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_assetdetails" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Asset Details</h3>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Asset Code</th>
+                        <th>Asset Name</th>
+                        <th>Asset Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_asset">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_assetmaintenancedetails" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Classification</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Primary Head </label>
+                <div class="col-sm-3">
+                    <input id="primaryheadid" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label">Secondary Head </label>
+                <div class="col-sm-3">
+                    <input id="secondaryheadid" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Tertiary Head </label>
+                <div class="col-sm-3">
+                    <input id="tertiaryheadid" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label">Division </label>
+                <div class="col-sm-3">
+                    <input id="divisionid" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Section </label>
+                <div class="col-sm-3">
+                    <input id="sectionid" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label">Asset Name </label>
+                <div class="col-sm-3">
+                    <input id="assetname" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Lap </label>
+                <div class="col-sm-3">
+                    <input id="lapid" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label">Demkhong </label>
+                <div class="col-sm-3">
+                    <input id="demkhongid" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Identification</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Asset Function </label>
+                <div class="col-sm-3">
+                    <input id="assetfuntionid" class="form-control" readonly />
+                </div>
+                <label class="col-sm-2 col-form-label">Asset Status </label>
+                <div class="col-sm-3">
+                    <input id="assetstatusid" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Remarks </label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" id="remarks" rows="2" readonly></textarea>
+                </div>
+                <label class="col-sm-2 col-form-label">Person Responsible </label>
+                <div class="col-sm-3">
+                    <input id="personresponsible" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Asset Maintenance </h3>
+            <input type="hidden" id="hdnAssetId" />
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Maintenance Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="MaintenanceTypeId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList(@ViewBag.Maintenance, "Value", "Text"))"
+                            value="0">
+                    </select>
+                </div>
+                <label class="col-sm-3 col-form-label">Maintenance Date<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input id="maintenancedate" class="form-control" type="date" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Spare Part Used</label>
+                <div class="col-sm-3">
+                    <input id="sparepartused" class="form-control" />
+                </div>
+                <label class="col-sm-3 col-form-label">Next Maintenance Date</label>
+                <div class="col-sm-3">
+                    <input id="dateofnextmaintenance" class="form-control" type="date" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Service Order No</label>
+                <div class="col-sm-3">
+                    <input id="serviceorderno" class="form-control" />
+                </div>
+                <label class="col-sm-3 col-form-label">Service Order Date</label>
+                <div class="col-sm-3">
+                    <input id="serviceorderdate" class="form-control" type="date" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Maintenance Cost<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input id="maintenancecost" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Reason</label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" id="reason" rows="2"></textarea>
+                </div>
+                <label class="col-sm-3 col-form-label">Remarks</label>
+                <div class="col-sm-3">
+                    <textarea class="form-control" id="idremarks" rows="2"></textarea>
+                </div>
+            </div>
+            <hr />
+            <div class="form-group row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-3">
+                    <button type="button" class="btn btn-primary" id="SaveAssetMaintenance" onclick="return Close();">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+
+        <script>
+    //DROPDOWN FOR SECONDARYACCOUNTHEAD
+     $(function () {
+         $('#PrimaryHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSecondaryAccountHead", "AssetMaintenances")',
+                data: {
+                    id: parseInt($('#PrimaryHeadId').val())
+                },
+
+                success: function (data) {
+                    console.log(data);
+                    $('#SecondaryHeadId').empty();
+                    $('#SecondaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+                    $('#TertiaryHeadId').empty();
+                    $('#TertiaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].secondaryAccountHeadId + '>'
+                                + data[i].secondaryAccountHeadName
+                                + '</option>');
+                            $('#SecondaryHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //DROPDOWN FOR TERTIARYACCOUNTHEAD
+    $(function () {
+        $('#SecondaryHeadId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTertiaryAccountHead", "AssetMaintenances")',
+                data: {
+                    id: parseInt($('#SecondaryHeadId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#TertiaryHeadId').empty();
+                    $('#TertiaryHeadId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].tertiaryAccountHeadId + '>'
+                                + data[i].tertiaryAccountHeadName
+                                + '</option>');
+                            $('#TertiaryHeadId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+
+    //POPULATE FOR SECTION
+      $(function () {
+          $('#DivisionId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateDivision", "AssetMaintenances")',
+                data: {
+                    id: parseInt($('#DivisionId').val())
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#SectionId').empty();
+                    $('#SectionId').append(
+                        '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].sectionId + '>'
+                                + data[i].sectionName
+                                + '</option>');
+                            $('#SectionId').append(newOption);
+                        }
+
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+      });
+
+    //SEARCH ASSET
+    function Search() {
+
+        if ($('#PrimaryHeadId').val() == "" && $('#SecondaryHeadId').val() == "" && $('#AssetStatusId').val() == "" &&
+            $('#TertiaryHeadId').val() == "" && $('#DivisionId').val() == "" && $('#SectionId').val() == "" &&
+            $('#DemkhongId').val() == "" && $('#LapId').val() == "" && $('#AssetNameInput').val() == "")
+        {
+            swal('Empty Fields!', '', 'error');
+            $('#PrimaryHeadId').focus();
+            $('#SecondaryHeadId').focus();
+            $('#AssetStatusId').focus();
+            $('#TertiaryHeadId').focus();
+            $('#DivisionId').focus();
+            $('#SectionId').focus();
+            $('#DemkhongId').focus();
+            $('#LapId').focus();
+            $('#AssetNameInput').focus();
+
+
+            return false;
+        }
+
+        var PrimaryHead = $('#PrimaryHeadId').val();
+        var SecondaryHead = $('#SecondaryHeadId').val();
+        var AssetStatus = $('#AssetStatusId').val();
+        var TertiaryHead = $('#TertiaryHeadId').val();
+        var Division = $('#DivisionId').val();
+        var Section = $('#SectionId').val();
+        var Lap = $('#LapId').val();
+        var Demkhong = $('#DemkhongId').val();
+        var AssetName = $('#AssetNameInput').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("SearchAsset", "AssetMaintenances")',
+            data: {
+                primaryhead: PrimaryHead,
+                secondaryhead: SecondaryHead,
+                assetstatus: AssetStatus,
+                tertertiaryhead: TertiaryHead,
+                division: Division,
+                section: Section,
+                assetname: AssetName,
+                lap: Lap,
+                demkhong: Demkhong
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#tbl_assetdetails').show(1000);
+                $('#tbl_asset').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_asset').append(
+                            '<tr>'
+                            + '<td>' + value.assetCode + '</td>'
+                            + '<td>' + value.assetName + '</td>'
+                            + '<td>' + value.assetStatus + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayAssetDetails(' + value.assetId + ');">Select</a></b></td>'
+                            + '</tr>');
+
+                        $('#hdnAssetId').val(data[0].assetId);
+
+                    });
+                } else {
+                    $('#tbl_asset').append(
+                        '<tr><td colspan="5" style="color: red;">No record found!</td></tr>');
+                    
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+    function displayAssetDetails(assetId) {
+                $('#tbl_assetmaintenancedetails').toggle(500);
+                $('html,body').animate({
+                    scrollTop: $("#tbl_assetmaintenancedetails").offset().top
+                }, 'slow');
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetAssetDetails", "AssetMaintenances")',
+            data: {
+                id: assetId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+                    var primaryhead = data[0].primaryAccountHead;
+                    var secondaryhead = data[0].secondaryAccountHead;
+                    var tertiaryhead = data[0].tertiaryAccountHead;
+                    var section = data[0].section;
+                    var division = data[0].division;
+                    var assetname = data[0].assetName;
+                    var lap = data[0].lap;
+                    var demkhong = data[0].demkhong;
+                    var assetfunction = data[0].assetFunction;
+                    var assetstatus = data[0].assetStatus;
+                    var remarks = data[0].remarks;
+                    var personresponsible = data[0].responsiblePerson;
+
+                    $('#primaryheadid').val(primaryhead);
+                    $('#secondaryheadid').val(secondaryhead);
+                    $('#tertiaryheadid').val(tertiaryhead);
+                    $('#divisionid').val(section);
+                    $('#sectionid').val(division);
+                    $('#assetname').val(assetname);
+                    $('#lapid').val(lap);
+                    $('#demkhongid').val(demkhong);
+                    $('#assetfuntionid').val(assetfunction);
+                    $('#assetstatusid').val(assetstatus);
+                    $('#remarks').val(remarks);
+                    $('#personresponsible').val(personresponsible);
+
+
+                } else {
+                    swal('no data');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+     });
+            }
+
+    $("#SaveAssetMaintenance").click(function () {
+        var myarray = [];
+        var AssetMaintenanceVM = {};
+
+        AssetMaintenanceVM.AssetId = parseInt($("#hdnAssetId").val());
+        AssetMaintenanceVM.MaintenanceTypeId = parseInt($("#MaintenanceTypeId").val());
+        AssetMaintenanceVM.MaintenanceDate = $("#maintenancedate").val();
+        AssetMaintenanceVM.MaintenanceCost = parseFloat($("#maintenancecost").val());
+        AssetMaintenanceVM.Reason = $("#reason").val();
+        AssetMaintenanceVM.SparePartUsed = $("#sparepartused").val();
+        AssetMaintenanceVM.ServiceOrderNo = $("#serviceorderno").val();
+        AssetMaintenanceVM.ServiceOrderDate = $("#serviceorderdate").val();
+        AssetMaintenanceVM.Remarks = $("#idremarks").val();
+        AssetMaintenanceVM.DateofNextMaintenance = $("#dateofnextmaintenance").val();
+
+
+        myarray.push(AssetMaintenanceVM);
+
+            var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveAssetMaintenance", "AssetMaintenances")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                swal(response);
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal({
+                    title: 'Record Creation Failed!',
+                    type: 'error',
+                    confirmButtonText: 'OK'
+                });            }
+
+        });
+        });
+
+            function Close() {
+                $('#tbl_assetdetails').hide(1000);
+                $('#tbl_assetmaintenancedetails').hide(1000);
+            }
+            $('#btnCancel').click(function () {
+                $('#tbl_assetmaintenancedetails').hide(1000);
+            });
+        </script>
+
+

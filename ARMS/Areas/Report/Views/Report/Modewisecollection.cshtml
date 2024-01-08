@@ -1,0 +1,210 @@
+﻿
+
+@{
+    ViewData["Title"] = "Modewisecollection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="dialog-background" style="display:none" id="img1">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100%; height: 100%;" /></span>
+    </div>
+</div>
+<link rel="stylesheet" href="~/plugins/sweetalert2/sweetalert2.js">
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+              
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Report</a></li>
+                    @*<li class="breadcrumb-item active">Asset Register Details</li>*@
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Mode Wise Collection</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <hr />
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Start Date<span style="font-weight: bold; color: red;">*</span></label>
+                <input id="sdate" type="date" class="form-control col-6" />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">End Date<span style="font-weight: bold; color: red;">*</span></label>
+                <input id="edate" type="date" class="form-control col-6" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Payment Mode<span style="font-weight: bold; color: red;">*</span></label>
+                <select id="modeid"class="form-control col-6" 
+                        asp-items="@(new SelectList (@ViewBag.Mode,"Value","Text"))" value="0"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Payment Mode<span style="font-weight: bold; color: red;"></span></label>
+                <select id="modeid" class="form-control col-6" 
+                        asp-items="@(new SelectList (@ViewBag.User,"Value","Text"))" value="0"></select>
+            </div>
+          
+        </div>
+        
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return search();" />
+            </div>
+       
+
+
+
+    </div>
+
+    </div>
+
+
+<div class="card card-info" id="IdWise" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Individual Wise Collection</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table  class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Recepit No</th>
+                        <th>Payment Mode No</th>
+                        <th>Payment Mode Date</th>
+                        <th>Total Amount</th>
+                       
+                    </tr>
+                </thead>
+                <tbody id="tblwise">
+                </tbody>
+
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>total</td>
+                    <td><b id="tta"></b></td>
+
+
+                </tr>
+            </table>
+          
+        </div>
+
+    </div>
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    function search() {
+        $('#IdWise').show();
+        $('#WaterDetails').hide();
+        $('#waterreceipt').hide();
+
+         $('#img1').show();
+
+
+        var today = new Date($("#sdate").val());
+        var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2)
+        let text1 = date.toString();
+        var sdate = text1;
+
+        var today1 = new Date($("#edate").val());
+        var date1 = today1.getFullYear() + '' + ("0" + (today1.getMonth() + 1)).slice(-2) + '' + ("0" + today1.getDate()).slice(-2)
+        let text = date1.toString();
+        var edate = text;
+
+        var modeId = $('#modeid').val();
+        var UserId = $('#userid').val();
+     
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetModeWise", "Report")',
+                data: {
+                    StartDate: sdate,
+                    EndDate: edate,
+                    PaymentModeId: modeId,
+                    UserId: UserId
+                },
+             success: function (data) {
+                 $('#img1').hide();
+                 $('#tblwise').empty();
+                 
+                 console.log();
+                 if (data.length > 0) {
+
+                     var TA = 0;
+
+                    
+                     $.each(data, function (key, value) {
+                         TA += value.amount;
+                         var today = new Date(value.paymentModeDate);
+                         var date = today.getFullYear() + '-' + ("0" + (today.getMonth() + 1)).slice(-2) + '-' + ("0" + today.getDate()).slice(-2)
+
+                         $('#tblwise').append(
+                             '<tr>'
+                             + '<td>' + (key + 1) + '</td>'
+                             + '<td>' + value.receiptNo + '</td>'
+                             + '<td>' + value.paymentModeNo + '</td>'
+                             + '<td>' + date + '</td>'
+                             + '<td>' + value.totalAmount + '</td>'
+
+
+                             + '</tr>');
+
+                     });
+
+                     //GTA = parseFloat(TA) + parseFloat(TPA);
+                     $("#wisetotal").html(TA.toFixed(2));
+                 } else {
+                    
+                     $('#img1').hide();
+                     $('#tblwise').append(
+                         '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                     swal({
+                         title: 'No data found!!!!',
+                         type: 'error',
+                         confirmButtonText: 'OK'
+                     });
+
+                 }
+             },
+             error: function () {
+                 $('#img1').hide();
+                 alert('Error');
+             }
+
+         });
+    }
+
+</script>

@@ -1,0 +1,95 @@
+﻿@using CORE_BOL
+@model LandUseSubCategoryModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Precinct</a></li>
+                    <li class="breadcrumb-item active">Update Land Use Sub Category</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Land Use Sub Category</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="LandUseSubCategoryId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Land Use Category<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="LandUseCategoryId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandUseCategoryId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="LandUseCategoryId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Land Use Sub Category<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="LandUseSubCategory" class="form-control" placeholder="Land Use Sub Category" />
+                    <span asp-validation-for="LandUseSubCategory" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Description</label>
+                <div class="col-sm-4">
+                    <textarea asp-for="LandUseCategoryDescription" class="form-control" rows="3" placeholder="Enter Land Use Description"></textarea>
+                    <span asp-validation-for="LandUseCategoryDescription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+

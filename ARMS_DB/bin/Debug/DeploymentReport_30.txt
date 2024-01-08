@@ -1,0 +1,83 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblDemand]
+       [dbo].[tblHouseRentDemandDetail]
+       [dbo].[tblMiscellaneousRecord]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblDemand].[vendorid] is being dropped, data loss could occur.
+
+** User actions
+     Rename
+       [dbo].[tblDemand].[ecRenewalId] (Column)
+       [dbo].[tblDemand].[miscellaneousRecordId] (Column)
+     Drop
+       unnamed constraint on [dbo].[tblMiscellaneousRecord] (Default Constraint)
+     Alter
+       [dbo].[enumLandOwnershipType] (Table)
+     Table rebuild
+       [dbo].[tblDemand] (Table)
+       [dbo].[tblHouseRentDemandDetail] (Table)
+       [dbo].[tblMiscellaneousRecord] (Table)
+     Create
+       [dbo].[tblLedger] (Table)
+       [dbo].[tblPaymentLeger] (Table)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+
+The column [dbo].[tblDemand].[vendorid] is being dropped, data loss could occur.
+

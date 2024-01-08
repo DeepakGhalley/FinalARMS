@@ -1,0 +1,60 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLandLeaseDemandDetail]
+       [dbo].[tblStallDetailDemand]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblLandLeaseDemandDetail].[demandDays] on table [dbo].[tblLandLeaseDemandDetail] must be added, but
+         the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not
+         work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable
+         the generation of smart-defaults as a deployment option.
+       The column [dbo].[tblStallDetailDemand].[demandDays] on table [dbo].[tblStallDetailDemand] must be added, but the column
+         has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To
+         avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+
+** User actions
+     Rename
+       [dbo].[tblLandLeaseDemandDetail].[demandNoId] (Column)
+       [dbo].[tblStallDetailDemand].[demandNoId] (Column)
+     Table rebuild
+       [dbo].[tblLandLeaseDemandDetail] (Table)
+       [dbo].[tblStallDetailDemand] (Table)
+     Alter
+       [dbo].[tblParkingFeeDemandDetail] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+     Create
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+     Refresh
+       [dbo].[GetVendorDemandSchedule] (Procedure)
+
+The column [dbo].[tblLandLeaseDemandDetail].[demandDays] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column demandDays on table [dbo].[tblParkingFeeDemandDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblStallDetailDemand].[demandDays] on table [dbo].[tblStallDetailDemand] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+If this deployment is executed, changes to [dbo].[tblLandLeaseDemandDetail] might introduce run-time errors in [dbo].[GetLandLeaseDemandScheduleMonthly].
+If this deployment is executed, changes to [dbo].[tblStallDetailDemand] might introduce run-time errors in [dbo].[GetStallDemandScheduleMonthly].
+

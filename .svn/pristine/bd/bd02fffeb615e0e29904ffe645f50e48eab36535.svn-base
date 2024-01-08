@@ -1,0 +1,65 @@
+﻿@model IEnumerable<CORE_BOL.Entities.TblRole>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/plugins/sweetalert2/sweetalert2.js">
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Permission</a></li>
+                    <li class="breadcrumb-item active">Permission Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Role & Menu Mapping Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        @{
+            Html.RenderPartial("Details");
+        }
+
+
+    </div>
+
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+
+
+<script>
+
+    $(document).ready(function () {
+        $(this).scrollTop(0);
+
+    });
+
+
+</script>
+

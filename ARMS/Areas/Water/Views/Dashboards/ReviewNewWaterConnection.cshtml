@@ -1,0 +1,150 @@
+﻿@model List<CORE_BOL.TrnWaterConnectionVM>
+
+@{
+    ViewData["Title"] = "ReviewNewWaterConnection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="Index">Water Transaction</a></li>
+                    <li class="breadcrumb-item active">Review Water Connection </li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Review Water Connection</h3>
+    </div>
+    <div class="card-body">
+        
+        <hr />
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Plot No</th>
+                        <th>Water Connection Status</th>
+                        <th>Meter No</th>
+                        <th>Water Meter Type</th>
+                        <th>Consumer No</th>
+                        <th>Connection Date</th>
+                        <th>Water Connection Type</th>
+                        <th>Billing Address</th>
+                        <th>Zone Name</th>
+                        <th>Flat No</th>
+                        <th>Initial Reading</th>
+                        <th>Organisation Name</th>
+                        <th>No Of Units</th>
+                        <th>Owner Type</th>
+                        <th>Mobile No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{int sl = 1; }
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @sl
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PlotNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WaterConnectionStatus)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WaterMeterNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WaterMeterType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ConsumerNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ConnectionDate)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.WaterConnectionType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.BillingAddress)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ZoneName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FlatNo)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.InitialReading)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OrganisationName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.NoOfUnits)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.OwnerType)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.PrimaryMobileNo)
+                            </td>
+                            <td style="text-align:center;">
+                                <a asp-action="Details" asp-route-id="@item.TrnWaterConnectionId" title="DETAILS"><i class="fas fa-eye"></i></a>
+                            </td>
+                        </tr>
+                        sl++;
+                    }
+                </tbody>
+            </table>
+        </div>
+        </div>
+    </div>
+
+        <script src="~/plugins/jquery/jquery.min.js"></script>
+
+        <script>
+
+            $(function () {
+                $("#example1").DataTable({
+                    "responsive": true,
+                    "autoWidth": false,
+                });
+                $('#example2').DataTable({
+                    "paging": true,
+                    "lengthChange": false,
+                    "searching": false,
+                    "ordering": true,
+                    "info": true,
+                    "autoWidth": false,
+                    "responsive": true,
+                });
+            });
+
+
+        </script>

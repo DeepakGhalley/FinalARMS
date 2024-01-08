@@ -1,0 +1,224 @@
+﻿@using CORE_BOL
+@model TranWaterConnectionModel
+@{
+    ViewData["Title"] = "DisconnectRequestDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="DisconnectRequests">Disconnect Request</a></li>
+                    <li class="breadcrumb-item active">Disconnect Request Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Disconnect Request Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="DisconnectRequests" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+        <input hidden id="hdnTranWaterConnectionId" asp-for="TrnWaterConnectionId" />
+        <input hidden id="hdnWaterConnectionId" asp-for="WaterConnectionId" />
+        <input hidden id="hdnIsPermanentDisconnect" asp-for="IsPermanentDisconnect" />
+
+        <!--DISPLAY DETAILS-->
+        <div class="form-group row">
+            <label asp-for="PlotNo" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.PlotNo)</label>
+            </div>
+            <label asp-for="WaterConnectionStatusId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.WaterConnectionStatus)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="WaterMeterNo" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.WaterMeterNo)</label>
+            </div>
+            <label asp-for="WaterMeterTypeId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.WaterMeterType)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="ConsumerNo" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.ConsumerNo)</label>
+            </div>
+            <label asp-for="ConnectionDate" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.ConnectionDate)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="WaterConnectionTypeId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.WaterConnectionType)</label>
+            </div>
+
+            <label asp-for="PermanentDisconnect" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.PermanentDisconnect)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="WaterLineTypeId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.WaterLineType)</label>
+            </div>
+            <label asp-for="StandardCosumption" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.StandardCosumption)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="BillingAddress" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.BillingAddress)</label>
+            </div>
+            <label asp-for="ZoneId" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.ZoneName)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="InitialReading" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.InitialReading)</label>
+            </div>
+            <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.Remarks)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label asp-for="DisconnectDate" class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">@Html.DisplayFor(model => model.DisconnectDate)</label>
+            </div>
+            <label class="col-sm-3 col-form-label">Mobile No</label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label font-weight-normal">
+                    @Html.DisplayFor(model => model.PrimaryMobileNo)
+                </label>
+            </div>
+        </div>
+        <div class="form-group row d-flex justify-content-center">
+            <div class="col-sm-3">
+                @*<input id="" type="submit" class="btn btn-outline-success" value="Approve" />*@
+                <button type="submit" id="btnApprove" class="btn btn-outline-success">Approve</button>
+                <input id="btnReject" type="submit" class="btn btn-outline-danger" value="Reject" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+     //Approve Disconnection Request
+    $("#btnApprove").click(function () {
+        var myarray = [];
+        var TranWaterConnectionModel = {};
+
+        TranWaterConnectionModel.TrnWaterConnectionId = parseInt($("#hdnTranWaterConnectionId").val());
+        TranWaterConnectionModel.WaterConnectionId = parseInt($("#hdnWaterConnectionId").val());
+        TranWaterConnectionModel.IsPermanentDisconnect = parseInt($("#hdnIsPermanentDisconnect").val());
+        myarray.push(TranWaterConnectionModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ApproveDisconnectionRequest", "Dashboards")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                swal({
+                    title: "Dissconnection Request has been Approved",
+                    text: "Approved",
+                    type: "success",
+                    confirmButtonText: "OK"
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            window.location.href = '@Url.Action("DisconnectRequests", "Dashboards")';
+                        }
+                    });
+            },
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    });
+
+    //Reject Disconnection Request
+    $("#btnReject").click(function () {
+        var myarray = [];
+        var TranWaterConnectionModel = {};
+
+        TranWaterConnectionModel.TrnWaterConnectionId = parseInt($("#hdnTranWaterConnectionId").val());
+        myarray.push(TranWaterConnectionModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RejectDisconnectionRequest", "Dashboards")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                swal({
+                    title: "Disconnection Request has been Rejected",
+                    text: "Rejected",
+                    type: "error",
+                    confirmButtonText: "OK"
+                },
+                    function (isConfirm) {
+                        if (isConfirm) {
+                            window.location.href = '@Url.Action("DisconnectRequests", "Dashboards")';
+                        }
+                    });
+            },
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    });
+
+</script>
+
+
+

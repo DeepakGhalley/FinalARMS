@@ -1,0 +1,37 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblStallDetailDemand]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[tblStallDetailDemand] (Table)
+     Create
+       [dbo].[mstLandServiceType] (Table)
+       [dbo].[trnLandFeeDetail] (Table)
+       [dbo].[FK_trnLandFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_2] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+     Refresh
+       [dbo].[GetStallDemandScheduleMonthly] (Procedure)

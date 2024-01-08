@@ -1,0 +1,428 @@
+﻿@using CORE_BOL
+@model WaterConnectionModel
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Connection</a></li>
+                    <li class="breadcrumb-item active">Create New Water Connection</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+@*<form method="get">
+        <div class="input-group">
+            <input class="form-control" asp-for="Search" />
+            <div class="input-group-append">
+                <button type="submit" class="btn btn-primary">Search</button>
+            </div>
+        </div>
+    </form>*@
+
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        @*@if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }*@
+
+        <div class="card-header">
+            <h3 class="card-title">Search Details</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+
+            <div class="row d-flex justify-content-center">
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="Ttin" class="form-control col-8" />
+                </div>
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="CIDinput" class="form-control col-sm-8" />
+                </div>
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-4 col-form-label">Name</label>
+                    <input id="name" class="form-control col-sm-8" />
+                </div>
+                <div class="input-group-append col-3">
+                    <input type="button" value="search" class="btn btn-primary" onclick="return displayLandOwnershipDeetails();" />
+                </div>
+            </div>
+            </div>
+    </div>
+</form>
+
+<!--LandOwnerShipdetails Details-->
+<div id="menu_table" style="display:none ;">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Land Ownership Details</h3>
+        </div>
+        <div class="form-group row card-body">
+            <table id="tblPermission" class="table table-bordered table-striped">
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        <th>TTIN</th>
+                        <th>TPN</th>
+                        <th>CID</th>
+                        <th>Name</th>
+                        <th>Plot No</th>
+                        <th>Land Acreage</th>
+                        <th>Land Value</th>
+                        <th>Plot Address</th>
+                        <th>Thram No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="mybody">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!--Water Connection Detail-->
+<div id="water_connection" style="display: none;" class=" card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Water Connection Details</h3>
+    </div>
+    <div class="form-group row card-body">
+        <table id="tblPermission" class="table table-bordered table-striped">
+            <thead>
+
+                <tr>
+                    <th>#</th>
+                    <th>Water Meter No</th>
+                    <th>Consumer No</th>
+                    <th>OrganisationName</th>
+                    <th>No of Units</th>
+                    <th>Billing Address</th>
+                    <th>Contact No</th>
+                </tr>
+            </thead>
+            <tbody id="Water_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--New Water Connection-->
+<form class="form-horizontal" asp-action="Create" method="post">
+
+    <div class=" card-info" id="CreateWaterConnection" style="display:none;">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header ">
+            <h3 class="card-title">Add Water Connection</h3>
+            
+        </div>
+        <div class="card-body card">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input id="landdetailId" asp-for="LandDetailId" hidden/>
+            <input asp-for="LandOwnershipId" hidden />
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-3 col-form-label">Plot No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    @*<select asp-for="LandDetailId" class="form-control select2bs4" style="width: 100%;"
+                        asp-items="@(new SelectList (@ViewBag.LandDetailId,"Value","Text")) " value="0">
+                </select>*@
+                    <input id="plot" class="form-control" readonly />
+                    <span asp-validation-for="PlotNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="WaterConnectionStatusId" class="col-sm-3 col-form-label">Water Connection Status<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionStatusId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.WaterConnectionStatusId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterConnectionStatusId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterMeterNo" class="col-sm-3 col-form-label">Water Meter No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="WaterMeterNo" class="form-control" placeholder="Water Meter No" />
+                    <span asp-validation-for="WaterMeterNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="WaterMeterTypeId" class="col-sm-3 col-form-label">Water Meter Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterMeterTypeId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.WaterMeterTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterMeterTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="ConsumerNo" class="col-sm-3 col-form-label">Consumer No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConsumerNo" class="form-control" placeholder="Consumer No" />
+                    <span asp-validation-for="ConsumerNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ConnectionDate" class="col-sm-3 col-form-label">Connection Date<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConnectionDate" type="date" class="form-control" placeholder="Connection Date" />
+                    <span asp-validation-for="ConnectionDate" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="WaterLineTypeId" class="col-sm-3 col-form-label">Water Line Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterLineTypeId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.WaterLineTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterLineTypeId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="StandardCosumption" class="col-sm-3 col-form-label">Standard Consumption<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="StandardCosumption" class="form-control" placeholder="Standard Consumption" />
+                    <span asp-validation-for="StandardCosumption" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="BillingAddress" class="col-sm-3 col-form-label">Billing Address<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <textarea asp-for="BillingAddress" class="form-control" placeholder="Billing Address"></textarea>
+                    <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ZoneId" class="col-sm-3 col-form-label">Zone Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="ZoneId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.ZoneId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ZoneId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="FlatNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="FlatNo" class="form-control" placeholder="Flat No" />
+                    <span asp-validation-for="FlatNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="InitialReading" class="col-sm-3 col-form-label">Initial Reading<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" asp-for="InitialReading" class="form-control" placeholder="Initial Reading" />
+                    <span asp-validation-for="InitialReading" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OrganisationName" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="OrganisationName" class="form-control" placeholder="Organisation Name" />
+                    <span asp-validation-for="OrganisationName" class="text-danger"></span>
+                </div>
+
+                <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="NoOfUnits" class="col-sm-3 col-form-label">No of Units<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfUnits" class="form-control" placeholder="No Of Units" />
+                    <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+                </div>
+
+                <label asp-for="OwnerTypeId" class="col-sm-3 col-form-label">Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="OwnerTypeId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="OwnerTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PrimaryMobileNo" class="col-sm-3 col-form-label">Primary Mobile No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="PrimaryMobileNo" class="form-control" placeholder="Primary Mobile No" />
+                    <span asp-validation-for="PrimaryMobileNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="SecondaryMobileNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="SecondaryMobileNo" class="form-control" placeholder="Secondary Mobile No" />
+                    <span asp-validation-for="SecondaryMobileNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+
+                <label asp-for="WaterConnectionTypeId" class="col-sm-3 col-form-label">Water Connection Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionTypeId" class="form-control select2bs4" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.WaterConnectionTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterConnectionTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-6">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning" onclick="return close();">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <!-- /.card-footer -->
+</form>
+
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+            //Display Tax Prayer Profile By CID
+            function displayLandOwnershipDeetails() {
+                $('#CreateWaterConnection').hide(1000);
+                $('#menu_table').hide(1000);
+                $('#CIDinput').insertAfter(function () {
+                    var Cid = parseInt($('#CIDinput').val());
+                    var Ttin = parseInt($('#Ttin').val());
+                    var Name = $('#name').val();
+                    
+                    if (Cid == Cid || Name == Name || Ttin == Ttin ) {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("fetchLandOwnershipDetails", "WaterConnections")',
+                            data: {
+                                cid: Cid,
+                                ttin: Ttin,
+                                name: Name,
+                            },
+                            success: function (data) {
+                                $('#mybody').empty();
+
+                                if (data.length > 0) {
+                                    $.each(data, function (key, value) {
+                                        $('#menu_table').show(1000);
+
+                                        $('#mybody').append(
+                                            '<tr>'
+                                            + '<td>' + (key + 1) + '</td>'
+                                            + '<td>' + value.ttin + '</td>'
+                                            + '<td>' + value.tpn + '</td>'
+                                            + '<td>' + value.cid + '</td>'
+                                            + '<td>' + value.name + '</td>'
+                                            + '<td>' + value.plotNo + '</td>'
+                                            + '<td>' + value.landAcreage + '</td>'
+                                            + '<td>' + value.landValue + '</td>'
+                                            + '<td>' + value.plotAddress + '</td>'
+                                            + '<td>' + value.thramNo + '</td>'
+                                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayDataEntry(' + value.landDetailId + ',' + value.landOwnershipId + ',\'' + value.plotNo + '\');">Select</a></b></td>'
+                                            + '</tr>');
+                                    });
+                                }
+                                else {
+                                    $('#menu_table').hide(1000);
+                                    $('#LandDetail_Table').hide(1000);
+                                    $('#water_connection').hide(1000);
+
+                                    swal.fire({
+                                        text: 'Please Enter valid CID or TTIN!',
+                                        icon: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            },
+                            error: function () {
+                                alert('error');
+                            }
+
+                        });
+                    } else {
+
+                        swal.fire({
+                            text: 'Fields cannot be empty!',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+                });
+            }
+
+
+    function displayDataEntry(landDetailId, LandOwnershipId, plotno) {
+        $('#plot').val(plotno);
+        $('#LandOwnershipId').val(LandOwnershipId);
+        $('#landdetailId').val(landDetailId);
+                $('#water_connection').show(1000);
+                $('#CreateWaterConnection').show(1000);
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetWaterConnectionDetails", "WaterConnections")',
+                data: {
+                    id: parseInt(landDetailId),
+                    LandOwnershipId: parseInt(LandOwnershipId)
+                },
+                    success: function (data) {
+                        console.log(data);
+                        $('#Water_body').empty();
+
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#Water_body').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.waterMeterNo + '</td>'
+                                + '<td>' + value.consumerNo + '</td>'
+                                + '<td>' + value.organisationName + '</td>'
+                                + '<td>' + value.noOfUnits + '</td>'
+                                + '<td>' + value.billingAddress + '</td>'
+                                + '<td>' + value.primaryMobileNo + '</td>'
+                                + '</tr>');
+
+                        });
+
+                    }
+                    else {
+                        $('#Water_body').append(
+                            '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+            }
+
+            function saveme() {
+                $('#img').show();
+                //$('#water_connection').hide(1000);
+                //$('#CreateWaterConnection').hide(1000);
+
+
+
+            }
+</script>
+

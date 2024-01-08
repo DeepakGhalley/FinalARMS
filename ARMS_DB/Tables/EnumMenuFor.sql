@@ -1,0 +1,5 @@
+﻿CREATE TABLE [dbo].[EnumMenuFor]
+(
+	[menuForId] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [menuFor] VARCHAR(150) NOT NULL
+)

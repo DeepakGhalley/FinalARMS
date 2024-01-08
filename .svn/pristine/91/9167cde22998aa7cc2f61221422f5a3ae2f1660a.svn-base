@@ -1,0 +1,1085 @@
+﻿@using CORE_BOL
+@model LandLeaseModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Land Lease</a></li>
+                    <li class="breadcrumb-item active">Create New Data</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Search Land Lease</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="cid" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="ttin" class="form-control col-6" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayTaxPayer();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="taxPayerDiv">
+    <div class="card-header">
+        <h3 class="card-title">Tax payer Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                </tr>
+            </thead>
+            <tbody id="tptbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="searchPlotNo">
+    <div class="card-header">
+        <h3 class="card-title">Search Plot No</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Plot No</label>
+                <input id="searchPlotNoInput" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return searchPlotNo();" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Existing Lease" class="btn btn-primary" onclick="return DisplayExistingLease();" />
+            </div>
+            </div>
+        </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="ExistingLease">
+    <div class="card-header">
+        <h3 class="card-title">Existing Lease</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>Plot No</th>
+                    <th>Billing Schedule</th>
+                    <th>Lease Type</th>
+                    <th>Lease Activity Type</th>
+                    <th>Start Date</th>
+                    <th>Lease Amount</th>
+                </tr>
+            </thead>
+            <tbody id="existinglease_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="plotNoInfo">
+    <div class="card-header">
+        <h3 class="card-title">Plot Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>Land Acerage</th>
+                    <th>Plot Address</th>
+                  
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="plottbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="landDetail">
+
+    <div class="card-header">
+        <h3 class="card-title">Save Land Detail</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Plot No/Certificate No <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Plot No." id="plotNo" disabled />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Land Acreage/Net plot <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Land Acerage" type="number" id="landAcerage" OnChange="av(this)" />
+                <span class="text-danger"></span>
+            </div>
+
+        </div>
+
+            <div class="form-group row">
+
+                <label class="col-sm-2 col-form-label"> Street Name</label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.StreetNameId,"Value","Text"))" value="0" id="streetName">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Demkhong </label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.DemkhongId,"Value","Text"))"
+                            value="0" id="demkhong">
+                    </select>
+                </div>
+            </div>
+        
+    
+          
+
+           
+            <div class="form-group row">
+                @*<label class="col-sm-2 col-form-label">Land Use Type <span style="font-weight: bold; color: red;">*</span></label>
+        <div class="col-sm-4">
+            <select class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandTypeId,"Value","Text"))"
+                    value="0" id="landType" onchange="getrate()">
+            </select>
+        </div>*@
+
+
+                <label class="col-sm-2 col-form-label">LAP Name</label>
+                <div class="col-sm-4">
+                    <select class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LapId,"Value","Text"))"
+                            value="0" id="lapId">
+                    </select>
+                </div>
+                <label class="col-sm-2 col-form-label">Plot Address <span style="font-weight:bold; color:red;">*</span></label>
+                <div class="col-sm-4">
+                    <textarea class="form-control" rows="3" placeholder="Enter Plot Address" id="plotAddress"></textarea>
+                </div>
+
+            </div>
+        <div class="form-group row" hidden>
+            <label class="col-sm-2 col-form-label">Property Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="text" value="Lease" readonly id="propertyType" />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            
+          
+        </div>
+        @*<div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" id="structureAvailable" checked>
+                <label for="structureAvailable" class="custom-control-label">
+                    Structure Available
+                </label>
+            </div>
+
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" id="vacantLand" checked>
+                <label for="vacantLand" class="custom-control-label">
+                    Vacant Land
+                </label>
+            </div>
+
+        </div>*@
+        @*<div class="form-group row">
+
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" id="garbageApplicable" checked>
+                <label for="garbageApplicable" class="custom-control-label">
+                    Garbage Applicable
+                </label>
+            </div>
+
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" id="streetLight" checked>
+                <label for="streetLight" class="custom-control-label">
+                    Street Light
+                </label>
+            </div>
+        </div>*@
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="landLease">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Create Land Lease</h3>
+    </div>
+    <div class="card-body">
+        <input type="text" id="hdnla" hidden />
+        <input type="text" id="hdnTaxPayerId" hidden />
+        <input type="text" id="hdnLandDetailId" @*asp-for="LandDetailId"*@ hidden />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Lease Type</label>
+            <div class="col-sm-4">
+                <select id="LeaseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LeaseTypeId,"Value","Text")) " value="0"></select>
+                <span class="text-danger"></span>
+            </div>
+
+
+            <label class="col-sm-2 col-form-label">Lease Activity Type<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="LeaseActivityTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LeaseActivityTypeId,"Value","Text")) " value="0"></select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label class="col-sm-2 col-form-label">Start Date<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="date" id="StartDate" class="form-control" placeholder="Start Date" />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">End Date<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="EndDate" placeholder="Start Date" />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Billing Schedule<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <select asp-for="BillingScheduleId" class="form-control select2bs4" style="width: 100%;" onchange="myFunction()">
+                    <option value="2">--select--</option>
+                    <option value="0">Monthly</option>
+                    <option value="1">Yearly</option>
+
+                </select>
+                @*<select class="form-control select2bs4" id="BillingScheduleId" style="width: 100%;">
+                    <option value="">--select--</option>
+                    <option value="2">Monthly</option>
+                    <option value="1">Yearly</option>
+
+                </select>*@
+                <span class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Rate <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Rate" id="lblrate" OnChange="av(this)" disabled />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Lease Approval No</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="LeaseApprovalNo" placeholder="Lease Approval No" />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Lease Amount<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="LeaseAmount" placeholder="Lease Amount" disabled />
+                <span class="text-danger"></span>
+            </div>
+        </div>     
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Shed Amount</label>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="ShedAmount" placeholder="Shed Amount" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="HasShed">
+                <label class="form-check-label" for="HasShed">
+                    <b>HasShed</b>
+                </label>
+            </div>
+        </div>
+        </div>
+        @*<div class="form-group row">
+
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="custom-control custom-checkbox">
+                &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" id="IsActive" checked>
+                <label for="IsActive" class="custom-control-label">
+                    Is active
+                </label>
+            </div>
+        </div>*@
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input type="submit" style="display:none;" class="btn btn-primary" id="SaveLand" value="Save" />
+                <input type="submit" style="display:none;" class="btn btn-primary" id="SaveLandLease" value="Save" />
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+      $(function () {
+
+          $('#LeaseActivityTypeId').change(function () {
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("FetchRate", "LandLeases")',
+                data: {
+                    id: parseInt($('#LeaseActivityTypeId').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#lblrate').empty();
+                    if (data.length > 0) {
+                        $("#lblrate").val(data[0].rate);
+
+                $('#img').hide();
+                }
+                else
+                {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+      });
+
+
+    function av(avSelect) {
+
+        var las = $('#landAcerage').val();
+        $('#hdnla').val(las);
+
+        var x = document.getElementById("BillingScheduleId").value;
+        if (x = 1) {
+            var one = $('#lblrate').val();
+            var two = $('#hdnla').val();
+            var avvy = one * two;
+            $('#LeaseAmount').val(avvy);
+        }
+        else {
+            var one = $('#lblrate').val();
+            var two = $('#hdnla').val();
+            var avvy = one * two;
+            var as = avvy / 12;
+            $('#LeaseAmount').val(as);
+        }
+
+
+    }
+
+    function myFunction() {
+        var x = document.getElementById("BillingScheduleId").value;
+
+        if (x == 1) {
+
+            $('#am').show(1000);
+            var one = $('#lblrate').val();
+            var two = $('#hdnla').val();
+            var avvy = one * two;
+            $('#LeaseAmount').val(avvy);
+        }
+
+        else {
+            $('#am').hide(1000);
+            var one = $('#lblrate').val();
+            var two = $('#hdnla').val();
+            var avvy = one * two;
+            var as = avvy / 12;
+            $('#LeaseAmount').val(as);
+        }
+
+    }
+    function hideall(){
+        $('#landLease').hide(1000);
+        $('#landDetail').hide(1000);
+        $('#searchPlotNo').hide(1000);
+        $('#taxPayerDiv').hide(1000);
+        $('#plotNoInfo').hide(1000);
+        $('#ExistingLease').hide(1000);
+    }
+
+    function displayTaxPayer() {
+            var cid = $('#cid').val();
+            var ttin = $('#ttin').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetTaxPayer", "LandLeases")',
+                    data: {
+                        cid: cid,
+                        ttin: ttin,
+                    },
+                    success: function (data) {
+                        $('#searchPlotNoInput').val('');
+                        $('#tptbl_body').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+
+                                $('#tptbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '</tr>');
+                            });
+                            hideall();
+
+                            $('#taxPayerDiv').show(1000);
+                            $('#searchPlotNo').show(1000);
+
+                            var taxPayerId = data[0].taxPayerId;
+                            $('#hdnTaxPayerId').val(taxPayerId);
+
+
+                        } else {
+                            $('#taxPayerDiv').hide(1000);
+
+                            swal("Please Enter valid CID or TTIN!", "", "warning");
+                            hideall();
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                        hideall();
+
+                    }
+
+                });
+    }
+
+
+    function searchPlotNo() {
+        if ($('#searchPlotNoInput').val() == "") {
+            swal('Please Enter Plot No!', '', 'error');
+            $('#searchPlotNoInput').focus();
+            return false;
+        }
+        var plotNo = $('#searchPlotNoInput').val();
+        $('#plotNo').val(plotNo);
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetPlotNo", "LandLeases")',
+                    data: {
+                        plotNo: plotNo,
+                    },
+                    success: function (data) {
+                        
+
+                        $('#ExistingLease').hide(1000);
+                        if (data.length > 0) {
+
+                            $.each(data, function (key, value) {
+                                $('#plottbl_body').empty();
+                                var la = value.landAcerage;
+
+                                $('#hdnla').val(la);
+                                $('#plottbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.landAcerage + '</td>'
+                                    + '<td>' + value.plotAddress + '</td>'
+
+                                    //+ '<td>' + '<a style = "color: #007bff; cursor: pointer;" onclick = "return displayLandLease(' + value.plotNo + ',' + value.landAcerage + ',' + value.plotAddress + ',' + value.location + ',' + value.landValue + ',' + value.landPoolingRate + ',' + value.landUseSubCategoryId + ',' + value.streetNameId + ',' + value.lapId + ',' + value.propertyTypeId + ',' + value.structureAvailable + ',' + value.vacantLandTaxApplicable + ',' + value.garbageApplicable + ',' + value.streetLightApplicable + ',' + value.demkhongId + ',' + value.landTypeId + ',' + value.isApproved + ')" >Select</a >' + '</td>'
+                                    + '<td>' + '<a style = "color: #007bff; cursor: pointer;" onclick = "return displayLandLease(' + value.landDetailId + ')" >Select</a >' + '</td>'
+                                    + '</tr>');
+                            });
+
+                            $("#landLease").hide(1000);
+                            $("#SaveLandLease").show(1000);
+                            $("#SaveLand").hide(1000);
+                            $('#ExistingLease').hide(1000);
+
+                            $("#plotNoInfo").show(1000);
+                            $("#landDetail").hide(1000);
+                            //swal("Working ya","","success");
+                        }
+                        else {
+                            $("#landLease").show(1000);
+                            $("#SaveLandLease").hide(1000);
+                            $("#SaveLand").show(1000);
+                            $("#plotNoInfo").hide(1000);
+                            $("#landDetail").show(1000);
+                            $('#ExistingLease').hide(1000);
+
+                            //swal("not Working ya","","error");
+                        }
+                        $('#landAcerage').val('');
+                        $('#plotAddress').val('');
+                        $('#StartDate').val('');
+                        $('#EndDate').val('');
+                        $('#lblrate').val('');
+                        $('#LeaseApprovalNo').val('');
+                        $('#ShedAmount').val(0);
+                        $('#LeaseAmount').val('');
+                        $('#streetName').val(0).trigger('change');
+                        $('#demkhong').val(0).trigger('change');
+                        $('#lapId').val(0).trigger('change');
+                        $('#LeaseTypeId').val(0).trigger('change');
+                        $('#LeaseActivityTypeId').val(0).trigger('change');
+                        $('#BillingScheduleId').val(2).trigger('change');
+                        $('#HasShed').prop('checked', value == 0);
+                    },
+
+                    error: function () {
+                        swal("Error","","error");
+                    }
+
+                });
+
+    }
+
+    function displayLandLease(landDetailId) {
+
+        $("#landLease").show(1000);
+        $("#hdnLandDetailId").val(landDetailId);
+        $('#ExistingLease').hide(1000);
+
+        //$("#plotNo").val(plotNo);
+        //$("#landAcerage").val(landAcerage);
+        //$("#plotAddress").val(plotAddress);
+        //$("#location").val(location);
+        //$("#landValue").val(landValue);
+        //$("#landPoolingRate").val(landPoolingRate);
+        //alert(landUseSubCategory);
+        //$("#lusc").val(landUseSubCategory);
+        //$("#streetName").val(streetName);
+        //$("#lapId").val(lap);
+        //$("#propertyType").val(propertyType);
+        //$("#structureAvailable").val(structureAvailable);
+        //$("#vacantLandTaxApplicable").val(vacantLandTaxApplicable);
+        //$("#garbageApplicable").val(garbageApplicable);
+        //$("#streetLightApplicable").val(streetLightApplicable);
+        //$("#demkhong").val(demkhong);
+        //$("#landType").val(landType);
+        ////$("#isApproved").val(isApproved);
+
+    }
+
+    $("#SaveLand").click(function () {
+
+        //validation
+
+              if ($('#plotNo').val() == "" || $('#plotNo').val() == null) {
+                  swal("Please Fill out all Required Fields", "", "warning");
+                  return false;
+              }
+              if ($('#landAcerage').val() == "" || $('#landAcerage').val() == null) {
+                  swal("Please Fill out all Required Fields", "", "warning");
+                  return false;
+              }
+
+              if ($('#plotAddress').val() == "" || $('#plotAddress').val() == null) {
+                  swal("Please Fill out all Required Fields", "", "warning");
+                  return false;
+              }
+
+              if ($('#LeaseAmount').val() == "" || $('#LeaseAmount').val() == null) {
+                  swal("Please Fill out all Required Fields", "", "warning");
+                  return false;
+              }
+
+          var myarray = [];
+          var LandDetailModel = {};
+
+          LandDetailModel.PlotNo = $("#plotNo").val();
+          LandDetailModel.LandAcerage = parseFloat($("#landAcerage").val());
+          LandDetailModel.PlotAddress = $("#plotAddress").val();
+         /* LandDetailModel.LandTypeId = parseInt($("#landType").val());*/
+
+        if ($('#streetName').val() == 0) {
+            LandDetailModel.StreetNameId = 1;
+        }
+        else {
+            LandDetailModel.StreetNameId = parseInt($("#streetName").val());
+        }
+        if ($('#demkhong').val() == 0) {
+            LandDetailModel.DemkhongId = 1;
+        }
+        else {
+            LandDetailModel.DemkhongId = parseInt($("#demkhong").val());
+        }
+        if ($('#lapId').val() == 0) {
+            LandDetailModel.LapId = 1;
+        }
+        else {
+            LandDetailModel.LapId = parseInt($("#lapId").val());
+        }
+          //Land Lease
+              LandDetailModel.TaxPayerId = parseInt($("#hdnTaxPayerId").val());
+              //LandDetailModel.BillingScheduleId = parseInt($("#BillingScheduleId").val());
+              LandDetailModel.LeaseTypeId = parseInt($("#LeaseTypeId").val());
+              LandDetailModel.LeaseActivityTypeId = parseInt($("#LeaseActivityTypeId").val());
+              LandDetailModel.HasShed = Boolean($("#HasShed").val());
+              LandDetailModel.LeaseAmount = parseFloat($("#LeaseAmount").val());
+              //LandDetailModel.HassecurityDeposit = Boolean($("#HassecurityDeposit").val());
+              LandDetailModel.StartDate = $("#StartDate").val();
+              LandDetailModel.EndDate = $("#EndDate").val();
+              LandDetailModel.LeaseApprovalNo = $("#LeaseApprovalNo").val();
+
+
+
+        if ($('#ShedAmount').val() == '') {
+            LandDetailModel.ShedAmount = 1;
+
+        }
+        else {
+            LandDetailModel.ShedAmount = parseFloat($("#ShedAmount").val());
+        }
+        if ($('#BillingScheduleId').val() == 1) {
+            LandDetailModel.BSI = 1;
+        }
+        else {
+            LandDetailModel.BSI = 0;
+        }
+              //LandDetailModel.IsActive = Boolean($("#IsActive").val());
+
+          myarray.push(LandDetailModel);
+              var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateLand", "LandLeases")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                //swal("Success");
+                if (response > 0) {
+                    if ($('#BillingScheduleId').val() == 1) {
+                        $('#img').hide();
+                        swal("Data saved successfully.");
+                        $('#searchPlotNoInput').val('');
+                        $('#img').hide();
+                     /*   displayDemand(response);*/
+                       /* $('#displaydemand').show(1000);*/
+                        $('#landDemand').show(1000);
+                        $('#landDetail').hide(1000);
+                        $('#landLease').hide(1000);
+                    }
+                    else {
+                        $('#img').hide();
+                        swal("Data saved successfully.");
+                        $('#searchPlotNoInput').val('');
+                        $('#img').hide();
+                        $('#landDetail').hide(1000);
+                        $('#landLease').hide(1000);
+                    }
+
+                } else {
+                    swal("Error saving details.");
+                    $('#img').hide();
+                }
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+    });
+
+    $("#SaveLandLease").click(function () {
+
+        //if ($('#HasShed').is(':checked')) {
+        //    $('#HasShed').val(true);
+        //    alert("Has Shed is Checked");
+        //}
+        //else {
+        //    $('#HasShed').val(false);
+        //}
+        //if ($('#HassecurityDeposit').is(':checked')) {
+        //    $('#HassecurityDeposit').val(true);
+        //    alert("security is Checked");
+        //}
+        //else {
+        //    $('#HassecurityDeposit').val(false);
+        //}
+        //if ($('#IsActive').is(':checked')) {
+        //    alert("is active is Checked");
+        //    $('#IsActive').val(1);
+        //}
+        //else {
+        //    $('#IsActive').val(0);
+        //}
+
+        //validation
+
+        if ($('#LeaseAmount').val() == "" || $('#LeaseAmount').val() == null) {
+            swal("Please Fill out all Required Fields", "", "warning");
+            return false;
+        }
+
+
+
+
+
+        var myarray = [];
+        var LandDetailModel = {};
+
+        //Land Lease
+        LandDetailModel.TaxPayerId = parseInt($("#hdnTaxPayerId").val());
+        LandDetailModel.LandDetailId = parseInt($("#hdnLandDetailId").val());
+        //LandDetailModel.BillingScheduleId = parseInt($("#BillingScheduleId").val());
+        LandDetailModel.LeaseTypeId = parseInt($("#LeaseTypeId").val());
+        LandDetailModel.LeaseActivityTypeId = parseInt($("#LeaseActivityTypeId").val());
+        LandDetailModel.StartDate = $("#StartDate").val();
+        LandDetailModel.EndDate = $("#EndDate").val();
+        LandDetailModel.LeaseAmount = parseFloat($("#LeaseAmount").val());
+        LandDetailModel.LeaseApprovalNo = $("#LeaseApprovalNo").val();
+
+        LandDetailModel.Remarks = $("#Remarks").val();
+        LandDetailModel.HasShed = Boolean($("#HasShed").val());
+        LandDetailModel.HassecurityDeposit = Boolean($("#HassecurityDeposit").val());
+        LandDetailModel.IsActive = Boolean($("#IsActive").val());
+        if ($('#ShedAmount').val() == '') {
+            LandDetailModel.ShedAmount = 1;
+        }
+        else {
+            LandDetailModel.ShedAmount = parseFloat($("#ShedAmount").val());
+        }
+
+
+        if ($('#BillingScheduleId').val() == 1) {
+            LandDetailModel.BSI = 1;
+        }
+        else {
+            LandDetailModel.BSI = 0;
+        }
+
+        myarray.push(LandDetailModel);
+        var json_data = JSON.stringify(myarray);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateLandLease", "LandLeases")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                if (response > 0) {
+
+
+                    if ($('#BillingScheduleId').val() == 1) {
+                        $('#img').hide();
+                        swal("Data saved successfully.");
+                        $('#searchPlotNoInput').val('');
+                        $('#img').hide();
+                       /* displayDemand(response);*/
+                       /* $('#displaydemand').show(1000);*/
+                        $('#landDemand').show(1000);
+                        $('#landDetail').hide(1000);
+                        $('#landLease').hide(1000);
+                        $('#searchPlotNo').hide(1000);
+                    }
+                    else {
+                        $('#img').hide();
+                        swal("Data saved successfully.");
+                        $('#searchPlotNoInput').val('');
+                        $('#img').hide();
+                        $('#landDetail').hide(1000);
+                        $('#landLease').hide(1000);
+                        $('#searchPlotNo').hide(1000);
+                    }
+
+
+                } else {
+                    swal("Error saving details.");
+                    $('#img').hide();
+                }
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+    });
+
+
+    function displayDemand(transactionId) {
+        $('#landDemand').show(1000);
+
+
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemandlongterm", "LandLeases")',
+                data: {
+                    TransactionId: transactionId,
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tblDemand').empty();
+                    if (data.length > 0) {
+
+                        var datec = data[0].demandDate;
+                        const c = new Date(datec);
+                        const CreatedDate = ("0" + c.getDate()).slice(-2) + "-" + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + c.getFullYear()
+
+                        var today = new Date(data[0].sStartDate);
+                        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblstart").html(date);
+
+                        var today = new Date(data[0].eEndDate);
+                        var datea = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblend").html(datea);
+
+                        $("#lblName").html(data[0].taxPayerName);
+                        $("#lblTTIN").html(data[0].ttin);
+                        $("#lbluser").html(data[0].creatorname);
+                        $("#lblCID").html(data[0].cid);
+                        $("#lblAddress").html(data[0].cAddressID);
+                        $("#lblDemandDate").html(CreatedDate);
+                        $("#lblDemandNo").html(data[0].demandNo);
+
+                        $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                        $.each(data, function (key, value) {
+                            $('#tblDemand').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.leaseAmount+ '</td>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#landDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#landDemand").show(1000);
+                        $('#tblDemand').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+        }
+
+        function printPage() {
+            var dataToPrint = document.getElementById("toprint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+    }
+    function ok() {
+        $('#landDemand').hide(1000);
+        $('#taxPayerDiv').hide(1000);
+        $('#searchPlotNo').hide(1000);
+        $('#plotNoInfo').hide(1000);
+        $('#landDetail').hide(1000);
+        $('#landLease').hide(1000);
+    }
+
+
+    //Populate Dropdown
+    $(function () {
+        $('#luc').change(function () {
+
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateLUSC", "LandLeases")',
+                data: {
+                id: parseInt($('#luc').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                $('#lusc').empty();
+
+                $('#lusc').append(
+                '<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                var newOption = $('<option value=' + data[i].landUseSubCategoryId + '> '
+                    + data[i].landUseSubCategory
+                    + '  </option>');
+                $('#lusc').append(newOption);
+                }
+
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+                });
+
+    function DisplayExistingLease() {
+        $('#landDetail').hide(1000);
+        $('#landLease').hide(1000);
+        $('#plotNoInfo').hide(1000);
+        $('#searchPlotNoInput').val('');
+
+        var TaxPayerId = $('#hdnTaxPayerId').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("DisplayExistingLease", "LandLeases")',
+                    data: {
+                        TaxPayerId: TaxPayerId,
+                    },
+                    success: function (data) {
+
+                        if (data.length > 0) {
+                            $('#ExistingLease').show(1000);
+                           
+                            $.each(data, function (key, value) {
+                                var datec = data[0].startDate;
+                                const c = new Date(datec);
+                                const SDate = ("0" + c.getDate()).slice(-2) + "-" + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + c.getFullYear()
+                                $('#existinglease_body').empty();
+                                $('#existinglease_body').append(
+                                    '<tr>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.billingScheduleName + '</td>'
+                                    + '<td>' + value.leaseType + '</td>'
+                                    + '<td>' + value.leaseActivityType + '</td>'
+                                    + '<td>' + SDate + '</td>'
+                                    + '<td>' + value.leaseAmount + '</td>'
+
+                                    + '</tr>');
+                            });
+                        }
+                        else {
+                            $('#ExistingLease').show(1000);
+                            $('#existinglease_body').empty();
+                            $('#existinglease_body').append(
+                                '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        swal("Error","","error");
+                    }
+
+                });
+
+    }
+    $('#btnCancel').click(function () {
+        $('#landDetail').hide(1000);
+        $('#landLease').hide(1000);    })
+</script>

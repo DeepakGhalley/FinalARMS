@@ -1,0 +1,45 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstTaxPayerProfile]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstTaxPayerProfile] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_8] (Foreign Key)
+     Create
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_8] (Foreign Key)

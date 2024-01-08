@@ -1,0 +1,105 @@
+﻿@using CORE_BOL
+@model SecondaryAccountHeadModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Secondary Account Head</a></li>
+                    <li class="breadcrumb-item active">Update Secondary Account Head</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Secondary Account Head</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="SecondaryAccountHeadId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Primary Account Head <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-10">
+                    <select asp-for="PrimaryAccountHeadId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.PrimaryAccountHeadId,"Value","Text"))"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="PrimaryAccountHeadId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"> Account Head Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-10">
+                    <input asp-for="SecondaryAccountHeadName" class="form-control" placeholder="Secondary Account Name" />
+                    <span asp-validation-for="SecondaryAccountHeadName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"> Account Head Code<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="SecondaryAccountHeadCode" class="form-control" placeholder="Secondary Account Code" />
+                    <span asp-validation-for="SecondaryAccountHeadCode" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label"> Account Head Symbol<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="SecondaryAccountHeadSymbol" class="form-control" placeholder="Secondary Account Symbol" />
+                    <span asp-validation-for="SecondaryAccountHeadSymbol" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"> Account Head Description</label>
+                <div class="col-sm-10">
+                    <textarea asp-for="SecondaryAccountHeadDescription" class="form-control" rows="3" placeholder="Secondary Account Head Description"></textarea>
+                    <span asp-validation-for="SecondaryAccountHeadDescription" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+
+</form>
+</div>
+<script>
+
+    function saveme() {
+        $('#img').show();
+    }
+</script>

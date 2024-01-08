@@ -1,0 +1,974 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div>
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Generate Occupancy</a></li>
+                        <li class="breadcrumb-item active">Generate Occupancy</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Generate Occupancy</h3>
+        </div>
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="Cid" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="Ttin" class="form-control col-6" />
+                </div>
+
+                <div class="input-group-append col-2">
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayOwnership();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="LandOwnershipDetails">
+    <div class="card-header">
+        <h3 class="card-title">Property Details</h3>
+        <input type="hidden" id="hdnLandOwnershipId" />
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Tax Payer Name</th>
+                    <th>Thram No</th>
+                    <th>Property Type</th>
+                    <th>Ownership Type</th>
+                    <th>Plot Address</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_landownershipdetails">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="BuildingDetails">
+    <div class="card-header">
+        <input id="hdntaxpayerId" type="hidden" />
+        <h3 class="card-title">Building Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Building No</th>
+                    <th>Building Class</th>
+                    <th>Story Type</th>
+                    <th>BuildUp Area</th>
+                    <th>Plinth Area</th>
+                    <th>No Of Floors</th>
+                    <th>Year Of Construction</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_buildingdetails">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="BuildingUnitDetails">
+    <div class="card-header">
+        <h3 class="card-title">Building Unit Details For Building No: <label id="DisplayBuildingNo"></label></h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Floor Name</th>
+                    <th>Unit Use Type</th>
+                    <th>Unit Owner Type</th>
+                    <th>No Of Units</th>
+                    <th>Floor Area</th>
+                    <th>Floor No</th>
+                    <th>Flat No</th>
+                    <th>No Of Rooms</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_buildingunitdetails">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="HiddenBuildingUnitDetails">
+    <div class="card-header">
+        <h3 class="card-title">Building Unit Details For Building No:</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Floor Name</th>
+                    <th>Unit Use Type</th>
+                    <th>Unit Owner Type</th>
+                    <th>Floor Area</th>
+                    <th>Floor No</th>
+                    <th>Flat No</th>
+                    <th>No Of Rooms</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_hiddenbuildingunitdetails">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="DisplayRadioButtton">
+    <div class="card-body">
+        <div class="form-check">
+            <input class="form-check-input" type="radio" id="BR" name="flexRadioDefault1" onchange=" return GenerateB();" value="1">
+            <label class="form-check-label col-sm-3" for="BuildingGenerate" id="BR1">
+                Building OC
+            </label>
+            <input class="form-check-input" type="radio" id="BUR" name="flexRadioDefault1" onchange="return GenerateBU();" value="2">
+            <label class="form-check-label" for="BuildingUnitGenerate" id="BUR1">
+                Building Unit OC
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="HDisplayBuilding">
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <b>Plot No:</b>&nbsp;&nbsp;<i id="DisplayPlot" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-2">
+                    <b>TTIN:</b>&nbsp;&nbsp;<i id="DisplayTTIN" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">
+                    <b>CID:</b>&nbsp;&nbsp;<i id="DisplayCID" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-5">
+                    <b>Name:</b>&nbsp;&nbsp;<i id="DisplayName" readonly class="col-sm-6"></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <b>Thram No:</b>&nbsp;&nbsp;<i id="DisplayThram" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-2">
+                    <b>Building No:</b>&nbsp;&nbsp;<i id="DisplayBuildingNos" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-3">
+                    <b>Building Class:</b>&nbsp;&nbsp;<i id="DisplayBuildingClass" readonly class="col-sm-6"></i>
+                </div>
+                <div class="col-sm-3">
+                    <b>Story Type:</b>&nbsp;&nbsp;<i id="DisplayStoryType" readonly class="col-sm-6"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="HDisplayBuildingUnit">
+    <div class="card-body">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-2">
+                    <b>Plot No:</b>&nbsp;&nbsp;<i id="DisplayUPlot" readonly></i>
+                </div>
+                <div class="col-sm-2">
+                    <b>TTIN:</b>&nbsp;&nbsp;<i id="DisplayUTTIN" readonly></i>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">
+                    <b>CID:</b>&nbsp;&nbsp;<i id="DisplayUCID" readonly></i>
+                </div>
+                <div class="col-sm-2">
+                    <b>Name:</b>&nbsp;&nbsp;<i id="DisplayUName" readonly></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-2">
+                    <b>Thram No:</b>&nbsp;&nbsp;<i id="DisplayUThram" readonly></i>
+                </div>
+                <div class="col-sm-2">
+                    <b>Building No:</b>&nbsp;&nbsp;<i id="DisplayUBuildingNos" readonly></i>
+                </div>
+                <div class="col-sm-1"></div>
+                <div class="col-sm-2">
+                    <b>Building Class:</b>&nbsp;&nbsp;<i id="DisplayUBuildingClass" readonly></i>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-5">
+                    <b>Story Type:</b>&nbsp;&nbsp;<i id="DisplayUStoryType" readonly></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="DisplayBuildingUnit">
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Occupancy Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="OccupancyTypeId1" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OccupancyType,"Value","Text")) " value="0"></select>
+                <span id="errorOccupancyTypeId1" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Is New OC<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="IsNewOCDropDown1" class="form-control select2bs4" style="width: 100%;">
+                    <option value="2">--select--</option>
+                    <option value="0">Yes</option>
+                    <option value="1">Renewal</option>
+                </select>
+                <span id="errorIsNewOC1" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Date of Final Inspection<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="DateOfFinalInspection1" min="0" type="date" class="form-control" placeholder="Date of Final Inspection" required />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="DisplayBuilding">
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Occupancy Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="OccupancyTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OccupancyType,"Value","Text")) " value="0"></select>
+                <span id="errorOccupancyTypeId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">New/Renewal OC<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="IsNewOCDropDown" class="form-control select2bs4" style="width: 100%;">
+                    <option value="2">--select--</option>
+                    <option value="0">Is New OC</option>
+                    <option value="1">Renewal OC</option>
+                </select>
+                <span id="errorIsNewOC" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Date of Final Inspection<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="DateOfFinalInspection" min="0" type="date" class="form-control" placeholder="Date of Final Inspection" required />
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="dvGenerate" style="display:none;" class="form-group row">
+    <label class="col-sm-2 col-form-label"> </label>
+    <div class="col-sm-4">
+        <input type="button" value="Generate" class="btn btn-primary" onclick="return Generate();" />
+    </div>
+</div>
+
+<input type="hidden" id="hdnbuilding" />
+<input type="hidden" id="hdnbuildingunit" />
+<input type="hidden" id="BDI" />
+<input type="hidden" id="sLandOwnershipType_" />
+<input type="hidden" id="sLandDetail_" />
+
+<script>
+
+    $(document).ready(function () {
+
+        $('input[type=radio][name=flexRadioDefault1]').change(function () {
+
+            if (this.value != null) {
+                $('#hdnbuilding').val(this.value);
+            }
+        });
+    });
+
+            //*********************************************************  DISPLAY LAND OWNERSHIP DETAILS  ***********************************************************************************//
+
+    function displayOwnership() {
+            $('#BuildingDetails').hide(1000);
+            $('#BuildingUnitDetails').hide(1000);
+            $('#DisplayRadioButtton').hide(1000);
+            $('#DisplayBuilding').hide(1000);
+            $('#DisplayBuildingUnit').hide(1000);
+            $('#HDisplayBuilding').hide(1000);
+            $('#HDisplayBuildingUnit').hide(1000);
+            $('#dvGenerate').hide(1000);
+    if ($('#Ttin').val() == "" && $('#Cid').val() == "") {
+                swal('Empty Fields', '', 'error');
+                $('#Ttin').focus();
+                $('#Cid').focus();
+                return false;
+            }
+
+        var Ttin = $('#Ttin').val();
+        var Cid = $('#Cid').val();
+
+            $.ajax({
+                   type: "GET",
+                   url: '@Url.Action("FetchLandOwnershipDetails", "GenerateOccupancy")',
+                   data: {
+                        Ttin: Ttin,
+                        Cid: Cid
+                         },
+                       dataType: "json",
+                       success: function (data) {
+                              $('#tbl_landownershipdetails').empty();
+
+                           if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#LandOwnershipDetails').show(1000);
+                                    $('#DisplayUPlot').html(data[0].plotNo);
+                                    $('#DisplayUThram').html(data[0].thramNo);
+                                    $('#hdntaxpayerId').val(data[0].taxPayerId);
+                                    $('#tbl_landownershipdetails').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.plotNo + '</td>'
+                                        + '<td>' + value.ttin + '</td>'
+                                        + '<td>' + value.cid + '</td>'
+                                        + '<td>' + value.taxPayerName + '</td>'
+                                        + '<td>' + value.thramNo + '</td>'
+                                        + '<td>' + value.propertyType + '</td>'
+                                        + '<td>' + value.landOnwershipType + '</td>'
+                                        + '<td>' + value.plotAddress + '</td>'
+                                        + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return ViewBuilding(' + value.landDetailId + ',' + value.landOwnershipTypeId + ',' + value.taxPayerId + ');">View</a></b></td>'
+                                        + '<input id="sLandOwnershipId_" type="hidden" value="' + value.landOwnershipId + '" />'
+                                        + '<input id="sTaxPayerBId_" type="hidden" value="' + value.taxPayerId + '" />'
+                                        + '</tr>');
+                                });
+                            } else {
+                            $('#tbl_landownershipdetails').append(
+                                    '<tr><td colspan="9" style="color: red;">No record found!</td></tr>');
+                            $('#LandOwnershipDetails').show(1000);
+
+                            }
+
+                        },
+
+                        error: function () {
+                            alert('error');
+                        }
+                    });
+    }
+
+            //*********************************************************  DISPLAY BUILDING DETAILS  ***********************************************************************************//
+
+    function ViewBuilding(landDetailId, landOwnershipTypeId, taxPayerId) {
+        $('#sLandOwnershipType_').val(landOwnershipTypeId);
+        $('#sLandDetail_').val(landDetailId);
+
+            $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("FetchBuildingDetails", "GenerateOccupancy")',
+                    data: {
+                        LandDetailId: landDetailId, 
+                        TaxpayerId: taxPayerId
+                },
+
+                        success: function (data) {
+                            console.log(data);
+                            $('#BuildingDetails').show(1000);
+                            $('#BuildingUnitDetails').hide(1000);
+                            $('#DisplayRadioButtton').hide(1000);
+                            $('#HDisplayBuilding').hide(1000);
+                            $('#HDisplayBuildingUnit').hide(1000);
+                            $('#DisplayBuildingUnit').hide(1000);
+                            $('#DisplayBuilding').hide(1000);
+                            $('#dvGenerate').hide(1000);
+                            $('html,body').animate({
+                                scrollTop: $("#BuildingDetails").offset().top
+                            }, 'slow');
+                            $('#tbl_buildingdetails').empty();
+
+                            if (data.length > 0) {
+                                $('#DisplayBuildingNo').html(data[0].buildingNo);
+                                $.each(data, function (key, value) {
+                                    $('#tbl_buildingdetails').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.buildingNo + '</td>'
+                                        + '<td>' + value.buildingClassName + '</td>'
+                                        + '<td>' + value.storyType + '</td>'
+                                        + '<td>' + value.buildupArea + '</td>'
+                                        + '<td>' + value.plinthArea + '</td>'
+                                        + '<td>' + value.numberOfFloors + '</td>'
+                                        + '<td>' + value.yearOfConstruction + '</td>'
+                                        //+ '<input id="sBuildingDetailId" type="hidden" value="' + value.buildingDetailId + '" />'
+                                        + '<input id="sDateOfFinalInspection" type="hidden" value="' + value.dateOfFinalInspection + '" />'
+                                        + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return ViewBuildingUnit(' + value.buildingDetailId + ');">View Unit</a></b>'
+                                        + '</tr>');
+                                });
+                                $('#img').hide();
+                            }
+                            else {
+                                $('#img').hide();
+                                $('#tbl_buildingdetails').append(
+                                    '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                            }
+
+                        },
+                            error: function () {
+                            $('#img').hide();
+                            alert('Error occured');
+                            }
+            });
+    }
+
+                //*********************************************************  DISPLAY BUILDING UNIT DETAILS  ***********************************************************************************//
+
+    function ViewBuildingUnit(buildingDetailId) {
+
+        if ($('#sLandOwnershipType_').val() == 2) {
+            $('#BUR').hide(1000);
+            $('#BUR1').hide(1000);
+            $('#BR').show(1000);
+            $('#BR1').show(1000);
+            $('#HDisplayBuilding').hide(1000);
+       }
+        else {
+            $('#BR').hide(1000);
+            $('#BR1').hide(1000);
+            $('#BUR').show(1000);
+            $('#BUR1').show(1000);
+            $('#HDisplayBuildingUnit').hide(1000);
+        }
+        $('input[name=flexRadioDefault1]').prop('checked', false);
+        $('#BDI').val(buildingDetailId);
+        $('#DisplayRadioButtton').hide(1000);
+        $('#DisplayBuilding').hide(1000);
+        $('#DisplayBuildingUnit').hide(1000);
+        $('#HDisplayBuilding').hide(1000);
+        $('#HDisplayBuildingUnit').hide(1000);
+        $('#dvGenerate').hide(1000);
+
+            $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("FetchBuildingUnitDetails", "GenerateOccupancy")',
+                    data: {
+                        BuildingDetailId: buildingDetailId,
+                         TaxpayerId: $('#hdntaxpayerId').val()
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            $('#BuildingUnitDetails').show(1000);
+                            $('#tbl_buildingunitdetails').empty();
+
+                            if (data.length > 0) {
+                                $('#DisplayRadioButtton').show(1000);
+                                $.each(data, function (key, value) {
+                                    $('#tbl_buildingunitdetails').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.floor + '</td>'
+                                        + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                        + '<td>' + value.unitOwnerTypename + '</td>'
+                                        + '<td>' + value.noOfUnit + '</td>'
+                                        + '<td>' + value.floorArea + '</td>'
+                                        + '<td>' + value.floorNo + '</td>'
+                                        + '<td>' + value.flatNo + '</td>'
+                                        + '<td>' + value.noOfrooms + '</td>'
+                                        + '<td><input id="chk1_' + key + '" type="checkbox" value="' + value.buildingUnitDetailId + '" class="checkbox" /> <label for=chk1_' + key + '></label>'
+                                        + '</td>'
+                                        + '<input id="sBuildingUnitDetailId_" type="hidden" value="' + value.buildingUnitDetailId + '" />'
+                                        + '<input id="sTaxPayerId_" type="hidden" value="' + value.taxPayerId + '" />'
+                                        + '</tr>');                                    
+                                });
+
+                                if ($('#sLandOwnershipType_').val() == 2) {
+                                    $('.checkbox').prop('disabled', true);
+                                }
+                                else {
+                                    $('.checkbox').prop('disabled', false);
+                                }
+
+                                $('#img').hide();
+                            }
+                            else {
+                                $('#img').hide();
+                                $('#tbl_buildingunitdetails').append(
+                                    '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                            }
+
+                        },
+                            error: function () {
+                            $('#img').hide();
+                            alert('Error occured');
+                            }
+            });
+
+        //HIDDEN TABLE TO GENERATE BUILDING OC
+
+                $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("FetchBuildingUnitDetails", "GenerateOccupancy")',
+                        data: {
+                                BuildingDetailId: buildingDetailId,
+                                TaxpayerId: $('#hdntaxpayerId').val()
+
+                        },
+                        success: function (data) {
+                            console.log(data);
+                            $('#tbl_hiddenbuildingunitdetails').empty();
+                            if (data.length > 0) {
+                                $.each(data, function (key, value) {
+                                    $('#tbl_hiddenbuildingunitdetails').append(
+                                        '<tr>'
+                                        + '<td><input id="chk2_' + key + '" type="checkbox" value="' + value.buildingUnitDetailId + '" checked /> <label for=chk2_' + key + '></label>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.floor + '</td>'
+                                        + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                        + '<td>' + value.unitOwnerTypename + '</td>'
+                                        + '<td>' + value.floorArea + '</td>'
+                                        + '<td>' + value.floorNo + '</td>'
+                                        + '<td>' + value.flatNo + '</td>'
+                                        + '<td>' + value.noOfrooms + '</td>'
+                                        + '</td>'
+                                        + '</tr>');
+                                });
+                                $('#img').hide();
+                            }
+                            else {
+                                $('#img').hide();
+                                $('#tbl_hiddenbuildingunitdetails').append(
+                                    '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                            }
+
+                        },
+                            error: function () {
+                            $('#img').hide();
+                            alert('Error occured');
+                            }
+            });
+        }
+
+    function DisplayGenerate() {
+        $('#DisplayRadioButtton').show(1000);
+        $('input[name=flexRadioDefault1]').prop('checked', false);
+        $('#DisplayBuildingUnit').hide(1000);
+        $('#DisplayBuilding').hide(1000);
+        $('#HDisplayBuilding').hide(1000);
+        $('#HDisplayBuildingUnit').hide(1000);
+        $('#dvGenerate').hide(1000);
+        }
+
+    function GenerateB() {
+        $('#DateOfFinalInspection').val('');
+        $('#IsNewOCDropDown').val(2).trigger('change')
+        $('#OccupancyTypeId').val(0).trigger('change')
+        $('#DisplayBuildingUnit').hide(1000);
+        $('#HDisplayBuildingUnit').hide(1000);
+
+        var selected = new Array();
+        $("#BuildingUnitDetails input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+
+        if (selected.length > 0) {
+            alert('done');
+            $('input[name=flexRadioDefault1]').prop('checked', false);
+            swal('Please Deselect the Building Unit!');
+            $('#DisplayBuilding').hide(1000);
+            $('#HDisplayBuilding').hide(1000);
+            $('#dvGenerate').hide(1000);
+            return false;
+        }
+
+        else {
+
+            $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetBDDetails", "GenerateOccupancy")',
+                    data: {
+                            BuildingDetailId: parseInt($('#BDI').val())
+                            },
+                    success: function (data) {
+
+                        $('#HDisplayBuilding').show(1000);
+                        $('#DisplayBuilding').show(1000);
+                        $('#dvGenerate').show(1000);
+
+                        if (data.length > 0) {
+                            $('#DisplayPlot').html(data[0].plotNo);
+                            $('#DisplayTTIN').html(data[0].ttin);
+                            $('#DisplayCID').html(data[0].cid);
+                            $('#DisplayName').html(data[0].taxPayerName);
+                            $('#DisplayThram').html(data[0].thramNo);
+                            $('#DisplayBuildingNos').html(data[0].buildingNo);
+                            $('#DisplayStoryType').html(data[0].storyType);
+                            $('#DisplayBuildingClass').html(data[0].buildingUnitClassName);
+                        }
+
+                        else {
+                            swal('No Record Found!');
+                        }
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+        }
+            }
+
+    function GenerateBU() {
+       
+        $('#DateOfFinalInspection').val('');
+        $('#IsNewOCDropDown1').val(2).trigger('change')
+        $('#OccupancyTypeId1').val(0).trigger('change')
+        $('#DisplayBuilding').hide(1000);
+        $('#HDisplayBuilding').hide(1000);
+
+        var selected = new Array();
+        $("#BuildingUnitDetails input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+
+        if (selected.length > 0) {
+            ids = selected.join(",");
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetBDDetails", "GenerateOccupancy")',
+                data: {
+                    BuildingDetailId: parseInt($('#BDI').val())
+                },
+                success: function (data) {
+                    $('#HDisplayBuildingUnit').show(1000);
+                    $('#DisplayBuildingUnit').show(1000);
+                    $('#dvGenerate').show(1000);
+                    if (data.length > 0) {
+                        $('#DisplayUTTIN').html(data[0].ttin);
+                        $('#DisplayUCID').html(data[0].cid);
+                        $('#DisplayUName').html(data[0].taxPayerName);
+                        $('#DisplayUBuildingNos').html(data[0].buildingNo);
+                        $('#DisplayUBuildingClass').html(data[0].buildingUnitClassName);
+                        $('#DisplayUStoryType').html(data[0].storyType);
+                    }
+                    else {
+                        swal('No Record Found!');
+                    }
+                },
+
+                error: function () {
+                    alert('error');
+                }
+
+            });
+        }
+        else {
+            $('input[name=flexRadioDefault1]').prop('checked', false);
+            swal('Please Select a row!');
+            $('#DisplayBuildingUnit').hide(1000);
+            $('#HDisplayBuildingUnit').hide(1000);
+            $('#dvGenerate').hide(1000);
+            return false;
+        }
+    }
+
+    function Generate() {
+        $('#dvGenerate').show(1000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("CheckDuplicate", "GenerateOccupancy")',
+                    data: {
+                        BDId: parseInt($('#BDI').val()),
+                        BTId: parseInt($('#sTaxPayerBId_').val()),
+                        },
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.length > 0) {
+                                var validDate = data[0].validTillDate;
+                                const d = new Date(validDate);
+                                const VDate = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear()
+                                swal('Occupancy Certificate already Exists!: Valid To:'  + VDate);
+                                return false;
+                            }
+
+                            else {
+                                 if ($('#hdnbuilding').val() == 1) {
+
+            
+                            if ($('#OccupancyTypeId option:selected').val() == 0) {
+                                  $('#errorOccupancyTypeId').html('Please Select a value');
+                                  $('#OccupancyTypeId').focus();
+                                    return false;
+                            }
+
+            else {
+                $('#errorOccupancyTypeId').html('');
+                                     }
+
+            if ($("#IsNewOCDropDown").val() == 2) {
+                $('#errorIsNewOC').html('Please Select a value');
+                $('#IsNewOCDropDown').focus();
+                return false;
+            }
+
+            else {
+                $('#errorIsNewOC').html('');
+                  }
+                        if ($("#DateOfFinalInspection").val() == "") {
+                            swal("Enter Date First");
+                            return false;
+                                     }
+
+
+                var index = 0;
+                var myarray = [];
+                var OccupancyCertificate = {};
+
+                    OccupancyCertificate.LandOwnershipId = parseInt($('#sLandOwnershipId_').val());
+                    OccupancyCertificate.LandDetailId = parseInt($('#sLandDetail_').val());
+                    OccupancyCertificate.BuildingDetailId = parseInt($("#BDI").val());
+                    OccupancyCertificate.TaxPayerId = parseInt($("#sTaxPayerBId_").val());
+                    OccupancyCertificate.DateOfFinalInspection = $("#DateOfFinalInspection").val();
+                    OccupancyCertificate.OccupancyTypeId = parseInt($("#OccupancyTypeId").val());
+
+                    if ($("#IsNewOCDropDown").val() == 0) {
+                        OccupancyCertificate.IsNewOC = true;
+                    }
+
+                    else if ($("#IsNewOCDropDown").val() == 1) {
+                        OccupancyCertificate.IsNewOC = false;
+                    }
+
+                 myarray.push(OccupancyCertificate);
+                 index = index + 1
+
+                        var json_data = JSON.stringify(myarray);
+                        console.log(json_data);
+                        $('#img').hide();
+
+
+                            $.ajax({
+                                type: "POST",
+                                url: '@Url.Action("CreateBuildingOC", "GenerateOccupancy")',
+                                data: json_data,
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+
+                                success: function (response) {
+                                console.log(response);
+
+                                    if (response > 0) {
+                                   swal('Building OC Generated Successfully!');
+                                   $('input[name=flexRadioDefault1]').prop('checked', false);
+                                   $('#DateOfFinalInspection').val('');
+                                   $('#DisplayBuilding').hide(1000);
+                                   $('#HDisplayBuilding').hide(1000);
+                                   $('#dvGenerate').hide(1000);
+                                   $('#img').hide();
+
+                                    }
+
+                    else {
+                        swal('Building OC Generated Failed!');
+                        $('#img').hide();
+                        return false;
+                    }
+                         },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+                                 }
+
+            else {
+                  var selected = new Array();
+                  var ids;
+
+                    $("#BuildingUnitDetails input[type=checkbox]:checked").each(function () {
+                        selected.push(this.value);
+                    });
+
+                        if (selected.length > 0) {
+                            ids = selected.join(",");
+                        }
+
+                            else {
+                                 swal('Please Select a Row.!');
+                                 $('#img').hide();
+                                 return false;
+                                     }
+
+            $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("CheckDuplicateU", "GenerateOccupancy")',
+                    data: {
+                        BUId: $('#sBuildingUnitDetailId_').val(),
+                        UTId: parseInt($('#sTaxPayerId_').val())
+                        },
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.length > 0) {
+                                var validDate = data[0].validTillDate;
+                                swal('Occupancy Certificate already Exists!' + validDate);
+                                return false;
+                            }
+
+                            else {
+                                swal('Sorry');
+                            }
+
+                        },
+                            error: function () {
+                            $('#img').hide();
+                            alert('Error occured');
+                            }
+            });
+
+            if ($('#OccupancyTypeId1 option:selected').val() == 0) {
+                $('#errorOccupancyTypeId1').html('Please Select a value');
+                $('#OccupancyTypeId1').focus();
+                return false;
+            }
+
+            else {
+                $('#errorOccupancyTypeId1').html('');
+                                     }
+
+            if ($("#IsNewOCDropDown1").val() == 2) {
+                $('#errorIsNewOC1').html('Please Select a value');
+                $('#IsNewOCDropDown1').focus();
+                return false;
+            }
+
+            else {
+                $('#errorIsNewOC1').html('');
+                                     }
+
+             if ($("#DateOfFinalInspection1").val() == "") {
+                swal("Enter Date First");
+                return false;
+                                     }
+
+
+        var index = 0;
+        var myarray = [];
+        var OccupancyCertificate = {};
+
+                    OccupancyCertificate.LandOwnershipId = parseInt($('#sLandOwnershipId_').val());
+                    OccupancyCertificate.LandDetailId = parseInt($("#sLandDetail_").val());
+                    OccupancyCertificate.BuildingDetailId = parseInt($("#BDI").val());
+                    OccupancyCertificate.BuildingUnit = ids;
+                    OccupancyCertificate.TaxPayerId = parseInt($("#sTaxPayerId_").val());
+                    OccupancyCertificate.DateOfFinalInspection = $("#DateOfFinalInspection1").val();
+                    OccupancyCertificate.OccupancyTypeId = parseInt($("#OccupancyTypeId1").val());
+
+                    if ($("#IsNewOCDropDown1").val() == 0) {
+                        OccupancyCertificate.IsNewOC = true;
+                    }
+
+                    else if ($("#IsNewOCDropDown1").val() == 1) {
+                        OccupancyCertificate.IsNewOC = false;
+                    }
+
+                    myarray.push(OccupancyCertificate);
+                    index = index + 1
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+            $('#img').hide();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateBuildingUnitOC", "GenerateOccupancy")',
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response > 0) {
+                        swal('Building Unit OC Generated Successfully!');
+                        $('input[name=flexRadioDefault1]').prop('checked', false);
+                        $('#DateOfFinalInspection').val('');
+                        $('#DisplayBuildingUnit').hide(1000);
+                        $('#HDisplayBuildingUnit').hide(1000);
+                        $('#dvGenerate').hide(1000);
+                        $('#img').hide();
+
+                    }
+
+                    else {
+                        swal('Building Unit OC Generated Failed!');
+                        $('#img').hide();
+                        return false;
+                    }
+                         },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+            });
+        }
+                            }
+
+                        },
+                            error: function () {
+                            $('#img').hide();
+                            alert('Error occured');
+                            }
+            });
+    }
+</script>

@@ -1,0 +1,109 @@
+﻿@using CORE_BOL
+@model LandDetailModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+    
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Land Detail</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" asp-action="Create" method="post">
+
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Land Details</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+           
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PlotNo)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="LandValue" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.LandValue)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="LandAcerage" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.LandAcerage)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PlotAddress" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PlotAddress)</label>
+                </div>
+            </div>            
+            <div class="form-group row">
+                <label asp-for="PropertyTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PropertyType)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="LandPoolingRate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.LandPoolingRate)</label>
+                </div>
+            </div>
+           
+            <div class="form-group row">
+                <label asp-for="StreetName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.StreetName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="DemkhongName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.DemkhongName)</label>
+                </div>
+            </div>
+            
+
+
+           
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <a asp-action="Edit" asp-route-id="@Model.LandDetailId" title="Go Back" class="btn btn-primary fas fa-edit"
+                       onclick="return saveme();">
+                        Edit
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+

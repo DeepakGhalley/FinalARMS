@@ -1,0 +1,129 @@
+﻿@*@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers*@
+
+@{
+    ViewData["Title"] = "PaymentDepositReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@model Byte[]
+
+    @{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="DailyMinorHeadWiseReport">Report</a></li>
+                        <li class="breadcrumb-item active">Daily Payment Deposit Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Daily Payment Deposit Report</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Start Date<span style="font-weight: bold; color: red;"></span></label>
+                    <input id="lblsdate" type="date" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">End Date<span style="font-weight: bold; color: red;"></span></label>
+                    <input id="lbledate" type="date" class="form-control col-6" />   
+                </div>
+
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+        function PrintReport() {
+
+            if ($("#lblsdate").val() == "" && $("#lbledate").val() == "") {
+                swal("Please fill atlease one field to search.!");
+                $("#DemandNo").focus();
+
+                return false;
+            }
+            $('#img').show();
+
+            var today = new Date($("#lblsdate").val());
+            var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' +( "0" + today.getDate()).slice(-2)
+            var sdate = date;
+
+            var today1 = new Date($("#lbledate").val());
+            var date1 = today1.getFullYear() + '' + ("0" + (today1.getMonth() + 1)).slice(-2) + '' + ("0" + today1.getDate()).slice(-2)
+            var edate = date1;
+
+
+            console.log(date);
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintPaymentDepositReport", "Deposits")',
+                    data: {
+                        StartDate: parseInt(sdate),
+                        EndDate: parseInt(edate),
+                        sdate: $("#lblsdate").val(),
+                        edate: $("#lbledate").val()
+                    },
+                    success: function (data) {
+
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                   { Area = "Deposit", Controller = "Deposits", Action = "PrintPaymentDepositReport" })/?StartDate=" + parseInt(sdate) + "&EndDate=" + parseInt(edate)+"&sdate=" + $("#lblsdate").val() + "&edate=" + $("#lbledate").val(),'_blank');
+
+                        }
+
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+
+
+    }
+
+
+</script>

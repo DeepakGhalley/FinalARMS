@@ -1,0 +1,716 @@
+﻿@using CORE_BOL
+@model BfsModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">BFS Transaction Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">BFS Failed Online Transaction Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="text-danger"></div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Consumer No:</label>
+                <input id="searchId" class="form-control col-6" />
+            </div>
+            <div class="col-sm-2">
+                <button type="button" class="btn btn-outline-primary" onclick="return Search();">View</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Details-->
+<div class="card card-info" id="tbl_fproperty" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Demand Details</h3>
+    </div>
+    <input type="hidden" id="bfsTransactionDetailId" />
+    <div class="card-body">
+
+        <table id="example1" class="table table-bordered table-striped ">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl No</th>
+                    <th>Demand No</th>
+                    <th>Demand Generated</th>
+                    <th>Demand Amount</th>
+                    <th>Exemption Amount</th>
+                    <th>Total Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+    <div class="input-group col-6">
+        <label class="col-sm-3 col-form-label">Payment Date <span style="font-weight: bold; color: red;">*</span></label>
+        <div class="col-sm-4">
+            <input class="form-control" id="paymentdate" type="date" required />
+            <span class="text-danger" id="pdate"></span>
+        </div>
+        <div class="input-group-append col-2">
+            &nbsp;  <input id="btnProceed" type="button" value="Proceed" class="btn btn-primary" onclick="return GetDemandDetail();" />
+        </div>
+    </div>
+    <br />
+</div>
+<div class="card card-info" style="display:none;" id="dvDemandDetail">
+    <div class="card-header">
+        <h3 class="card-title">Demand Details View</h3>
+    </div>
+    <div class="card-body table-responsive">
+        <table id="exampleDemandDetail" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Demand No </th>
+                    <th>Tax Name </th>
+                    <th>Demand Amount </th>
+                    <th>Exemption Amount</th>
+                    <th>Penalty Amount</th>
+                    <th>Total Amount</th>
+                    @*<th>Action</th>*@
+                </tr>
+            </thead>
+            <tbody id="tbl_body2">
+            </tbody>
+        </table>
+        <hr />
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-6">
+                <input type="hidden" id="hdnGrandTotalAmount" value="" />
+                @*<input type="hidden" id="hdnGrandPenaltyAmount" value="" />*@
+
+                <input type="hidden" id="hdnReceiptId" value="" />
+
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-6">
+                <div class="input-group-append col-3">
+                    &nbsp;  <input id="btnProceedToPay" type="button" value="Proceed To Pay" class="btn btn-primary" />
+                </div>
+                &nbsp;   &nbsp;  &nbsp;   &nbsp;
+                <div class="input-group-append col-2">
+                    &nbsp;   &nbsp;  <input id="btnCancelProceed" type="button" value="Cancel" class="btn btn-warning" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr />
+<div id="dvPaymentModeDetail" style="display:none;">
+
+    <TABLE id="tblPaymentDetail" width="100%" border="1" class="table table-bordered table-striped">
+        <thead style="background-color:mediumaquamarine">
+            <tr>
+                <th style="width:150px">Payment Mode</th>
+                <th style="width:150px">Amount</th>
+                <th style="width:150px">Bank</th>
+                <th style="width:150px">Payment Mode No</th>
+                <th style="width:150px">Payment Mode Date</th>
+                <th style="width:150px"></th> @*Action*@
+            </tr>
+        </thead>
+        <tbody id="pbody">
+        </tbody>
+    </TABLE>
+
+    <TABLE>
+        <tr>
+            <th style="width:240px">
+                @*<input type="button" value="Add Row" class="btn btn-info" onclick="return addMoreRow();" />*@
+                &nbsp;  &nbsp; <b>Net Amount:</b>
+            </th>
+            <th style="width:150px">
+                <input type="text" id="hdnPaymentAmount" class="form-control" value="" readonly />
+                <input type="text" id="hdnTransactionTypeId" class="form-control" value="" hidden />
+
+            </th>
+        </tr>
+    </TABLE>
+
+
+    <hr />
+    <div class="input-group d-flex justify-content-center col-4">
+        <div class="input-group-append col-2">
+            &nbsp;  <input id="btnPay" type="button" value="Pay" class="btn btn-primary" />
+        </div>
+
+        <div class="input-group-append col-2">
+            &nbsp;   &nbsp;  <input id="btnCancelPayment" type="button" value="Cancel" class="btn btn-warning" />
+            &nbsp;   &nbsp;  @*<input id="btnCancelPayment" type="button" value="Generate" class="btn btn-warning" onclick="return MakePayment(71)" />*@
+        </div>
+    </div>
+
+</div>
+<script>
+        function hideAll() {
+            $('#tbl_fproperty').hide(1000);
+            $('#tbl_details').hide(1000);
+            $('#Recepit').hide(1000);
+        }
+
+    function Cancel() {
+        $('#tbl_fproperty').hide(1000);
+        $('#tbl_details').hide(1000);
+    }
+
+    function Cancel1() {
+        $('#tbl_details').hide(1000);
+    }
+
+    function Search() {
+        if ($('#searchId').val() == "") {
+           swal('Empty Fields', 'Please Enter Valid Value', 'error');
+            $('#searchId').focus();
+                return false;
+            }
+
+        var searchId = $('#searchId').val();
+        //var tranId = $('#tranIdInput').val();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Search", "BfsFailedOnlineTransactionDetails")',
+                data: {
+                    search: searchId,
+                    //transactionId: tranId
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+                        //var CreatedOn = data[0].createdOn;
+                        //var Month = Date.getMonth(CreatedOn);
+
+                            $('#tbl_fproperty').show(1000);
+                        $.each(data, function (key, value) {
+                            const e = new Date(value.createdOn);
+                            const y = new Date(value.createdOn);
+                            let month = e.toLocaleString('en-us', { month: 'long' });
+                            let year = y.getFullYear();
+                            //let year = e.toLocaleString('en-us', { year: 'long' });
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.demandNo + '</td>'
+                                    + '<td>' + month + ', ' + year + '</td>'
+                                    + '<td>' + value.demandAmount + '</td>'
+                                    + '<td>' + value.exemptionAmount + '</td>'
+                                    + '<td>' + value.totalAmount + '</td>'
+                                    + '<td><input id="chk1_' + key + '" type="checkbox" value="' + value.demandNoId + '" class"=checkbox" /> <label for=chk1_' + key + '></label>'
+                                    + '</tr>');
+                                });
+
+
+                    //} else if (data[0].bfsDebitAuthCode == '00') {
+                    //    swal("Payment already made. kamsamidha");
+                    //    return false;
+
+                    } else {
+                        $('#tbl_fproperty').show(1000);
+                        $('#tbl_body').append(
+                            '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+                    }
+
+
+
+                },
+
+            });
+
+    }
+    function GetDemandDetail() {
+        //$('#img').show();
+        var selected = new Array();
+        var ids; var paymentdate;
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#example1 input[type=checkbox]:checked").each(function () {
+            selected.push(this.value);
+        });
+        
+        //Display the selected CheckBox values.
+        if (selected.length > 0) {
+            ids = selected.join(",");
+        }
+        else {
+            swal('Please select at least one Demand No to pay.!');
+            $('#img').hide();
+            return false;
+        }
+        if ($('#paymentdate').val() == '') {
+            swal('Select Payment Date!');
+            return false;
+            $('#img').hide();
+        }
+         @*$.ajax({
+            type: "GET",
+            url: '@Url.Action("FetOnlinePaymentStatus", "Home")',
+                data: {
+                    DemandNoIds: ids
+                },
+            success: function (data) {
+                console.log(data);
+                $('#tbl_body2').empty();
+                if (data.length > 0) {
+                    swal("Please visit ICT section to settle your incomplete payment.");
+                    $('#img').hide();
+                }
+                else {
+                  //IF NOT SUCCESS*@
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetDemandDetail", "BfsFailedOnlineTransactionDetails")',
+                data: {
+                    id: ids,
+                    paymentdate: $('#paymentdate').val()
+                    
+                },
+            success: function (data) {
+              ;
+                $("#dvPaymentModeDetail").hide(1000);
+                console.log(data);
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+                        $("#dvDemandDetail").show(1000);
+
+                        $("#hdnPaymentAmount").val(data[0].grandTotalAmount );
+                        $("#hdnTransactionTypeId").val(data[0].transactionTypeId);
+                        //$("#hdnGrandPenaltyAmount").val(data[0].totalPenaltyAmount);
+                        var tpenalty = 0;
+                        var gttlamt = 0;
+                        var dttlamt = 0;
+
+                        $('#tbl_body2').empty();
+                        $.each(data, function (key, value) {
+                            var exmpamt = value.exemptionAmount;
+                            if (value.exemptionAmount == null) {
+                                exmpamt = 0;
+                            }
+                            var ttlamt = 0;
+                            ttlamt = value.totalAmount + value.totalPenaltyAmount;
+                            tpenalty += value.totalPenaltyAmount;
+
+                            dttlamt += value.demandAmount;
+
+                            gttlamt += ttlamt;
+
+                            $("#hdnGrandTotalAmount").val(gttlamt.toFixed(0));
+
+                            const e = new Date(value.createdOn);
+                            let month = e.toLocaleString('en-us', { month: 'long' });
+
+
+                                $('#tbl_body2').append(
+                                    '<tr>' + '<td>' + (key + 1) + '</td>'
+                                    + '<td style="display:none;"><input id="demandId_' + key + '" type="hidden" value="' + value.demandId + '" /><input id="transactionId_' + key + '" type="hidden" value="' + value.transactionId + '" /><input id="taxId_' + key + '" type="hidden" value="' + value.taxId + '" /><input id="financialYearId_' + key + '" type="hidden" value="' + value.financialYearId + '" /><input id="calendarYearId_' + key + '" type="hidden" value="' + value.calendarYearId + '" /><input id="totalAmount_' + key + '" type="hidden" value="' + value.totalAmount + '" /></td>'
+                                    + '<td>' + value.demandNo + '</td>'
+                                    + '<td>' + value.taxName + '</td>'
+                                    + '<td>' + value.demandAmount + '</td>'
+                                    + '<td>' + exmpamt + '</td>'
+                                    + '<td>' + value.totalPenaltyAmount.toFixed(2) + '</td>'
+                                    + '<td>' + ttlamt.toFixed(2) + '</td>'
+                                    + '<td style="display:none;">'
+                                    + '<input id="chkDemand_' + key + '" type="checkbox" value="' + value.demandId + '" class"=checkbox" checked /> <label for=chkDemand_' + key + '> Select </label>'
+                                    + '</td>'
+                                    + '</tr>');
+
+                        });
+                        $('#img').hide();
+                        $('#tbl_body2').append('<tr>' + '<td colspan="3" align="Right" ><b> Total : </b></td><td>' + dttlamt +'</td><td></td><td><b>' + tpenalty.toFixed(2) + '</b></td> </td>' +
+                            '<td colspan="1" style="font-weight:bold;"> <label id="lblGrandTotal" value="" ></label></td>'
+                            + '</tr>');
+
+                        $('html,body').animate({
+                            scrollTop: $("#dvDemandDetail").offset().top
+                        }, 'slow');
+
+                        $("#lblGrandTotal").html($("#hdnGrandTotalAmount").val());
+
+                    }
+                    else {
+                        $('#tbl_body2').empty();
+                        $('#img').hide();
+                        $("#dvDemandDetail").show(1000);
+                        $('#tbl_body2').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+        });
+
+         //        }
+
+         //    },
+         //    error: function () {
+         //        $('#img').hide();
+         //        alert('Error occured');
+         //    }
+         //});
+        //
+
+    }
+
+    $('#btnProceedToPay').on('click', function () {
+
+        $('#dvPaymentModeDetail').show(1000);
+
+
+        $("#hdnPaymentAmount").val($("#lblGrandTotal").html());
+
+        var rowCount = $('#tblPaymentDetail').find('tr').length;
+        if (rowCount == 1) {
+            //addMoreRow();
+            //alert(rowCount);
+
+            var rowCount = $('#tblPaymentDetail').find('tr').length;
+
+            var str = "<tr> <td> <select id=paymentModeId_" + rowCount + " class='clspaymentmode form-control select2' ></select></td>     <td style='width: 150px'><input id=paymentModeAmount_" + rowCount + " type='number' value='" + $("#lblGrandTotal").html() + "' class='form-control clsTotalAmount' onblur='findTotal()' /></td>   <td><select id=bankBranchId_" + rowCount + " class='clsBankBranch form-control select2' ></select></td>  <td  style='width: 150px'><input id=paymentModeNo_" + rowCount + " type='text' class='clsPaymentModeNo form-control' /></td>   <td> <input id=paymentModeDate_" + rowCount + " type='date' class='clsPaymentModeNoDate form-control' placeholder='Payment Mode Date' /></td>       <td style=width: 150px><INPUT type=button value='Delete Row' onclick=Remove(this) class='btn btn-danger fa-trash'/></td>     </tr>";
+            $('#pbody').append(str);
+            getPaymentMode(rowCount);
+            getBankBranch(rowCount);
+
+        }
+        else {
+            $("#paymentModeAmount_1").val($("#lblGrandTotal").html());
+            findTotal();
+
+        }
+        $('#img').hide();
+
+        //$('html,body').animate({
+        //    scrollTop: $("#dvPaymentModeDetail").offset().top
+        //}, 'slow');
+    });
+
+    function findTotal() {
+
+        var arr = document.getElementsByClassName('clsTotalAmount');
+        var tot = 0;
+        for (var i = 0; i < arr.length; i++) {
+            if (parseFloat(arr[i].value))
+                tot += parseFloat(arr[i].value);
+        }
+        $("#hdnPaymentAmount").val(tot);
+    }
+
+     function getPaymentMode(key) {
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetPaymentMode", "BfsFailedOnlineTransactionDetails")',
+                data: {
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#paymentModeId_' + key).empty();
+                    if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '> '
+                            + data[i].text
+                        + ' </option>');
+                        $('#paymentModeId_' + key).append(newOption);
+                    }
+                }
+                else {
+                    //$('#img').hide();
+                }
+
+                },
+                error: function () {
+                    //$('#img').hide();
+                    alert('Error occured');
+                }
+                });
+
+    }
+    function getBankBranch(key) {
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetBankBranch", "BfsFailedOnlineTransactionDetails")',
+                data: {
+                    //AssetAttributeId: parseInt(assetattribute_id)
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#bankBranchId_' + key).empty();
+                    if (data.length > 0) {
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '> '
+                            + data[i].text
+                        + ' </option>');
+                        $('#bankBranchId_' + key).append(newOption);
+                    }
+                }
+                else {
+                    //$('#img').hide();
+                }
+
+                },
+                error: function () {
+                    //$('#img').hide();
+                    alert('Error occured');
+                }
+                });
+
+    }
+
+    function addMoreRow() {
+        var rowCount = $('#tblPaymentDetail').find('tr').length;
+        var str = "<tr> <td> <select id=paymentModeId_" + rowCount + " class='clspaymentmode form-control select2' ></select></td>     <td style='width: 150px'><input id=paymentModeAmount_" + rowCount + " type='number' class='form-control clsTotalAmount'  onblur='findTotal()'/></td>   <td><select id=bankBranchId_" + rowCount + " class='clsBankBranch form-control select2' ></select></td>  <td  style='width: 150px'><input id=paymentModeNo_" + rowCount + " type='text' class='clsPaymentModeNo form-control' /></td>   <td> <input id=paymentModeDate_" + rowCount + " type='date' class='clsPaymentModeNoDate form-control' placeholder='Payment Mode Date' /></td>       <td style=width: 150px><INPUT type=button value='Delete Row' onclick=Remove(this) class='btn btn-danger fa-trash'/></td>     </tr>";
+
+        $('#pbody').append(str);
+        getPaymentMode(rowCount);
+        getBankBranch(rowCount);
+}
+
+    function Remove(button) {
+        //Determine the reference of the Row using the Button.
+        var row = $(button).closest("TR");
+        //var name = $("TD", row).eq(0).html();
+        if (confirm("Are you sure want to delete.?")) {
+            //Get the reference of the Table.
+            var table = $("#tblPaymentDetail")[0];
+            //Delete the ITempDataDictionaryable row using it's Index.
+
+
+            var rowCount = $('#tblPaymentDetail').find('tr').length;
+            if (rowCount > 2) {
+                table.deleteRow(row[0].rowIndex);
+            }
+            else {
+                swal("You can not delete all rows");
+                return false;
+            }
+        }
+    };
+
+    $('#btnPay').on('click', function () {
+        //alert($("#hdnTransactionTypeId").val());
+        if ($('.clspaymentmode').val() == 0) {
+            swal("Please Select Payment Mode.!");
+            return false;
+        }
+        if ($('.clsBankBranch').val() == 0) {
+            swal("Please Select Bank.!");
+            return false;
+        }
+        if ($('.clsPaymentModeNo').val() == 0) {
+            swal("Please Enter Payment Mode.!");
+            return false;
+        } 
+        if ($('.clsPaymentModeNoDate').val() == 0) {
+            swal("Please select Payment Mode Date.!");
+            return false;
+        }
+        //if ($('.clspaymentmode').val() == 2 && ($('.clsBankBranch').val() == 0 || $('.clsPaymentModeNo').val() == "" || $('.clsPaymentModeNoDate').val() == "" ) ){
+        //    swal("Please select bank branch ,cheque no and check date.!");
+        //    return false;
+        //}
+
+        if (($("#hdnGrandTotalAmount").val() )!= $("#hdnPaymentAmount").val()) {
+            swal("Payment amount does not match with the demand amount, please check.!");
+            return false;
+        }
+        //alert($('.clspaymentmode').val());
+        var r = confirm("Are you sure you want to pay.?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+
+        //***********************ids start************************
+        var selectedDemand = new Array();
+        var ids;
+
+        //Reference the CheckBoxes and insert the checked CheckBox value in Array.
+        $("#exampleDemandDetail input[type=checkbox]:checked").each(function () {
+            selectedDemand.push(this.value);
+        });
+
+        //Display the selected CheckBox values.
+        if (selectedDemand.length > 0) {
+            ids = selectedDemand.join(",");
+        }
+        //**********************ids end****************
+        $('#img').show();
+         $.ajax({
+                type: "POST",
+                 url: '@Url.Action("CheckDuplicatePayment", "BfsFailedOnlineTransactionDetails")',
+                data: {
+                  id: ids
+                      },
+                success: function (data) {
+
+                    console.log(data);
+                    //alert(ids);
+                    if (data.length > 0) {
+                        $('#img').hide();
+                        $('MakePayment').hide();
+                        swal("Payment already made the payment for the demand (s) you selected.!");
+                        return false;
+                    }
+                    else {
+
+                        //console.log(JSON.stringify(PMarray));
+                       //************************PAYMENT MODE LOOP START**********************
+                        var myarray = [];
+                        //for (i = 0; i < $("#exampleDemandDetail TBODY TR").length - 1; i++) {
+
+                            var ledgobj = {};
+                        ledgobj.Ids = ids;
+                        ledgobj.PaymentDate = $('#paymentdate').val();
+                        //ledgobj.ReceiptId = parseFloat($("#demandId_" + i).val());
+                            myarray.push(ledgobj);
+                        console.log(JSON.stringify(myarray));
+                       //************************DEMAND LOOP START**********************
+
+                        $.ajax({
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            url: '@Url.Action("CreateLedger", "BfsFailedOnlineTransactionDetails")',
+                            type: "POST",
+                            data: JSON.stringify(myarray),
+                            success: function (r) {
+                                if (r > 0) {
+                                   // MakePayment(r,20);
+                                    //MakePaymentForWater(r);
+                                    //************************PAYMENT MODE LOOP START**********************
+                                    var PMarray = []; var i = 1;
+                                    $('#tblPaymentDetail > tbody  > tr ').each(function () {
+                                        var PMobj = {};
+                                        if (parseFloat($("#paymentModeAmount_" + i).val()) > 0) {
+                                            PMobj.PaymentModeId = parseInt($("#paymentModeId_" + i).val());
+                                            PMobj.Amount = parseFloat($("#paymentModeAmount_" + i).val());
+                                            PMobj.BankBranchId = parseInt($("#bankBranchId_" + i).val());
+                                            PMobj.PaymentModeNo = ($("#paymentModeNo_" + i).val());
+                                            PMobj.PaymentDate = $('#paymentdate').val();
+                                            if ($("#paymentModeId_" + i).val() == 1) {
+                                                PMobj.PaymentModeDate = "1900-01-01";
+                                            }
+                                            else {
+                                                PMobj.PaymentModeDate = ($("#paymentModeDate_" + i).val());
+                                            }
+                                            PMobj.ReceiptId = parseInt(r);
+                                            PMarray.push(PMobj);
+                                        }
+
+                                        i = i + 1;
+                                    });
+                                 //   alert('lt generated');
+                                    console.log(PMarray);
+                                                    $.ajax({
+                                                        contentType: "application/json; charset=utf-8",
+                                                        dataType: "json",
+                                                        url: '@Url.Action("CreatePaymentLedger", "BfsFailedOnlineTransactionDetails")',
+                                                        type: "POST",
+                                                        data: JSON.stringify(PMarray),
+                                                        success: function (r2) {
+                                                            if (r2 > 0) {
+
+                                                                //alert($("#hdnTransactionTypeId").val());
+                                                                //MakePayment(r2, $("#hdnTransactionTypeId").val());
+                                                                //MakePaymentForWater(r2,19);
+                                                                swal("Payment saved successfully.");
+                                                                $('#paymentModeId_1').val(0).trigger('change')
+                                                                $('#bankBranchId_1').val(0).trigger('change')
+                                                                $('#paymentModeNo_1').val('');
+                                                                $('#paymentModeDate_1').val('');
+                                                                $('#paymentdate').val('');
+                                                                $('#tbl_fproperty').hide(1000);
+                                                                $("#dvDemandDetail").hide(1000);
+                                                                $('#dvPaymentModeDetail').hide(1000);
+                                                                $('#img').hide();
+                                                                
+                                                            }
+                                                            else {
+                                                                alert("Error saving payment details.!");
+                                                                $('#img').hide();
+                                                            }
+                                                        }
+                                                      });
+
+                                    setTimeout(function () {
+                                        $('#img').hide();
+                                        $('.alert').fadeOut(1000);
+                                        //location.reload();
+                                    }, 5000);
+                                }
+                                else {
+                                    $('#img').hide();
+                                    alert("Error saving details, please try by logging again.");
+                                }
+                            }
+                        });
+                           //************************DEMAND LOOP END**********************
+                    }
+                 },
+                 error: function () {
+                     $('#img').hide();
+                     alert('Error occured');
+                 }
+
+             });
+    });
+        function printPages() {
+            var dataToPrint = document.getElementById("print");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+</script>
+
+

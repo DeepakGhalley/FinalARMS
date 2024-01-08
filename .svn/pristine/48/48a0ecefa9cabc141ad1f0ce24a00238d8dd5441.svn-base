@@ -1,0 +1,1007 @@
+﻿@model List<CORE_BOL.PartialTransferModel>
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Land Transaction</a></li>
+                    <li class="breadcrumb-item active">Partial Property Transfer</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Fetch Details From eSakor</h3>
+        </div>
+        <div class="card-body">
+            <div class="input-group d-flex justify-content-center">
+                <label class="col-sm-2 col-form-label">Transaction ID<span style="font-weight: bold; color: red;">*</span></label>
+                <input id="Transactioninput" class="form-control col-sm-4" />
+                <div class="input-group-append">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Fetch" class="btn btn-primary" onclick="return fetchPropertyDetails();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="row" id="FPT_details" style="display:none;">
+    <input type="hidden" id="hdnTransactionId" />
+    <div class="col-md-12">
+        <div class="card card-tabs">
+            <!--Tab Links-->
+            <div class="card-header p-0 pt-1" style="background-color:#17A2B8;">
+                <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link" id="Property_Details" data-toggle="pill" href="#property_Details" role="tab" aria-controls="Property_Details" aria-selected="false" style="color:black;">Property Details</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="transferor" data-toggle="pill" href="#Transferor" role="tab" aria-controls="transferor" aria-selected="false" style="color:black;">Transferor</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="Transferee" data-toggle="pill" href="#transferee" role="tab" aria-controls="Transferee" aria-selected="false" style="color:black;">Transferee</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="taxDetails" data-toggle="pill" href="#Tax_Details" role="tab" aria-controls="taxDetails" aria-selected="false" style="color:black;">Tax Details</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-five-tabContent">
+                    <!--Property Details-->
+                    <div class="tab-pane fade show active" id="property_Details" role="tabpanel" aria-labelledby="Property_Details">
+                        <form>
+                            <div class="card-body">
+                                <label style="font-size:25px;">Details of Transfered Property</label>
+                                <div class="row">
+                                    <input hidden id="pd_cid" />
+                                    <div class="col-5">
+                                        <label style="font-size:20px;">Land Details</label>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Thram No.</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_thramno" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot No.</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_plotno" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Plot Area</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_plotarea" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Thromde</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_thromde" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Thromde Village</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_thromdevillage" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Owner Name</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_oname" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Owner CID</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_oCID" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Ownership Type</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_oType" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-6">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Transaction Type</label>
+                                            </div>
+                                            <div class="col-6">
+                                                <input id="pd_transaction" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-7" >
+                                        <div id="buidingDetails" style="display:none;">
+                                            <label style="font-size:20px;">Building Details</label>
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sl.No <br /><span><input type="checkbox" id="selectAll" />Select All</span></th>
+                                                        <th>Plinth Area</th>
+                                                        <th>Building No</th>
+                                                        <th>Building Color</th>
+                                                        <th>No of Units</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="building_details">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <div id="buidingUnitDetails" style="display:none;">
+                                            <label style="font-size:20px;">Building Unit Details</label>
+                                            <table class="table table-bordered table-striped">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sl.No</th>
+                                                        <th>Floor No</th>
+                                                        <th>Floor Area</th>
+                                                        <th>No of Rooms</th>
+                                                        <th>No of Units</th>
+                                                        <th>Is Main Owner</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="unit_details">
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!--Transferor Details-->
+                    <div class="tab-pane fade" id="Transferor" role="tabpanel" aria-labelledby="transferor">
+                        <div class="card-body">
+                            <label style="font-size:25px;">Transferor Details</label>
+                            @*<div class="row">
+                                <div class="col-4">
+                                    <div class="row">
+                                        <div class="col-4">
+                                            &nbsp;&nbsp;<label>CID</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input id="td_cid" readonly class="form-control" /> <br />
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4">
+                                            &nbsp;&nbsp;<label>Name</label>
+                                        </div>
+                                        <div class="col-8">
+                                            <input id="td_name" readonly class="form-control" /> <br />
+                                        </div>
+                                    </div>
+                                    <div>
+                                        &nbsp;&nbsp;<label>Permanent Address</label>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Dzongkhag</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_dzongkhag" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Dungkhag</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_dungkhag" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Gewog</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_gewog" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;&nbsp;&nbsp;<label>Village</label>
+                                            </div>
+                                            <div class="col-8">
+                                                 <input id="td_village" readonly class="form-control" /> <br />
+                                            </div>                                           
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-8">
+                                    <div>
+                                        <label style="font-size:20px;">Land Details</label>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;<label>Plot No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_plotno" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;<label>Thram No</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_thramno" readonly class="form-control" /> <br />
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                &nbsp;&nbsp;<label>Plot Area</label>
+                                            </div>
+                                            <div class="col-8">
+                                                <input id="td_plotarea" readonly class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label style="font-size:20px;">Building Unit Details</label>
+                                    <table class="table table-bordered table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Sl.No</th>
+                                                <th>Floor No</th>
+                                                <th>Floor Area</th>
+                                                <th>No of Rooms</th>
+                                                <th>No of Units</th>
+                                                <th>Is Main Owner</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="transferor_unit_details">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>*@
+                        <div class="row">
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>CID</th>
+                                        <th>Name</th>
+                                        <th>Thromde</th>
+                                        <th>Thromde Village</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transferor_details">
+                                </tbody>
+                            </table>
+                            <!--Permanent Address-->
+                            @*<label style="font-size:20px;">Permanent Address</label>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Dzongkhag</th>
+                                        <th>Dungkhag</th>
+                                        <th>Gewog</th>
+                                        <th>Village</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transferor_address">
+                                </tbody>
+                            </table>*@
+                            <!--Land Details-->
+                            <label style="font-size:20px;">Land Detail</label>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Plot Number</th>
+                                        <th>Thram Number</th>
+                                        <th>Plot Area</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transferor_land">
+                                </tbody>
+                            </table>
+                            <!--Building Unit Details-->
+                            <label style="font-size:20px;">Building Unit Details</label>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Sl.No</th>
+                                        <th>Floor No</th>
+                                        <th>Floor Area</th>
+                                        <th>No of Rooms</th>
+                                        <th>No of Units</th>
+                                        <th>Is Main Owner</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transferor_unit_details">
+                                </tbody>
+                            </table>
+                        </div>
+                        </div>
+                    </div>
+
+                    <!--Transferee Details-->
+                    <div class="tab-pane fade" id="transferee" role="tabpanel" aria-labelledby="Transferee">
+                        <div class="card-body">
+                            <label style="font-size:25px;">Transferee Details</label>
+                            @*<div class="row">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col-4">
+                        &nbsp;&nbsp;<label>CID</label>
+                    </div>
+                    <div class="col-8">
+                        <input id="tdcid" readonly class="form-control" /> <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        &nbsp;&nbsp;<label>Name</label>
+                    </div>
+                    <div class="col-8">
+                        <input id="tdname" readonly class="form-control" /> <br />
+                    </div>
+                </div>
+                <div>
+                    &nbsp;&nbsp;<label>Permanent Address</label>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>Dzongkhag</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tddzongkhag" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>Dungkhag</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tddzongkhag" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>Gewog</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tdgewog" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;&nbsp;&nbsp;<label>Village</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tdvillage" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-8">
+                <div>
+                    <label style="font-size:20px;">Land Details</label>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;<label>Plot No</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tdplotno" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;<label>Thram No</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tdthramno" readonly class="form-control" /> <br />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            &nbsp;&nbsp;<label>Plot Area</label>
+                        </div>
+                        <div class="col-8">
+                            <input id="tdplotarea" readonly class="form-control" />
+                        </div>
+                    </div>
+                </div>
+                    <label style="font-size:20px;">Building Unit Details</label>
+                    <table class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sl.No</th>
+                                <th>Floor No</th>
+                                <th>Floor Area</th>
+                                <th>No of Rooms</th>
+                                <th>No of Units</th>
+                                <th>Is Main Owner</th>
+                            </tr>
+                        </thead>
+                        <tbody id="transferee_unit_details">
+                        </tbody>
+                    </table>
+                        </div>
+                    </div>*@
+                            <div class="row">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>CID</th>
+                                            <th>Name</th>
+                                            <th>Thromde</th>
+                                            <th>Thromde Village</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transferee_details">
+                                    </tbody>
+                                </table>
+                                <!--Land Details-->
+                                <label style="font-size:20px;">Land Detail</label>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Plot Number</th>
+                                            <th>Thram Number</th>
+                                            <th>Plot Area</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transferee_land">
+                                    </tbody>
+                                </table>
+                                <!--Building Unit Details-->
+                                <label style="font-size:20px;">Building Unit Details</label>
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Sl.No</th>
+                                            <th>Floor No</th>
+                                            <th>Floor Area</th>
+                                            <th>No of Rooms</th>
+                                            <th>No of Units</th>
+                                            <th>Is Main Owner</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="transferee_unit_details">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--Tax Details-->
+                    <div class="tab-pane fade" id="Tax_Details" role="tabpanel" aria-labelledby="taxDetails">
+                        <form>
+                            <div class="card-body">
+                                <label style="font-size:25px;">Tax Details</label>
+                                <div class="row">
+                                    <div class="col-4">
+                                        &nbsp;&nbsp;<label>Transfer Fees</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="tax_transferfees" readonly class="form-control" /> <br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        &nbsp;&nbsp;<label>Plot Sub-Division Fees</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="tax_plotfees" readonly class="form-control" /> <br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        &nbsp;&nbsp;<label>Lag Thram Change</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="tax_lagthram" readonly class="form-control" /> <br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        &nbsp;&nbsp;<label>Total Payable Amount</label>
+                                    </div>
+                                    <div class="col-8">
+                                        <input id="totalpayable" readonly class="form-control" /> <br />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 d-flex justify-content-end">
+                                        <input id="generateDemand" type="button" class="btn btn-primary" onclick="return saveMe();" value="Update" />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;<button type="reset" class="btn btn-danger" onclick="return cancel();">Cancel</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script>
+
+    function displayTab() {
+            $('#Transactioninput').insertAfter(function () {
+                var transactionid = parseInt($('#Transactioninput').val());
+                //var transactionid = 1;
+                if (transactionid == transactionid) {
+                    $('#FPT_details').show(1000);
+
+                }
+            });
+        }
+
+    function cancel() {
+        $('#FPT_details').hide(1000);
+    }
+
+    function fetchPropertyDetails() {
+        $('#img').show();
+        SelectListLap();
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetTransactionDetailFromAPIByTransactionId", "PartialPropertyTrasfers")',
+            data: {
+                transactionId: parseInt($('#Transactioninput').val())
+            },
+            success: function (data) {
+
+                console.log(data);
+                $('#transferor_details').empty();
+                $('#transferor_land').empty();
+                $('#transferee_details').empty();
+                $('#transferee_land').empty();
+
+                if (data.length > 0) {
+                    $('#img').hide();
+                    $('#FPT_details').show(1000);
+                    $('#buidingDetails').show();
+
+                    var ownerCID = data[0].ownerCID;
+                    $('#pd_cid').val(ownerCID);
+
+                    //PROPERTY DETAILS
+                    var ownerCid = data[0].ownerCID;
+                    var ownername = data[0].ownerName;
+                    var thramno = data[0].thram;
+                    var plotID = data[0].plotID;
+                    var plotArea = data[0].plotArea;
+                    var thromde = data[0].thromde;
+                    var thromdeVillage = data[0].thromdeVillage;
+                    var ownership = data[0].ownershipType;
+                    var transactiontype = data[0].transactionType;
+
+                    //TAX DETAILS
+                    var subdivisionFee = data[0].subdivisionFee;
+                    var demarcationFee = data[0].demarcationFee;
+                    var lagthramFee = data[0].lagthramFee;
+                    var totalPayable = data[0].totalPayable;
+
+                    $('#hdnTransactionId').val(parseInt($('#Transactioninput').val()));
+
+                    //PROPERTY DETAILS
+                    $('#pd_thramno').val(thramno);
+                    $('#pd_plotno').val(plotID);
+                    $('#pd_plotarea').val(plotArea);
+                    $('#pd_thromde').val(thromde);
+                    $('#pd_thromdevillage').val(thromdeVillage);
+                    $('#pd_oname').val(ownername);
+                    $('#pd_oCID').val(ownerCid);
+                    $('#pd_oType').val(ownership);
+                    $('#pd_transaction').val(transactiontype);
+
+                    //TAX DETAILS
+                    $('#tax_plotfees').val(subdivisionFee);
+                    $('#tax_transferfees').val(demarcationFee);
+                    $('#tax_lagthram').val(lagthramFee);
+                    $('#totalpayable').val(totalPayable);
+
+
+                    //transferror
+                    //$('#td_cid').val(ownerCid);
+                    //$('#td_name').val(ownername);
+                    //$('#td_plotno').val(plotID);
+                    //$('#td_thramno').val(thramno);
+                    //$('#td_plotarea').val(plotArea);
+
+                    $.each(data, function (key, value) {
+                        $('#transferor_details').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.ownerCID + '</td>'
+                            + '<td>' + value.ownerName + '</td>'
+                            + '<td>' + value.thromde + '</td>'
+                            + '<td>' + value.thromdeVillage + '</td>'
+                            + '</tr>');
+                    });
+
+                    //$.each(data, function (key, value) {
+                    //    $('#transferor_address').append(
+                    //        '<tr>'
+                    //        + '<td>' + (key + 1) + '</td>'
+                    //        + '<td>' +  + '</td>'
+                    //        + '<td>' +  + '</td>'
+                    //        + '<td>' +  + '</td>'
+                    //        + '<td>' +  + '</td>'
+                    //        + '</tr>');
+                    //});
+
+                    $.each(data, function (key, value) {
+                        $('#transferor_land').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.plotID + '</td>'
+                            + '<td>' + value.thram + '</td>'
+                            + '<td>' + value.plotArea + '</td>'
+                            + '</tr>');
+                    });
+
+                    //transferee
+                    //$('#tdcid').val(ownerCid);
+                    //$('#tdname').val(ownername);
+                    //$('#tdplotno').val(plotID);
+                    //$('#tdthramno').val(thramno);
+                    //$('#tdplotarea').val(plotArea);
+
+
+                    $.each(data, function (key, value) {
+                        $('#transferee_details').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.ownerCID + '</td>'
+                            + '<td>' + value.ownerName + '</td>'
+                            + '<td>' + value.thromde + '</td>'
+                            + '<td>' + value.thromdeVillage + '</td>'
+                            + '</tr>');
+                    });
+
+                    $.each(data, function (key, value) {
+                        $('#transferee_land').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.plotID + '</td>'
+                            + '<td>' + value.thram + '</td>'
+                            + '<td>' + value.plotArea + '</td>'
+                            + '</tr>');
+                    });
+                }
+                else {
+                    $('#img').hide();
+                    swal.fire({
+                        icon: 'info',
+                        text: 'No Record Found!!'
+                    });
+                    $('#FPT_details').hide(1000);
+                    $('#transferor_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    $('#transferor_land').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    $('#transferee_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    $('#transferee_land').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                }
+
+            },
+            error: function () {
+                $('#img').hide();
+                $('#FPT_details').hide(1000);
+                alert('Error occured');
+            }
+        });
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingDetails", "PartialPropertyTrasfers")',
+            data: {
+                id: parseInt($('#Transactioninput').val())
+             },
+            success: function (data) {
+
+                console.log(data);
+                $('#building_details').empty();
+
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#building_details').append(
+                            '<tr>'
+                            + '<td> <input type="checkbox" onclick="return displayUnitDetail('+ value.buildingDetailId +');" id="select" />' + (key + 1) + '</td>'
+                            + '<td>' + value.plinthArea + '</td>'
+                            + '<td>' + value.buildingNo + '</td>'
+                            + '<td>' + value.buildingColorType + '</td>'
+                            + '<td>' + value.noOfUnits + '</td>'
+                            + '</tr>');
+                    });
+                }
+                else {
+                    $('#building_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                swal.fire('Error occured');
+            }
+        });
+
+    }
+
+
+    function SelectListLap() {
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("SelectListLap", "PartialPropertyTrasfers")',
+                data: {
+                    //AssetAttributeId: parseInt(assetattribute_id)
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#LapId').empty();
+
+                    if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '> '
+                            + data[i].text
+                        + ' </option>');
+                        $('#LapId').append(newOption);
+                    }
+                }
+                else {
+                    //$('#img').hide();
+                }
+
+                },
+                error: function () {
+                    //$('#img').hide();
+                    alert('Error occured');
+                }
+                });
+
+    }
+
+    //Saving Demand Number
+    $("#generateDemand").click(function () {
+        var myarray = [];
+        var DemandVM = {};
+            DemandVM.SubdivisionFee = parseFloat($('#tax_plotfees').val());
+            DemandVM.LagthramFee = parseFloat($("#tax_lagthram").val());
+            DemandVM.PlotNo = ($("#pd_plotno").val());
+            DemandVM.Cid = ($("#pd_cid").val());
+
+        myarray.push(DemandVM);
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        swal.fire({
+            title: "Partial Property Transfer",
+            text: "The Transferee is not Registered as Tax Payer with Thimphu Thromde. Would you like to Register the Tax Payer?",
+            confirmButtonText: "Yes, Save it!",
+            cancelButtonText: "No, cancel!",
+            type: "info",
+            showCancelButton: true,
+            closeOnConfirm: false,
+            showLoaderOnConfirm: true,
+        },
+            function () {
+                setTimeout(function () {
+                    //
+
+                                swal.fire("Ajax request finished!");
+
+
+        }, 5000);
+    });
+
+
+          $('#img').show();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("CreateDemand", "PartialPropertyTrasfers")',
+                        data: json_data,
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+
+                            $('#img').hide();
+                            swal.fire(response);
+                        },
+                        failure: function (response) {
+                            $('#img').hide();
+                            swal.fire("Saving Failed.!");
+                        },
+                        error: function (response) {
+                            $('#img').hide();
+                            swal.fire("Error while inserting.!");
+                        }
+                    });
+
+    });
+
+    $("#selectAll").bind("change", function () {
+        $("#select").prop("checked", $(this).prop("checked"));
+    });
+    $("#select").bind("change", function () {
+        if (!$(this).prop("checked"))
+            $("#selectAll").prop("checked", false);
+    });
+
+    
+    function displayUnitDetail(buildingUnitDetailId) {
+        if ($('#select').is(':checked')) {
+            $('#img').show();
+            $('#buidingUnitDetails').show(1000);
+            $('#transferee_unit_details').show(1000);
+            $('#transferor_unit_details').show(1000);
+        //BUILDING UNIT DETAILS
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingUnitDetails", "PartialPropertyTrasfers")',
+            data: {
+                id: parseInt(buildingUnitDetailId)
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+            success: function (data) {
+
+                console.log(data);
+                $('#unit_details').empty();
+
+                if (data.length > 0) {
+                    $('#img').hide();
+                    $.each(data, function (key, value) {
+                        $('#unit_details').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.floorNo + '</td>'
+                            + '<td>' + value.floorArea + '</td>'
+                            + '<td>' + value.noOfrooms + '</td>'
+                            + '<td>' + value.noOfUnit + '</td>'
+                            + '<td>' + value.isMainOwner + '</td>'
+                            + '</tr>');
+                    });
+                }
+                else {
+                    $('#unit_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                swal.fire('Error occured');
+            }
+        });
+
+        } else {
+            $('#buidingUnitDetails').hide(1000);
+            $('#transferee_unit_details').hide(1000);
+            $('#transferor_unit_details').hide(1000);
+        }
+
+        //Transferee Building Unit Details
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingUnitDetails", "PartialPropertyTrasfers")',
+            data: {
+                id: parseInt(buildingUnitDetailId)
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+            success: function (data) {
+
+                console.log(data);
+                $('#transferee_unit_details').empty();
+
+                if (data.length > 0) {
+                    $('#img').hide();
+                    $.each(data, function (key, value) {
+                        $('#transferee_unit_details').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.floorNo + '</td>'
+                            + '<td>' + value.floorArea + '</td>'
+                            + '<td>' + value.noOfrooms + '</td>'
+                            + '<td>' + value.noOfUnit + '</td>'
+                            + '<td>' + value.isMainOwner + '</td>'
+                            + '</tr>');
+                    });
+                }
+                else {
+                    $('#transferee_unit_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                swal.fire('Error occured');
+            }
+        });
+
+
+        //Transferor Building Unit Details
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingUnitDetails", "PartialPropertyTrasfers")',
+            data: {
+                id: parseInt(buildingUnitDetailId)
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+            success: function (data) {
+
+                console.log(data);
+                $('#transferor_unit_details').empty();
+
+                if (data.length > 0) {
+                    $('#img').hide();
+                    $.each(data, function (key, value) {
+                        $('#transferor_unit_details').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.floorNo + '</td>'
+                            + '<td>' + value.floorArea + '</td>'
+                            + '<td>' + value.noOfrooms + '</td>'
+                            + '<td>' + value.noOfUnit + '</td>'
+                            + '<td>' + value.isMainOwner + '</td>'
+                            + '</tr>');
+                    });
+                }
+                else {
+                    $('#transferor_unit_details').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                swal.fire('Error occured');
+            }
+        });
+    }
+
+</script>

@@ -1,0 +1,184 @@
+﻿@using CORE_BOL
+@model TranWaterConnectionModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Connection</a></li>
+                    <li class="breadcrumb-item active">Update Water Connection</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Water Connection</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="TrnWaterConnectionId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="LandDetailId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LandDetailId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="LandDetailId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="WaterConnectionStatusId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionStatusId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterConnectionStatusId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterConnectionStatusId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterMeterNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="WaterMeterNo" class="form-control" placeholder="Water Meter No" />
+                    <span asp-validation-for="WaterMeterNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="WaterMeterTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterMeterTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterMeterTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterMeterTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="ConnectionDate" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConnectionDate" type="date" class="form-control" placeholder="Connection Date" />
+                    <span asp-validation-for="ConnectionDate" class="text-danger"></span>
+                </div>
+
+                <label asp-for="WaterConnectionTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterConnectionTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterConnectionTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterConnectionTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterLineTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterLineTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterLineTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterLineTypeId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="StandardCosumption" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="StandardCosumption" class="form-control" placeholder="Standard Consumption" />
+                    <span asp-validation-for="StandardCosumption" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="BillingAddress" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="BillingAddress" class="form-control" placeholder="Billing Address" />
+                    <span asp-validation-for="BillingAddress" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ZoneId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="ZoneId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ZoneId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ZoneId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="FlatNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="FlatNo" class="form-control" placeholder="Flat No" />
+                    <span asp-validation-for="FlatNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="InitialReading" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="InitialReading" class="form-control" placeholder="Initial Reading" />
+                    <span asp-validation-for="InitialReading" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OrganisationName" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="OrganisationName" class="form-control" placeholder="Organisation Name" />
+                    <span asp-validation-for="OrganisationName" class="text-danger"></span>
+                </div>
+
+                <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OwnerTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="OwnerTypeId" class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="OwnerTypeId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="PrimaryMobileNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="PrimaryMobileNo" class="form-control" placeholder="Primary Mobile No" />
+                    <span asp-validation-for="PrimaryMobileNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="SecondaryMobileNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="SecondaryMobileNo" class="form-control" placeholder="Secondary Mobile No" />
+                    <span asp-validation-for="SecondaryMobileNo" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ConsumerNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="ConsumerNo" class="form-control" placeholder="Consumer No" />
+                    <span asp-validation-for="ConsumerNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="NoOfUnits" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfUnits" class="form-control" placeholder="Secondary Mobile No" />
+                    <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+
+    function saveme() {
+        $('#img').show();
+    }
+</script>

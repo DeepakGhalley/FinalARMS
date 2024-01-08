@@ -1,0 +1,47 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstLandDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[mstLandDetail].[propertyTypeId] on table [dbo].[mstLandDetail] must be added, but the column has no
+         default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this
+         issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of
+         smart-defaults as a deployment option.
+
+** User actions
+     Table rebuild
+       [dbo].[mstLandDetail] (Table)
+     Create
+       [dbo].[enumPropertyType] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+
+The column [dbo].[mstLandDetail].[propertyTypeId] on table [dbo].[mstLandDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

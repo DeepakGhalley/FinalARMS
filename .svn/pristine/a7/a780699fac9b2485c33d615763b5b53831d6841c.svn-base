@@ -1,0 +1,77 @@
+﻿
+@using Microsoft.AspNetCore.Http;
+
+@{
+    ViewData["Title"] = "OnlineWaterBillPayment";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+@{
+    var bfs_benfBankCode = Context.Session.GetString("bfs_benfBankCode");
+    var BenificiaryID = Context.Session.GetString("BenificiaryID");
+
+    var trnTime = Context.Session.GetString("bfs_benfTxnTime");
+    var bfs_msgType = Context.Session.GetString("bfs_msgType");
+
+    var orderNo = Context.Session.GetString("bfs_orderNo");
+    var bfs_paymentDesc = Context.Session.GetString("bfs_paymentDesc");
+
+    var email = Context.Session.GetString("bfs_remitterEmail");
+    var bfs_txnCurrency = Context.Session.GetString("bfs_txnCurrency");
+
+    var bfs_txnAmount = Context.Session.GetString("bfs_txnAmount");
+    var BFSVersion = Context.Session.GetString("bfs_version");
+    var SignedString = Context.Session.GetString("bfs_checkSum");
+}
+
+
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head runat="server">
+    <title></title>
+
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+    <script lang="javascript" type="text/javascript">
+
+        $(document).ready(function () {
+
+            redirectToBFS();
+
+        });
+        function redirectToBFS() {
+            
+            document.forms[0].submit();
+        }
+
+    </script>
+
+</head>
+
+@*<body onload="javascript:redirectToBFS();">*@
+<body>
+
+    <form id="form1" runat="server" method="post" action="http://uatbfssecure.rma.org.bt/BFSSecure/makePayment">
+        <div>
+            <input type="hidden" value="@bfs_benfBankCode" name="bfs_benfBankCode" />
+            <input type="hidden" value="@BenificiaryID" name="bfs_benfId" />
+            <input type="hidden" value="@trnTime" name="bfs_benfTxnTime" />
+            <input type="hidden" value="@bfs_msgType" name="bfs_msgType" />
+            <input type="hidden" value="@orderNo" name="bfs_orderNo" />
+            <input type="hidden" value="@bfs_paymentDesc" name="bfs_paymentDesc" />
+            <input type="hidden" value="@email" name="bfs_remitterEmail" />
+            <input type="hidden" value="@bfs_txnAmount" name="bfs_txnAmount" />
+            <input type="hidden" value="@bfs_txnCurrency" name="bfs_txnCurrency" />
+            <input type="hidden" value="@BFSVersion" name="bfs_version" />
+            <input type="hidden" value="@SignedString" name="bfs_checkSum" />
+
+            <input type="submit" value="Pay via BFS Secure">
+
+        </div>
+    </form>
+</body>
+</html>
+

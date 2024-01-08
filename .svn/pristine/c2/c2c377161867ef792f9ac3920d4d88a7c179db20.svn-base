@@ -1,0 +1,347 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[trnSewerageConnection]
+       [dbo].[mstTaxPayerProfile]
+       [dbo].[tblDemand]
+       [dbo].[tblDemandNo]
+       [dbo].[tblHouseRentDemandDetail]
+       [dbo].[tblHouseRentPeriod]
+       [dbo].[tblLandLease]
+       [dbo].[tblLandLeaseDemandDetail]
+       [dbo].[tblLandLeasePeriod]
+       [dbo].[tblLedger]
+       [dbo].[tblMiscellaneousRecord]
+       [dbo].[tblParkingFeeDemandDetail]
+       [dbo].[tblParkingfeeDetail]
+       [dbo].[tblPaymentLeger]
+       [dbo].[tblReceipt]
+       [dbo].[tblStallDetailDemand]
+       [dbo].[tblTransactionDetail]
+       [dbo].[tblWaterMeterReading]
+       [dbo].[trnConstructionApprovalApplicationFeeDetail]
+       [dbo].[trnLandFeeDetail]
+       [dbo].[trnWaterConnection]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[trnSewerageConnection].[cid] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[emailId] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[name] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[ownerName] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[plotNo] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[thramNo] is being dropped, data loss could occur.
+       The column [dbo].[trnSewerageConnection].[createdBy] on table [dbo].[trnSewerageConnection] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[trnSewerageConnection].[createdOn] on table [dbo].[trnSewerageConnection] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[trnSewerageConnection].[landOwnershipId] on table [dbo].[trnSewerageConnection] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+
+** User actions
+     Drop
+       [dbo].[DF__tmp_ms_xx__isPay__70D3A237] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__payme__052FA09F] (Default Constraint)
+       [dbo].[DF__tblMiscel__payme__29AC2CE0] (Default Constraint)
+       [dbo].[DF__tblParkin__isAct__2AA05119] (Default Constraint)
+       [dbo].[DF__tblPaymen__payme__477C86E9] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isRea__0BDC9E2E] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isAct__0CD0C267] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isDis__0DC4E6A0] (Default Constraint)
+       [dbo].[DF__trnWaterC__noOfU__270FB757] (Default Constraint)
+     Table rebuild
+       [dbo].[trnSewerageConnection] (Table)
+       [dbo].[mstTaxPayerProfile] (Table)
+       [dbo].[tblDemand] (Table)
+       [dbo].[tblDemandNo] (Table)
+       [dbo].[tblHouseRentDemandDetail] (Table)
+       [dbo].[tblHouseRentPeriod] (Table)
+       [dbo].[tblLandLease] (Table)
+       [dbo].[tblLandLeaseDemandDetail] (Table)
+       [dbo].[tblLandLeasePeriod] (Table)
+       [dbo].[tblLedger] (Table)
+       [dbo].[tblMiscellaneousRecord] (Table)
+       [dbo].[tblParkingFeeDemandDetail] (Table)
+       [dbo].[tblParkingfeeDetail] (Table)
+       [dbo].[tblPaymentLeger] (Table)
+       [dbo].[tblReceipt] (Table)
+       [dbo].[tblStallDetailDemand] (Table)
+       [dbo].[tblTransactionDetail] (Table)
+       [dbo].[tblWaterMeterReading] (Table)
+       [dbo].[trnConstructionApprovalApplicationFeeDetail] (Table)
+       [dbo].[trnLandFeeDetail] (Table)
+       [dbo].[trnWaterConnection] (Table)
+     Create
+       [dbo].[FK_trnSewerageConnection_ToTable_1] (Foreign Key)
+     Alter
+       [dbo].[rptGetDailyHeadWiseDemandCollection] (Procedure)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_trnSewerageConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayerProfile_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseRentPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeasePeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_15] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingFeePeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDeposit_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterBillChangeHistory_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnVacuumTankerService_ToTable] (Foreign Key)
+       [dbo].[FK_tblTransactionDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblTransactionDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblWaterBillChangeHistory_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_5] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_10] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_9] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_trnSewerageConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseAllocation_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_5] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_6] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_7] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_8] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstTaxPayer_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxPayerProfile_ToTable] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblHouseRentDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblHouseRentPeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeasePeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_10] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_9] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_11] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_15] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_13] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_14] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblParkingFeeDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingFeePeriod_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblParkingfeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDeposit_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblPaymentLeger_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblStallDetailDemand_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnLandTransferDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterBillChangeHistory_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnVacuumTankerService_ToTable] (Foreign Key)
+       [dbo].[FK_tblTransactionDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblTransactionDetail_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblWaterBillChangeHistory_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnLandFeeDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_4] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_5] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_7] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_10] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_9] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_2] (Foreign Key)
+     Refresh
+       [dbo].[ViewProertyTaxLedger] (View)
+       [dbo].[View_ReadingSeet] (View)
+       [dbo].[rptDefaulterPropertyList] (Procedure)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbycalyear] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbytofromdate] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)
+       [dbo].[GetHouseRentDemandScheduleMonthly] (Procedure)
+       [dbo].[GetLandLeaseDemandScheduleMonthly] (Procedure)
+       [dbo].[rptDailyPaymentWiseDemandCollection] (Procedure)
+       [dbo].[rptGetYearlyHeadWiseDemandCollection] (Procedure)
+       [dbo].[GetVendorDemandSchedule] (Procedure)
+       [dbo].[rptDailyReceiptWiseCollectionByFromDateToDate] (Procedure)
+       [dbo].[rptIndividualReceiptWiseCollection] (Procedure)
+       [dbo].[rptOnlinePaymentByFromDateToDate] (Procedure)
+       [dbo].[rptReconcilReport] (Procedure)
+       [dbo].[spCollectionByFromDateToDate] (Procedure)
+       [dbo].[spPaymentDepositReport] (Procedure)
+       [dbo].[GetStallDemandScheduleMonthly] (Procedure)
+       [dbo].[rptGetWaterConsumption] (Procedure)
+       [dbo].[rptMissedOutReadingReport] (Procedure)
+       [dbo].[rptMonthlyMeterReader] (Procedure)
+
+The column [dbo].[trnSewerageConnection].[cid] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[emailId] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[name] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[ownerName] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[plotNo] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[thramNo] is being dropped, data loss could occur.
+The column [dbo].[trnSewerageConnection].[createdBy] on table [dbo].[trnSewerageConnection] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[trnSewerageConnection].[createdOn] on table [dbo].[trnSewerageConnection] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[trnSewerageConnection].[landOwnershipId] on table [dbo].[trnSewerageConnection] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+If this deployment is executed, changes to [dbo].[tblParkingFeeDemandDetail] might introduce run-time errors in [dbo].[GetParkingVendorDemandScheduleQuarterly].
+If this deployment is executed, changes to [dbo].[tblPaymentLeger] might introduce run-time errors in [dbo].[rptReconcilingReport].
+

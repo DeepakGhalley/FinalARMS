@@ -1,0 +1,340 @@
+﻿@using CORE_BOL
+@model BuildingDetailModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Details</a></li>
+                    <li class="breadcrumb-item active">Update Building Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Building Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="BuildingDetailId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <div class="col-sm-3" style="display:none;">
+                    <input asp-for="LandDetailId" class="form-control" readonly />
+                    <span asp-validation-for="LandDetailId" class="text-danger"></span>
+                </div>
+                <label asp-for="YearOfConstruction" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="YearOfConstruction" class="form-control" placeholder="Year of construction" />
+                    <span asp-validation-for="YearOfConstruction" class="text-danger"></span>
+                </div>
+                <label asp-for="BuildingNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="BuildingNo" class="form-control" placeholder="Building Number" />
+                    <span asp-validation-for="BuildingNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="BuildupArea" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="BuildupArea" class="form-control" placeholder="Buildup Area" />
+                    <span asp-validation-for="BuildupArea" class="text-danger"></span>
+                </div>
+                <label asp-for="StoryTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="StoryTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StoreyTypeId,"Value","Text")) "></select>
+                    <span asp-validation-for="StoryTypeId" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="NoOfUnits" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfUnits" class="form-control" placeholder="Number of units" />
+                    <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+                </div>
+
+                <label asp-for="NumberOfFloors" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="NumberOfFloors" class="form-control" placeholder="Number of Floors" />
+                    <span asp-validation-for="NumberOfFloors" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="StructureTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="StructureTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="StructureTypeId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ConstructionTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="ConstructionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ConstructionTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="GarbagServiceAccessibilityId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="GarbagServiceAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="GarbagServiceAccessibilityId" class="text-danger"></span>
+                </div>
+                <label asp-for="StreetLightAccessibilityId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="StreetLightAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="StreetLightAccessibilityId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="StructureCategoryId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="StructureCategoryId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureCategoryId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="StructureCategoryId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="OccupancyCertificateNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="OccupancyCertificateNo" class="form-control" placeholder="Occupancy Certificate No" />
+                    <span asp-validation-for="OccupancyCertificateNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="RoofingTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="RoofingTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.RoofingTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="RoofingTypeId" class="text-danger"></span>
+                </div>
+                <label asp-for="BoundaryTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="BoundaryTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BoundaryTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BoundaryTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="MaterialTypeId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="MaterialTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MaterialTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="MaterialTypeId" class="text-danger"></span>
+                </div>
+                <label asp-for="BuildingColourId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="BuildingColourId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingColourId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingColourId" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label asp-for="WaterTankLocationId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterTankLocationId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterTankLocationId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterTankLocationId" class="text-danger"></span>
+                </div>
+
+                <label asp-for="ParkingSlotId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="ParkingSlotId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ParkingSlotId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ParkingSlotId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+                <label asp-for="ModificationRemarks" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="ModificationRemarks" class="form-control" placeholder="Modification Remarks" />
+                    <span asp-validation-for="ModificationRemarks" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterSupplyAccessibilityId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="WaterSupplyAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="WaterSupplyAccessibilityId" class="text-danger"></span>
+                </div>
+                <label asp-for="DateOfFinalInspection" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="DateOfFinalInspection" type="date" class="form-control" placeholder="Date of final inspection" />
+                    <span asp-validation-for="DateOfFinalInspection" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyAlteredOn" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="OccupancyAlteredOn" type="date" class="form-control" placeholder="Occupancy altered on" />
+                    <span asp-validation-for="OccupancyAlteredOn" class="text-danger"></span>
+                </div>
+                <!-- COMMON FUNCTION NOT SURE -->
+                <label asp-for="OccupancyReferenceId" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="OccupancyReferenceId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OccupancyReferenceId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="OccupancyReferenceId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyCertificateIssueDate" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="OccupancyCertificateIssueDate" type="date" class="form-control" placeholder="Occupancy certificate issue Date" />
+                    <span asp-validation-for="OccupancyCertificateIssueDate" class="text-danger"></span>
+                </div>
+                <label asp-for="PlinthArea" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="PlinthArea" class="form-control" placeholder="Plinth Area" />
+                    <span asp-validation-for="PlinthArea" class="text-danger"></span>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="SewerageConnection">
+                    <label for="SewerageConnection" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.SewerageConnection)
+                    </label>
+                </div>
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="Attic">
+                    <label for="Attic" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.Attic)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="WaterConnection">
+                    <label for="WaterConnection" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.WaterConnection)
+                    </label>
+                </div>
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="ArchFeature">
+                    <label for="ArchFeature" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.ArchFeature)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="OccupancyCertificateIssued">
+                    <label for="OccupancyCertificateIssued" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.OccupancyCertificateIssued)
+                    </label>
+                </div>
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="Roofing">
+                    <label for="Roofing" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.Roofing)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="TraditionalPainting">
+                    <label for="TraditionalPainting" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.TraditionalPainting)
+                    </label>
+                </div>
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="Plantation">
+                    <label for="Plantation" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.Plantation)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="NumberDisplayed">
+                    <label for="NumberDisplayed" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.NumberDisplayed)
+                    </label>
+                </div>
+
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="FireExtingusher">
+                    <label for="FireExtingusher" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.FireExtingusher)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="DrainToStormWaterDrain">
+                    <label for="DrainToStormWaterDrain" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.DrainToStormWaterDrain)
+                    </label>
+                </div>
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox col-sm-3">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="RoadAccess">
+                    <label for="RoadAccess" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.RoadAccess)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+

@@ -1,0 +1,86 @@
+﻿@*@using CORE_BOL
+    @model WaterMeterReadingModel*@
+
+
+@{
+    ViewData["Title"] = "Miscellaneous";
+    Layout = "~/Views/Shared/_Layout1.cshtml";
+}
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="CitizenServices">Citizen Services</a></li>
+                    <li class="breadcrumb-item active">Miscellaneous</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Construction Approval</h3>
+    </div>
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">CID No.: <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="cid" class="form-control" />
+            </div>
+            <label class="col-sm-0 col-form-label"></label>
+            <div class="col-sm-6">
+                <button class="btn btn-primary" onclick="return Search();">Search</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card card-info" style="display:none;" id="dvDemand">
+    <div class="card-header">
+        <h3 class="card-title">Miscellaneous</h3>
+    </div>
+    <div class="card-body">
+        <p>Body Part</p>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="submit" class="btn btn-primary">Save</button>
+                <button type="reset" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function Search() {
+        $('#dvDemand').show(1000);
+    }
+
+    function Cancel() {
+        $('#dvDemand').hide(1000);
+    }
+</script>

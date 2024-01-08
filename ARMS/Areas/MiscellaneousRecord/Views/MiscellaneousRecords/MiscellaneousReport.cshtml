@@ -1,0 +1,208 @@
+﻿@model List<CORE_BOL.MiscellaneousRecordModel>
+@*@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers*@
+
+@{
+    ViewData["Title"] = "Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*@model Byte[]
+
+    @{
+        ViewData["Title"] = "Index";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }*@
+
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Miscellaneous Record</a></li>
+                        <li class="breadcrumb-item active">Miscellaneous Record Details</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Miscellaneous Record</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+        
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-5 col-form-label">Miscellaneous Type<span style="font-weight: bold; color:red;">*</span></label>
+                    <div class="col-sm-5">
+                        <select class="form-control select2bs4" style="width: 100%;" id="TaxId" asp-items="@(new SelectList (@ViewBag.TaxId,"Value","Text")) " value="0"></select>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-group d-flex justify-content-center col-5">
+                        <label class="col-sm-4 col-form-label">From Date<span style="font-weight: bold; color: red;"></span></label>
+                        <input id="idfromdate" type="date" class="form-control col-5" />
+                    </div>
+
+                    <div class="input-group d-flex justify-content-center col-5">
+                        <label class="col-sm-4 col-form-label">To Date<span style="font-weight: bold; color: red;"></span></label>
+                        <input id="idtodate" type="date" class="form-control col-5" />
+                    </div>
+
+                    <div class="input-group-append col-2">
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="button" value="Search" class="btn btn-primary" onclick="return displaydataDetails();" />
+                    </div>
+                </div>
+
+            </div>
+    </div>
+
+</form>
+
+
+<div class="card card-info" style="display:none;" id="ec_renewal">
+    <div class="card card-info" id="dvPrint">
+        <div class="card-header">
+            <h3 class="card-title">Miscellaneous Details</h3>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Sl.no</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>CID No.</th>
+                        <th>Mobile No.</th>
+                        <th>Quantity</th>
+
+                        <th>Amount</th>
+
+                        <th>Tax</th>
+
+
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                </tbody>
+                <tr><td></td><td></td><td></td><td></td><td></td><td align="right"><b>Total :</b></td><td><label id="tamount" value="" class="col-form-label" readonly /> </td><td></td></tr>
+
+            </table>
+        </div>
+    </div>
+    <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+</div>
+
+
+
+
+
+
+
+
+
+    <script>
+
+
+    //Display Details
+
+    function displaydataDetails() {
+
+        var TaxId = ($('#TaxId').val());
+            var Name = $('#Name').val();
+            var fromdate = $('#idfromdate').val();
+            var todate = $('#idtodate').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Report", "MiscellaneousRecords")',
+                    data: {
+
+                        TaxId: TaxId,
+                        fromdate: fromdate,
+                        todate: todate
+                    },
+                    success: function (data) {
+                        $('#tbl_body').empty();
+                        if (data.length > 0) {
+                            var TPA = 0;
+                            $.each(data, function (key, value) {
+                                $('#ec_renewal').show(1000);
+                                TPA += value.amount;
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.address + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>' + value.quantity + '</td>'
+
+                                    + '<td>' + value.amount + '</td>'
+
+                                    + '<td>' + value.tax + '</td>'
+
+
+                                    + '</tr>');
+                            });
+
+                            $("#tamount").html(TPA.toFixed(2));
+                       } else {
+                            $('#tbl_body').append(
+                                '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                            swal({
+                                title: 'Please Enter valid Value!',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+
+
+
+        });
+
+    }
+
+
+
+        function printPage() {
+
+
+            var dataToPrint = document.getElementById("dvPrint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+
+
+    </script>

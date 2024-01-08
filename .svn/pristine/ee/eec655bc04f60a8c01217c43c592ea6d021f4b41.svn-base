@@ -1,0 +1,76 @@
+{
+  "AllowedHosts": "*",
+  "ApplicationInsights": {
+    "InstrumentationKey": ""
+  },
+  "CitizenAPIBaseUrl": "https://staging-datahub-apim.dit.gov.bt/dcrc_citizen_details_api/1.0.0",
+  "ConnectionStrings": {
+   "ThromdeDBConnection": "Server=NARAYAN\\SQLE2019;Database=tt_db;Trusted_Connection=False;user id=sa;password=P@ssw0rd;MultipleActiveResultSets=true;Persist Security Info=True;Connection Timeout=30;"
+ //"ThromdeDBConnection": "Server=172.30.2.7\\REVENUE;Database=tt_db;Trusted_Connection=False;user id=sa;password=TTrms@2020;MultipleActiveResultSets=true;Persist Security Info=True;Connection Timeout=30;"
+    // "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=aspnet-ARMS-29A7C1E8-DFFB-4F98-9668-72F152368CE6;Trusted_Connection=True;MultipleActiveResultSets=true"
+  },
+  "DataHubSettings": {
+    //"ClientId": "75e1fVg7rkF2mc3QPEpPMsveik4a",
+    //"ClientSecret": "KGFS2hzWfAgETy1D52TcH14Hcx4a",
+    "ClientId": "ZAj21DtA1iDzMHvWZB6ymitsN5wa",
+    "ClientSecret": "R0WfWQfD4NGpqLMiDiubmqXoKeQa",
+    "TokenUrl": "https://sso.dit.gov.bt/oauth2/token/",
+    "CITIZEN_API": "https://staging-datahub-apim.dit.gov.bt/dcrc_citizen_details_api/1.0.0",
+    "CITIZEN_IMAGE_API": "https://staging-datahub-apim.dit.gov.bt/dcrc_restcitizenimageapi/1.0.0/citizenImage/",
+    "ESAKOR_Base_URL": "https://stg-api.dit.gov.bt/nlcs_landdetailapi/1.0.0"
+  },
+  "EmailConfiguration": {
+    "From": "thimthromde@gmail.com",
+    "SmtpServer": "smtp.gmail.com",
+    "Port": 465,
+    "Username": "thimthromde@gmail.com",
+    "Password": "Thromde@2021",
+    "enableSsl": "true"
+  },
+  "EsakorAPIBaseUrl": "https://stg-api.dit.gov.bt/nlcs_landdetailapi/1.0.0",
+  "G2CAPIBaseUrl": "http://localhost:99/api/G2CService/",
+  "G2CAPISettings": {
+    "ClientId": "admin",
+    "ClientSecret": "12345",
+    "TokenUrl": "http://localhost:5000/api/G2CService/generate/token"
+
+  },
+  // "G2CAPIBaseUrl": "http://103.80.110.239:3306/api/G2CService/",
+  //"G2CAPIBaseUrl": "http://localhost:5000/api/G2CService/",
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  },
+  "PaymentGatewaySettings": {
+    "PrivateKeyPath": "C:\\AIMS-key\\BE10000123.key",
+    "BenificiaryId": "BE10000123",
+    "GateWay": "https://bfssecure.rma.org.bt/BFSSecure/makePayment"
+  },
+  //"WebAPIBaseUrl": "https://staging-datahub-apim.dit.gov.bt/dcrc_citizen_details_api/1.0.0/citizendetails/11303003096",
+  "SmtpSettings": {
+    "Host": "smtp.gmail.com",
+    "Port": 587, //465
+    "FromAddress": "thimthromde@gmail.com",
+    "userName": "thimthromde@gmail.com",
+    "password": "Thromde@2021",
+    "enableSsl": "true"
+  },
+  "SSRSSettings": {
+    "ReportPath": "http://localhost/ReportServer/Pages/ReportViewer.aspx?%2faims_report%2f"
+  }
+}
+
+ //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+ //       {
+ //           if (!optionsBuilder.IsConfigured)
+ //           {
+ //               IConfigurationRoot configuration = new ConfigurationBuilder()
+ //                             .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+ //                             .AddJsonFile("appsettings.json")
+ //                             .Build();
+ //               optionsBuilder.UseSqlServer(configuration.GetConnectionString("ThromdeDBConnection"));
+ //           }
+ //       }

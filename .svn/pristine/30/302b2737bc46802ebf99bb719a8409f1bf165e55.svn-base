@@ -1,0 +1,75 @@
+using System;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.Extensions.Configuration;
+
+namespace CORE_BOL.Entities
+{
+    public partial class tt_dbContext : DbContext
+    {
+        public tt_dbContext()
+        {
+        }
+
+        public tt_dbContext(DbContextOptions<tt_dbContext> options)
+            : base(options)
+        {
+        }
+        public virtual DbSet<AssetManagementVM> AssetManagement { get; set; }
+   public virtual DbSet<PaymentModeWiseReport> PaymentModeWiseReport { get; set; }
+        public virtual DbSet<ConnectionTypeWiseRevenue> ConnectionTypeWiseRevenue { get; set; }
+        public virtual DbSet<ConnectionTypeWiseConsumption> ConnectionTypeWiseConsumption { get; set; }
+        public virtual DbSet<ZoneWiseWaterConsumptionFromToDate> ZoneWiseWaterConsumptionFromToDate { get; set; }
+public virtual DbSet<OnlinePaymentReconciliationsReport> OnlinePaymentReconciliationsReport { get; set; }
+public virtual DbSet<NoOfConnectionZoneWiseReport> NoOfConnectionZoneWiseReport { get; set; }
+        public virtual DbSet<NoOfConnectionCategoryWiseReport> NoOfConnectionCategoryWiseReport { get; set; }
+        public virtual DbSet<DifferentSizesMeterNoReport> DifferentSizesMeterNoReport { get; set; }  
+        public virtual DbSet<AssetMaintenanceReport> AssetMaintenanceReport { get; set; }
+        public virtual DbSet<AssetTransferReport> AssetTransferReport { get; set; }
+public virtual DbSet<AssetListing> AssetListing { get; set; }
+        public virtual DbSet<AssetListByResponsiblePerson> AssetListByResponsiblePerson { get; set; }
+        public virtual DbSet<AssetStatusReport> AssetStatusReport { get; set; }
+public virtual DbSet<LongandShortTermCollection> LongandShortTermCollection { get; set; }
+public virtual DbSet<LongandShortLeaseList> LongandShortLeaseList { get; set; }
+public virtual DbSet<ConsolidatePropertyWaterCollection> ConsolidatePropertyCollection { get; set; }
+ public virtual DbSet<ConsolidateWaterCollection> ConsolidateWaterCollection { get; set; }
+        public virtual DbSet<GenerateAllModel> GetOwnershipDetailByLandOwnershipId { get; set; }
+ public virtual DbSet<LongtermleaseVM> LongTermLandLeaseDemandSchedule { get; set; }
+              public virtual DbSet<GenerateAllDisplayModel> GetOwnershipDetailByTaxPayerId { get; set; }
+        public virtual DbSet<OccupancyCertificateVM> OccupancyCertificate { get; set; }
+
+        public virtual DbSet<WaterTransactionReport> WaterTransactionReport { get; set; }
+
+  public virtual DbSet<PropertyandWaterCollectionReport> PropertyandWaterCollectionReport { get; set; }
+      
+public virtual DbSet<DemandCancelModel> DemandCancel { get; set; }
+        public virtual DbSet<ZoneWiseWaterConsumption> GetZoneWiseWaterConsumption { get; set; }
+        public virtual DbSet<MonthlyZoneWiseWaterConsumption> GetMonthlyZoneWiseWaterConsumption { get; set; }
+        public virtual DbSet<ZoneWiseWaterCollection> GetZoneWiseWaterCollection { get; set; }
+        public virtual DbSet<WaterAccountWiseReport> GetWaterAccountWiseReport { get; set; }
+        public virtual DbSet<FloorsWiseCountReportVM> FloorsWiseCount { get; set; }
+        public virtual DbSet<MissedOutReadingReportVM> MissedOutReading { get; set; }
+        public virtual DbSet<OnlinePaymentByFromDateToDateModel> OnlinePaymentByFromDateToDate { get; set; }
+
+        public virtual DbSet<Report2VM> GetMonthlyMeterReading { get; set; }
+
+        public virtual DbSet<rptGetWaterConsumptionVM> GetWaterConsumption { get; set; }
+        public virtual DbSet<PaymentDepositReportVM> PaymentDepositReport { get; set; }
+        public virtual DbSet<DefaulterWaterList> GetDefaulterWaterList { get; set; }
+        public virtual DbSet<DailyMinorHeadWiseCollection> DailyMinorHeadWise { get; set; }
+        public virtual DbSet<YearlyMinorHeadWiseCollection> YearlyMinorHeadWise { get; set; }
+        public virtual DbSet<DemandYearsModel> DemandYearsModel { get; set; }
+        public virtual DbSet<IndividaulReceiptWiseDemandCollection> IndividaulReceiptWiseCollection { get; set; }
+        public virtual DbSet<DefaulterPropertyList> GetDefaulterPropertyList { get; set; }
+        public virtual DbSet<FinancialYearWiseReportVM> FinancialYearWiseReport { get; set; }
+        public virtual DbSet<TaxRateVM> GetTaxRate { get; set; }
+        public virtual DbSet<ReconcilingReport> GetReconcilingReport { get; set; }
+        public virtual DbSet<DailyReceiptWiseCollection> GetDailyRecepitWiseCollection { get; set; }
+        public virtual DbSet<DailyPaymentModeWisedemandCollectionVM> DailyPaymentModeWiseDemandCollection { get; set; }
+        public virtual DbSet<DepositVM> CollectionByFromDateToDate { get; set; }
+        public virtual DbSet<ReportVM> DailyWiseReport { get; set; }
+        public virtual DbSet<HouseRentDemandScheduleModule> HouseRentDemandSchedule { get; set; }
+        public virtual DbSet<StallRentDemandScheduleModel> StallRentDemandSchedule { get; set; }
+        public virtual DbSet<LandLeaseDemandScheduleModel> LandLeaseDemandSchedule { get; set; }
+        public virtual DbSet<VendorDemandScheduleModel> VendorDemandSchedule { get; set; }
+        public virtual DbSet<MenuMapModel> MenuMapModel { get; set; }

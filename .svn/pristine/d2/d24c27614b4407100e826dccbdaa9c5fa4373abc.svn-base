@@ -1,0 +1,620 @@
+﻿@model List<CORE_BOL.TranWaterConnectionModel>
+
+@{
+    ViewData["Title"] = "ReconnectionRequests";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Dashboard</a></li>
+                    <li class="breadcrumb-item active">Reconnection Requests</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Water Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>Water Meter No</th>
+                    <th>Consumer No</th>
+                    <th>Billing Address</th>
+                    <th>Disconnect Date</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{int sl = 1; }
+
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @sl
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.PlotNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.WaterMeterNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.ConsumerNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.BillingAddress)</td>
+                        <td>@Html.DisplayFor(modelItem => item.DisconnectDate)</td>
+
+                        <td style="text-align:center;">
+                            <a style="color: #007bff; cursor: pointer;" onclick="return displayReconnectionDisplay('@item.TrnWaterConnectionId','@item.WorkLevelId','@item.ApprovalStatusId')"><i class="fas fa-eye"></i></a>
+                        </td>
+                    </tr>
+                    sl++;
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" id="divReconnectionDetail" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Water Connection Detail</h3>
+        <input hidden id="hdnWorkLevelId" />
+        <input hidden id="hdnApprovalStatus" />
+        <input hidden id="hdnTranWaterConnectionId" />
+        <input hidden id="hdnTransactionId" />
+
+    </div>
+    <div class="card-body">
+        <table style="width:100%">
+            <tr>
+                <td colspan="2">
+                    <b>Meter No:</b>&nbsp;
+                </td>
+                <td colspan="2"><p id="IdMeterNo" class="col-form-label"></p></td>
+                <td colspan="2">
+                    <b>Connection Status:</b>&nbsp;
+                </td>
+                <td colspan="2"><p id="IdWaterConnectionStatus" class="col-form-label"></p></td>
+                <td colspan="2">
+                    <b>Connection Date:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdConnectionDate" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Consumer No:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdConsumerNo" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Meter Type:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdWaterMeterType" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Disconnect Date:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdDisconnectDate" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Phone No:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdPhoneNo" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b> Line Type:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdWaterLineType" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Reconnection Date:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdReconnectionDate" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Plot No:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdPlotNo" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Connection Type:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdWaterConnectionType" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Standard Consumption:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdStandardConsumption" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Flat No:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdFlatNo" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Billing Address:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdBillingAddress" class="col-form-label"></p>
+                </td>
+                <td colspan="2">
+                    <b>Initial Reading:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdInitialReading" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <b>Zone:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdZoneName" class="col-form-label"></p>
+                </td>
+                <td colspan="2"></td>
+                <td colspan="2"></td>
+                <td colspan="2">
+                    <b>No Of Units:</b>&nbsp;
+                </td>
+                <td colspan="2">
+                    <p id="IdNoOfUnits" class="col-form-label"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5"></td>
+                <td>
+                    <div class="row-cols-lg-3">
+                        <button type="submit" id="btnApprove" class="btn btn-outline-success">Approve</button>&nbsp;&nbsp;
+                        <button type="submit" id="btnReject" class="btn btn-outline-danger">Reject</button>
+                    </div>
+                </td>
+            </tr>
+            <tr id="displayremarks" style="display:none;">
+                <td colspan="2">
+                    <b>Remarks:</b>&nbsp;
+                </td>
+                <td>
+                    <textarea class="form-control" id="IdRemarks" placeholder="Enter Remarks" rows="3"></textarea>
+
+                </td>
+            </tr>
+            <tr id="displayremark" style="display:none;">
+                <td colspan="2"></td>
+                <td colspan="2">
+                    <button class="btn btn-primary" id="saveme">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                </td>
+            </tr>
+
+
+        </table>
+    </div>
+</div>
+@* WATER RECIEPT *@
+<div id="divwatertaxrecepit" style="display: none;">
+    <div class="card card-info" id="dvPrint">
+
+        <div class="card-body">
+            <div class="form-group row">
+                <table style="width: 100%">
+                    <tr>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                    </tr>
+
+                    <tr>
+                        <td colspan="2">
+                            <img src="~/dist/img/tt_logo.gif"
+                                 style="width: 162px; height: 120px" />
+                        </td>
+                        <td colspan="4" align="center">
+                            <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong><label id="lbltransactiontype" value="" /> </strong>
+                        </td>
+                        <td colspan="4"></td>
+                        <td></td>
+                        <td></td>
+                        <td colspan="2">
+                            <img id="qrDemandNo" style="width: 162px; height: 120px" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" style="height: 15px">
+                            &nbsp;
+                        </td>
+                        <td colspan="2" align="center">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td colspan="2"></td>
+                        <td style="height: 15px">
+                            @*<span>
+                                <b>Receipt No:</b>&nbsp;<label id="idrecepitno" value="" />
+                            </span>*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Demand NO:</b>&nbsp;<label id="iddemand" value="" />
+                        </td>
+
+                        <td colspan="2">
+                            @*<b>Tax Year :</b>*@ <label value="" />
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2">
+                        </td>
+                        <td colspan="2"></td>
+                        <td>
+                            <b>Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b> Billing Date:</b>&nbsp;<label id="idbilldate" value="" />
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td colspan="2">
+                            <b>Consumer No:</b>&nbsp; <label id="idrconsumer" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            <b>Meter No:</b>&nbsp;<label id="idrmeter" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="2">
+                            @*<b>Thram No:</b>&nbsp; <label id="idrthramno" class="col-form-label" readonly />*@
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td colspan="6">
+                            <b>Billing Address:</b>&nbsp;<label id="idrbillingaddress" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4">
+                            <b>Name:</b>&nbsp;<label id="idrname" class="col-form-label" readonly />
+                        </td>
+                        <td colspan="4"></td>
+                       
+
+                        <td colspan="4">
+                            <b>Phone No:</b>&nbsp;<label id="idrphone" class="col-form-label" readonly />
+                        </td>
+                    </tr>
+                </table>
+
+            </div>
+            <div class="form-group row">
+                <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>#</th>
+                            <th>Tax For</th>
+
+                            <th>Amount</th>
+
+
+                        </tr>
+                    </thead>
+                    <tbody id="tblDemand">
+                    </tbody>
+                    <tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="idtamount" value="" class="col-form-label" readonly /> </td></tr>
+                </table>
+
+            </div>
+        </div>
+
+    </div>
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button asp-action="Index" type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+    <br />
+</div>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+function displayReconnectionDisplay(TrnWaterConnectionId, WorkLevelId, ApprovalStatusId) {
+                $('#hdnTranWaterConnectionId').val(TrnWaterConnectionId);
+                $('#hdnWorkLevelId').val(WorkLevelId);
+                $('#hdnApprovalStatus').val(ApprovalStatusId);
+
+                $('#divReconnectionDetail').toggle(1000);
+                $('html,body').animate({
+                    scrollTop: $("#divReconnectionDetail").offset().top
+                }, 'slow');
+
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetReconnectionDetail", "Dashboards")',
+                    data: {
+                    id: parseInt(TrnWaterConnectionId)
+                    },
+                    success: function (data) {
+                    $.each(data, function (key, value) {
+                    $('#IdMeterNo').html(data[0].waterMeterNo);
+                    $('#IdConsumerNo').html(data[0].consumerNo);
+                    $('#IdPhoneNo').html(data[0].phoneNo);
+                    $('#IdWaterConnectionStatus').html(data[0].waterConnectionStatus);
+                    $('#IdWaterMeterType').html(data[0].waterMeterType);
+                    $('#IdWaterConnectionType').html(data[0].waterConnectionType);
+                    $('#IdWaterLineType').html(data[0].waterLineType);
+                    var cdate = new Date(data[0].connectionDate);
+                    var connectiondate = ("0" + cdate.getDate()).slice(-2) + '/' + ("0" + (cdate.getMonth() + 1)).slice(-2) + '/' + cdate.getFullYear()
+                    $('#IdConnectionDate').html(connectiondate);
+
+                    var ddate = new Date(data[0].disconnectDate);
+                    var disconnectdate = ("0" + ddate.getDate()).slice(-2) + '/' + ("0" + (ddate.getMonth() + 1)).slice(-2) + '/' + ddate.getFullYear()
+                    $('#IdDisconnectDate').html(disconnectdate);
+
+                    var rdate = new Date(data[0].reconnectionDate);
+                    var reconnectionDate = ("0" + rdate.getDate()).slice(-2) + '/' + ("0" + (rdate.getMonth() + 1)).slice(-2) + '/' + rdate.getFullYear()
+                    $('#IdReconnectionDate').html(reconnectionDate);
+
+                    $('#IdPlotNo').html(data[0].plotNo);
+                    $('#IdZoneName').html(data[0].zoneName);
+                    $('#IdFlatNo').html(data[0].flatNo);
+                    $('#IdBillingAddress').html(data[0].billingAddress);
+                    $('#IdNoOfUnits').html(data[0].noOfUnits);
+                    $('#IdStandardConsumption').html(data[0].standardCosumption);
+                    $('#IdInitialReading').html(data[0].initialReading);
+
+                        $('#hdnTransactionId').val(data[0].transactionId);
+
+
+                    });
+                    },
+                    error: function () {
+                    alert('error');
+                    }
+
+
+                    });
+    }
+     //Approve Reconnection Request
+    $("#btnApprove").click(function () {
+
+        var myarray = [];
+        var TranWaterConnectionModel = {};
+                TranWaterConnectionModel.TrnWaterConnectionId = parseInt($("#hdnTranWaterConnectionId").val());
+                TranWaterConnectionModel.WorkLevelId = parseInt($("#hdnWorkLevelId").val());
+                TranWaterConnectionModel.ApprovalStatusId = parseInt($("#hdnApprovalStatus").val());
+        myarray.push(TranWaterConnectionModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("ApproveReconnectionRequest", "Dashboards")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#divwatertaxrecepit').show(1000);
+                displayWaterReceipt(response);
+                $('#img').hide();
+         
+                swal({
+                    title: "Reconnection Request has been Approved",
+                    text: "Approved",
+                    type: "success",
+                    confirmButtonText: "OK"
+                },
+                );
+                
+
+            },
+            
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+            });
+
+      //WATER RECEIPT
+    function displayWaterReceipt() {
+
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("WaterDemandReceipt", "Dashboards")',
+                data: {
+                    TransactionId: $('#hdnTransactionId').val()
+
+                },
+             success: function (data) {
+               //  alert($("#hdnty").val());
+                 $("#lbltransactiontype").html($("#hdntransactionType").val());
+                 $('#tblDemand').empty();
+                 var today = new Date(data[0].createdOn);
+                 var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 $("#lblDemandDate").html(date);
+
+                 var today = new Date(data[0].billingDate);
+                 var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                 $("#idbilldate").html(date);
+
+                 $("#idrname").html(data[0].firstName);
+                 $("#iddemand").html(data[0].demandNo);
+                 $("#idrbillingaddress").html(data[0].billingAddress);
+                 $("#idrphone").html(data[0].phoneNo);
+                 $("#idrecepitno").html(data[0].receipt);
+                 $("#idtamount").html(data[0].netAmount);
+                 $('#idrconsumer').html(data[0].consumerNo);
+                 $('#idrmeter').html(data[0].waterMeterNO);
+                 $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+                 if (data.length > 0) {
+                     //$('html,body').animate({
+                     //    scrollBottom: $("#divwatertaxrecepit").offset().Bottom
+                     //}, 'slow');
+
+
+                 $.each(data, function (key, value) {
+                     $('#tblDemand').append(
+                         '<tr>'
+                         + '<td>' + (key + 1) + '</td>'
+                         + '<td>' + value.taxName + '</td>'
+                         + '<td>' + value.demandAmount + '</td>'
+
+                         + '</tr>');
+
+
+
+                 });
+                 } else {
+                     $('#tbl_body').append(
+                         '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+                     swal({
+                         title: 'Please Enter valid Value!',
+                         type: 'error',
+                         confirmButtonText: 'OK'
+                     });
+
+                 }
+             },
+             error: function () {
+                 alert('error');
+             }
+
+         });
+
+    }
+
+    //Reject Reconnection Request
+    $("#btnReject").click(function () {
+        var myarray = [];
+        var TranWaterConnectionModel = {};
+
+        TranWaterConnectionModel.TrnWaterConnectionId = parseInt($("#hdnTranWaterConnectionId").val());
+        TranWaterConnectionModel.WorkLevelId = parseInt($("#hdnWorkLevelId").val());
+        TranWaterConnectionModel.ApprovalStatusId = parseInt($("#hdnApprovalStatus").val());
+        myarray.push(TranWaterConnectionModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("RejectReconnectionRequest", "Dashboards")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#displayremarks').show(1000);
+                $('#displayremark').show(1000);
+
+                $('#btnApprove').hide(1000);
+                $('#btnReject').hide(1000);
+                $('#img').hide();
+                swal({
+                    title: "Reconnection Request has been Rejected",
+                    text: "Rejected",
+                    type: "error",
+                    confirmButtonText: "OK"
+                },
+                );
+            },
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    });
+
+            //SAVE REMARKS
+            $("#saveme").click(function () {
+
+        var myarray = [];
+                var TranWaterConnectionModel = {};
+                TranWaterConnectionModel.TrnWaterConnectionId = parseInt($("#hdnTranWaterConnectionId").val());
+                TranWaterConnectionModel.Remarks = $("#IdRemarks").val();
+                myarray.push(TranWaterConnectionModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateRejectedRemarks", "Dashboards")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#displayremarks').hide(1000);
+                $('#displayremark').hide(1000);
+
+                $('#img').hide();
+                swal(response);
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+
+            });
+                                 
+</script>

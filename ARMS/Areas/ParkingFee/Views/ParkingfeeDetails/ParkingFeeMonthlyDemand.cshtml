@@ -1,0 +1,730 @@
+﻿@using CORE_BOL
+@model TaxPayerProfileModel
+
+@{
+    ViewData["Title"] = "ParkingFeeMonthlyDemand";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img1">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100%; height: 100%;" /></span>
+    </div>
+</div>
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Vendor Demand Generate</a></li>
+                    <li class="breadcrumb-item active">Parking Fee Monthly Demand</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search Parking Fee Monthly Demand</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="cid" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="ttin" class="form-control col-6" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayParkingFeeMonthlyDemand();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="parkingfeediv">
+    <div class="card-header">
+        <h3 class="card-title">Tax payer Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="parkingfeedemandtbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--VIEW parking fee DETAILS-->
+<div class="card card-info" style="display:none;" id="parkingfeedetails">
+    <div class="card-header">
+        <h3 class="card-title">Parking Fee Details</h3>
+    </div>
+
+    <input type="hidden" id="hdnTaxPayerId" value="" />
+    <input type="hidden" id="hdnScheduleId" value="" />
+    <input type="hidden" id="hdnParking" value="" />
+    <input type="hidden" id="hdnAmt" value="" />
+    <input type="hidden" id="hdnStartdate" value="" />
+    <input type="hidden" id="hdnEnddate" value="" />
+    <input type="hidden" id="hdnYear" value="" />
+
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Parking Zone</th>
+                    <th>Billing Schedule</th>
+                    <th>Installment Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyParkingfeeDetail">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--VIEW Latest available start date & end date-->
+<div class="card card-info" style="display:none;" id="parkingfeeperiod">
+    <div class="card-header">
+        <h3 class="card-title">Parking Fee Demand</h3>
+    </div>
+    <div class="card-body">
+        <div class="row" style="display:none;">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Start Date</label>
+                <input id="StartDate" class="form-control col-6" disabled />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">End Date</label>
+                <input id="EndDate" class="form-control col-6" disabled />
+            </div>
+        </div>
+        <br /><br />
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="yearbody">
+            </tbody>
+        </table>
+        <br /><br />
+
+        <table id="tblperiod" style="display:none;" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Days</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="periodbody">
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="card card-info" id="parkingDemand" style="display:none;">
+    <div class="card-body" id="toprint">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 120px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Demand Receipt </strong>
+                    </td>
+                    <td></td>
+
+
+
+                    <td colspan="2">
+                        <img id="qrDemandNo" style="width: 120px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Demand Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>TTIN:</b> <label id="lblTTIN" value="" />
+
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Demand No:</b>&nbsp;<label id="lblDemandNo" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>CID:</b>&nbsp; <label id="lblCID" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Name:</b><label id="lblName" value="" />
+                    </td>
+
+
+                    <td colspan="6">
+                        <b>Address:</b>&nbsp;<label id="lblAddress" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4">
+                        <b>Start Date</b>&nbsp; <label id="lblstart" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="2">
+                        <b>End Date:</b>&nbsp;<label id="lblend" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="2">
+                        <b>Bill For:</b>&nbsp;<label id="lblmonth" class="col-form-label" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDemand">
+                </tbody>
+                @*<tr><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lblTotalDemandAmount" value="" class="col-form-label" readonly /> </td></tr>*@
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="lbluser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="form-group row">
+        <div class="col-sm-10">
+            <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+            <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+        function hideall() {
+            $('#parkingfeediv').hide(1000);
+            $('#parkingfeedetails').hide(1000);
+            $('#parkingfeeperiod').hide(1000);
+            $('#parkingDemand').hide(1000);
+        }
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    //first
+    function displayParkingFeeMonthlyDemand() {
+        //$('#parkingfeedetailname').html(assetname);
+
+            var cid = $('#cid').val();
+            var ttin = $('#ttin').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("ParkingFeeMonthlyDemands", "ParkingfeeDetails")',
+                    data: {
+                        cid: cid,
+                        ttin: ttin,
+                    },
+                    success: function (data) {
+                        $('#parkingfeedemandtbl_body').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+
+                                $('#parkingfeedemandtbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return ParkingFeeDetails(' + value.taxPayerId + ')" >Select</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                            hideall();
+                            $('#parkingfeediv').show(1000);
+
+                        } else {
+
+                            swal(
+                               'Please Enter valid CID or TTIN!'
+                            );
+                            hideall();
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                        hideall();
+                    }
+
+                });
+    }
+
+    //second
+    function ParkingFeeDetails(taxPayerId) {
+
+        $('#hdnTaxPayerId').val(taxPayerId);
+
+        $('#parkingfeedetails').show(1000);
+        $('html,body').animate({
+            scrollTop: $("#parkingfeedetails").offset().top
+        }, 'slow');
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("ParkingFeeDetails", "ParkingfeeDetails")',
+                    data: {
+                        id: taxPayerId,
+                    },
+                        success: function (data) {
+                            $('#tbodyParkingfeeDetail').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+
+                                $('#tbodyParkingfeeDetail').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.parkingZoneName + '</td>'
+                                    + '<td>' + value.billingScheduleName + '</td>'
+                                    + '<td>' + value.installmentAmount + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return GetYear(' + value.startDate + ',' + value.endDate + ',' + value.parkingFeeDetailId + ',' + value.installmentAmount + ',' + value.sid + ');">Select</a >'
+
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+
+                        } else {
+                            $('#tbodyParkingfeeDetail').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    //third
+        function GetYear(stDate, enDate, pid, amt, sid) {
+        //var stDate1 = "20200101";
+        //var enDate1 = "20200322";
+        //$('#hdnParking').val(parkingFeeDetailId);
+        //$('#hdnAmt').val(amt);
+        //$('#hdnStartdate').val(stDate);
+        //$('#hdnEnddate').val(enDate);
+        //$('#hdnScheduleId').val(sid);
+            $('#tblperiod').hide();
+            $('#parkingDemand').hide();
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetYear", "ParkingfeeDetails")',
+                    data: {
+                        startDate: stDate,
+                        endDate: enDate
+                        },
+
+                        success: function (data) {
+                            if (data.length > 0) {
+                                console.log(data);
+
+                            $('#StartDate').val(stDate);
+                                $('#EndDate').val(enDate);
+                                $('#yearbody').empty();
+
+                                $.each(data, function (key, value) {
+
+                                    $('#yearbody').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.year + '</td>'
+                                    + '<td>'
+                                        + '<a style = "color: #007bff; cursor: pointer;" onclick = "return GetVendorDemandSchedule(' + pid + ',' + amt + ',' + stDate + ',' + enDate + ',' + sid + ',' + value.year +');" >Select</a >'
+                                    + '</td>'
+
+                            + '</tr>');
+
+                                    });
+                                $('#parkingfeeperiod').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#parkingfeeperiod").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    function GetVendorDemandSchedule(parkingFeeDetailId, amt, stDate, enDate, sid, yr) {
+        //var stDate1 = "20200101";
+        //var enDate1 = "20200322";
+        $('#hdnParking').val(parkingFeeDetailId);
+        $('#hdnAmt').val(amt);
+        $('#hdnStartdate').val(stDate);
+        $('#hdnEnddate').val(enDate);
+        $('#hdnScheduleId').val(sid);
+        $('#parkingDemand').hide(1000);
+        //alert($('#hdnScheduleId').val());
+
+        $('#hdnYear').val(yr);
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetVendorDemandSchedule", "ParkingfeeDetails")',
+                    data: {
+                        id: parkingFeeDetailId,
+                        startDate: stDate,
+                        endDate: enDate,
+                        yr: yr
+                        },
+
+                        success: function (data) {
+                            if (data.length > 0) {
+                                console.log(data);
+                                //alert(yr);
+                            $('#StartDate').val(stDate);
+                                $('#EndDate').val(enDate);
+                                var res = null
+                                $('#periodbody').empty();
+
+                                $.each(data, function (key, value) {
+
+                                    //    res = (value.generateStatus != null) ? value.generateStatus : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return displayWaterDetails(' + value.id + ');">Generate</a></b>';
+                                    res = (value.demandNoId != null) ? '<b><a style="cursor: pointer; color: forestgreen;" title="View Demand" onclick="return displayDemand(' + value.demandNoId + ',\'' + value.month +'\');">View</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return GenerateDemand(' + value.id + ',' + value.days + ',' + value.monthId + ',' + value.year + ',' + amt + ','+ value.totalDays +');">Generate</a></b>';
+
+                                    $('#periodbody').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.year + '</td>'
+                                    + '<td>' + value.month + '</td>'
+                                    + '<td>' + value.days + '</td>'
+                                    + '<td id="tdays" hidden>' + value.totalDays + '</td>'
+                                    + '<td>' + res + '</td>'
+
+                            + '</tr>');
+
+                                    });
+                                $('#tblperiod').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#tblperiod").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    //fourth
+    function GenerateDemand(parkingFeeDetailId, days, month, year, amount, totalDays) {
+                     $('#img1').show();
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GenerateDemand", "ParkingfeeDetails")',
+                    data: {
+                        parkingFeeDetailId: parseInt(parkingFeeDetailId),
+                        pDays: parseInt(days),
+                        pMonth: parseInt(month),
+                        pYear: parseInt(year),
+                        ScheduleId: parseInt($('#hdnScheduleId').val()),
+                        Amount: parseFloat(amount),
+                        taxPayerId: parseInt($('#hdnTaxPayerId').val()),
+                        totalDays: parseInt(totalDays)
+                        },
+
+                        success: function (data) {
+                            //if (data.length > 0) {
+                            $('#img1').hide();
+                            swal({
+                                title: "Success",
+                                text: "Demand generated successfully please click on view to see the demand details",
+                                icon: "Success",
+
+                            });
+                            GetVendorDemandSchedule($('#hdnParking').val(), $('#hdnAmt').val(), $('#hdnStartdate').val(), $('#hdnEnddate').val(), $('#hdnScheduleId').val(), $('#hdnYear').val());
+
+                            //} else {
+                            //    swal('no data');
+                            //}
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+    //fifth
+    function displayDemand(demandNoId, mnth) {
+        $('#parkingDemand').show(1000);
+
+        $("#lblmonth").html(mnth);
+
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetParkingDemand", "ParkingFeeDetails")',
+                data: {
+                    DemandNoId: demandNoId,
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tblDemand').empty();
+                    if (data.length > 0) {
+
+                        var today = new Date(data[0].sStartDate);
+                        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblstart").html(date);
+
+                        var today = new Date(data[0].eEndDate);
+                        var datea = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                        $("#lblend").html(datea);
+
+                        var datec = data[0].demandDate;
+                        const c = new Date(datec);
+                        const CreatedDate = ("0" + c.getDate()).slice(-2) + "-" + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + c.getFullYear()
+
+                        $("#lbluser").html(data[0].creatorname);
+                        $("#lblName").html(data[0].taxPayerName);
+                        $("#lblTTIN").html(data[0].ttin);
+                        $("#lblCID").html(data[0].cid);
+                        $("#lblAddress").html(data[0].address);
+                        $("#lblDemandDate").html(CreatedDate);
+                        $("#lblDemandNo").html(data[0].demandNo);
+
+                        $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                        $.each(data, function (key, value) {
+                            $('#tblDemand').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td style="text-align:center">' + value.totalAmount+ '</td>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#parkingDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#parkingDemand").show(1000);
+                        $('#tblDemand').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+        }
+
+        function printPage() {
+            var dataToPrint = document.getElementById("toprint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+        function ok() {
+            $("#parkingDemand").hide(1000);
+            $("#tblDemand").hide(1000);
+            $("#parkingfeeperiodbody").hide(1000);
+            $("#parkingfeedemandtbl_body").hide(1000);
+            $("#parkingfeedemand").hide(1000);
+            $("#parkingfeeperiod").hide(1000);
+            $("#parkingfeedetails").hide(1000);
+            $("#parkingfeediv").hide(1000);
+
+        }
+</script>

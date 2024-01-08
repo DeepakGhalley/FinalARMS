@@ -1,0 +1,112 @@
+﻿@{
+    ViewData["Title"] = "DefaulterPropertyList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                       
+                        <li class="breadcrumb-item active">Defaulter Property List</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Defaulter Property List</h3>       
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Year</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idYear" asp-items="@(new SelectList (@ViewBag.CalendarYear,"Value","Text"))">
+                    </select>
+                    <span id="Yearcheck" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-2 col-form-label">Tax Payer Type</label>
+                <div class="col-sm-3">
+                    <select class="form-control" id="idTaxPayerType" asp-items="@(new SelectList (@ViewBag.TaxPayerTypeId,"Value","Text"))">
+                    </select>
+                    <span id="TaxPayerTypecheck" class="text-danger"></span>
+                </div>
+                <label class="col-sm-1 col-form-label"></label>
+                <div class="col-sm-2">
+                    <input type="button" value="Search" class="btn btn-block btn-primary " onclick="return PrintReport();" />
+                </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+    function PrintReport() {
+        if ($('#idYear').val() == "" && $('#idTaxPayerType').val() == "") {
+            swal("Fields not selected!");
+            $("#Yearcheck").focus();
+            $("#TaxPayerTypecheck").focus();
+
+               return false;
+        }
+
+        $('#img').show();
+
+        var today = new Date($("#lblsdate").val());
+        var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2)
+        var sdate = date;
+
+        var today1 = new Date($("#lbledate").val());
+        var date1 = today1.getFullYear() + '' + ("0" + (today1.getMonth() + 1)).slice(-2) + '' + ("0" + today1.getDate()).slice(-2)
+        var edate = date1;
+
+        console.log(date);
+
+                   $.ajax({
+                       type: "GET",
+                       url: '@Url.Action("PrintDefaulterPropertyList", "Report")',
+                       data: {
+                           CalendarYearId: $("#idYear").val(),
+                           taxPayerTypeId: $("#idTaxPayerType").val()
+                           
+                       },
+                       success: function (data) {
+                          if (data.length > 0) {
+                              window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report", Action = "PrintDefaulterPropertyList" })/?CalendarYearId=" + $("#idYear").val() + "&taxPayerTypeId=" + $("#idTaxPayerType").val() ,'_blank');
+                           }
+                           $('#img').hide();
+                       },
+                       error: function () {
+                           alert('error');
+                           $('#img').hide();
+                       }
+                   });
+    }
+
+
+</script>

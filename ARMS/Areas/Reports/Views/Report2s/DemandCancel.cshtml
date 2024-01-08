@@ -1,0 +1,106 @@
+﻿
+@{
+    ViewData["Title"] = "DemandCancel";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="DemandCancel">Report</a></li>
+                        <li class="breadcrumb-item active">Demand Cancel</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Demand Cancel Report</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">From Date</label>
+                    <input id="lblfdate" type="date" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">To Date</label>
+                    <input id="lbltdate" type="date" class="form-control col-6" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Demand No</label>
+                    <input id="DemandNoInput" class="form-control col-6" placeholder="Search by Demand No"/>
+                </div>
+                <div class="input-group-append col-3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary form-control col-6" onclick="return PrintReport();" />
+                </div>
+                </div>
+
+            </div>
+    </div>
+
+</form>
+
+
+<script>
+
+        function PrintReport() {
+        
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintDemandCancelReport", "Report2s")',
+                    data: {
+                        FromDate: $("#lblfdate").val(),
+                        ToDate: $("#lbltdate").val(),
+                        DemandNo: $("#DemandNoInput").val()
+                    },
+                    success: function (data) {
+
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report2s", Action = "PrintDemandCancelReport" })/?FromDate=" + $("#lblfdate").val() + "&ToDate=" + $("#lbltdate").val() + "&DemandNo=" + $("#DemandNoInput").val() ,'_blank');
+
+                        }
+
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+
+
+    }
+
+
+</script>

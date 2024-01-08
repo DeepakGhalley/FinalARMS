@@ -1,0 +1,26 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[tblDemand] (Table)
+     Create
+       [dbo].[tblDemandCancel] (Table)
+       [dbo].[FK_tblDemandCancel_ToTable] (Foreign Key)
+
+** Supporting actions
+     Refresh
+       [dbo].[rptDefaulterPropertyList] (Procedure)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptGetDailyHeadWiseDemandCollection] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbycalyear] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbytofromdate] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)

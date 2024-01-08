@@ -1,0 +1,34 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstRate]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The type for column minimumRate in table [dbo].[mstRate] is currently  DECIMAL (18, 2) NULL but is being changed to 
+         DECIMAL (18, 3) NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible
+         with type  DECIMAL (18, 3) NULL.
+       The type for column rate in table [dbo].[mstRate] is currently  DECIMAL (18, 2) NOT NULL but is being changed to 
+         DECIMAL (18, 3) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible
+         with type  DECIMAL (18, 3) NOT NULL.
+
+** User actions
+     Table rebuild
+       [dbo].[mstRate] (Table)
+     Create
+       [dbo].[ViewProertyTaxLedger] (View)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+     Refresh
+       [dbo].[rptGetTaxRates] (Procedure)
+
+The type for column minimumRate in table [dbo].[mstRate] is currently  DECIMAL (18, 2) NULL but is being changed to  DECIMAL (18, 3) NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  DECIMAL (18, 3) NULL.
+The type for column rate in table [dbo].[mstRate] is currently  DECIMAL (18, 2) NOT NULL but is being changed to  DECIMAL (18, 3) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  DECIMAL (18, 3) NOT NULL.
+

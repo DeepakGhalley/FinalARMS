@@ -1,0 +1,174 @@
+﻿@using CORE_BOL
+@model SlabVM
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Master</a></li>
+                    <li class="breadcrumb-item active">Update Slab</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Slab</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="SlabId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                @*asp-items="@(new SelectList (@ViewBag.TaxId,"Value","Text")) "*@
+                <label asp-for="TaxId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="TaxId" asp-items="@(new SelectList (@ViewBag.TaxName,"Value","Text")) " id="TaxId" class="form-control select2bs4" onchange="showme(this);" id="TaxId" style="width: 100%;"
+                            value="0">
+                    </select>
+                    <span asp-validation-for="TaxId" id="errorTaxId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="SlabName" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="SlabName" class="form-control" placeholder="Slab Name" required/>
+                    <span asp-validation-for="SlabName" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Define1" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="Define1" class="form-control" placeholder="Define 1" required/>
+                    <span asp-validation-for="Define1" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Define2" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="Define2" class="form-control" placeholder="Define 2" required/>
+                    <span asp-validation-for="Define2" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="SlabStart" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="SlabStart" class="form-control" placeholder="Slab Start" required/>
+                    <span asp-validation-for="SlabStart" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="SlabEnd" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <input asp-for="SlabEnd" class="form-control" placeholder="Slab End" required/>
+                    <span asp-validation-for="SlabEnd" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="BuildingUnitUseTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="BuildingUnitUseTypeId" id="BuildingUnitUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitUseTypeId" id="errorBuildingUnitUseTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="BuildingUnitClassId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-5">
+                    <select asp-for="BuildingUnitClassId" id="BuildingUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitClassId" id="errorBuildingUnitClassId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="IsActive" class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+
+<script>
+    //validation
+    function saveme() {
+        //Tax
+        if ($('#TaxId option:selected').val() == 0) {
+            $('#errorTaxId').html('Please Select a Value');
+            $('#TaxId').focus();
+            return false;
+        }
+        else {
+            $('#errorTaxId').html('');
+        }
+
+        //Building unit use type
+        if ($('#BuildingUnitUseTypeId option:selected').val() == 0) {
+            $('#errorBuildingUnitUseTypeId').html('Please Select a Value');
+            $('#BuildingUnitUseTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorBuildingUnitUseTypeId').html('');
+        }
+
+        //Building Unit Class
+        if ($('#BuildingUnitClassId option:selected').val() == 0) {
+            $('#errorBuildingUnitClassId').html('Please Select a Value');
+            $('#BuildingUnitClassId').focus();
+            return false;
+        }
+        else {
+            $('#errorBuildingUnitClassId').html('');
+        }
+
+    }
+</script>

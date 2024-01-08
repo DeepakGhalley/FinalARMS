@@ -1,0 +1,108 @@
+﻿@using CORE_BOL
+@model DetailHeadModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Detail Head</a></li>
+                    <li class="breadcrumb-item active">Update Detail Head</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Detail Head</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="DetailHeadId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Minor Head<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="MinorHeadId" id="MHeadId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MinorHeadId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="MinorHeadId" id="mheadid" class="text-danger"></span>
+                </div>           
+                <label class="col-sm-2 col-form-label">Detail Head Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="DetailHeadName" class="form-control" placeholder="Detail Head Name" required/>
+                    <span asp-validation-for="DetailHeadName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Detail Head Code<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="DetailHeadCode" class="form-control" placeholder="Detail Head Code" required/>
+                    <span asp-validation-for="DetailHeadCode" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Detail Head Symbol<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="DetailHeadSymbol" class="form-control" placeholder="Detail Head Symbol" required/>
+                    <span asp-validation-for="DetailHeadSymbol" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Description</label>
+                <div class="col-sm-4">
+                    <textarea asp-for="DetailHeadDescription" class="form-control" rows="3" placeholder="Detail Head Description"></textarea>
+                    <span asp-validation-for="DetailHeadDescription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+
+        </div>
+
+    </form>
+</div>
+<script>
+    function saveme() {
+        if ($('#MHeadId option:selected').val() == 0) {
+            $('#mheadid').html('Please Select a Value!');
+            $('#MHeadId').focus();
+            return false;
+        }
+        else {
+            $('#mheadid').html('');
+        }
+    }
+</script>
+

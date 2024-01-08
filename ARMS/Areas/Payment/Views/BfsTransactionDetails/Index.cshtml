@@ -1,0 +1,574 @@
+﻿@using CORE_BOL
+@model BfsModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">BFS Transaction Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">BFS Transaction Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="text-danger"></div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-6 col-form-label">TTIN/CID/Consumer No:</label>
+                <input id="searchId" class="form-control col-6" />
+            </div>
+            @*<div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Transaction ID:</label>
+                    <input id="tranIdInput" class="form-control col-6" />
+                </div>*@
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <button class="btn btn-primary" onclick="return Search();">View</button>
+                <button class="btn btn-primary" onclick="return Check();">check</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Details-->
+<div class="card card-info" id="tbl_fproperty" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">BFS Transaction Detail</h3>
+    </div>
+    <input type="hidden" id="bfsTransactionDetailId" />
+    <div class="card-body">
+
+        <table class="table table-bordered table-striped ">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl No</th>
+                    <th>Transaction Type</th>
+                    <th>Msg Type</th>
+                    <th>BenfId</th>
+                    <th>Order No</th>
+                    <th>Amount</th>
+                    @*<th>Time</th>
+                        <th>TxnId</th>*@
+                    <th>Account No</th>
+                    <th>Bank Name</th>
+                    <th>Created On</th>
+                    @*<th>Created By</th>*@
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+
+        <br />
+        <div class="form-group row">
+            <button class="btn btn-warning" onclick="return Cancel();">Cancel</button>
+        </div>
+    </div>
+</div>
+
+
+<!--Details2-->
+<div class="card card-info" id="tbl_details" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">BFS Transaction Detail Details</h3>
+    </div>
+
+    <div class="card-body">
+        <input class="form-control" id="hdnbfsTransactionDetailId" hidden />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Order No:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="orderNoId" readonly />
+            </div>
+            <label class="col-sm-2 col-form-label">Amount:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="amountId" readonly />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Time:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="timeId" readonly />
+            </div>
+            <label class="col-sm-2 col-form-label">TxnId:</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="txnId" readonly />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Account No</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="accountNoId" readonly />
+            </div>
+            <label class="col-sm-2 col-form-label">Bank Name</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="bankNameId" readonly />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-4">
+                <button type="button" class="btn btn-warning" onclick="return Cancel1();">Cancel</button>
+                &nbsp; <input type="submit" class="btn btn-primary" id="SavePaymentSuccess" value="Confirm Payment" />
+            </div>
+
+        </div>
+    </div>
+</div>
+<!--End of Details2-->
+
+<div class="card card-info" id="Recepit" style="display: none;">
+    <div class="row">
+
+        <div class="col-md-12">
+            <div class="card card-default">
+                <div class="card-header">
+                    <h3 class="card-title text-primary">
+                        <i class="fas fa-bullhorn"></i>
+                        &nbsp;&nbsp;Thromde Online Services
+                    </h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="callout callout-danger">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="callout callout-info">
+                                    <h5 class="text-success"><i style="color:green;" class="fas fa-check"></i> Payment Success:</h5>
+                                    Your payment is successfully completed.
+                                </div>
+
+
+                                <!-- Main content -->
+                                <div class="invoice p-3 mb-12">
+                                    <div class="card card-info" id="print">
+                                        <!-- title row -->
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <h4>
+
+                                                    @*<small class="float-right"><B>Date:</B> <input id="PaymentDate" class="form-control" placeholder="BfsBfsTxnId" readonly /></small>*@
+
+                                                </h4>
+                                            </div>
+                                            <!-- /.col -->
+                                        </div>
+                                        <!-- info row -->
+                                        <div class="row invoice-info">
+                                            <div class="col-sm-12 invoice-col">
+                                                <table style="width: 100%;">
+
+
+                                                    <tr>
+                                                        <td colspan="10">
+                                                            <img width="50" height="50" src="~/Logo/tt_logo.png" class="brand-image img-circle elevation-3" style="opacity: 1;" alt="Thromde Logo">
+
+                                                        </td>
+
+                                                        <td style="text-align: center;">
+                                                            <strong><b style="font-size:15px;">Thimphu Thromde</b></strong> <br /> <strong>Online Payment Recepit </strong>
+                                                        </td>
+
+                                                        <td style="float: right;">  <b>Payment Date:</b>&nbsp;<label id="PaymentDate" value="" /> </td>
+                                                    </tr>
+                                                </table>
+                                                <hr />
+                                                <br />
+                                                <table style="width: 100%;">
+
+                                                    <tr> <td> <b>BFS Transaction No:</b>&nbsp;<label id="rtxnId" value="" /></td> </tr>
+                                                </table>
+                                                <br />
+                                                <table style="width: 100%;">
+                                                    <tr><td><b>BFS Order No:</b>&nbsp;<label id="rorderNoId" value="" /></td> </tr>
+                                                </table>
+                                                <br />
+                                                <table style="width: 100%;">
+                                                    <tr><td> <b>BFS Amount:</b>&nbsp;<label id="ramountId" value="" /> </td> </tr>
+                                                </table>
+
+
+                                            </div>
+                                            <!-- /.col -->
+                                            <!--<div class="col-sm-12 invoice-col">
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">TxnId: </label>
+                                                <div class="col-sm-5">-->
+                                            @*<input id="rtxnId" class="form-control" placeholder="BfsBfsTxnId" readonly />*@
+                                            <!--<label class="col-sm-2 col-form-label" id="rtxnId"> </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Order No:</label>
+                                                <div class="col-sm-5">
+                                                    <label class="col-sm-2 col-form-label" id="rorderNoId"> </label>-->
+                                            @*<input id="rorderNoId" class="form-control" placeholder="BfsBfsTxnId" readonly />*@
+                                            <!--</div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-sm-2 col-form-label">Amount</label>
+                                                <div class="col-sm-5">
+                                                    <label class="col-sm-2 col-form-label" id="ramountId"></label>-->
+                                            @*<input id="ramountId" class="form-control" placeholder="BfsBfsTxnId" readonly />*@
+                                            <!--</div>
+                                            </div>-->
+                                            @*<b>
+                                                    <label asp-for="BfsBfsTxnId" class="col-sm-3 col-form-label"></label>
+                                                    <input asp-for="BfsBfsTxnId" class="form-control" placeholder="BfsBfsTxnId" readonly />
+
+                                                </b>*@
+                                            <!--<br>
+
+                                            </div>-->
+                                            <!-- /.col -->
+                                        </div>
+                                    </div>
+
+                                    <!-- /.row -->
+                                    <!-- this row will not appear when printing -->
+                                    <div class="row no-print">
+                                        <div class="col-12">
+                                            <a class="btn btn-default" onclick="return printPages();"><i class="fas fa-print"></i> Print</a>
+                                            <a class="btn btn-default" onclick="return hideAll();"><i class="far fa-check-circle"></i> Ok</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.invoice -->
+                            </div><!-- /.col -->
+                        </div>
+
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+</div>
+
+
+<script>
+        function hideAll() {
+            $('#tbl_fproperty').hide(1000);
+            $('#tbl_details').hide(1000);
+            $('#Recepit').hide(1000);
+        }
+
+    function Cancel() {
+        $('#tbl_fproperty').hide(1000);
+        $('#tbl_details').hide(1000);
+    }
+
+    function Cancel1() {
+        $('#tbl_details').hide(1000);
+    }
+    
+    function Check() {
+       
+
+      
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("SearchAll", "BfsTransactionDetails")',
+                data: {
+                   
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+
+
+                            $('#tbl_fproperty').show(1000);
+                            $.each(data, function (key, value) {
+
+                                res = (value.bfsDebitAuthCode == 00) ? '<b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return showDetails(' + value.bfsTransactionDetailId + ');">Select</a></b>' : '';
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.transactionType + '</td>'
+                                    + '<td>' + value.bfsMsgType + '</td>'
+                                    + '<td>' + value.bfsBenfId + '</td>'
+                                    + '<td>' + value.bfsOrderNo + '</td>'
+                                    + '<td>' + value.bfsTxnAmount + '</td>'
+                                    //+ '<td>' + value.bfsTxnTime + '</td>'
+                                    //+ '<td>' + value.bfsBfsTxnId + '</td>'
+                                    + '<td>' + value.bfsRemitterAccNo + '</td>'
+                                    + '<td>' + value.bfsBankName + '</td>'
+                                    + '<td>' + value.createdOn + '</td>'
+                                    /*+ '<td>' + value.userName + '</td>'*/
+                                    + '<td>' + res + '</td>'
+                                    + '</tr>');
+                                });
+
+
+                    //} else if (data[0].bfsDebitAuthCode == '00') {
+                    //    swal("Payment already made. kamsamidha");
+                    //    return false;
+
+                    } else {
+                        $('#tbl_fproperty').show(1000);
+                        $('#tbl_body').append(
+                            '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+                    }
+
+
+
+                },
+
+            });
+
+    }
+
+
+    function Search() {
+        if ($('#searchId').val() == "") {
+           swal('Empty Fields', 'Please Enter Valid Value', 'error');
+            $('#searchId').focus();
+                return false;
+            }
+
+        var searchId = $('#searchId').val();
+        //var tranId = $('#tranIdInput').val();
+
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("Search", "BfsTransactionDetails")',
+                data: {
+                    search: searchId,
+                    //transactionId: tranId
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+
+
+                            $('#tbl_fproperty').show(1000);
+                            $.each(data, function (key, value) {
+
+                                res = (value.bfsDebitAuthCode == 00) ? '<b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return showDetails(' + value.bfsTransactionDetailId + ');">Select</a></b>' : '';
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.transactionType + '</td>'
+                                    + '<td>' + value.bfsMsgType + '</td>'
+                                    + '<td>' + value.bfsBenfId + '</td>'
+                                    + '<td>' + value.bfsOrderNo + '</td>'
+                                    + '<td>' + value.bfsTxnAmount + '</td>'
+                                    //+ '<td>' + value.bfsTxnTime + '</td>'
+                                    //+ '<td>' + value.bfsBfsTxnId + '</td>'
+                                    + '<td>' + value.bfsRemitterAccNo + '</td>'
+                                    + '<td>' + value.bfsBankName + '</td>'
+                                    + '<td>' + value.createdOn + '</td>'
+                                    /*+ '<td>' + value.userName + '</td>'*/
+                                    + '<td>' + res + '</td>'
+                                    + '</tr>');
+                                });
+
+
+                    //} else if (data[0].bfsDebitAuthCode == '00') {
+                    //    swal("Payment already made. kamsamidha");
+                    //    return false;
+
+                    } else {
+                        $('#tbl_fproperty').show(1000);
+                        $('#tbl_body').append(
+                            '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+                    }
+
+
+
+                },
+
+            });
+
+    }
+    //*****end of SearchDetails*****
+
+    function showDetails(bfsTransactionDetailId) {
+        $('#tbl_details').show(1000);
+
+        $('#hdnbfsTransactionDetailId').val(bfsTransactionDetailId);
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("showDetails", "BfsTransactionDetails")',
+            data: {
+                id: bfsTransactionDetailId
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+
+            success: function (data) {
+                if (data.length > 0) {
+                    //var bfsTransactionDetailId = data[0].bfsTransactionDetailId;
+                    var bfsOrderNo = data[0].bfsOrderNo;
+                    var bfsTxnAmount = data[0].bfsTxnAmount;
+                    var bfsTxnTime = data[0].bfsTxnTime;
+                    var bfsBfsTxnId = data[0].bfsBfsTxnId;
+                    var bfsRemitterAccNo = data[0].bfsRemitterAccNo;
+                    var bfsBankName = data[0].bfsBankName;
+
+                    var today = new Date(data[0].paymentDate);
+                    var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear()
+                    $("#PaymentDate").val(date);
+                    $("#PaymentDate").html(date);
+                    //alert(bfsOrderNo);
+
+                    //$('#bfsTransactionDetailId').val(bfsTransactionDetailId);
+                    $('#orderNoId').val(bfsOrderNo);
+                    $('#amountId').val(bfsTxnAmount);
+                    $('#timeId').val(bfsTxnTime);
+                    $('#txnId').val(bfsBfsTxnId);
+                    $('#accountNoId').val(bfsRemitterAccNo);
+                    $('#bankNameId').val(bfsBankName);
+
+                    $('#rorderNoId').val(bfsOrderNo);
+                    $('#ramountId').val(bfsTxnAmount);
+                    $('#rtxnId').val(bfsBfsTxnId);
+
+                    $('#rorderNoId').html(bfsOrderNo);
+                    $('#ramountId').html(bfsTxnAmount);
+                    $('#rtxnId').html(bfsBfsTxnId);
+                }
+            },
+            error: function () {
+                $('#img').hide();
+                alert('Error occured');
+            }
+        });
+    }
+
+
+    $("#SavePaymentSuccess").click(function () {
+        //Auto-Scroll
+        $('#Recepit').show(1000);
+        $('html,body').animate({
+            scrollTop: $("#Recepit").offset().top
+        }, 'slow');
+
+         $.ajax({
+                type: "GET",
+                url: '@Url.Action("bfsCheck", "BfsTransactionDetails")',
+                data: {
+                    id: parseInt($("#hdnbfsTransactionDetailId").val())
+                    //transactionId: tranId
+                },
+                dataType: "json",
+                success: function (data) {
+
+                    $('#tbl_body').empty();
+                    if (data.length > 0) {
+                        swal("Payemnt already made");
+
+                    } else {
+                        var myarray = [];
+        var BfsModel = {};
+
+
+        BfsModel.BfsTransactionDetailId = parseInt($("#hdnbfsTransactionDetailId").val());
+
+
+
+
+        myarray.push(BfsModel);
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SavePaymentSuccess", "BfsTransactionDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                //swal("Success");
+                if (response > 0) {
+
+                        $('#img').hide();
+                        swal("Payment successfull");
+                    $('#Recepit').show();
+                    //$('#tbl_details').hide();
+                    //$('#tbl_fproperty').hide();
+
+                } else {
+                    swal("Error saving details.");
+                    $('#tbl_details').hide();
+                    $('#tbl_fproperty').hide();
+                }
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+
+                    }
+
+                },
+
+            });
+
+
+
+    });
+
+
+        function printPages() {
+            var dataToPrint = document.getElementById("print");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+</script>
+
+

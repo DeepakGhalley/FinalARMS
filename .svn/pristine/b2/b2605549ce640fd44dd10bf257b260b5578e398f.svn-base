@@ -1,0 +1,816 @@
+﻿@model List<CORE_BOL.LandLeaseModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Lease</a></li>
+                    <li class="breadcrumb-item active">Land Lease</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <div class="card card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New Lease"><b><i class="fas fa-plus"></i> Add New </b> </a>
+        </p>
+
+        <div class="row">
+            <label class="col-form-label">CID:</label>
+            <div class="input-group col-3">
+                <input id="cid" class="form-control col-8" />
+            </div>
+            <label class="col-form-label">TTIN:</label>
+            <div class="input-group col-3">
+                <input id="ttin" class="form-control col-8" />
+            </div>
+            <label class="col-form-label">Plot No:</label>
+            <div class="input-group col-3">
+                <input id="plotNo" class="form-control col-8" />
+            </div>
+            <input type="button" value="Search" class="btn btn-primary" onclick="return SearchTaxPayer();" />
+        </div>
+        <br />
+        <div class="row">
+            <div class="input-group-append col-5">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Temporary" class="btn btn-primary" onclick="return Temporary();" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Long term list" class="btn btn-primary" onclick="return longterm();" />
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Short term list" class="btn btn-primary" onclick="return shortterm();" />
+            </div>
+        </div>
+
+    </div>
+    <!--<div class="card-body">
+    <div class="row">
+        <div class="input-group d-flex justify-content-center col-5">
+            <label class="col-sm-1 col-form-label">CID: </label>
+            <input class="form-control" id="cid" maxlength="11" placeholder="Search by CID" />
+        </div>
+        <div class="input-group d-flex justify-content-center col-5">
+            <label class="col-sm-1 col-form-label">TTIN: </label>
+            <input class="form-control" id="ttin" placeholder="Search by TTIN" />
+        </div>-->
+    @*<label class="col-sm-1 col-form-label">Plot No: </label>
+        <div class="col-sm-2 input-group-append">
+            <input class="form-control" id="plotno" placeholder="Search by Plot No" />
+        </div>*@
+
+    <!--<div class="col-sm-2">-->
+    @*<button type="button" class="btn btn-outline-primary" onclick="return SearchTaxPayer();">Search</button>*@
+    <!--<input type="button" class="btn btn-outline-primary" value="Search" onclick="return SearchTaxPayer();" />
+            </div>
+        </div><br />
+    </div>-->
+    <div class="card card-info" id="tbl_landownershipdetail" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Land Lease Records</h3>
+        </div>
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Sl.No</th>
+                        <th>Plot No</th>
+                        <th>Tax Payer</th>
+                        <th>Lease Type</th>
+                        <th>End Date</th>
+                        <th>Lease Amount</th>
+                        <th>Shed Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_body">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="UpdateLandDetail">
+
+    <div class="card-header">
+        <input type="text" id="HDNLA" hidden />
+        <input type="text" id="hdnLandLeaseId" hidden />
+        <input type="text" id="hdnLandDetailId" hidden />
+        <input type="text" id="hdnLandLeasePeriodId" hidden />
+        <input type="text" id="hdnLL" hidden />
+        <h3 class="card-title">Update Land Detail</h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Plot No/Certificate No <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Plot No." id="UPlotNo" />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Land Acreage/Net plot <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Land Acerage" type="number" id="ULandAcerage" OnChange="UR(this)" />
+                <span class="text-danger"></span>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+
+            <label class="col-sm-2 col-form-label"> Street Name</label>
+            <div class="col-sm-4">
+                <select class="form-control select2" style="width: 100%;"
+                        asp-items="@(new SelectList (@ViewBag.StreetNameId,"Value","Text"))" value="0" id="UStreetName">
+                </select>
+            </div>
+            <label class="col-sm-2 col-form-label">Demkhong </label>
+            <div class="col-sm-4">
+                <select class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.DemkhongId,"Value","Text"))"
+                        value="0" id="UDemkhong">
+                </select>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">LAP Name</label>
+            <div class="col-sm-4">
+                <select class="form-control select2" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LapId,"Value","Text"))"
+                        value="0" id="ULapName">
+                </select>
+            </div>
+            <label class="col-sm-2 col-form-label">Plot Address <span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <textarea class="form-control" rows="3" placeholder="Enter Plot Address" id="UPlotAddress"></textarea>
+            </div>
+
+        </div>
+        <div class="form-group row" hidden>
+            <label class="col-sm-2 col-form-label">Property Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="text" value="Lease" readonly id="UPropertyType" />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="UpdateLandLease">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Update Land Lease</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Lease Type</label>
+            <div class="col-sm-4">
+                <select id="ULeaseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LeaseTypeId,"Value","Text")) " value="0"></select>
+                <span class="text-danger"></span>
+            </div>
+
+
+            <label class="col-sm-2 col-form-label">Lease Activity Type<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="ULeaseActivityTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.LeaseActivityTypeId,"Value","Text")) " value="0"></select>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+
+            <label class="col-sm-2 col-form-label">Start Date<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="date" id="UStartDate" class="form-control" placeholder="Start Date" />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">End Date<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="date" class="form-control" id="UEndDate" placeholder="Start Date" />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Billing Schedule<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="UBillingScheduleId" class="form-control select2bs4" style="width: 100%;" onchange="myFunction1()">
+                    @*<option value="0">--select--</option>
+                    <option value="1">Monthly</option>
+                    <option value="3">Yearly</option>*@
+
+                </select>
+
+                <span class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-2 col-form-label">Rate <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" placeholder="Rate" id="URate" OnChange="UR(this)" disabled />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Lease Approval No</label>
+            <div class="col-sm-4">
+                <input class="form-control" id="ULeaseApprovalNo" placeholder="Lease Approval No" />
+                <span class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Lease Amount<span style="font-weight:bold; color:red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="ULeaseAmount" placeholder="Lease Amount" disabled />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Shed Amount</label>
+            <div class="col-sm-4">
+                <input class="form-control" type="number" id="UShedAmount" placeholder="Shed Amount" />
+                <span class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UHasShed">
+                <label class="form-check-label" for="HasShed">
+                    <b>HasShed</b>
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <input type="submit" class="btn btn-primary" onclick="return UpdateLease()" value="Update" />
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+    });
+
+    function SearchTaxPayer() {
+        if ($("#cid").val() == "" && $("#ttin").val() == "" && $("#plotNo").val() == "") {
+                 $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("Listall", "LandLeases")',
+                    data: {
+
+                    },
+                    success: function (data) {
+                        $('#tbl_body').empty();
+                        if (data.length > 0) {
+
+                            $.each(data, function (key, value) {
+                                $('#tbl_landownershipdetail').show(1000);
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.leaseName + '</td>'
+                                    + '<td>' + value.sdate + '</td>'
+                                    + '<td>' + value.leaseAmount + '</td>'
+                                    + '<td>' + value.shedAmount + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Extension(' + value.landLeaseId + ');" >&nbsp; Extension |</a >'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Terminate(' + value.landLeaseId + ');" >&nbsp;Terminate |</a >'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Update(' + value.landLeaseId + ');" >&nbsp;Update</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                       } else {
+                            $('#tbl_body').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+               });
+            return false;
+        }
+            var Cid = ($('#cid').val());
+            var TTIN = $('#ttin').val();
+            var plotNo = $('#plotNo').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("getLandOwnerShip", "LandLeases")',
+                    data: {
+                        Cid: Cid,
+                        TTIN: TTIN,
+                        plotno: plotNo
+                    },
+                    success: function (data) {
+                        $('#tbl_body').empty();
+                        if (data.length > 0) {
+
+                            $.each(data, function (key, value) {
+                                $('#tbl_landownershipdetail').show(1000);
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.leaseName + '</td>'
+                                    + '<td>' + value.sdate + '</td>'
+                                    + '<td>' + value.leaseAmount + '</td>'
+                                    + '<td>' + value.shedAmount + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Extension(' + value.landLeaseId + ');" >&nbsp; Extension |</a >'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Terminate(' + value.landLeaseId + ');" >&nbsp;Terminate |</a >'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Update(' + value.landLeaseId + ');" >&nbsp;Update</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                       } else {
+                            $('#tbl_body').append(
+                                '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                            swal({
+                                title: 'No details found!',
+                                type: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+
+
+    function Terminate(id) {
+       
+        $('#hdnParkingFeeDetailId').val(id);
+        $('#terminate').show(1000);
+        $('#extension').hide(1000);
+        
+        window.location.href = "LandLeases/Terminate?id=" + id;
+
+    }
+
+    function Extension(id) {
+
+        $('#ParkingFeeDetailId').val(id);
+        $('#extension').show(1000);
+        $('#terminate').hide(1000);
+        window.location.href = "LandLeases/Extension?id=" + id;
+    }
+
+    function longterm() {
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Longterm", "LandLeases")',
+            data: {
+
+            },
+            success: function (data) {
+                $('#tbl_body').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_landownershipdetail').show(1000);
+                        $('#tbl_body').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.plotNo + '</td>'
+                            + '<td>' + value.taxPayerName + '</td>'
+                            + '<td>' + value.leaseName + '</td>'
+                            + '<td>' + value.sdate + '</td>'
+                            + '<td>' + value.leaseAmount + '</td>'
+                            + '<td>' + value.shedAmount + '</td>'
+                            + '<td>'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Extension(' + value.landLeaseId + ');" >&nbsp; Extension |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Terminate(' + value.landLeaseId + ');" >&nbsp;Terminate |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Update(' + value.landLeaseId + ');" >&nbsp;Update</a >'
+                            + '</td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#tbl_body').append(
+                        '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+
+        });
+    }
+
+    function shortterm() {
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Shortterm", "LandLeases")',
+            data: {
+
+            },
+            success: function (data) {
+                $('#tbl_body').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_landownershipdetail').show(1000);
+                        $('#tbl_body').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.plotNo + '</td>'
+                            + '<td>' + value.taxPayerName + '</td>'
+                            + '<td>' + value.leaseName + '</td>'
+                            + '<td>' + value.sdate + '</td>'
+                            + '<td>' + value.leaseAmount + '</td>'
+                            + '<td>' + value.shedAmount + '</td>'
+                            + '<td>'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Extension(' + value.landLeaseId + ');" >&nbsp; Extension |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Terminate(' + value.landLeaseId + ');" >&nbsp;Terminate |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Update(' + value.landLeaseId + ');" >&nbsp;Update</a >'
+                            + '</td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#tbl_body').append(
+                        '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+
+        });
+    }
+
+    function Temporary() {
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("Temporary", "LandLeases")',
+            data: {
+
+            },
+            success: function (data) {
+                $('#tbl_body').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_landownershipdetail').show(1000);
+                        $('#tbl_body').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.plotNo + '</td>'
+                            + '<td>' + value.taxPayerName + '</td>'
+                            + '<td>' + value.leaseName + '</td>'
+                            + '<td>' + value.sdate + '</td>'
+                            + '<td>' + value.leaseAmount + '</td>'
+                            + '<td>' + value.shedAmount + '</td>'
+                            + '<td>'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Extension(' + value.landLeaseId + ');" >&nbsp; Extension |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Terminate(' + value.landLeaseId + ');" >&nbsp;Terminate |</a >'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Update(' + value.landLeaseId + ');" >&nbsp;Update</a >'
+                            + '</td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#tbl_body').append(
+                        '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+
+        });
+    }
+     //*****************************************************       LAND LEASE DETAILS FOR UPDATE      ********************************************************************************
+    function Update(landLeaseId) {
+        $('#hdnLL').val(landLeaseId);
+                $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetLeaseDetailsForUpdate", "LandLeases")',
+                    data: {
+                        LandLeaseId: landLeaseId
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#UpdateLandDetail').show(1000);
+                            $('#UpdateLandLease').show(1000);
+                            var PlotNo = data[0].plotNo; var LandAcerage = data[0].landAcerage;
+                            var StreetName = data[0].streetNameId; var Demkhong = data[0].demkhongId;
+                            var LapName = data[0].lapId; var PlotAddress = data[0].plotAddress;
+                            var LeaseType = data[0].leaseTypeId; var LeaseActivityType = data[0].leaseActivityTypeId;
+                            var LandLeaseId = data[0].landLeaseId;
+                            var LandDetailId = data[0].landDetailId;
+                            var LandLeasePeriodId = data[0].landLeasePeriodId;
+                            var StartDate = data[0].startDate;
+                            const c = new Date(StartDate);
+                            const SDate = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+                            var EndDate = data[0].endDate;
+                            const e = new Date(EndDate);
+                            const EDate = e.getFullYear() + '-' + ("0" + (e.getMonth() + 1)).slice(-2) + '-' + ("0" + e.getDate()).slice(-2)
+                            var BillingSchedule = data[0].billingScheduleId;
+
+                            $('#UBillingScheduleId').append($('<option>', { value: 0, text: '--Select--' }));
+                            $('#UBillingScheduleId').append($('<option>', { value: 1, text: 'Monthly' }));
+                            $('#UBillingScheduleId').append($('<option>', { value: 3, text: 'Yearly' }));
+
+                            if (BillingSchedule == 3) {
+                                $("#UBillingScheduleId option[value=" + BillingSchedule + "]").prop('selected', true);
+                            }
+                            else if (BillingSchedule == 1) {
+                                $("#UBillingScheduleId option[value=" + BillingSchedule + "]").prop('selected', true);
+                            }
+                            else {
+                                $("#UBillingScheduleId option[value=" + BillingSchedule + "]").prop('selected', true);
+                            }
+                            var LeaseAmount = data[0].leaseAmount;
+                            var LeaseApprovalNo = data[0].leaseApprovalNo; var ShedAmount = data[0].shedAmount;
+                            if (StreetName > 0) {
+                                $('select#UStreetName').val(StreetName).change();
+                            }
+                            else {
+                                $('select#UStreetName').val(StreetName).change(0);
+                            }
+                            if (Demkhong > 0) {
+                                $('select#UDemkhong').val(Demkhong).change();
+                            }
+                            else {
+                                $('select#UDemkhong').val(Demkhong).change(0);
+                            }
+                            if (LapName > 0) {
+                                $('select#ULapName').val(LapName).change();
+                            }
+                            else {
+                                $('select#ULapName').val(LapName).change(0);
+                            }
+                            if (LeaseType > 0) {
+                                $('select#ULeaseTypeId').val(LeaseType).change();
+                            }
+                            else {
+                                $('select#ULeaseTypeId').val(LeaseType).change(0);
+                            }
+                            if (LeaseActivityType > 0) {
+                                $('select#ULeaseActivityTypeId').val(LeaseActivityType).change();
+                            }
+                            else {
+                                $('select#ULeaseActivityTypeId').val(LeaseActivityType).change(0);
+                            }
+
+                            var HasShed = data[0].hasShed;
+                            if (HasShed == true) {
+                                $('#UHasShed').prop('checked', 1);
+                            }
+                            else {
+                                $('#UHasShed').prop('checked', 0);
+                            }
+                            if (LeaseActivityType == 1) {
+                                $('#URate').val('1.0');
+                            }
+                            if (LeaseActivityType == 2) {
+                                $('#URate').val('5.0');
+                            }
+                            if (LeaseActivityType == 3) {
+                                $('#URate').val('1.0');
+                            }
+                            if (LeaseActivityType == 4) {
+                                $('#URate').val('20.0');
+                            }
+                            if (LeaseActivityType == 5) {
+                                $('#URate').val('0.1');
+                            }
+                            $('#UPlotNo').val(PlotNo);
+                            $('#ULandAcerage').val(LandAcerage);
+                            $('#UPlotAddress').val(PlotAddress);
+                            $('#UStartDate').val(SDate);
+                            $('#UEndDate').val(EDate);
+                            $('#ULeaseAmount').val(LeaseAmount);
+                            $('#ULeaseApprovalNo').val(LeaseApprovalNo);
+                            $('#UShedAmount').val(ShedAmount);
+                            $('#hdnLandLeaseId').val(LandLeaseId);
+                            $('#hdnLandDetailId').val(LandDetailId);
+                            $('#hdnLandLeasePeriodId').val(LandLeasePeriodId);
+
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+    }
+
+    function UR(avSelect) {
+
+        var las = $('#ULandAcerage').val();
+        $('#HDNLA').val(las);
+
+        var x = document.getElementById("UBillingScheduleId").value;
+        if (x = 1) {
+            var one = $('#URate').val();
+            var two = $('#HDNLA').val();
+            var avvy = one * two;
+            $('#ULeaseAmount').val(avvy);
+        }
+        else {
+            var one = $('#URate').val();
+            var two = $('#HDNLA').val();
+            var avvy = one * two;
+            var as = avvy / 12;
+            $('#ULeaseAmount').val(as);
+        }
+    }
+    function myFunction1() {
+        var x = document.getElementById("UBillingScheduleId").value;
+
+        if (x == 1) {
+
+            $('#am').show(1000);
+            var one = $('#URate').val();
+            var two = $('#HDNLA').val();
+            var avvy = one * two;
+            $('#ULeaseAmount').val(avvy);
+        }
+
+        else {
+            $('#am').hide(1000);
+            var one = $('#URate').val();
+            var two = $('#HDNLA').val();
+            var avvy = one * two;
+            var as = avvy / 12;
+            $('#ULeaseAmount').val(as);
+        }
+    }
+    $(function () {
+
+        $('#ULeaseActivityTypeId').change(function () {
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("FetchRate", "LandLeases")',
+                data: {
+                    id: parseInt($('#ULeaseActivityTypeId').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#URate').empty();
+                    if (data.length > 0) {
+                        $("#URate").val(data[0].rate);
+
+                $('#img').hide();
+                }
+                else
+                {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+    });
+
+    function UpdateLease() {
+        var myarray = [];
+        var LandLeaseModel = {};
+
+        LandLeaseModel.LandLeaseId = parseInt($("#hdnLandLeaseId").val());
+        LandLeaseModel.LandDetailId = parseInt($("#hdnLandDetailId").val());
+        LandLeaseModel.LandLeasePeriodId = parseInt($("#hdnLandLeasePeriodId").val());
+        LandLeaseModel.PlotNo = $("#UPlotNo").val();
+        LandLeaseModel.LandAcerage = parseFloat($("#ULandAcerage").val());
+        LandLeaseModel.StreetNameId = parseInt($("#UStreetName").val());
+        LandLeaseModel.DemkhongId = parseInt($("#UDemkhong").val());
+        LandLeaseModel.LapId = parseInt($("#ULapName").val());
+        LandLeaseModel.PlotAddress = $("#UPlotAddress").val();
+        LandLeaseModel.LeaseTypeId = parseInt($("#ULeaseTypeId").val());
+        LandLeaseModel.LeaseActivityTypeId = parseInt($("#ULeaseActivityTypeId").val());
+        LandLeaseModel.StartDate = $("#UStartDate").val();
+        LandLeaseModel.EndDate = $("#UEndDate").val();
+        LandLeaseModel.LeaseApprovalNo = $("#ULeaseApprovalNo").val();
+        LandLeaseModel.LeaseAmount = parseFloat($("#ULeaseAmount").val());
+        LandLeaseModel.ShedAmount = parseInt($("#UShedAmount").val());
+
+        if ($('#UHasShed').is(':checked')) {
+            LandLeaseModel.HS = 1;
+        }
+        else {
+            LandLeaseModel.HS = 0;
+        }
+        if ($('#UBillingScheduleId').val() == 3) {
+            LandLeaseModel.BSI = 3;
+        }
+        else if ($('#UBillingScheduleId').val() == 1) {
+            LandLeaseModel.BSI = 1;
+        }
+        else {
+            swal('Please Select Billing Schedule!');
+            return false;
+        }
+        myarray.push(LandLeaseModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateLandLease", "LandLeases")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Land Lease Updated Successfully!');
+                    $('#UpdateLandDetail').hide(1000);
+                    $('#UpdateLandLease').hide(1000);
+                    SearchTaxPayer();     
+                    //longterm();
+                    //shortterm();
+                    //Temporary();
+                }
+                else {
+                    swal('Land Lease Updating Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+</script>
+

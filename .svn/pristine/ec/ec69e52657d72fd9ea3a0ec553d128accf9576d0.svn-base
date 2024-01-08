@@ -1,0 +1,319 @@
+﻿@using CORE_BOL
+@model DepositVM
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="PaymentDeposit">Report</a></li>
+                        <li class="breadcrumb-item active">Daily Wise Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Payment Deposit</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Start Date:<span style="font-weight: bold; color: red;">*</span></label>
+                    <input id="lblsdate" type="date" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">End Date:<span style="font-weight: bold; color: red;">*</span></label>
+                    <input id="lbledate" type="date" class="form-control col-6" />
+                </div>
+
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return GetDeposit();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+<div class="card card-info" id="divdeposit" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Deposit Details</h3>
+    </div>
+    <input type="hidden" id="hdnPaymentLegderId" />
+    <input type="" id="hdnsdate" />
+    <input type="" id="hdnedate" />
+    <div class="card-body">
+
+        <table id="mytable" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>Sl.NO</th>
+                    <th>Payment Mode</th>
+                    <th>Branch Name</th>
+                    <th>Cheque No</th>
+                    <th>Cheque Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+            <tfoot>
+                <tr><td></td><td></td><td></td><td></td><td align="right"><b>Total Amount:</b></td><td><label id="lbltamount" value="" class="col-form-label" readonly /> </td></tr>
+            </tfoot>
+        </table>
+        <br />
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Deposit Date:<span style="font-weight: bold; color: red;">*</span></label>
+                <input id="lblddate" type="date" class="form-control col-6" />
+            </div>
+        </div>
+        <br />
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" @*id="SaveDeposit"*@ onclick="return SaveDeposit();">Save</button> &nbsp;&nbsp;
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+
+    function GetDeposit() {
+        $('#img').hide();
+
+            if ($("#lblsdate").val() == "" && $("#lbledate").val() == "") {
+                swal("Please fill atlease one field to search.!");
+                $("#lblsdate").focus();
+
+                return false;
+        }
+
+        const hdnsdate = new Date($('#hdnsdate').val());
+        alert(hdnsdate);
+        var hdnedate = new Date($('#hdnedate').val());
+        var sdate = new Date($('#lblsdate').val());
+        var edate = new Date($('#lbledate').val());
+
+        if (sdate >= hdnsdate && edate <= hdnedate) {
+            swal('House Already Allocated for this Date!');
+            return false;
+        }
+        //if ($('#hdnedate').val() > $('#lbledate').val()) {
+        //    swal('House Already Allocated for this Date!');
+        //    return false;
+        //}
+
+        $('#divdeposit').toggle(1000);
+        var today = new Date($("#lblsdate").val());
+        var date = today.getFullYear() + '' + ("0" + (today.getMonth() + 1)).slice(-2) + '' + ("0" + today.getDate()).slice(-2)
+        var sdate = date;
+
+        var today1 = new Date($("#lbledate").val());
+        var date1 = today1.getFullYear() + '' + ("0" + (today1.getMonth() + 1)).slice(-2) + '' + ("0" + today1.getDate()).slice(-2)
+        var edate = date1;
+            console.log();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetDepositDetails", "Deposits")',
+                    data: {
+                        StartDate: sdate,
+                        EndDate: edate
+
+                    },
+                    success: function (data) {
+                        $('#img').hide();
+                        $('#hdnPaymentLegderId').val();
+
+
+                        //var ttlamt = 0;
+                        //ttlamt = value.totalAmount + value.totalPenaltyAmount;
+                        //tpenalty += value.totalPenaltyAmount;
+
+                        //dttlamt += value.demandAmount;
+
+                        //gttlamt += ttlamt;
+
+                        //$("#hdnGrandTotalAmount").val(gttlamt.toFixed(0));
+
+                        $('#tbl_body').empty();
+
+
+                        if (data.length > 0) {
+
+                            //var sum = 0;
+                            //sum += totamt;
+                            var totamt = 0;
+
+                            $.each(data, function (key, value) {
+
+                                var pmode = value.paymentMode;
+
+                                var amount = value.amount;
+                                if (pmode == 'Cash') {
+                                    amount = value.amount;
+
+                                }
+                                if (pmode == 'Cheque') {
+                                    amount = value.amount;
+
+
+                                }
+
+                                totamt += amount;
+                                //alert(totamt);
+                                $("#lbltamount").html(totamt);
+
+                                    $('#tbl_body').append(
+                                        '<tr>'
+                                        + '<td>' + (key + 1) + '</td>'
+                                        + '<td>' + value.paymentMode + '</td>'
+                                        + '<td>' + value.paymentModeNo + '</td>'
+                                        + '<td>' + value.branchName + '</td>'
+
+                                        + '<td>' + value.paymentModeDate + '</td>'
+                                        + '<td> <input id="pamount_' + key + '" type="hidden" value="' + value.amount + '" />' + value.amount + '</td>'
+                                        + '<td><input id="id_' + key + '" type="hidden" value="' + value.paymentLedgerId + '" />'
+                                        + '</tr>');
+
+
+
+                            });
+                            $('#img').hide();
+
+                        }
+                        else {
+                            $('#img').hide();
+                            $('#tbl_body').append(
+                                '<tr><td colspan="4" style="color: red;">No record found!</td></tr>');
+
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                        $('#img').hide();
+                    }
+
+                });
+        @*$.ajax({
+             type: "GET",
+                url: '@Url.Action("GetDate", "Deposits")',
+                    data: {
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var Sd = data[0].paymentFromDate;
+                            var Ed = data[0].paymentToDate;
+                            
+
+                            $('#hdnsdate').val(Sd);
+                            $('#hdnedate').val(Ed);
+                           
+                        }
+                    },
+
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });*@
+
+    }
+
+    function SaveDeposit() {
+
+    var index = 0;
+
+
+    var myarray = [];
+
+    $('#mytable > tbody  > tr ').each(function () {
+
+
+
+     var DepositVM = {};
+
+        var paymentamount = $('#pamount_' + parseInt(index)).val();
+        var paymentLegderId = $('#id_' + parseInt(index)).val();
+        alert(paymentLegderId);
+
+        DepositVM.PaymentLedgerId = parseInt(paymentLegderId);
+        DepositVM.DepositAmount = parseFloat(paymentamount);
+        DepositVM.PaymentFromDate = $("#lblsdate").val();
+        DepositVM.PaymentToDate = $("#lbledate").val();
+        DepositVM.DepositDate = $("#lblddate").val();
+
+
+        myarray.push(DepositVM);
+        index = index + 1
+    });
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+
+
+     $('#img').show();
+    $.ajax({
+            type: "POST",
+            url: '@Url.Action("GethouseDetails", "Deposits")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $('#divdeposit').hide(1000);
+
+
+                $('#img').hide();
+                swal(response);
+                setInterval('location.reload()', 2000);
+            },
+
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+
+     }
+
+    $("#btnCancel").click(function () {
+        $('#divdeposit').hide(1000);
+
+
+    });
+</script>

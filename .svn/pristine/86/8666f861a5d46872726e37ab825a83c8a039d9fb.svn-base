@@ -1,0 +1,974 @@
+﻿@model List<CORE_BOL.AssetRegisterVM>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" href="~/plugins/sweetalert2/sweetalert2.js">
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+                <!-- HIDDEN FIELDS HERE -->
+                <input type="hidden" id="hdnAssetId" value="" />
+
+
+                <!-- HIDDEN FIELDS HERE END -->
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Asset Register</a></li>
+                    <li class="breadcrumb-item active">Asset Register Details</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Asset Management System</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New"><b><i class="fas fa-plus"></i> Add New</b> </a>
+        </p><hr />
+        <div class="form-group row">
+            <table class="table table-bordered table-striped" style="width:50%;">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+
+                        <th colspan="2" style="text-align:center;">Fixed Asset</th>
+
+                    </tr>
+                    <tr>
+                        <td>Asset Name</td>
+                        <td>Unit/Qty</td>
+
+                    </tr>
+                </thead>
+                <tbody id="tblfixasset">
+                </tbody>
+            </table>
+
+            <table class="table table-bordered table-striped" style="width:50%;">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th colspan="2" style="text-align:center;">Movable Asset</th>
+                    </tr>
+                    <tr>
+                        <td>Asset Name</td>
+                        <td>Unit/Qty</td>
+
+                    </tr>
+                </thead>
+                <tbody id="tblMovableasset">
+                </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+<div class="card-body" id="hdnAssetRegister" style="display:none;">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Asset Register Details</h3>
+        </div>
+    </div>
+    <br />
+    <table id="example1" class="table table-bordered table-striped">
+        <thead style="background-color:mediumaquamarine">
+            <tr>
+                <th>#</th>
+                <th>Asset No</th>
+                <th>Asset Code</th>
+                <th>Asset Name</th>
+                <th>Asset Status</th>
+                <th>Tertiary Account Head</th>
+
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody id="tblAssetRegister">
+        </tbody>
+    </table>
+</div>
+</div>
+
+
+
+<div class="card card-info" id="financialInfoDetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Financial Information Details for <label id="lblasset"></label></h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Asset Name</th>
+                        <th>Date Of Procurement</th>
+                        <th>Date Of Commissioning</th>
+                        <th>Useful Life</th>
+                        <th>Cost of procurement</th>
+                        <th>Procurement Order ref no</th>
+                        <th>Procurement order Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="financialTbl">
+                </tbody>
+            </table>
+            <div class="form-group row col-sm-10" id="editfinancial" style="display:none;">
+                <div class="col-sm-12">
+                    <div class="card-header" style="background-color:cornflowerblue">
+                        <h3 class="card-title" style="color:white">Edit Financial Information for <label id="lblasset"></label></h3>
+                    </div>
+                    <div class="card-body" style="-webkit-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.39); -moz-box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.39); box-shadow: 0px 0px 9px 0px rgba(0,0,0,0.39);">
+                        <input type="hidden" id="hdnAssetId" value="" />
+
+                        <label class="col-sm-12 col-form-label">Procurement Order Ref. No. <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" id="eProcurementOrderRefNo" />
+                        </div>
+                        <label class="col-sm-12 col-form-label">Procurement Order Date <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="eProcurementOrderDate" />
+                        </div>
+
+                        <label class="col-sm-12 col-form-label">Date of Procurement <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="eFinDateofProcurement" />
+                        </div>
+                        <label class="col-sm-12 col-form-label">Date of Commissioning <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" type="date" placeholder="Enter Date" id="eDateofCommissioning" />
+                        </div>
+
+                        <label class="col-sm-12 col-form-label">Useful Economic life (Years) <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="form-control" onkeypress="return isNumberKey(this, event);" id="eUsefulLife" />
+                        </div>
+                        <label class="col-sm-12 col-form-label">Cost of procurement (Nu) <span style="font-weight: bold; color: red;">*</span></label>
+                        <div class="col-sm-12">
+                            <input class="onlynum form-control" id="eCostofProcurement" />
+                        </div>
+                        <br />
+                        <div class="form-group row">
+                            <label class="col-sm-3 col-form-label"></label>
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-primary" id="UpdateFinancial">Save</button>
+                                <button type="reset" id="btnCancel" class="btn btn-warning" onclick="cancel();">Cancel</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="card card-info" id="financial" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Financial Information for <label id="lblassetdetail"></label></h3>
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Procurement Order Ref. No. <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" id="ProcurementOrderRefNo" />
+            </div>
+            <label class="col-sm-3 col-form-label">Procurement Order Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="ProcurementOrderDate" />
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Date of Procurement <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" type="date" placeholder="dd/mm/yyyy" id="DateofProcurement" />
+            </div>
+            <label class="col-sm-3 col-form-label">Date of Commissioning <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" type="date" placeholder="Enter Date" id="DateofCommissioning" />
+            </div>
+
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Useful Economic life (Years) <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="form-control" onkeypress="return isNumberKey(this, event);" id="UsefulLife" />
+            </div>
+            <label class="col-sm-3 col-form-label">Cost of procurement (Nu) <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input class="onlynum form-control" id="CostofProcurement" />
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-9">
+                <button type="button" class="btn btn-primary" id="SaveFinancial">Save</button>
+                <button type="reset" id="btnCancel" class="btn btn-warning" onclick="cancel();">Cancel</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<div class="card card-info" id="technical" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">Technical Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example111" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>Attribute Name</th>
+                    <th>Asset Name</th>
+                    <th>Measurement Unit Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody id="technicalTbl">
+            </tbody>
+        </table>
+        <br />
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th style="display:none;"></th>
+                    <th>Attribute Name</th>
+                    <th>Value</th>
+                    <th>Unit</th>
+                </tr>
+            </thead>
+            <tbody id="myTechnicalbody">
+            </tbody>
+        </table>
+
+    </div>
+    <div class="form-group row">
+        <label class="col-sm-3 col-form-label"></label>
+        <div class="col-sm-9">
+            <button type="button" class="btn btn-primary" id="SaveTechnical">Save</button>
+            <button type="reset" id="btnCancel" class="btn btn-warning" onclick="cancel();">Cancel</button>
+        </div>
+
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+
+        $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FetchAssetRegiser", "Assets")',
+                    data: {
+                        PrimaryHeadId: 2,
+
+                        },
+
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.length > 0) {
+
+                                $('#tblMovableasset').empty();
+
+                                $.each(data, function (key, value) {
+
+
+                                    $('#tblMovableasset').append(
+                                      '<tr>'
+                                        + '<td><a style="color: #007bff; cursor: pointer;" onclick="return GetAsset(' + value.secondaryAccountHeadId + ');">' + value.assetname + '</a ></td>'
+                                        + '<td>' + value.qty + '</td>'
+
+
+                            + '</tr>');
+
+                                });
+
+                                $('#tblMovableasset').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#tblMovableasset").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+        });
+
+         $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("FetchAssetRegiser", "Assets")',
+                    data: {
+                        PrimaryHeadId: 1,
+
+                        },
+
+                        success: function (data) {
+                            console.log(data);
+
+                            if (data.length > 0) {
+
+                                $('#tblfixasset').empty();
+
+                                $.each(data, function (key, value) {
+
+
+                                    $('#tblfixasset').append(
+                                      '<tr>'
+                                        + '<td><a style="color: #007bff; cursor: pointer;" onclick="return GetAsset(' + value.secondaryAccountHeadId + ');">' + value.assetname + '</a ></td>'
+                                        + '<td>' + value.qty + '</td>'
+
+
+                            + '</tr>');
+
+                                });
+
+                                $('#tblfixasset').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#tblfixasset").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    });
+
+    function GetAsset(secondaryAccountHeadId) {
+        $('#hdnAssetRegister').show();
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetAsset", "Assets")',
+                data: {
+                    SecondaryAccountHeadId: parseInt(secondaryAccountHeadId)
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#tblAssetRegister').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#tblAssetRegister').append(
+                                '<tr>'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.assetnumber + '</td>'
+                                + '<td>' + value.assetCode + '</td>'
+                                + '<td>' + value.assetName + '</td>'
+                                + '<td>' + value.assetStatusNames + '</td>'
+                                + '<td>' + value.tertiaryAccountHeadNames + '</td>'
+                                + '<td>'
+                                + '<a style = "color: #007bff; cursor: pointer;" onclick = "return edit(' + value.assetId + ' )" title = "EDIT" > <i class="fas fa-edit"></i>  </a >'
+                                + ' &nbsp;| &nbsp;<a style = "color: #007bff; cursor: pointer;" onclick = "return view(' + value.assetId + ' )" title = "view" > <i class="fas fa-eye"></i>  </a >'
+
+                                + '&nbsp; | &nbsp; <a style = "color: #007bff; cursor: pointer;" onclick = "return displayFinancial(' + value.assetId + ',\'' + value.assetName + '\'), displayFinancialDetail(' + value.assetId + ',\'' + value.assetName + '\');" title = "Add Financial Details" > <i class="fas fa-plus-circle"></i> Financial</a >'
+                                + '&nbsp;|&nbsp; <a style="color: #007bff; cursor: pointer;" onclick="return displayTechnical(' + value.tertiaryAccountHeadId + ',' + value.assetId + '), displayTechnicalDetail(' + value.assetId + ');" title="Add Technical Details"><i class="fas fa-plus-circle"></i> Technical</a>'
+                               + '</td > '
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#tblAssetRegister').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+        });
+
+
+    }
+
+    function edit(assetId) {
+
+        window.location.href = "Assets/Edit?id=" + assetId;
+    }
+    function view(assetId) {
+
+        window.location.href = "Assets/Details?id=" + assetId;
+    }
+    $(function () {
+        $("#example1").DataTable({
+            "responsive": true,
+            "autoWidth": false,
+        });
+        $('#example2').DataTable({
+            "paging": true,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+        $('.onlynum').keypress(function (event) {
+            if ((event.which != 46 || $(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57)) {
+                event.preventDefault();
+            }
+        });
+
+
+
+    });
+
+    function displayFinancial(assetid, assetname) {
+        $('#financialInfoDetail').show(1000);
+        $('#financial').show(1000);
+        $('#technical').hide(1000);
+        $('#editfinancial').hide(1000);
+
+        $('html,body').animate({
+            scrollTop: $("#financial").offset().top
+        }, 'slow');
+
+        $('#hdnAssetId').val(assetid);
+
+        $('#lblasset').html(assetname);
+        $('#lblassetdetail').html(assetname);
+    }
+
+    function displayFinancialDetail(assetId, assetname) {
+
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetFinancialDetail", "Assets")',
+                data: {
+                    id: parseInt(assetId)
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#financialTbl').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#financialTbl').append(
+                                '<tr>'
+                               // + '<td style=display:none>' +  + '</td>'
+                                + '<td>' + value.assetName + '</td>'
+                                + '<td>' + value.dateofProcurement + '</td>'
+                                + '<td>' + value.dateofCommissioning + '</td>'
+                                + '<td>' + value.usefulLife + '</td>'
+                                + '<td>' + value.costofProcurement + '</td>'
+                                + '<td>' + value.procurementOrderRefNo + '</td>'
+                                + '<td>' + value.procurementOrderDate + '</td>'
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Edit details" onclick="return displayData(' + value.costofProcurement + ',' + value.usefulLife + ');">EDIT</a></b></td>'
+                                //+ '<td data-toggle="modal" data-target="#exampleModalCenter" ><a onclick="return d(' + value.dateofProcurement + ');"><i class="fas fa-edit"></i></a></td>'
+                                //+ ',' + value.dateofCommissioning + ',' + value.usefulLife + ',' + value.procurementOrderRefNo + ',' + value.procurementOrderDate + ',' + value.costofProcurement
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#financialTbl').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+        });
+        $('#lblassetdetail').html(assetname);
+
+    }
+
+    function displayeditfinancial() {
+        $('#technical').hide(1000);
+        $('#financial').hide(1000);
+        $('#financialInfoDetail').show(1000);
+        $('#editfinancial').show(1000);
+
+        $('html,body').animate({
+            scrollTop: $("#editfinancial").offset().top
+        }, 'slow');
+
+    }
+
+    function displayTechnical(tertiary_id, assetId) {
+
+        $('#technical').show(1000);
+        $('#financial').hide(1000);
+        $('#financialInfoDetail').hide(1000);
+        $('#editfinancial').hide(1000);
+
+
+        $('#hdnAssetId').val(assetId);
+        //alert($('#hdnAssetId').val());
+
+        $('html,body').animate({
+            scrollTop: $("#technical").offset().top
+        }, 'slow');
+
+        // for already added display
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTechnical", "Assets")',
+                data: {
+                    id: parseInt(assetId)
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#myTechnicalbodyDetails').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+
+                            $('#myTechnicalbodyDetails').append(
+                                '<tr>'
+                                + '<td>' + value.attributeName + '</td>'
+                                + '<td>' + value.value + '</td>'
+                                + '<td>' + value.measurementUnit + '</td>'
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#myTechnicalbodyDetails').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+
+        // -----------END-----------
+
+        $('#img').show();
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTechnical", "Assets")',
+                data: {
+                    id: parseInt(tertiary_id)
+                },
+            success: function (data) {
+
+
+                console.log(data);
+                    $('#myTechnicalbody').empty();
+
+                    if (data.length > 0) {
+                        $('#img').hide();
+
+                        $.each(data, function (key, value) {
+
+                            $('#myTechnicalbody').append(
+                                '<tr>'
+                                + '<td style="display:none;"><input id="assetId_' + key + '" type="hidden" value="' + assetId + '" /><input id="assetAttributeId_' + key + '" type="hidden" value="' + value.assetAttributeId + '" /></td>'
+                                + '<td>' + value.attributeName + '</td>'
+                                + '<td><input type="text" id="attributeval_' + key + '" class="form-control" value="" /></td>'
+                                + '<td> <select id="measurementUnitId_'+ key + '" class="form-control select2" ></select></td>'
+
+                                + '</tr>');
+
+
+                            getMeasurementUnit(value.assetAttributeId, key);
+
+                        });
+
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+    function displayTechnicalDetail(assetId) {
+        $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetTechnicalDetail", "Assets")',
+                data: {
+                    id: parseInt(assetId)
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#technicalTbl').empty();
+
+                    //Changed from == 0 to >0
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+
+                            $('#technicalTbl').append(
+                                '<tr>'
+                                + '<td>' + value.attributeName + '</td>'
+                                + '<td>' + value.assetName + '</td>'
+                                + '<td>' + value.measurementUnitName + '</td>'
+                                + '<td>' + value.value + '</td>'
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#technicalTbl').append(
+                            '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+    }
+
+    function getMeasurementUnit(assetattribute_id, key) {
+
+        $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetMeasurementUnit", "Assets")',
+                data: {
+                    AssetAttributeId: parseInt(assetattribute_id)
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#measurementUnitId_' + key).empty();
+
+                    $('#measurementUnitId_' + key).append(
+                    '<option value=0>--Please Select--</option>');
+
+                    if (data.length > 0) {
+
+                    for (var i = 0; i < data.length; i++) {
+                        var newOption = $('<option value=' + data[i].value + '> '
+                            + data[i].text
+                        + ' </option>');
+                        $('#measurementUnitId_' + key).append(newOption);
+                    }
+
+
+                }
+                else {
+                    //$('#img').hide();
+                }
+
+                },
+                error: function () {
+                    //$('#img').hide();
+                    alert('Error occured');
+                }
+                });
+
+    }
+
+    function isNumberKey(txt, evt) {
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode == 46) {
+            //Check if the text already contains the . character
+            if (txt.value.indexOf('.') === -1) {
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            if (charCode > 31 &&
+                (charCode < 48 || charCode > 57))
+                return false;
+        }
+        return true;
+    }
+
+    function cancel() {
+        $('#financial').hide(1000);
+        $('#technical').hide(1000);
+        $('#financialInfoDetail').hide(1000);
+        $('html,body').animate({
+            scrollTop: $("#technical").offset().top
+        }, 'slow');
+
+    }
+
+    $("#SaveFinancial").click(function () {
+
+        var myarray = [];
+        var FinancialInformationVM = {};
+
+        FinancialInformationVM.AssetId = parseInt($('#hdnAssetId').val());
+        FinancialInformationVM.DateofProcurement = $("#DateofProcurement").val();
+        FinancialInformationVM.DateofCommissioning = $("#DateofCommissioning").val();
+        FinancialInformationVM.UsefulLife = parseFloat($("#UsefulLife").val());
+        FinancialInformationVM.ProcurementOrderRefNo = $("#ProcurementOrderRefNo").val();
+        FinancialInformationVM.ProcurementOrderDate = $("#ProcurementOrderDate").val();
+        FinancialInformationVM.CostofProcurement = parseFloat($("#CostofProcurement").val());
+
+        myarray.push(FinancialInformationVM);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateFinancial", "Assets")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $('#img').hide();
+                swal(response);
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    });
+
+    $("#UpdateFinancial").click(function () {
+
+        var myarray = [];
+        var FinancialInformationVM = {};
+
+        FinancialInformationVM.AssetId = parseInt($('#hdnAssetId').val());
+        FinancialInformationVM.DateofProcurement = $("#eFinDateofProcurement").val();
+        FinancialInformationVM.DateofCommissioning = $("#eDateofCommissioning").val();
+        FinancialInformationVM.UsefulLife = parseFloat($("#eUsefulLife").val());
+        FinancialInformationVM.ProcurementOrderRefNo = $("#eProcurementOrderRefNo").val();
+        FinancialInformationVM.ProcurementOrderDate = $("#eProcurementOrderDate").val();
+        FinancialInformationVM.CostofProcurement = parseFloat($("#eCostofProcurement").val());
+
+        myarray.push(FinancialInformationVM);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateFinancial", "Assets")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+                $('#img').hide();
+                swal(response);
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while updating");
+
+            }
+
+        });
+        location.reload();
+    });
+
+    function displayData(cost , use)
+    {
+        $('#technical').hide(1000);
+        $('#financial').hide(1000);
+        $('#financialInfoDetail').show(1000);
+        $('#editfinancial').show(1000);
+
+        $('html,body').animate({
+            scrollTop: $("#editfinancial").offset().top
+        }, 'slow');
+
+        //$('#eProcurementOrderRefNo').val(p_order);
+        $('#eCostofProcurement').val(cost);
+
+        //$('#eDateofProcurement').val(dop);
+        //$('#eDateofCommissioning').val(doc);
+        $('#eUsefulLife').val(use);
+        //$('#eProcurementOrderDate').val(p_order_date);
+    }
+
+    $('#SaveTechnical').on('click', function () {
+
+        var r = confirm("Do you want to submit technical details?");
+        if (r == true) {
+        } else {
+            return false;
+        }
+
+        var index = 0; var flag = 0; var flag1 = 0;
+        $('#example1 > tbody  > tr ').each(function () {
+            var sa = $('#attributeval_' + parseInt(index)).val();
+            var sb = $('#measurementUnitId_' + parseInt(index)).val();
+
+            if (sa == "") {
+                flag = 1;
+            }
+            if (sb == "0") {
+                flag1 = 1;
+            }
+            index = index + 1
+        });
+        if (flag == 1) {
+            alert("You have left some value fields empty. Please fill up the empty fields!");
+            return false;
+        }
+        if (flag1 == 1) {
+            alert("You have left some measurement fields empty. Please fill up the empty fields!");
+            return false;
+        }
+         $.ajax({
+                type: "POST",
+                url: '@Url.Action("CheckDuplicateInformation", "Assets")',
+                data: {
+
+                    id: parseInt($('#hdnAssetId').val())
+
+                },
+                success: function (data) {
+
+                    console.log(data);
+
+                    if (data.length > 0) {
+                       // alert($('#hdnAssetId').val());
+                        $('#img').hide();
+
+                        alert("The technical details for this asset is already added.!");
+                        return false;
+                    }
+                    else {
+
+                        var myarray = [];
+                        for (i = 0; i < $("#example1 TBODY TR").length - 1; i++) {
+
+                            var siobj = {};
+
+                            siobj.AssetId = parseInt($("#assetId_" + i).val());
+                            siobj.AssetAttributeId = parseInt($("#assetAttributeId_" + i).val());
+                            siobj.MeasurementUnitId = parseInt($("#measurementUnitId_" + i).val());
+                            siobj.Value = $("#attributeval_" + i).val();
+
+                            myarray.push(siobj);
+                        }
+
+                        console.log(JSON.stringify(myarray));
+
+                        //return false;
+                        $.ajax({
+                            contentType: "application/json; charset=utf-8",
+                            dataType: "json",
+                            url: '@Url.Action("CreateTechnicalInformation", "Assets")',
+                            type: "POST",
+                            data: JSON.stringify(myarray),
+                            success: function (r) {
+                                if (r > 0) {
+
+                                    alert("Technical details saved successfully.");
+
+                                    setTimeout(function () {
+                                        $('.alert').fadeOut(1000);
+                                        location.reload();
+                                    }, 5000);
+                                }
+                                else {
+                                    alert("Error saving Technical details.");
+                                }
+
+                            }
+                        });
+                    }
+                 },
+                 error: function () {
+                     $('#img').hide();
+                     alert('Error occured');
+                 }
+
+             });
+    });
+
+
+    function saveme() {
+        $('#img').show();
+    }
+
+</script>

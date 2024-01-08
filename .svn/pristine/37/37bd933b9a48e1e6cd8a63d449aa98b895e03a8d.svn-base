@@ -1,0 +1,121 @@
+﻿@using CORE_BOL
+@model ECRenewalDetailModel
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">EC Renewal Detail</a></li>
+                    <li class="breadcrumb-item active">Update EC Renewal Detail</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update EC Renewal Detail</h3>
+    </div>
+    <!-- /.card-header -->
+    <!-- form start -->
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        @*data-ajax="true" data-ajax-method="post">*@
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="EcRenewalId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label asp-for="EcDetailId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="EcDetailId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.EcDetailId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="EcDetailId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="EcUseTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <select asp-for="EcUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.EcUseTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="EcUseTypeId" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="ValidUpTo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="ValidUpTo" type="date" class="form-control" placeholder="Valid UpTo" />
+                    <span asp-validation-for="ValidUpTo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Amount" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Amount" class="form-control" placeholder="Amount" />
+                    <span asp-validation-for="Amount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="EcRefNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="EcRefNo" class="form-control" placeholder="EC Ref No" />
+                    <span asp-validation-for="EcRefNo" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="EcSl" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="EcSl" class="form-control" placeholder="EcSl" />
+                    <span asp-validation-for="EcSl" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="CalendarYear" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="CalendarYear" class="form-control" placeholder="Calendar Year" />
+                    <span asp-validation-for="CalendarYear" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Remarks" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="Remarks" class="form-control" placeholder="Remarks" />
+                    <span asp-validation-for="Remarks" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+        </div>
+        <!-- /.card-body -->
+
+    </form>
+</div>
+<script>
+    function saveme() {
+        $('#img').show();
+    }
+</script>

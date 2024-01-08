@@ -1,0 +1,623 @@
+﻿@using CORE_BOL
+@model BuildingDetailModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Detail</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!--BUILDING DETAILS-->
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Building Details</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+
+            <div class="form-group row">
+                <label asp-for="plotNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.plotNo)</label>
+                </div>
+
+                <label asp-for="BuildingNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.BuildingNo)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="BuildupArea" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.BuildupArea)</label>
+                </div>
+
+                <label asp-for="PlinthArea" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PlinthArea)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="NoOfUnits" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.NoOfUnits)</label>
+                </div>
+
+                <label asp-for="NumberOfFloors" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.NumberOfFloors)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="GarbagServiceAccessibilityId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.GarbagServiceAccessibility)</label>
+                </div>
+
+                <label asp-for="StreetLightAccessibilityId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.StreetLightAccessibility)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="StructureCategoryId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.StructureCategoryName)</label>
+                </div>
+
+                <label asp-for="StructureTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.StructureTypeName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyCertificateNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OccupancyCertificateNo)</label>
+                </div>
+
+                <label asp-for="RoofingTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.RoofingTypeName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="BoundaryTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.BoundryTypeName)</label>
+                </div>
+
+                <label asp-for="BuildingColourId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.BuildingcolorName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyCertificateIssueDate" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OccupancyCertificateIssueDate)</label>
+                </div>
+
+                <label asp-for="MaterialTypeId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.MaterialTypeName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterTankLocationId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.WaterTankAllocationName)</label>
+                </div>
+
+                <label asp-for="ParkingSlotId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.ParkingSlotName)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="DateOfFinalInspection" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.DateOfFinalInspection)</label>
+                </div>
+
+                <label asp-for="WaterSupplyAccessibilityId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.WaterSupplyAccessibility)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyAlteredOn" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OccupancyAlteredOn)</label>
+                </div>
+
+                <label asp-for="OccupancyReferenceId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OccupancyReferenceId)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="Remarks" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.Remarks)</label>
+                </div>
+
+                <label asp-for="ModificationRemarks" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.ModificationRemarks)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="SewerageConnection" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.SewerageConnection)</label>
+                </div>
+
+                <label asp-for="Attic" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.Attic)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="WaterConnection" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.WaterConnection)</label>
+                </div>
+
+                <label asp-for="ArchFeature" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.ArchFeature)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="OccupancyCertificateIssued" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OccupancyCertificateIssued)</label>
+                </div>
+
+                <label asp-for="Roofing" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.Roofing)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="TraditionalPainting" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.TraditionalPainting)</label>
+                </div>
+
+                <label asp-for="Plantation" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.Plantation)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="NumberDisplayed" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.NumberDisplayed)</label>
+                </div>
+
+                <label asp-for="FireExtingusher" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.FireExtingusher)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="DrainToStormWaterDrain" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.DrainToStormWaterDrain)</label>
+                </div>
+
+                <label asp-for="RoadAccess" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-4">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.RoadAccess)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-12">
+                    @*<a asp-action="Edit" asp-route-id="@Model.BuildingDetailId" title="Go Back" class="btn btn-primary fas fa-edit"
+                       onclick="return saveme();">Edit</a>*@
+                    <button type="button" onclick="return addMoreDetails();" class="btn btn-outline-info float-lg-right">Add More Building Information <i class="fas fa-forward"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<!--ADD MORE DETAILS-->
+<form class="form-horizontal" asp-action="AddMore" method="post">
+    <div style="display:none;" id="id_AddMoreDetails">
+        <div class="card card-info">
+            <div class="card-header">
+                <h3 class="card-title">Add More Building Details</h3>
+            </div>
+            <div class="card-body">
+                <input type="hidden" asp-for="BuildingDetailId" />
+                <div class="form-group row">
+                    <label asp-for="GarbagServiceAccessibilityId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="GarbagServiceAccessibilityId" id="GarbagServiceAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                        <span id="errorGarbagServiceAccessibilityId" asp-validation-for="GarbagServiceAccessibilityId" class="text-danger"></span>
+                    </div>
+                    <label asp-for="StreetLightAccessibilityId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="StreetLightAccessibilityId" id="StreetLightAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                        <span id="errorStreetLightAccessibilityId" asp-validation-for="StreetLightAccessibilityId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="StructureCategoryId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="StructureCategoryId" id="StructureCategoryId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureCategoryId,"Value","Text")) " value="0"></select>
+                        <span id="errorStructureCategoryId" asp-validation-for="StructureCategoryId" class="text-danger"></span>
+                    </div>
+
+                    <label asp-for="StructureTypeId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="StructureTypeId" id="StructureTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureTypeId,"Value","Text")) " value="0"></select>
+                        <span id="errorStructureTypeId" asp-validation-for="StructureTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="WaterTankLocationId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="WaterTankLocationId" id="WaterTankLocationId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterTankLocationId,"Value","Text")) " value="0"></select>
+                        <span id="errorWaterTankLocationId" asp-validation-for="WaterTankLocationId" class="text-danger"></span>
+                    </div>
+                    <label asp-for="RoofingTypeId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="RoofingTypeId" id="RoofingTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.RoofingTypeId,"Value","Text")) " value="0"></select>
+                        <span id="errorRoofingTypeId" asp-validation-for="RoofingTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="BoundaryTypeId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="BoundaryTypeId" id="BoundaryTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BoundaryTypeId,"Value","Text")) " value="0"></select>
+                        <span id="errorBoundaryTypeId" asp-validation-for="BoundaryTypeId" class="text-danger"></span>
+                    </div>
+                    <label asp-for="BuildingColourId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="BuildingColourId" id="BuildingColourId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingColourId,"Value","Text")) " value="0"></select>
+                        <span id="errorBuildingColourId" asp-validation-for="BuildingColourId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="WaterSupplyAccessibilityId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="WaterSupplyAccessibilityId" id="WaterSupplyAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                        <span id="errorWaterSupplyAccessibilityId" asp-validation-for="WaterSupplyAccessibilityId" class="text-danger"></span>
+                    </div>
+                    <label asp-for="MaterialTypeId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="MaterialTypeId" id="MaterialTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MaterialTypeId,"Value","Text")) " value="0"></select>
+                        <span id="errorMaterialTypeId" asp-validation-for="MaterialTypeId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="PlinthArea" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input type="number" asp-for="PlinthArea" class="form-control" placeholder="Plinth Area" required />
+                        <span asp-validation-for="PlinthArea" class="text-danger"></span>
+                    </div>
+                    <label asp-for="ParkingSlotId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="ParkingSlotId" id="ParkingSlotId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ParkingSlotId,"Value","Text")) " value="0"></select>
+                        <span id="errorParkingSlotId" asp-validation-for="ParkingSlotId" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="Remarks" class="form-control" placeholder="Remarks" required />
+                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                    </div>
+                    <label asp-for="ModificationRemarks" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="ModificationRemarks" class="form-control" placeholder="Modification Remarks" required />
+                        <span asp-validation-for="ModificationRemarks" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <!--<div class="form-group row">
+                    <label asp-for="OccupancyCertificateNo" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="OccupancyCertificateNo" class="form-control" placeholder="Occupancy Certificate No" />
+                        <span asp-validation-for="OccupancyCertificateNo" class="text-danger"></span>
+                    </div>-->
+                    <!-- COMMON FUNCTION NOT SURE -->
+                    <!--<label asp-for="OccupancyReferenceId" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <select asp-for="OccupancyReferenceId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OccupancyReferenceId,"Value","Text")) " value="0"></select>
+                        <span asp-validation-for="OccupancyReferenceId" class="text-danger"></span>
+                    </div>
+                </div>-->
+                @*<div class="form-group row">
+                    <label asp-for="OccupancyCertificateIssueDate" class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <input asp-for="OccupancyCertificateIssueDate" type="date" class="form-control" placeholder="Occupancy certificate issue Date" />
+                        <span asp-validation-for="OccupancyCertificateIssueDate" class="text-danger"></span>
+                    </div>
+                </div>*@
+
+            <div class="form-group row">
+                <label asp-for="DateOfFinalInspection" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="DateOfFinalInspection" type="date" class="form-control" placeholder="Date of final inspection" required />
+                    <span asp-validation-for="DateOfFinalInspection" class="text-danger"></span>
+                </div>
+                @*<label asp-for="OccupancyAlteredOn" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                <input asp-for="OccupancyAlteredOn" type="date" class="form-control" placeholder="Occupancy altered on" />
+                <span asp-validation-for="OccupancyAlteredOn" class="text-danger"></span>
+            </div>*@
+            </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="SewerageConnection">
+                        <label for="SewerageConnection" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.SewerageConnection)
+                        </label>
+                    </div>
+
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="Attic">
+                        <label for="Attic" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.Attic)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="ArchFeature">
+                        <label for="ArchFeature" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.ArchFeature)
+                        </label>
+                    </div>
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="Roofing">
+                        <label for="Roofing" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.Roofing)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="TraditionalPainting">
+                        <label for="TraditionalPainting" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.TraditionalPainting)
+                        </label>
+                    </div>
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="Plantation">
+                        <label for="Plantation" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.Plantation)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="NumberDisplayed">
+                        <label for="NumberDisplayed" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.NumberDisplayed)
+                        </label>
+                    </div>
+
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="FireExtingusher">
+                        <label for="FireExtingusher" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.FireExtingusher)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="DrainToStormWaterDrain">
+                        <label for="DrainToStormWaterDrain" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.DrainToStormWaterDrain)
+                        </label>
+                    </div>
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="RoadAccess">
+                        <label for="RoadAccess" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.RoadAccess)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="OccupancyCertificateIssued">
+                        <label for="OccupancyCertificateIssued" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.OccupancyCertificateIssued)
+                        </label>
+                    </div>
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="custom-control custom-checkbox col-sm-3">
+                        @*&nbsp;&nbsp;*@ <input class="custom-control-input" type="checkbox" asp-for="WaterConnection">
+                        <label for="WaterConnection" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.WaterConnection)
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <label class="col-sm-4 col-form-label"></label>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-primary" onclick="return saveme();">Save</button>
+                        <button type="button" onclick="return Close();" class="btn btn-danger">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    //Field Validation
+    function saveme() {
+        //Garbag Service Accessibility
+        if ($('#GarbagServiceAccessibilityId option:selected').val() == 0) {
+            $('#errorGarbagServiceAccessibilityId').html('Please Select a Garbag Service Accessibility');
+            $('#GarbagServiceAccessibilityId').focus();
+            return false;
+        }
+        else {
+            $('#errorGarbagServiceAccessibilityId').html('');
+        }
+
+        //Street Light Accessibility
+        if ($('#StreetLightAccessibilityId option:selected').val() == 0) {
+            $('#errorStreetLightAccessibilityId').html('Please Select a Street Light Accessibility');
+            $('#StreetLightAccessibilityId').focus();
+            return false;
+        }
+        else {
+            $('#errorStreetLightAccessibilityId').html('');
+        }
+
+        //Structure Category
+        if ($('#StructureCategoryId option:selected').val() == 0) {
+            $('#errorStructureCategoryId').html('Please Select a Structure Category');
+            $('#StructureCategoryId').focus();
+            return false;
+        }
+        else {
+            $('#errorStructureCategoryId').html('');
+        }
+
+        //Structure Type
+        if ($('#StructureTypeId option:selected').val() == 0) {
+            $('#errorStructureTypeId').html('Please Select a Structure Type');
+            $('#StructureTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorStructureTypeId').html('');
+        }
+
+        //Water Tank Location
+        if ($('#WaterTankLocationId option:selected').val() == 0) {
+            $('#errorWaterTankLocationId').html('Please Select a Water Tank Location');
+            $('#WaterTankLocationId').focus();
+            return false;
+        }
+        else {
+            $('#errorWaterTankLocationId').html('');
+        }
+
+        //Roofing Type
+        if ($('#RoofingTypeId option:selected').val() == 0) {
+            $('#errorRoofingTypeId').html('Please Select a Roofing Type');
+            $('#RoofingTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorRoofingTypeId').html(''); 
+        }
+
+        //Boundary Type
+        if ($('#BoundaryTypeId option:selected').val() == 0) {
+            $('#errorBoundaryTypeId').html('Please Select a Boundary Type');
+            $('#BoundaryTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorBoundaryTypeId').html('');
+        }
+
+        //Building Color
+        if ($('#BuildingColourId option:selected').val() == 0) {
+            $('#errorBuildingColourId').html('Please Select a Building Color');
+            $('#BuildingColourId').focus();
+            return false;
+        }
+        else {
+            $('#errorBuildingColourId').html('');
+        }
+
+        //Water Supply Accessibility
+        if ($('#WaterSupplyAccessibilityId option:selected').val() == 0) {
+            $('#errorWaterSupplyAccessibilityId').html('Please Select a Water Supply Accessibility');
+            $('#WaterSupplyAccessibilityId').focus();
+            return false;
+        }
+        else {
+            $('#errorWaterSupplyAccessibilityId').html('');
+        }
+
+        //Material Type
+        if ($('#MaterialTypeId option:selected').val() == 0) {
+            $('#errorMaterialTypeId').html('Please Select a Material Type');
+            $('#MaterialTypeId').focus();
+            return false;
+        }
+        else {
+            $('#errorMaterialTypeId').html('');
+        }
+
+        //Parking Slot
+        if ($('#ParkingSlotId option:selected').val() == 0) {
+            $('#errorParkingSlotId').html('Please Select a Parking Slot');
+            $('#ParkingSlotId').focus();
+            return false;
+        }
+        else {
+            $('#errorParkingSlotId').html('');
+        }  
+
+    }
+    //End ofField Validation
+
+    function addMoreDetails() {
+        $('#id_AddMoreDetails').toggle(1000);
+    }
+    function Close() {
+        $('#id_AddMoreDetails').hide(1000);
+
+    }
+</script>

@@ -1,0 +1,34 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblComplainDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The type for column modifiedOn in table [dbo].[tblComplainDetail] is currently  DATETIME2 (0) NULL but is being changed
+         to  DATETIME NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with
+         type  DATETIME NULL.
+
+** User actions
+     Drop
+       unnamed constraint on [dbo].[tblComplainDetail] (Default Constraint)
+     Table rebuild
+       [dbo].[tblComplainDetail] (Table)
+     Create
+       [dbo].[tblComplainReading] (Table)
+       [dbo].[tblInaccessibleWaterMeterDetail] (Table)
+       [dbo].[FK_tblInaccessibleWaterMeterDetail_ToTable] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblComplainDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_tblComplainDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblComplainDetail_ToTable_1] (Foreign Key)
+
+The type for column modifiedOn in table [dbo].[tblComplainDetail] is currently  DATETIME2 (0) NULL but is being changed to  DATETIME NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  DATETIME NULL.
+

@@ -1,0 +1,49 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[trnWaterMeterReading]
+       [dbo].[enumLandOwnershipType]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[trnWaterMeterReading].[waterConnectionId] is being dropped, data loss could occur.
+       The column [dbo].[trnWaterMeterReading].[waterMeterReadingId] is being dropped, data loss could occur.
+       The column [dbo].[trnWaterMeterReading].[trnWaterConnectionId] on table [dbo].[trnWaterMeterReading] must be added, but
+         the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not
+         work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable
+         the generation of smart-defaults as a deployment option.
+
+** User actions
+     Drop
+       [dbo].[FK_trnWaterMeterReading_ToTable] (Foreign Key)
+     Table rebuild
+       [dbo].[trnWaterMeterReading] (Table)
+       [dbo].[enumLandOwnershipType] (Table)
+     Create
+       [dbo].[tblWaterMeterReading] (Table)
+       [dbo].[FK_trnWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblWaterMeterReading_ToTable_4] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_trnWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_1] (Foreign Key)
+     Create
+       [dbo].[FK_trnWaterMeterReading_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnWaterMeterReading_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable_1] (Foreign Key)
+
+The column [dbo].[trnWaterMeterReading].[waterConnectionId] is being dropped, data loss could occur.
+The column [dbo].[trnWaterMeterReading].[waterMeterReadingId] is being dropped, data loss could occur.
+The column [dbo].[trnWaterMeterReading].[trnWaterConnectionId] on table [dbo].[trnWaterMeterReading] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

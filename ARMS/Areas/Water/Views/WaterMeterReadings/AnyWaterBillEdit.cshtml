@@ -1,0 +1,427 @@
+﻿@using CORE_BOL
+@model WaterMeterReadingModel
+@{
+    ViewData["Title"] = "Water Bill Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item active">Water Bill Edit</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Success!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Water Bill Edit</h3>
+    </div>
+    <div class="card-body">
+
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row" id="wbe_head">
+            <div class="input-group d-flex justify-content-center col-4">
+                <label class="col-sm-4 col-form-label">Consumer:</label>
+                <input id="consumerno" class="form-control col-8" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Year:</label>
+                <select class="form-control select2bs4 col-8" id="Year" asp-items="@(new SelectList(ViewBag.Year, "Value", "Text"))"></select>
+            </div>
+            <div class="input-group d-flex justify-content-center col-3">
+                <label class="col-sm-4 col-form-label">Month</label>
+                <select class="form-control select2bs4 col-8" id="Month" asp-items="@(new SelectList(ViewBag.Month, "Value", "Text"))"></select>
+            </div>
+
+
+            <div class="input-group col-2">
+                <button class="btn btn-primary col-12" onclick="return SearchWBE();">Search</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Water Bill Edit Details-->
+    <input id="hdnWaterMeterReadingid" hidden />
+    <input id="hdnTransactionId" hidden />
+
+    <div class="card card-info" id="waterbilledit_details" style="display: none;">
+        <div class="card-body">
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Consumer No</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDconsumerNo" />
+                </div>
+                <label class="col-sm-2 col-form-label">Name</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDname" />
+                </div>
+            </div>
+            <br />
+
+            <div class="row">
+                <label class="col-sm-2 col-form-label">Meter No</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDmeterNo" />
+                </div>
+                <label class="col-sm-2 col-form-label">Billing Address</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDbaddress" />
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Previous Reading</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDpreviousReading" />
+                </div>
+                <label class="col-sm-2 col-form-label">Reading Date</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDCurrentReadingDate" type="date" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">No of Unit</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDNoofUnitHide" />
+                </div>
+                <label class="col-sm-2 col-form-label">Current Reading</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="IDCurrentReadingHide" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Connection Type</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="dWaterConnectionType" />
+                </div>
+                <label class="col-sm-2 col-form-label">Standard Consumption</label>
+                <div class="col-sm-4">
+                    <input class="form-control" readonly id="dStandardConsumption" />
+                </div>
+            </div>
+
+
+           @*MODIFICATION TAB BELOW*@
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Modification reason<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select class="form-control select2bs4" id="IDRemark" onchange="display(this);" asp-items="@(new SelectList(ViewBag.ModificationReason, "Value", "Text"))"></select>
+                </div>
+            </div>
+
+            <div class="form-group row" id="NOUnits" style="display: none;">
+                <label class="col-sm-2 col-form-label">No of Unit<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input class="form-control" id="IDNoofUnit" />
+                </div>
+            </div>
+
+            <div class="form-group row" id="category" style="display: none;">
+                <label class="col-sm-2 col-form-label">Catagory<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select class="form-control select2bs4" id="IDCatagory" asp-items="@(new SelectList(ViewBag.WaterConnectionTypeId, "Value", "Text"))"></select>
+                </div>
+            </div>
+
+            <div class="form-group row" id="Creading" style="display: none;">
+                <label class="col-sm-2 col-form-label">Current Reading<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input class="form-control" id="IDCurrentReading" />
+                </div>
+            </div>
+            <div class="form-group row" id="dvStandardConsumption" style="display: none;">
+                <label class="col-sm-2 col-form-label">Std Consumption<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input class="form-control" id="txtStandardConsumption" />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="button" id="UpdateBillEdit" class="btn btn-primary">Save</button>
+                    <button type="reset" class="btn btn-warning" onclick="return cancelWBE();">Cancel</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+    function saveme() {
+        $('#img').show();
+    }
+    function cancelWBE() {
+        $('#waterbilledit_details').hide(1000);
+    }
+
+    function SearchWBE() {
+            $('#img').show();
+            var Consumerno = $('#consumerno').val();
+            var Year = $('#Year').val();
+        var Month = $('#Month').val() - 1;
+        const d = new Date();
+
+        //var sm = d.getMonth();
+        //var mn = sm - Month;
+        
+        //if (mn > 1) {
+
+        //    $('#img').hide();
+        //    $('#waterbilledit_details').hide(1000);
+        //    swal('Sorry, you are not allowed to edit water bill for the selected month.');
+           
+        //    return false;
+        //}
+
+        // execute only when the selected month is 1 less than system current month
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("fetchWaterBillEdit", "WaterMeterReadings")',
+            data: {
+                ConsumerNo: Consumerno,
+                Year: $('#Year').val(),
+                Month: $('#Month').val()
+            },
+            dataType: 'JSON',
+            contentType: 'application/json, charset=utf-8',
+            success: function (data) {
+                $('#img').hide();
+                //console.log(data);
+                        if (data.length > 0) {
+
+                            //Hidden
+                            var WaterMeterReadingId = data[0].waterMeterReadingId;
+                            $('#hdnWaterMeterReadingid').val(WaterMeterReadingId);
+
+                            if (data[0].transactionId != null) {
+
+                                $.ajax({
+                                    type: "GET",
+                                    url: '@Url.Action("checkPaymentStatusForWaterBillEdit", "WaterMeterReadings")',
+                                    data: {
+                                        WaterMeterReadingId: data[0].waterMeterReadingId
+                                    },
+                                    dataType: 'JSON',
+                                    contentType: 'application/json, charset=utf-8',
+                                    success: function (data1) {
+                                        if (data1.length > 0) {
+
+                                            //Display Details
+                                            var consumerno = data[0].consumerNo;
+                                            var taxPayerName = data[0].taxPayerName;
+                                            var waterMeterNo = data[0].waterMeterNo;
+                                            var previousReading = data[0].previousReading;
+                                            var bAddress = data[0].bAddress;
+                                            var WaterConnectionTypeId = data[0].waterConnectionTypeId;
+                                            var WaterConnectionType = data[0].waterConnectionType;
+                                            var StandardConsumption = data[0].standardConsumption;
+                                            var noOfUnit = data[0].noOfUnit;
+                                            var reading = data[0].reading;
+                                            //Date
+                                            var rDate = data[0].readingDate;
+                                            const c = new Date(rDate);
+                                            const RDate = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+
+                                            var remarks = data[0].remarks;
+
+                                            $('#dWaterConnectionType').val(WaterConnectionType);
+                                            $('#dStandardConsumption').val(StandardConsumption);
+                                            $('#txtStandardConsumption').val(StandardConsumption);
+                                            $('#IDconsumerNo').val(consumerno);
+                                            $('#IDname').val(taxPayerName);
+                                            $('#IDmeterNo').val(waterMeterNo);
+                                            $('#IDpreviousReading').val(previousReading);
+                                            $('#IDbaddress').val(bAddress);
+                                            $('#IDCurrentReadingDate').val(RDate);
+                                            //   $('#IDCatagoryHide').val(WaterConnectionTypeId).attr('disabled', true);
+                                            $('#IDNoofUnitHide').val(noOfUnit);
+                                            $('#IDCurrentReadingHide').val(reading);
+
+                                            //edit
+                                            $('#IDRemark').val(remarks);
+                                            $('#IDCatagory').val(WaterConnectionTypeId);
+                                            $('#IDNoofUnit').val(noOfUnit);
+                                            $('#IDCurrentReading').val(reading);
+
+                                            $('#waterbilledit_details').show(1000);
+                                        }
+                                        else {
+                                            swal("Payment already made!");
+                                            $('#waterbilledit_details').hide();
+                                        }
+
+
+                                    }
+
+
+                                });
+
+                            }
+                            else {
+                                if (data.length > 0) {
+                                //Display Details
+                                var consumerno = data[0].consumerNo;
+                                var taxPayerName = data[0].taxPayerName;
+                                var waterMeterNo = data[0].waterMeterNo;
+                                var previousReading = data[0].previousReading;
+                                var bAddress = data[0].bAddress;
+                                var WaterConnectionTypeId = data[0].waterConnectionTypeId;
+                                var WaterConnectionType = data[0].waterConnectionType;
+                                var StandardConsumption = data[0].standardConsumption;
+                                var noOfUnit = data[0].noOfUnit;
+                                var reading = data[0].reading;
+                                //Date
+                                var rDate = data[0].readingDate;
+                                const c = new Date(rDate);
+                                const RDate = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+
+                                var remarks = data[0].remarks;
+
+                                $('#dWaterConnectionType').val(WaterConnectionType);
+                                $('#dStandardConsumption').val(StandardConsumption);
+                                $('#txtStandardConsumption').val(StandardConsumption);
+                                $('#IDconsumerNo').val(consumerno);
+                                $('#IDname').val(taxPayerName);
+                                $('#IDmeterNo').val(waterMeterNo);
+                                $('#IDpreviousReading').val(previousReading);
+                                $('#IDbaddress').val(bAddress);
+                                $('#IDCurrentReadingDate').val(RDate);
+                                //   $('#IDCatagoryHide').val(WaterConnectionTypeId).attr('disabled', true);
+                                $('#IDNoofUnitHide').val(noOfUnit);
+                                $('#IDCurrentReadingHide').val(reading);
+
+                                //edit
+                                $('#IDRemark').val(remarks);
+                                $('#IDCatagory').val(WaterConnectionTypeId);
+                                $('#IDNoofUnit').val(noOfUnit);
+                                $('#IDCurrentReading').val(reading);
+
+                                $('#waterbilledit_details').show(1000);
+
+                                }
+                                }
+
+                        }
+                        else {
+                            swal("No records found.!");
+                            $('#waterbilledit_details').hide();
+
+                        }
+
+                        },
+            error: function () {
+                $('#img').hide();
+                        alert('Error occured');
+                        }
+        });
+
+
+            $('#UpdateBillEdit').click(function () {
+                $('#img').show();
+               var myarray = [];
+               var WaterMeterReadingModel = {};
+
+               WaterMeterReadingModel.WaterMeterReadingId = parseInt($('#hdnWaterMeterReadingid').val());
+               WaterMeterReadingModel.NoOfUnit = parseInt($('#IDNoofUnit').val());
+               WaterMeterReadingModel.Reading = parseInt($('#IDCurrentReading').val());
+               WaterMeterReadingModel.StandardConsumption = parseInt($('#txtStandardConsumption').val());
+               WaterMeterReadingModel.Remarks = $('#IDRemark').val();
+               WaterMeterReadingModel.WaterConnectionTypeId = parseInt($('#IDCatagory').val());
+
+               myarray.push(WaterMeterReadingModel);
+               var json_data = JSON.stringify(myarray);
+               console.log(json_data);
+
+
+               $.ajax({
+                type: "POST",
+                url: '@Url.Action("WaterBillEditupdate", "WaterMeterReadings")',
+                   data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                   success: function (response) {
+                       swal(response);
+                    if (response > 0) {
+
+                        swal("Water Bill Updated successfully.");
+                        $('#img').hide();
+                        setTimeout(function () {
+                            $('.alert').fadeOut(1000);
+                        }, 5000);
+                    }
+                    //else {
+                    //    alert("Error while updating.");
+                    //    $('#img').hide();
+                    //}
+
+                },
+                failure: function () {
+                    $('#img').hide();
+                    swal("Creation Failed");
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    swal("Error while inserting");
+                }
+            });
+
+    });
+    }
+
+        function display(select) {
+            if (select.value == 1) {
+                document.getElementById('category').style.display = "none";
+                document.getElementById('NOUnits').style.display = "none";
+                document.getElementById('Creading').style.display = "";
+                document.getElementById('dvStandardConsumption').style.display = "none";
+            }
+            else if (select.value == 2) {
+                document.getElementById('category').style.display = "";
+                document.getElementById('NOUnits').style.display = "none";
+                document.getElementById('Creading').style.display = "none";
+                document.getElementById('dvStandardConsumption').style.display = "none";
+            }
+            else if (select.value == 3) {
+                document.getElementById('category').style.display = "none";
+                document.getElementById('Creading').style.display = "none";
+                document.getElementById('NOUnits').style.display = "none";
+                document.getElementById('dvStandardConsumption').style.display = "";
+            }
+            else if (select.value == 0) {
+                document.getElementById('category').style.display = "";
+                document.getElementById('NOUnits').style.display = "";
+                document.getElementById('Creading').style.display = "";
+                document.getElementById('dvStandardConsumption').style.display = "none";
+            }
+        }
+
+    </script>

@@ -1,0 +1,49 @@
+D:\APPS\TT\New ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.deps.json
+D:\APPS\TT\New ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\New ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\APPS\TT\New ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.dll
+D:\APPS\TT\New ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.pdb
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csprojAssemblyReference.cache
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfoInputs.cache
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfo.cs
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CoreCompileInputs.cache
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CopyComplete
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\New ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\APPS\TT\ARMS-TT\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.deps.json
+D:\APPS\TT\ARMS-TT\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\ARMS-TT\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\APPS\TT\ARMS-TT\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.dll
+D:\APPS\TT\ARMS-TT\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.pdb
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csprojAssemblyReference.cache
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfoInputs.cache
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfo.cs
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CoreCompileInputs.cache
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CopyComplete
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\ARMS-TT\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\APPS\TT\ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.deps.json
+D:\APPS\TT\ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\APPS\TT\ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.dll
+D:\APPS\TT\ARMS\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.pdb
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csprojAssemblyReference.cache
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfoInputs.cache
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfo.cs
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CoreCompileInputs.cache
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CopyComplete
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.dll
+D:\APPS\TT\ARMS\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\TT\Finalarms\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.deps.json
+D:\TT\Finalarms\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.dll
+D:\TT\Finalarms\CORE_DLL\bin\Release\netcoreapp3.1\CORE_DLL.pdb
+D:\TT\Finalarms\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.dll
+D:\TT\Finalarms\CORE_DLL\bin\Release\netcoreapp3.1\CORE_BOL.pdb
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.AssemblyReference.cache
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfoInputs.cache
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.AssemblyInfo.cs
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CoreCompileInputs.cache
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.csproj.CopyComplete
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.dll
+D:\TT\Finalarms\CORE_DLL\obj\Release\netcoreapp3.1\CORE_DLL.pdb

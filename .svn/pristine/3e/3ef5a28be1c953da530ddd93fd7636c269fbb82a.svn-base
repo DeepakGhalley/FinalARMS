@@ -1,0 +1,679 @@
+﻿
+
+@using CORE_BOL
+@model PaymentAmountModification
+
+@{
+    ViewData["Title"] = "PaymentAmountModification";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="PaymentAmountModification">Payment</a></li>
+                    <li class="breadcrumb-item active">Payment Modification</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+
+
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Payment Amount Modification</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card card-primary card-tabs">
+                    <div class="card-header p-0 pt-1">
+                        <ul class="nav nav-tabs" id="custom-tabs-five-tab" role="tablist" style="cursor:pointer">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" role="tab" onclick="return Demand();">Demand Modification</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#menu3" data-toggle="tab" role="tab" onclick="return Payment();">Payment Modification</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- /.card -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card card-info" id="DemandDetails">
+        <div class="card-header">
+            <h3 class="card-title">Search By Demand No</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Demand No:<span style="font-weight: bold; color: red;"></span></label>
+                    <input id="SearchDemandNo" class="form-control col-6" style="text-transform:uppercase" />
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return DisplayDemandDetails();" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" id="ReceiptDetails" style="display:none;">
+        <div class="card-header">
+            <h3 class="card-title">Search By Receipt No</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">Receipt No:<span style="font-weight: bold; color: red;"></span></label>
+                    <input id="SearchReceiptNo" class="form-control col-6" style="text-transform:uppercase" />
+                </div>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return DisplayReceiptDetails();" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" style="display:none;" id="DisplayDemandDetails">
+        <div class="card-header">
+            <h3 class="card-title">Demand Details</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Demand No</th>
+                        <th>Tax Name</th>
+                        <th>Tax Payer Name</th>
+                        <th>Demand Amount</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_demanddetails">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" style="display:none;" id="DisplayReceiptDetails">
+        <div class="card-header">
+            <input type="hidden" id="HDNLedgerId" />
+            <input type="hidden" id="HDNPaymentLedgerId" />
+            <h3 class="card-title">Receipt Details</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="tblPaymentAmounts">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Receipt No</th>
+                        <th>Tax Name</th>
+                        <th>Tax Payer Name</th>
+                        <th>Previous Amount</th>
+                        <th>Enter Amount</th>
+                        <th>Total New Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_receiptdetails">
+                </tbody>
+            </table>
+            <br />
+            <div class="form-group row">
+                <div class="col-sm-7"></div>
+                <label class="col-sm-2 col-form-label">Grand Total</label>
+                <div class="col-sm-3">
+                    <input type="number" id="HDNGrandTotalPayment" class="form-control" readonly />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" style="display:none;" id="Show">
+        <input type="hidden" id="HDNPreviousPaymentAmount" />
+    </div>
+
+    <div class="card card-info" style="display:none;" id="DisplayPaymentModeDetails">
+        <div class="card-header">
+            <h3 class="card-title">Payment Mode Details</h3>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table-striped" id="tblpaymentmodedetails">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>#</th>
+                        <th>Payment Mode</th>
+                        <th>Payment Mode No</th>
+                        <th>Payment Mode Date</th>
+                        <th>Previous Payment Amount</th>
+                        <th>Enter Amount</th>
+                        <th>Total New Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_paymentmodedetails">
+                </tbody>
+            </table>
+            <br />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Upload Demand<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3 custom-file">
+                    <input id="UReceipt" type="file" placeholder="Upload" required />
+                </div>
+                <div class="col-sm-2"></div>
+                <label class="col-sm-2 col-form-label">Grand Total</label>
+                <div class="col-sm-3">
+                    <input type="number" id="HDNGrandTotalPaymentMode" class="form-control" readonly />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary" onclick="return SavePaymentAmount(), SavePaymentModeAmount();">Save</button>
+                    <button id="btnCancel1" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>       
+    </div>
+
+    <div class="card card-info" style="display:none;" id="DemandEntry">
+        <div class="card-header">
+            <input type="hidden" id="HDNDemandId" />
+            <input type="hidden" id="HDNDemandAmount" />
+            <input type="hidden" id="HDNDemandNo" />
+            <h3 class="card-title">Amount Entry</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Previous Demand Amount</label>
+                <div class="col-sm-3">
+                    <input type="number" id="OldDemandAmount" class="form-control" readonly />
+                </div>
+                <label class="col-sm-3 col-form-label">Demand Amount<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" id="NewDemandAmount" class="form-control" placeholder="Enter Demand Amount" required />
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Upload Demand<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3 custom-file">
+                    <input asp-for="DemandUpload" name="DemandUpload" type="file" placeholder="Sign Path" required onchange="fileSelect(event)" />
+
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary" onclick="return SaveDemandAmount();">Save</button>
+                    <button id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<script>
+                function Demand() {
+                    $('#DemandDetails').show(1000);
+                    $('#ReceiptDetails').hide(1000);
+                    $('#ReceiptEntry').hide(1000);
+                    $('#DisplayReceiptDetails').hide(1000);
+                    $('#DisplayReceiptDetails').hide(1000);
+                    $('#DisplayPaymentModeDetails').hide(1000);
+                    $('#SearchReceiptNo').val('');
+                }
+                function Payment() {
+                    $('#ReceiptDetails').show(1000);
+                    $('#DemandDetails').hide(1000);
+                    $('#DisplayDemandDetails').hide(1000);
+                    $('#DemandEntry').hide(1000);
+                    $('#SearchDemandNo').val('');
+                }
+
+                function menu3() {
+                    $('[href="#menu3"]').tab('show');
+                }
+
+                function DisplayDemandDetails() {
+                $('#DisplayReceiptDetails').hide(1000);
+        if ($('#SearchDemandNo').val() == " ") {
+                swal('Empty Fields!', '', 'error');
+                $('#SearchDemandNo').focus();
+                return false;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetDemandDetails", "PaymentAmountModification")',
+                    data: {
+                        DemandNo: $('#SearchDemandNo').val()
+                    },
+                    success: function (data) {
+                        $('#tbl_demanddetails').empty();
+                        if (data.length > 0) {
+
+                            $('#DisplayDemandDetails').show(1000);
+                            $.each(data, function (key, value) {
+                                $('#tbl_demanddetails').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.demandNo + '</td>'
+                                    + '<td>' + value.taxName + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.totalDemandAmount + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return ViewDemand(' + value.demandId + ',' + value.totalDemandAmount + ',' + value.dsl +')" title = "View">View</a >'
+                                    + '</td>'
+                                    + '</tr>');
+
+                            });
+
+                        } else {
+                            $('#DisplayDemandDetails').show(1000);
+                            $('#tbl_demanddetails').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+    function ViewDemand(demandId, totalDemandAmount, dsl) {
+        $('#HDNDemandId').val(demandId);
+        $('#HDNDemandAmount').val(totalDemandAmount);
+        $('#OldDemandAmount').val(totalDemandAmount);
+        $('#HDNDemandNo').val(dsl);
+        $('#DemandEntry').show(1000);
+    }
+
+    function SaveDemandAmount() {
+
+            var a = document.getElementById("DemandUpload").files[0].name;
+
+        var myarray = [];
+        var PaymentAmountModification = {};
+
+        PaymentAmountModification.DemandId = parseInt($('#HDNDemandId').val());
+        PaymentAmountModification.PreviousDemandAmount = parseFloat($("#OldDemandAmount").val());
+        PaymentAmountModification.TotalDemandAmount = parseFloat($("#NewDemandAmount").val());
+        PaymentAmountModification.DSL = parseFloat($("#HDNDemandNo").val());
+        PaymentAmountModification.DemandUpload = a;
+
+        myarray.push(PaymentAmountModification);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SaveDemand", "PaymentAmountModification")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Demand Saved Successfully!');
+                    $('#DemandUpload').val('');
+                    $('#NewDemandAmount').val('');
+                    DisplayDemandDetails();                                                            
+                    $('#DemandEntry').hide(1000);
+
+                }
+                else {
+                    swal('Saving Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+        }
+
+
+
+
+
+
+
+
+                function DisplayReceiptDetails() {
+                    $('#DisplayDemandDetails').hide(1000);
+
+        if ($('#SearchReceiptNo').val() == "") {
+                swal('Empty Fields!', '', 'error');
+            $('#SearchReceiptNo').focus();
+                return false;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetReceiptDetails", "PaymentAmountModification")',
+                    data: {
+                        ReceiptNo: $('#SearchReceiptNo').val()
+                    },
+                    success: function (data) {
+                        $('#tbl_receiptdetails').empty();
+                        if (data.length > 0) {
+                            var RI = data[0].receiptId;
+                            var LI = data[0].ledgerId;
+                            var PLI = data[0].paymentLedgerId;
+                            var TPA = data[0].totalPaymentAmount;
+                            ViewReceipt(RI, LI, PLI, TPA)
+                            $('#DisplayReceiptDetails').show(1000);
+                            $.each(data, function (key, value) {
+                                $('#tbl_receiptdetails').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.receiptNo + '</td>'
+                                    + '<td>' + value.taxName + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td><input id="DemandId_' + key + '" type="hidden" value="' + value.demandId + '" />' + value.totalPaymentAmount + '<input type ="hidden" id = "OldAmount_' + key + '"  value = "' + value.totalPaymentAmount + '" class= "form-control prd" /> </td>'
+                                    + '<input id="LedgerId_' + key + '" type="hidden" value="' + value.ledgerId + '" />'
+                                    + '<input id="PaymentLedgerId_' + key + '" type="hidden" value="' + value.paymentLedgerId + '" />'
+                                    + '<input id="ReceiptNo_' + key + '" type="hidden" value="' + value.rsl + '" />'
+                                    + '<td><input id="NewPaymentAmount' + key + '" type="number" onkeyup="return TotalAmount();"  value=""  class="form-control cmr" /></td>'
+                                    + '<td><input id="NewTotalAmount_' + key + '" type="number"  class="form-control cm" readonly value="" /></td > '
+                                    + '</tr>');
+
+
+                            });
+
+                        } else {
+                            $('#DisplayReceiptDetails').show(1000);
+                            $('#tbl_receiptdetails').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+        }
+
+
+    function ViewReceipt(receiptId, ledgerId, paymentLedgerId, totalPaymentAmount) {
+        $('#HDNReceiptId').val(receiptId);
+        $('#HDNLedgerId').val(ledgerId);
+        $('#HDNPaymentLedgerId').val(paymentLedgerId);
+        $('#HDNPreviousPaymentAmount').val(totalPaymentAmount);
+    $.ajax({
+
+                    type: "GET",
+                    url: '@Url.Action("GetPaymentModeDetails", "PaymentAmountModification")',
+                    data: {
+                        ReceiptId: receiptId
+                    },
+            success: function (data) {
+
+                $('#Show').show(1000);
+
+                        $('#tbl_paymentmodedetails').empty();
+                if (data.length > 0) {
+                    var PaymentDate = data[0].paymentModeDate;
+                    const d = new Date(PaymentDate);
+                            const PDate = ("0" + d.getDate()).slice(-2) + '/' + ("0" + (d.getMonth() + 1)).slice(-2) + '/' + d.getFullYear()
+                            $('#DisplayPaymentModeDetails').show(1000);
+                            $.each(data, function (key, value) {
+                                $('#tbl_paymentmodedetails').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.paymentMode + '</td>'
+                                    + '<td>' + value.paymentModeNo + '</td>'
+                                    + '<td>' + PDate + '</td>'
+                                    + '<td>' + value.previousPaymentAmount + '<input type ="hidden" id = "OldPaymentModeAmount_' + key + '"  value = "' + value.previousPaymentAmount + '" class= "form-control opma" /> </td>'
+                                    //+ '<input id="PDemandId_' + key + '" type="hidden" value="' + value.demandId + '" />'
+                                    + '<input id="PReceiptNo_' + key + '" type="hidden" value="' + value.rsl + '" />'
+                                    //+ '<input id="PLedgerId_' + key + '" type="hidden" value="' + value.ledgerId + '" />'
+                                    + '<input id="PPaymentLedgerId_' + key + '" type="hidden" value="' + value.paymentLedgerId + '" />'
+                                    + '<td><input id="NewPaymentModeAmount' + key + '" type="number" onkeyup="return TotalPaymentModeAmount();"  value=""  class="form-control pma" /></td>'
+                                    + '<td><input id="NewTotalPaymentModeAmount_' + key + '" type="number"  class="form-control cs" readonly value="" /></td > '
+                                    + '</tr>');
+
+                            });
+
+                        } else {
+                            $('#DisplayPaymentModeDetails').show(1000);
+                            $('#tbl_paymentmodedetails').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+
+                }
+
+
+    function SavePaymentAmount() {
+        alert($('#HDNGrandTotalPayment').val());
+        alert($('#HDNGrandTotalPaymentMode').val());
+        if ($('#HDNGrandTotalPayment').val() != $('#HDNGrandTotalPaymentMode').val()) {
+            swal('The Amount you enter is not equal!');
+            return false;
+        }
+        var a = document.getElementById("UReceipt").files[0].name;
+
+        var myarray = [];
+        var index = 0;
+
+        $('#tblPaymentAmounts > tbody  > tr ').each(function () {
+        var PaymentAmountModification = {};
+
+            var DemandId = $('#DemandId_' + parseInt(index)).val();
+            var LedgerId = $('#LedgerId_' + parseInt(index)).val();
+            var PaymentLedgerId = $('#PaymentLedgerId_' + parseInt(index)).val();
+            var PaymentAmount = $('#NewPaymentAmount' + parseInt(index)).val();
+            var PreviousAmount = $('#OldAmount_' + parseInt(index)).val();
+            var RSL = $('#ReceiptNo_' + parseInt(index)).val();
+
+            PaymentAmountModification.DemandId = parseInt(DemandId);
+            PaymentAmountModification.LedgerId = parseInt(LedgerId);
+            PaymentAmountModification.PaymentLedgerId = parseInt(PaymentLedgerId);
+            PaymentAmountModification.TotalPaymentAmount = parseFloat(PaymentAmount);
+            PaymentAmountModification.PreviousPaymentAmount = parseFloat(PreviousAmount);
+            PaymentAmountModification.RSL = parseInt(RSL);
+            PaymentAmountModification.PaymentUpload = a;
+
+                myarray.push(PaymentAmountModification);
+            index = index + 1;
+        });
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SavePayment", "PaymentAmountModification")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Payment Saved Successfully!');
+                    $('#UReceipt').val('');
+                    $('#NewPaymentAmount').val('');
+                    DisplayReceiptDetails();
+                    ViewReceipt();
+                    $('#ReceiptEntry').hide(1000);
+
+                }
+                else {
+                    swal('Saving Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+    function SavePaymentModeAmount() {
+        alert($('#HDNGrandTotalPayment').val());
+        alert($('#HDNGrandTotalPaymentMode').val());
+        if ($('#HDNGrandTotalPayment').val() != $('#HDNGrandTotalPaymentMode').val()) {
+            swal('The Amount you enter is not equal!');
+            return false;
+        }
+        var myarray1 = [];
+        var index = 0;
+        var a = document.getElementById("UReceipt").files[0].name;
+
+        $('#tblpaymentmodedetails > tbody  > tr ').each(function () {
+            var PaymentModeAmountModification = {};
+            var PaymentLedgerId = $('#PPaymentLedgerId_' + parseInt(index)).val();
+            var OldPaymentModeAmount = $('#OldPaymentModeAmount_' + parseInt(index)).val();
+            var PaymentModeAmount = $('#NewPaymentModeAmount' + parseInt(index)).val();
+            var RSL = $('#PReceiptNo_' + parseInt(index)).val();
+            PaymentModeAmountModification.PreviousPaymentModeAmount = parseFloat(OldPaymentModeAmount);
+            PaymentModeAmountModification.TotalPaymentModeAmount = parseFloat(PaymentModeAmount);
+            PaymentModeAmountModification.PaymentLedgerId = parseInt(PaymentLedgerId);
+            PaymentModeAmountModification.RSL = parseInt(RSL);
+
+            PaymentModeAmountModification.PaymentUpload = a;
+
+            myarray1.push(PaymentModeAmountModification);
+            index = index + 1;
+        });
+        var json_data = JSON.stringify(myarray1);
+        console.log(json_data);
+        $('#img').hide();
+
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SavePaymentModeAmount", "PaymentAmountModification")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Payment Saved Successfully!');
+                    DisplayReceiptDetails();
+                    ViewReceipt();
+                    $('#NewPaymentModeAmount').val('');
+                    $('#UReceipt').val('');
+                    $('#ReceiptEntry').hide(1000);
+
+                }
+                else {
+                    swal('Saving Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+    function TotalAmount() {
+
+        $("#tblPaymentAmounts tbody tr").each(function () {
+            //cons
+            var cr = Number($(this).find('.cmr').val());
+            var pvr = Number($(this).find('.prd').val());
+            //var r = Number($(this).find('.cm').val());
+                //$('#HDNGrandTotalPayment').val(r);
+
+            if (cr == "") {
+                $(this).find('.cm').val(pvr);
+                findTotal();
+            }
+
+            else {
+                $(this).find('.cm').val(cr);
+                findTotal();
+            }
+
+            function findTotal() {
+
+                var arr = document.getElementsByClassName('cm');
+                var tot = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    if (parseFloat(arr[i].value))
+                        tot += parseFloat(arr[i].value);
+                }
+                $("#HDNGrandTotalPayment").val(tot.toFixed(2));
+            }
+
+        });
+    }
+
+    function TotalPaymentModeAmount() {
+
+        $("#tblpaymentmodedetails tbody tr").each(function () {
+            //cons
+            var PMA = Number($(this).find('.pma').val());
+            var OPMA = Number($(this).find('.opma').val());
+
+            //var r = Number($(this).find('.cm').val());
+            //$('#HDNGrandTotalPayment').val(r);
+
+            if (PMA == "") {
+                $(this).find('.cs').val(OPMA);
+                findPaymentModeTotal();
+            }
+
+            else {
+                $(this).find('.cs').val(PMA);
+                findPaymentModeTotal();
+            }
+
+            function findPaymentModeTotal() {
+
+                var arr = document.getElementsByClassName('cs');
+                var tot = 0;
+                for (var i = 0; i < arr.length; i++) {
+                    if (parseFloat(arr[i].value))
+                        tot += parseFloat(arr[i].value);
+                }
+                $("#HDNGrandTotalPaymentMode").val(tot.toFixed(2));
+            }
+
+        });
+    }
+
+</script>
+

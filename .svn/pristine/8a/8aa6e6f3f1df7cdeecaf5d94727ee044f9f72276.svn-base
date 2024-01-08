@@ -1,0 +1,138 @@
+﻿@using CORE_BOL
+@model TranWaterConnectionModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Connection</a></li>
+                    <li class="breadcrumb-item active">Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" asp-action="Create" method="post">
+
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Water Connection Details</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PlotNo)</label>
+                </div>
+
+                <label asp-for="WaterConnectionStatus" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.WaterConnectionStatus)</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="WaterMeterNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.WaterMeterNo)</label>
+                </div>
+
+                <label asp-for="ConsumerNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.ConsumerNo)</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="ConnectionDate" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.ConnectionDate)</label>
+                </div>
+
+                <label asp-for="StandardCosumption" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.StandardCosumption)</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="CreatedOn" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.CreatedOn)</label>
+                </div>
+
+                <label asp-for="BillingAddress" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.BillingAddress)</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="FlatNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.FlatNo)</label>
+                </div>
+
+                <label asp-for="InitialReading" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.InitialReading)</label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="OrganisationName" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.OrganisationName)</label>
+                </div>
+
+                <label asp-for="Remarks" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.Remarks)</label>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label asp-for="PrimaryMobileNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PrimaryMobileNo)</label>
+                </div>
+
+                <label asp-for="SecondaryMobileNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-3">
+                    <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.SecondaryMobileNo)</label>
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10 offset-5">
+                    <a asp-action="Edit" asp-route-id="@Model.TrnWaterConnectionId" title="Edit" class="btn btn-primary fas fa-edit"
+                       onclick="return saveme();">
+                        Edit
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>

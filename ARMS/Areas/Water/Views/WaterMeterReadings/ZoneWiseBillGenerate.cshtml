@@ -1,0 +1,165 @@
+﻿@using CORE_BOL
+@model WaterMeterReadingModel
+@{
+    ViewData["Title"] = "ZoneWiseBillGenerate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Zone Wise Bill Generation</a></li>
+                    <li class="breadcrumb-item active">Water Transaction</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Generate Zone Wise Bill</h3>
+    </div>
+    <div class="card-body">           
+        <div class="row d-flex justify-content-center">               
+            <div class="input-group d-flex justify-content-center col-3">                    
+                <label class="col-sm-4 col-form-label">Zone</label>                   
+                <select id="IDzone" class="form-control col-sm-8 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.Zone,"Value","Text")) " value="0"></select>                
+            </div>                
+            <div class="input-group d-flex justify-content-center col-3">
+                   
+                <label class="col-sm-4 col-form-label">Year</label>                    
+                <select id="IDyear" class="form-control col-sm-8 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.Year,"Value","Text")) " value="0"></select>                
+            </div>                
+            <div class="input-group d-flex justify-content-center col-3">                   
+                <label class="col-sm-4 col-form-label">Month</label>                    
+                <select id="IDmonth" class="form-control col-sm-4 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.Month,"Value","Text")) " value="0"></select>               
+            </div>                
+            <div class="input-group col-3 float-left">                    
+                <input type="button" value="Generate" class="btn btn-primary col-5 "  /> &nbsp;&nbsp;                    
+                <input type="button" value="Preview" class="btn btn-primary col-5 " onclick="return generateBillDetails();" />                              
+            </div>                     
+        </div>
+    </div>   
+</div>
+
+<!--WATER METER READING DETAILS-->
+<div class="card card-info" id="tblZoneWiseBillDetails" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Reading Report</h3>
+    </div>
+    <div class="card-body">
+        <table id="printableData" border='1' style="text-align:center;"  width="100%" class="table table-bordered table-striped tblCol">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center" id="tblrow">
+                    <th>#</th>
+                    <th>Consumer No</th>
+                    <th>Meter No</th>
+                    <th>Billing Address</th>
+                    <th>Zone</th>
+                    <th>Zone Reader</th>
+                </tr>
+            </thead>
+            <tbody id="mybody">
+            </tbody>
+        </table>
+        <br />
+        <div class="row">
+            <div class="col-6">
+                <input type="button" value="Print" onclick="return PrintData();" class="btn btn-primary col-2 "/>
+                <input type="button" value="Done" onclick="return done();" class="btn btn-primary col-2 "/>
+            </div>
+        </div>
+    </div>   
+</div>
+
+<script>
+                
+    function generateBillDetails() {
+
+        $('#IDzone').insertAfter(function () {
+            var zonename = $('#IDzone').val();
+            var month = $('#IDmonth').val();
+            var year = $('#IDyear').val();
+
+
+            if (zonename == zonename && month == month && year == year) {
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GenerateZoneWiseBill", "WaterMeterReadings")',
+                    data: {
+                        zone: zonename,
+                        month: month,
+                        year: year
+                    },
+                    success: function (data) {
+                        $('#mybody').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblZoneWiseBillDetails').show(1000);
+                                $('#mybody').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.consumerNo + '</td>'
+                                    + '<td>' + value.waterMeterNo + '</td>'
+                                    + '<td>' + value.billingAddress + '</td>'
+                                    + '<td>' + value.zoneName + '</td>'
+                                    + '<td>' + value.zoneReader + '</td>'
+                                    + '</tr>');
+                            });
+                        } else {
+                            $('#tblZoneWiseBillDetails').hide(1000);
+
+                            swal('No Record Found!');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+            else {
+                swal('PLease Enter Correct Plot Number');
+            }
+        });
+
+    }
+
+    function PrintData() {
+        var today = new Date();
+        //var date = today.getFullYear() + '/' + (today.getMonth() + 1) + '/' + today.getDate();
+        //var date = today.getFullYear() + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + ("0" + today.getDate()).slice(-2)
+        var date = ("0" + today.getDate()).slice(-2) + '/' + ("0" + (today.getMonth() + 1)).slice(-2) + '/' + today.getFullYear() 
+
+
+        var tableToPrint = document.getElementById("printableData");
+        newWin = window.open("");
+        newWin.document.write('<html><p style="text-align:right;">Date: ' + date + '</p>');
+        newWin.document.write('<html><h3 style="text-align:center;">Missed Out Reading Report</h3> </head></html>');
+        newWin.document.write(tableToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+        //document.getElementById("tblrow").style.backgroundColor = grey;
+    }
+
+
+    function done() {
+        $('#tblZoneWiseBillDetails').hide(1000);
+
+    }
+</script>
+
+

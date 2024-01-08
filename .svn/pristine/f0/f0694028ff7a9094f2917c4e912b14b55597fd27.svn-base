@@ -1,0 +1,138 @@
+﻿@using CORE_BOL
+@model BfsModel
+@{
+    ViewData["Title"] = "Payment Success";
+    if (!User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_Layout1.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+}
+
+
+
+@{
+    @if (!User.Identity.IsAuthenticated)
+    {
+
+        <div class="row">
+
+            <div class="col-md-12">
+                <div class="card card-default">
+                    <div class="card-header">
+                        <h3 class="card-title text-primary">
+                            <i class="fas fa-bullhorn"></i>
+                            &nbsp;&nbsp;Thromde Online Services
+                        </h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <div class="callout callout-danger">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="callout callout-info">
+                                        <h5 class="text-success"><i style="color:green;" class="fas fa-check"></i> Payment Success:</h5>
+                                        Your payment is successfully.
+                                    </div>
+
+
+                                    <!-- Main content -->
+                                    <div class="invoice p-3 mb-12">
+                                        <div class="card card-info" id="print">
+                                            <!-- title row -->
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <h4>
+
+                                                        @*<small class="float-right"><B>Date:</B> <input id="PaymentDate" class="form-control" placeholder="BfsBfsTxnId" readonly /></small>*@
+
+                                                    </h4>
+                                                </div>
+                                                <!-- /.col -->
+                                            </div>
+                                            <!-- info row -->
+                                            @*<div class="row invoice-info">
+                                                <div class="col-sm-12 invoice-col">*@
+                                                    <div style="border: 1px solid black; width: 50%;">
+                                                        <table style="width: 100%;">
+
+
+                                                            <tr>
+                                                                <td colspan="10">
+                                                                    <img width="50" height="50" src="~/Logo/tt_logo.png" class="brand-image img-circle elevation-3" style="opacity: 1;" alt="Thromde Logo">
+
+                                                                </td>
+                                                               
+                                                                <td style="text-align: center;">
+                                                                    <strong><b style="font-size:15px;">Thimphu Thromde</b></strong> <br /> <strong>Online Payment Recepit </strong>
+                                                                </td>
+
+                                                                <td style="text-align: right;">  <b>Payment Date:</b>&nbsp;<label asp-for="PaymentDate" value="" /> </td>
+                                                            </tr>
+                                                        </table>
+                                                        <hr />
+                                                        <br />
+                                                        <table style="width: 100%;">
+
+                                                            <tr> <td> <b>BFS Transaction No:</b>&nbsp;<label asp-for="BfsBfsTxnId" value="" /></td> </tr>
+                                                        </table>
+                                                        <br />
+                                                        <table style="width: 100%;">
+                                                            <tr><td><b>BFS Order No:</b>&nbsp;<label asp-for="BfsOrderNo" value="" /></td> </tr>
+                                                        </table>
+                                                        <br />
+                                                        <table style="width: 100%;">
+                                                            <tr><td> <b>BFS Amount:</b>&nbsp;<label asp-for="BfsTxnAmount" value="" /> </td> </tr>
+                                                            <tr></tr>
+                                                            <tr><td></td><td><strong><b style="font-size:15px;"></b></strong> <br /> <strong>Thank You!!! </strong></td><td></td></tr>
+                                                        </table>
+
+                                                    
+                                                </div>
+                                               
+                                            </div>
+                                        @*</div>*@
+
+                                        <!-- /.row -->
+                                        <!-- this row will not appear when printing -->
+                                        <div class="row no-print">
+                                            <div class="col-12">
+                                                <a class="btn btn-default" onclick="return printPages();"><i class="fas fa-print"></i> Print</a>
+                                                @*<button type="button" class="btn btn-success float-right">
+                                        <i class="far fa-credit-card"></i> Ok
+                                    </button>*@
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /.invoice -->
+                                </div><!-- /.col -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+
+
+    }
+
+}
+<script>
+
+    function printPages() {
+        var dataToPrint = document.getElementById("print");
+        newWin = window.open("");
+        newWin.document.write(dataToPrint.outerHTML);
+        newWin.print();
+        newWin.close();
+    }
+</script>

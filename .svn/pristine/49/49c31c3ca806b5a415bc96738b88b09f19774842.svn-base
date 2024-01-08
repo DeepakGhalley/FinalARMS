@@ -1,0 +1,29 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblDemand].[isCancelled] on table [dbo].[tblDemand] must be added, but the column has no default value
+         and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must
+         either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults
+         as a deployment option.
+
+** User actions
+     Alter
+       [dbo].[tblDemand] (Table)
+
+** Supporting actions
+     Refresh
+       [dbo].[rptDefaulterPropertyList] (Procedure)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptGetDailyHeadWiseDemandCollection] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbycalyear] (Procedure)
+       [dbo].[rptMinorHeadWiseCollectionbytofromdate] (Procedure)
+       [dbo].[rptMonthlyZoneWiseWaterConsumption] (Procedure)
+       [dbo].[rptZoneWiseWaterConsumption] (Procedure)
+
+The column [dbo].[tblDemand].[isCancelled] on table [dbo].[tblDemand] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

@@ -1,0 +1,40 @@
+﻿CREATE TABLE [dbo].[mstAsset]
+(
+	[assetId] INT NOT NULL PRIMARY KEY IDENTITY,
+    [tertiaryAccountHeadId] int NOT NULL,
+    [sectionId] INT NOT NULL ,
+    [assetStatusId] INT NOT NULL,
+    [assetFunctionId] INT NOT NULL,
+    [supplierId] INT NULL,
+    [lapId] int NULL,
+    [demkhongId] int NULL,
+    [areaId] int NOT NULL,
+    	[zoneId] INT,
+	[assetCode] VARCHAR(250) NOT NULL, 
+    [assetName] VARCHAR(300) NOT NULL,
+    [responsiblePerson] VARCHAR(250) NOT NULL,
+    [isActive] BIT NOT NULL, 
+    [isApproved] BIT NOT NULL,
+    [remarks] VARCHAR(250) NULL, 
+    [gisCode] VARCHAR(350) NOT NULL, 
+     [goodReceiveDate] DATETIME NULL, 
+    [goodReceiveBy] INT NULL, 
+     [assetEntryStatusId] INT NULL DEFAULT 1, 
+    [createdBy] INT NOT NULL, 
+    [createdOn] DATETIME NOT NULL, 
+    [modifiedBy] INT NULL, 
+    [modifiedOn] DATETIME NULL,  
+   
+     
+   
+    CONSTRAINT [FK_mstAsset_ToTable] FOREIGN KEY ([tertiaryAccountHeadId]) REFERENCES [mstTertiaryAccountHead]([tertiaryAccountHeadId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_1] FOREIGN KEY ([sectionId]) REFERENCES [mstSection]([sectionId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_2] FOREIGN KEY ([assetStatusId]) REFERENCES [mstAssetStatus]([assetStatusId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_3] FOREIGN KEY ([assetFunctionId]) REFERENCES [mstAssetFunction]([assetFunctionId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_4] FOREIGN KEY ([supplierId]) REFERENCES [mstSuppliers]([supplierId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_5] FOREIGN KEY ([demkhongId]) REFERENCES [mstDemkhong]([demkhongId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_6] FOREIGN KEY ([lapId]) REFERENCES [mstLap]([lapId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_7] FOREIGN KEY ([assetEntryStatusId]) REFERENCES [enumAssetEntryStatus]([assetEntryStatusId]), 
+    CONSTRAINT [FK_mstAsset_ToTable_8] FOREIGN KEY ([zoneId]) REFERENCES [mstZone]([zoneId]), 
+
+)

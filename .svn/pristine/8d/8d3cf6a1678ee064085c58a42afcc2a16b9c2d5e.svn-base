@@ -1,0 +1,78 @@
+﻿@model IEnumerable<CORE_BOL.Entities.TblAssetDepreciation>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.DepreciationValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Asset)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DepreciationType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FinancialYear)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepreciationValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Asset.AssetCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DepreciationType.DepreciationType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FinancialYear.FinancialYear)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DepreciationId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DepreciationId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DepreciationId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

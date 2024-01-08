@@ -1,0 +1,154 @@
+﻿@using CORE_BOL
+@model BfsModel
+@{
+    ViewData["Title"] = "Home Page";
+
+    if (!User.Identity.IsAuthenticated)
+    {
+        Layout = "~/Views/Shared/_Layout1.cshtml";
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_Layout.cshtml";
+    }
+
+}
+
+
+
+@{
+    @if (!User.Identity.IsAuthenticated)
+    {
+
+        <div style="display: block;" id="dvac">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-primary">
+                                <i class="fas fa-bullhorn"></i>
+                                Thromde Online Payment Services <br />
+                                @*@Model.CreatedBy*@
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <div class="callout callout-danger">
+                                <div class="row">
+                                    <div class="col-6 col-sm-6 col-md-6">
+                                        <div class="info-box">
+                                            <span class="info-box-icon bg-info elevation-2"><i class="fas fa-faucet"></i></span>
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Pay Water Bill(s)</span>
+                                                <span class="info-box-number">
+
+                                                    <a class="text-success" asp-controller="Home" asp-action="OnlineWaterBillPayment">Click here</a>
+
+                                                </span>
+                                            </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+                                    <!-- /.col -->
+                                    <div class="col-6 col-sm-6 col-md-6">
+                                        <div class="info-box mb-3">
+                                            @*  <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-home"></i></span>*@
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Occupancy Certificate</span>
+                                                    <span class="info-box-number">
+                                                        <a class="text-success" asp-area="Property" asp-controller="OccupancyCertificates" asp-action="OcCertificates">Click here</a>
+                                                    </span>
+                                                </div>
+                                            <!-- /.info-box-content -->
+                                        </div>
+                                        <!-- /.info-box -->
+                                    </div>
+
+                                    <!-- /.col -->
+                                </div>
+                            </div>
+
+                            <!--<div class="callout callout-info">
+                                <div class="row">
+
+                                    <div class="col-12 col-sm-6 col-md-6">
+                                        <div class="info-box mb-3">
+                                            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hard-hat"></i></span>
+
+                                            <div class="info-box-content">
+                                                <span class="info-box-text">Construction Approval Fees</span>
+                                                <span class="info-box-number">
+                                                    <a class="text-success" asp-controller="Home" asp-action="ConstructionApproval">Click here</a>
+                                                </span>
+                                            </div>-->
+                            <!-- /.info-box-content -->
+                            <!--</div>-->
+                            <!-- /.info-box -->
+                            <!--</div>
+
+                            <div class="col-12 col-sm-6 col-md-6">
+                                <div class="info-box">
+                                    <span class="info-box-icon bg-info elevation-1"><i class="far fa-list-alt"></i></span>
+
+                                    <div class="info-box-content">
+                                        <span class="info-box-text">Pay Miscellaneous Fees</span>
+                                        <span class="info-box-number">
+                                            <a class="text-success" asp-controller="Home" asp-action="Miscellaneous">Click here</a>
+                                        </span>
+                                    </div>-->
+                            <!-- /.info-box-content -->
+                            <!--</div>-->
+                            <!-- /.info-box -->
+                            <!--</div>
+
+
+                                </div>
+                            </div>-->
+
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+
+                <div class="col-md-6">
+                    <div class="card card-default">
+                        <div class="card-header">
+                            <h3 class="card-title text-primary">
+                                <i class="fas fa-address-card"></i>
+                                Informations
+                            </h3>
+                        </div>
+                        <!-- /.card-header -->
+                        <div class="card-body">
+
+                            <div class="callout callout-danger">
+                                <div class="row">
+                                    <p>Pending Bill Payment for Water and Property for Thimphu Thromde can be made via online now.</p> <br />
+                                    To pay Water Bill, click on Water Tax box (Click here).<br />
+                                    To pay Property Bill, click on Property Tax box (Click here).
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /.card-body -->
+                    </div>
+                    <!-- /.card -->
+                </div>
+                <!-- /.col -->
+
+
+            </div>
+        </div>
+
+
+
+    }
+
+}

@@ -1,0 +1,98 @@
+﻿@model CORE_BOL.Entities.MstSlab
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>MstSlab</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SlabName)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SlabName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Define1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Define1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Define2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Define2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SlabStart)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SlabStart)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SlabEnd)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SlabEnd)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.IsActive)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IsActive)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedOn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildingUnitClass)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildingUnitClass.BuildingUnitClassName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildingUnitUseType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildingUnitUseType.BuildingUnitUseType)
+        </dd>
+       
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Tax)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Tax.TaxName)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.SlabId">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

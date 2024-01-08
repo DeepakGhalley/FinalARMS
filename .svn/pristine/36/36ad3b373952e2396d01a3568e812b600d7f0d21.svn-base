@@ -1,0 +1,60 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLandLeaseDemandDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[tblLandLeaseDemandDetail].[createdBy] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[tblLandLeaseDemandDetail].[createdOn] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The column [dbo].[tblLandLeaseDemandDetail].[demandId] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the
+         column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work.
+         To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the
+         generation of smart-defaults as a deployment option.
+       The type for column amount in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NOT NULL but is being
+         changed to  DECIMAL (18, 2) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is
+         incompatible with type  DECIMAL (18, 2) NOT NULL.
+       The type for column demandGenerateScheduleId in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NULL but
+         is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is
+         incompatible with type  INT NOT NULL.
+       The type for column demandYear in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NULL but is being
+         changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible
+         with type  INT NOT NULL.
+
+** User actions
+     Rename
+       [dbo].[tblLandLeaseDemandDetail].[demandYear] (Column)
+       [dbo].[tblLandLeaseDemandDetail].[demandGenerateScheduleId] (Column)
+       [dbo].[tblLandLeaseDemandDetail].[amount] (Column)
+     Alter
+       [dbo].[tblDemand] (Table)
+     Table rebuild
+       [dbo].[tblLandLeaseDemandDetail] (Table)
+     Create
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_5] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+
+The column [dbo].[tblLandLeaseDemandDetail].[createdBy] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblLandLeaseDemandDetail].[createdOn] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The column [dbo].[tblLandLeaseDemandDetail].[demandId] on table [dbo].[tblLandLeaseDemandDetail] must be added, but the column has no default value and does not allow NULL values. If the table contains data, the ALTER script will not work. To avoid this issue you must either: add a default value to the column, mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column amount in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NOT NULL but is being changed to  DECIMAL (18, 2) NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  DECIMAL (18, 2) NOT NULL.
+The column demandGenerateScheduleId on table [dbo].[tblLandLeaseDemandDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column demandGenerateScheduleId in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NULL but is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  INT NOT NULL.
+The column demandYear on table [dbo].[tblLandLeaseDemandDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+The type for column demandYear in table [dbo].[tblLandLeaseDemandDetail] is currently  NCHAR (10) NULL but is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  INT NOT NULL.
+The column landLeaseId on table [dbo].[tblLandLeaseDemandDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

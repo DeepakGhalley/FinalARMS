@@ -1,0 +1,328 @@
+﻿@model CORE_BOL.Entities.MstBuildingDetail
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>MstBuildingDetail</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildingClassId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildingClassId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildingNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildingNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BuildupArea)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BuildupArea)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PlinthArea)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PlinthArea)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.NoOfUnit)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.NoOfUnit)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.NumberofFloors)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.NumberofFloors)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyCertificateNo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyCertificateNo)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ConstructionType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ConstructionType)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.StreetLight)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.StreetLight)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Sewerage)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.Sewerage)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Attic)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Attic)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.StreetNameId)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.StreetNameId)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StructureCategoryId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StructureCategoryId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.StructureTypeId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.StructureTypeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.MaterialTypeId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.MaterialTypeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ArchFeature)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ArchFeature)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RoofingTypeId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RoofingTypeId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Roofing)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Roofing)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.Color)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.Color)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.BoundryTypeId)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.BoundryTypeId)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TraditionalPainting)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TraditionalPainting)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Plantation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Plantation)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.WaterTank)*@
+        </dt>
+        <dd class = "col-sm-10">
+           @* @Html.DisplayFor(model => model.WaterTank)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.NumberDisplayed)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.NumberDisplayed)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ParkingSlot)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ParkingSlot)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FireExtingusher)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FireExtingusher)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.WaterSupply)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.WaterSupply)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RoadAccess)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RoadAccess)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DrainToStormWaterDrain)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DrainToStormWaterDrain)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.AdvInfoFedBy)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.AdvInfoFedBy)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.AdvInfoFedOn)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.AdvInfoFedOn)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.WaterConnection)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.WaterConnection)
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.GarbageCollectionUseStatusId)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.GarbageCollectionUseStatusId)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @*@Html.DisplayNameFor(model => model.StreetLightUseStatusId)*@
+        </dt>
+        <dd class = "col-sm-10">
+            @*@Html.DisplayFor(model => model.StreetLightUseStatusId)*@
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateOfFinalInspection)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateOfFinalInspection)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyAlteredOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyAlteredOn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyAlteredBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyAlteredBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModificationRemarks)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModificationRemarks)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModificationReasonId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModificationReasonId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyReferenceId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyReferenceId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.YearOfConstruction)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.YearOfConstruction)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyCertificateIssued)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyCertificateIssued)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OccupancyCertificateIssueDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OccupancyCertificateIssueDate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PaymentCompletionStatusId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PaymentCompletionStatusId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Remarks)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Remarks)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.CreatedOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedBy)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ModifiedOn)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ModifiedOn)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TransactionId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TransactionId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LandDetail)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LandDetail.PlotAddress)
+        </dd class>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="BuildingDetailId" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>

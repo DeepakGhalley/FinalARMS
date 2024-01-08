@@ -1,0 +1,326 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Name>ARMS_DB</Name>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectVersion>4.1</ProjectVersion>
+    <ProjectGuid>{535ebd1a-d8ec-4b59-9b54-056e4398b0cf}</ProjectGuid>
+    <DSP>Microsoft.Data.Tools.Schema.Sql.Sql130DatabaseSchemaProvider</DSP>
+    <OutputType>Database</OutputType>
+    <RootPath />
+    <RootNamespace>ARMS_DB</RootNamespace>
+    <AssemblyName>ARMS_DB</AssemblyName>
+    <ModelCollation>1033, CI</ModelCollation>
+    <DefaultFileStructure>BySchemaAndSchemaType</DefaultFileStructure>
+    <DeployToDatabase>True</DeployToDatabase>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetLanguage>CS</TargetLanguage>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <SqlServerVerification>False</SqlServerVerification>
+    <IncludeCompositeObjects>True</IncludeCompositeObjects>
+    <TargetDatabaseSet>True</TargetDatabaseSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <BuildScriptName>$(MSBuildProjectName).sql</BuildScriptName>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
+    <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Condition="'$(SQLDBExtensionsRefPath)' != ''" Project="$(SQLDBExtensionsRefPath)\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <Import Condition="'$(SQLDBExtensionsRefPath)' == ''" Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets" />
+  <ItemGroup>
+    <Folder Include="Properties" />
+    <Folder Include="Tables" />
+    <Folder Include="StoredProcedure" />
+    <Folder Include="Functions" />
+    <Folder Include="Views" />
+  </ItemGroup>
+  <ItemGroup>
+    <Build Include="Tables\AspNetRoleClaims.sql" />
+    <Build Include="Tables\AspNetRoles.sql" />
+    <Build Include="Tables\AspNetUserClaims.sql" />
+    <Build Include="Tables\AspNetUserLogins.sql" />
+    <Build Include="Tables\AspNetUserRoles.sql" />
+    <Build Include="Tables\AspNetUsers.sql" />
+    <Build Include="Tables\AspNetUserTokens.sql" />
+    <Build Include="Tables\enumApprovalStatus.sql" />
+    <Build Include="Tables\enumBillingSchedule.sql" />
+    <Build Include="Tables\enumBuildingEditReason.sql" />
+    <Build Include="Tables\enumECUseType.sql" />
+    <Build Include="Tables\enumFeeType.sql" />
+    <Build Include="Tables\enumGender.sql" />
+    <Build Include="Tables\enumIndustryType.sql" />
+    <Build Include="Tables\enumLandOwnershipType.sql" />
+    <Build Include="Tables\enumLandTransferType.sql" />
+    <Build Include="Tables\enumLeaseActivityType.sql" />
+    <Build Include="Tables\enumLeaseType.sql" />
+    <Build Include="Tables\enumMeterReplacementType.sql" />
+    <Build Include="Tables\enumOccupancyType.sql" />
+    <Build Include="Tables\enumOwnerType.sql" />
+    <Build Include="Tables\enumPaymentMode.sql" />
+    <Build Include="Tables\enumProjectStatus.sql" />
+    <Build Include="Tables\enumServiceAccessibilityType.sql" />
+    <Build Include="Tables\enumSlabFor.sql" />
+    <Build Include="Tables\enumTaxPayerType.sql" />
+    <Build Include="Tables\enumTitle.sql" />
+    <Build Include="Tables\enumTransactorType.sql" />
+    <Build Include="Tables\enumUnitOwnerType.sql" />
+    <Build Include="Tables\enumWaterBillEditReason.sql" />
+    <Build Include="Tables\enumWaterConnectionStatus.sql" />
+    <Build Include="Tables\enumWaterTankLocation.sql" />
+    <Build Include="Tables\enumWorkLevel.sql" />
+    <Build Include="Tables\mstArea.sql" />
+    <Build Include="Tables\mstAsset.sql" />
+    <Build Include="Tables\mstAssetAttribute.sql" />
+    <Build Include="Tables\mstAssetFunction.sql" />
+    <Build Include="Tables\mstAssetStatus.sql" />
+    <Build Include="Tables\mstAttributeUnitMap.sql" />
+    <Build Include="Tables\mstBank.sql" />
+    <Build Include="Tables\mstBankBranch.sql" />
+    <Build Include="Tables\mstBoundaryType.sql" />
+    <Build Include="Tables\mstBuildingColour.sql" />
+    <Build Include="Tables\mstBuildingDetail.sql" />
+    <Build Include="Tables\mstBuildingType.sql" />
+    <Build Include="Tables\mstBuildingUnitClass.sql" />
+    <Build Include="Tables\mstBuildingUnitDetail.sql" />
+    <Build Include="Tables\mstBuildingUnitUseType.sql" />
+    <Build Include="Tables\mstCalendarYear.sql" />
+    <Build Include="Tables\mstConditionRating.sql" />
+    <Build Include="Tables\mstConstructionType.sql" />
+    <Build Include="Tables\mstDCDSignUpload.sql" />
+    <Build Include="Tables\mstDemkhong.sql" />
+    <Build Include="Tables\mstDepreciationType.sql" />
+    <Build Include="Tables\mstDesignation.sql" />
+    <Build Include="Tables\mstDetailHead.sql" />
+    <Build Include="Tables\mstDetailTechnicalAttribute.sql" />
+    <Build Include="Tables\mstDisposalType.sql" />
+    <Build Include="Tables\mstDivision.sql" />
+    <Build Include="Tables\mstDzongkhag.sql" />
+    <Build Include="Tables\mstECActivityType.sql" />
+    <Build Include="Tables\mstECApplicantdetail.sql" />
+    <Build Include="Tables\mstEsSignUpload.sql" />
+    <Build Include="Tables\mstFinancialYear.sql" />
+    <Build Include="Tables\mstFloorName.sql" />
+    <Build Include="Tables\mstGewog.sql" />
+    <Build Include="Tables\mstInspectionType.sql" />
+    <Build Include="Tables\mstLandDetail.sql" />
+    <Build Include="Tables\mstLandType.sql" />
+    <Build Include="Tables\mstLandUseCategory.sql" />
+    <Build Include="Tables\mstLandUseSubCategory.sql" />
+    <Build Include="Tables\mstLap.sql" />
+    <Build Include="Tables\mstLogoSignMap.sql" />
+    <Build Include="Tables\mstLogoUpload.sql" />
+    <Build Include="Tables\mstMaintenanceType.sql" />
+    <Build Include="Tables\mstMajorHead.sql" />
+    <Build Include="Tables\mstMaterialType.sql" />
+    <Build Include="Tables\mstMeasurementUnit.sql" />
+    <Build Include="Tables\mstMinorHead.sql" />
+    <Build Include="Tables\mstModificationReason.sql" />
+    <Build Include="Tables\mstOccupation.sql" />
+    <Build Include="Tables\mstParentAttribute.sql" />
+    <Build Include="Tables\mstParkingSlot.sql" />
+    <Build Include="Tables\mstPavaRate.sql" />
+    <Build Include="Tables\mstPrimaryAccountHead.sql" />
+    <Build Include="Tables\mstProcessLevel.sql" />
+    <Build Include="Tables\mstRate.sql" />
+    <Build Include="Tables\mstRoofingType.sql" />
+    <Build Include="Tables\mstSecondaryAccountHead.sql" />
+    <Build Include="Tables\mstSection.sql" />
+    <Build Include="Tables\mstSlab.sql" />
+    <Build Include="Tables\mstStreetName.sql" />
+    <Build Include="Tables\mstStructureCategory.sql" />
+    <Build Include="Tables\mstStructureType.sql" />
+    <Build Include="Tables\mstSuppliers.sql" />
+    <Build Include="Tables\mstTaxMaster.sql" />
+    <Build Include="Tables\mstTaxPayerProfile.sql" />
+    <Build Include="Tables\mstTaxPeriod.sql" />
+    <Build Include="Tables\mstTaxTypeClassification.sql" />
+    <Build Include="Tables\mstTechnicalAttribute.sql" />
+    <Build Include="Tables\mstTertiaryAccountHead.sql" />
+    <Build Include="Tables\mstTransactionType.sql" />
+    <Build Include="Tables\mstTransactionTypeTaxMap.sql" />
+    <Build Include="Tables\mstUser.sql" />
+    <Build Include="Tables\mstVillage.sql" />
+    <Build Include="Tables\mstWaterConnection.sql" />
+    <Build Include="Tables\mstWaterConnectionType.sql" />
+    <Build Include="Tables\mstWaterLineType.sql" />
+    <Build Include="Tables\mstWaterMeterType.sql" />
+    <Build Include="Tables\mstZone.sql" />
+    <Build Include="Tables\tbl_menu.sql" />
+    <Build Include="Tables\tbl_menumap.sql" />
+    <Build Include="Tables\tbl_role.sql" />
+    <Build Include="Tables\tblDemand.sql" />
+    <Build Include="Tables\tblDemandNo.sql" />
+    <Build Include="Tables\tblECdetail.sql" />
+    <Build Include="Tables\tblECRenewalDetail.sql" />
+    <Build Include="Tables\tblFinancialInformation.sql" />
+    <Build Include="Tables\tblLandLease.sql" />
+    <Build Include="Tables\tblLandOwnershipDetail.sql" />
+    <Build Include="Tables\tblMiscellaneousRecord.sql" />
+    <Build Include="Tables\tblTechnicalInformation.sql" />
+    <Build Include="Tables\tblTransactionDetail.sql" />
+    <Build Include="Tables\trnLandDetail.sql" />
+    <Build Include="Tables\trnTaxDetail.sql" />
+    <Build Include="Tables\trnTaxPayerInformation.sql" />
+    <Build Include="Tables\trnWaterConnection.sql" />
+    <Build Include="Tables\trnWaterMeterReading.sql" />
+    <Build Include="StoredProcedure\sp_deletemappedmenus.sql" />
+    <Build Include="StoredProcedure\sp_populatemenu.sql" />
+    <Build Include="StoredProcedure\sp_populatemenusByRoleID.sql" />
+    <Build Include="Tables\EnumMenuFor.sql" />
+    <Build Include="Tables\tblParkingfeeDetail.sql" />
+    <Build Include="Tables\enumDemandGenerateSchedule.sql" />
+    <Build Include="Tables\mstParkingZone.sql" />
+    <Build Include="Tables\mstStallLocation.sql" />
+    <Build Include="Tables\tblLandLeaseDemandDetail.sql" />
+    <Build Include="Tables\tblLandLeasePeriod.sql" />
+    <Build Include="Tables\tblStallDetail.sql" />
+    <Build Include="Tables\tblParkingFeeDemandDetail.sql" />
+    <Build Include="Tables\tblStallAllocation.sql" />
+    <Build Include="Tables\tblHouseRentDemandDetail.sql" />
+    <Build Include="Tables\tblHouseRentPeriod.sql" />
+    <Build Include="Tables\tblParkingFeePeriod.sql" />
+    <Build Include="Tables\tblStallDetailDemand.sql" />
+    <Build Include="Tables\tblStallPeriod.sql" />
+    <Build Include="Tables\tblHouseAllocation.sql" />
+    <Build Include="Tables\tblHouseDetail.sql" />
+    <Build Include="Tables\tblLedger.sql" />
+    <Build Include="Tables\tblPaymentLeger.sql" />
+    <Build Include="Tables\tblReceipt.sql" />
+    <Build Include="Tables\tblWaterMeterReading.sql" />
+    <Build Include="Tables\enumStoryType.sql" />
+    <Build Include="Tables\enumPropertyType.sql" />
+    <Build Include="StoredProcedure\GetVendorDemandSchedule.sql" />
+    <Build Include="StoredProcedure\GetStallDemandScheduleMonthly.sql" />
+    <Build Include="StoredProcedure\GetLandLeaseDemandScheduleMonthly.sql" />
+    <Build Include="StoredProcedure\GetHouseRentDemandScheduleMonthly.sql" />
+    <Build Include="Tables\tblDeposit.sql" />
+    <Build Include="Tables\enumPaymentStatus.sql" />
+    <Build Include="StoredProcedure\spCollectionByFromDateToDate.sql" />
+    <Build Include="StoredProcedure\rptGetTaxRates.sql" />
+    <Build Include="StoredProcedure\GetDemandYears.sql" />
+    <Build Include="StoredProcedure\rptDailyPaymentModeWiseDemandCollection.sql" />
+    <Build Include="StoredProcedure\rptGetDailyHeadWiseDemandCollection.sql" />
+    <Build Include="StoredProcedure\rptGetYearlyHeadWiseDemandCollection.sql" />
+    <Build Include="Tables\trnConstructionApprovalApplicationFeeDetail.sql" />
+    <Build Include="StoredProcedure\rptDailyReceiptWiseCollectionByFromDateToDate.sql" />
+    <Build Include="StoredProcedure\rptReconcilReport.sql" />
+    <Build Include="Tables\trnOccupancyCertificateApplication.sql" />
+    <Build Include="Tables\enumDepreciationType.sql" />
+    <Build Include="Tables\tblAssetDepreciation.sql" />
+    <Build Include="Tables\tblAssetMaintenance.sql" />
+    <Build Include="Tables\tblAssetTransfer.sql" />
+    <Build Include="Tables\tblWaterBillChangeHistory.sql" />
+    <Build Include="Tables\trnLandTransferDetail.sql" />
+    <Build Include="Tables\trnSewerageConnection.sql" />
+    <Build Include="Tables\trnVacuumTankerService.sql" />
+    <Build Include="StoredProcedure\rptDefaulterPropertyList.sql" />
+    <Build Include="StoredProcedure\rptIndividualReceiptWiseCollection.sql" />
+    <Build Include="Tables\enumVendorType.sql" />
+    <Build Include="Tables\enumComplainType.sql" />
+    <Build Include="Tables\enumComplainStatus.sql" />
+    <Build Include="Tables\tblComplainDetail.sql" />
+    <Build Include="Tables\tblInaccessibleWaterMeterDetail.sql" />
+    <Build Include="Tables\tblComplainReading.sql" />
+    <Build Include="StoredProcedure\rptDefaulterWaterList.sql" />
+    <Build Include="StoredProcedure\rptMinorHeadWiseCollectionbycalyear.sql" />
+    <Build Include="StoredProcedure\rptMinorHeadWiseCollectionbytofromdate.sql" />
+    <Build Include="StoredProcedure\rptOnlinePaymentByFromDateToDate.sql" />
+    <Build Include="StoredProcedure\rptGetWaterConsumption.sql" />
+    <Build Include="StoredProcedure\rptMonthlyMeterReader.sql" />
+    <Build Include="StoredProcedure\spPaymentDepositReport.sql" />
+    <Build Include="StoredProcedure\rptFloorWiseCountReport.sql" />
+    <Build Include="StoredProcedure\rptMissedOutReadingReport.sql" />
+    <Build Include="Tables\tblBuildingOwnership.sql" />
+    <Build Include="Views\View_ReadingSeet.sql" />
+    <Build Include="Tables\tblOccupancyCertificateUnitMap.sql" />
+    <Build Include="Views\ViewProertyTaxLedger.sql" />
+    <Build Include="Tables\mstStallType.sql" />
+    <Build Include="Tables\trnLandFeeDetail.sql" />
+    <Build Include="Tables\mstLandServiceType.sql" />
+    <Build Include="StoredProcedure\rptMonthlyZoneWiseWaterConsumption.sql" />
+    <Build Include="StoredProcedure\rptZoneWiseWaterCollection.sql" />
+    <Build Include="StoredProcedure\rptZoneWiseWaterConsumption.sql" />
+    <Build Include="Tables\tblDemandCancel.sql" />
+    <Build Include="Tables\tblUnScheduledParkingRecord.sql" />
+    <Build Include="Tables\MstCollection.sql" />
+    <Build Include="StoredProcedure\FetchAssetRegiser.sql" />
+    <Build Include="StoredProcedure\GetHouseRentDemandScheduleMonthlyAPI.sql" />
+    <Build Include="StoredProcedure\GetLongTermLandLease.sql" />
+    <Build Include="StoredProcedure\GetOwnershipDetailByLandOwnershipId.sql" />
+    <Build Include="StoredProcedure\GetOwnershipDetailByTaxPayerId.sql" />
+    <Build Include="StoredProcedure\GetStallDemandScheduleMonthlyAPI.sql" />
+    <Build Include="StoredProcedure\Modewisecollection.sql" />
+    <Build Include="StoredProcedure\OccupancyCertificate.sql" />
+    <Build Include="StoredProcedure\rptAssetListByResponsiblePerson.sql" />
+    <Build Include="StoredProcedure\rptAssetListing.sql" />
+    <Build Include="StoredProcedure\rptAssetMaintenanceReport.sql" />
+    <Build Include="StoredProcedure\rptAssetTransferReport.sql" />
+    <Build Include="StoredProcedure\rptConnectionTypewiseConsumption.sql" />
+    <Build Include="StoredProcedure\rptConnetionTypeWiseWaterRevenue.sql" />
+    <Build Include="StoredProcedure\rptConsolidatedPropertyCollection.sql" />
+    <Build Include="StoredProcedure\rptConsolidateWatercollection.sql" />
+    <Build Include="StoredProcedure\rptDailyPaymentWiseDemandCollectionSum.sql" />
+    <Build Include="StoredProcedure\rptDemandCancelReport.sql" />
+    <Build Include="StoredProcedure\rptDifferentSizesMeterNo.sql" />
+    <Build Include="StoredProcedure\rptLongLeaseList.sql" />
+    <Build Include="StoredProcedure\rptNoOfConnectionCategoryWise.sql" />
+    <Build Include="StoredProcedure\rptNoOfConnectionZoneWise.sql" />
+    <Build Include="StoredProcedure\rptOnlinepaymentreconciliations.sql" />
+    <Build Include="StoredProcedure\rptPaymentModeWiseCollection.sql" />
+    <Build Include="StoredProcedure\rptPrescinctWiseCunt.sql" />
+    <Build Include="StoredProcedure\rptPropertyCollection.sql" />
+    <Build Include="StoredProcedure\rptShortAndLongTermCollectionReport.sql" />
+    <Build Include="StoredProcedure\rptShortLeaseList.sql" />
+    <Build Include="StoredProcedure\rptStatusReportAsset.sql" />
+    <Build Include="StoredProcedure\rptWaterAccountWisePaymentStatus.sql" />
+    <Build Include="StoredProcedure\rptWatercollection.sql" />
+    <Build Include="StoredProcedure\rptWaterTrabsactionReport.sql" />
+    <Build Include="StoredProcedure\rptWaterTransactionReport.sql" />
+    <Build Include="StoredProcedure\rptZoneWiseWaterConsumptionFromToDate.sql" />
+    <Build Include="StoredProcedure\spTaxCalculationAPI.sql" />
+    <Build Include="Tables\enumAssetEntryStatus.sql" />
+    <Build Include="Tables\enumAssetTransferType.sql" />
+    <Build Include="Tables\tblAudit.sql" />
+    <Build Include="Tables\tblBfsTransactiondetails.sql" />
+    <Build Include="Tables\tblConstructionApprovedDetail.sql" />
+    <Build Include="Tables\tblDemandLedgerPaymentUpdate.sql" />
+    <Build Include="Tables\tblEsakorTransaction.sql" />
+    <Build Include="Tables\tblInchargeCollection.sql" />
+    <Build Include="Tables\tblVersionControl.sql" />
+    <Build Include="Tables\tblEsakorThramJointOwnerDetail.sql" />
+    <Build Include="Tables\tblEsakorThramPlotDetail.sql" />
+    <Build Include="StoredProcedure\rptGetPropertyTaxDefaulter.sql" />
+    <Build Include="Tables\tblManualReceipt.sql" />
+    <Build Include="Tables\tblRevenueTransfer.sql" />
+    <Build Include="Tables\mstBuildingClass.sql" />
+    <Build Include="Tables\tblOpeningBalance.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="ARMS_DB.refactorlog" />
+  </ItemGroup>
+</Project>

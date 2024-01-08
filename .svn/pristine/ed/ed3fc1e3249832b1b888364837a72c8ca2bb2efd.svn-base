@@ -1,0 +1,97 @@
+﻿
+@{
+    ViewData["Title"] = "AssetStatusReport";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="GetTaxRate">Report</a></li>
+                        <li class="breadcrumb-item active">Asset Status Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Asset Status Report</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-1 col-form-label">Status</label>
+                <div class="col-sm-2">
+                    <select id="isActiveId" class="form-control select2" style="width: 100%;" value="0">
+                        <option value="2">
+                            Select a Value
+                        </option>
+                        <option value="0">  
+                            inActive
+                        </option>
+                        <option value="1">
+                            Active
+                        </option>
+                    </select>
+
+                </div>
+
+                <div class="input-group-append col-2">
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+    function PrintReport() {
+        var isActiveId = $('#isActiveId').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintAssetStatusReport", "Report")',
+                    data: {
+                        isActiveId: isActiveId,
+                    },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report", Action = "PrintAssetStatusReport" })/?isActiveId=" + $("#isActiveId").val(), '_blank');
+                        }
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        swal('Information','No Report for selected Type!','warning')
+                    }
+
+                });
+    }
+
+</script>
+

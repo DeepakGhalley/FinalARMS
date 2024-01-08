@@ -1,0 +1,371 @@
+﻿@model List<CORE_BOL.HouseRentDetailVM>
+@{
+    ViewData["Title"] = "HouseRentRenewal";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Lease</a></li>
+                    <li class="breadcrumb-item active">House Rent Renewal</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<form class="form-horizontal" asp-action="HouseRentRenewal" method="post">
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">House Rent Renewal</h3>
+            <input type="hidden" id="hdnHouseAllocationId" />
+
+        </div>
+        <div class="card-body">
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label text-center">CID </label>
+                <div class="col-sm-3">
+                    <input class="form-control" maxlength="11" placeholder="Search by CID" id="CIDinput" />
+                </div>
+                <label class="col-sm-2 col-form-label text-center">TTIN </label>
+                <div class="col-sm-3">
+                    <input class="form-control" placeholder="Search by TTIN" id="TTINinput" />
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-outline-success" onclick="return SearchTaxPayer();">Search</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<div class="form-group row" id="taxpayerdetails" style="display: none;">
+    <table id="example1" class="table table-bordered table-striped">
+        <thead>
+
+            <tr>
+                <th>Name</th>
+                <th>CID</th>
+                <th>Address</th>
+                <th>Phone Number</th>
+                <th>Action</th>
+
+            </tr>
+        </thead>
+        <tbody id="mybody">
+        </tbody>
+    </table>
+</div>
+<hr />
+<div class="card card-info" id="houserentdetail" style="display: none;">
+    <div class="card-header">
+        <h3 class="card-title">House Rent Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>House No</th>
+                        <th>House Address</th>
+                        <th>Billing Schedule</th>
+                        <th>Rental Amount</th>
+                        <th>Security Amount</th>
+                        <th>Allocation Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblhouserentdetail">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="houseallocationdetail" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">House Allocation Detail</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>Billing Schedule</th>
+                        <th>Rental Amount</th>
+                        <th>Allocation Date</th>
+                        <th>House No</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tblhouseallocation">
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" id="renewhouseallocation" style="display: none;">
+    <div class="card-header" style="background-color:cornflowerblue">
+        <h3 class="card-title" style="color:white">Renew House Allocation</h3>
+
+    </div>
+    <div class="card-body">
+
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Start Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddstartdate" type="date" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">End Date <span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input class="form-control" id="iddenddate" type="date" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label">Remarks </label>
+            <div class="col-sm-4">
+                <textarea class="form-control" id="idremarks" placeholder="Enter Remarks" rows="3"></textarea>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-2 col-form-label"></label>
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" id="SaveRenew">Save</button>
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="form-group row" style="display: none;" id="closebutton">
+    <div class="col-sm-5">    </div>
+    <button type="button" class="btn btn-primary" id="CloseButton" style="width:100px; height:50px;">OK</button>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+
+                //Display Tax Prayer Profile
+      function SearchTaxPayer() {
+            $('#CIDinput').insertAfter(function () {
+                var Cid = ($('#CIDinput').val());
+                var Ttin = ($('#TTINinput').val());
+                if (Cid == Cid || Ttin == Ttin) {
+                    $('#taxpayerdetails').show(1000);
+                    $('#mybody').show(1000);
+
+                    $.ajax({
+                        type: "GET",
+                        url: '@Url.Action("GetTaxPayer", "HouseDetails")',
+                        data: {
+                            cid: Cid,
+                            ttin: Ttin
+                        },
+                        success: function (data) {
+                            $('#mybody').empty();
+                            $.each(data, function (key, value) {
+                                $('#taxpayerdetails').show(1000);
+                                $('#mybody').append(
+                                    '<tr>'
+                                    + '<td>' + value.fullName + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.cAddress + '</td>'
+                                    + '<td>' + value.phoneNo + '</td>'
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayHouseDetail(' + value.taxPayerId + ');">View</a></b></td>'
+                                    + '</tr>');
+                            });
+                            $('#hdnTaxPayerId').val(data[0].taxPayerId);
+
+                        },
+                        error: function () {
+                            alert('error');
+                        }
+
+                    });
+                }
+                else {
+                    $('#mybody').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+
+                }
+            });
+    }
+        //House Rent Allocation Entry
+    function displayHouseDetail(taxPayerId) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetRenewalHouseRentDetail", "HouseDetails")',
+                data: {
+                    id: taxPayerId
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#tblhouserentdetail').empty();
+                    $('#houserentdetail').show(1000);
+
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#tblhouserentdetail').append(
+                                '<tr>'
+                                + '<td>' + value.houseNo + '</td>'
+                                + '<td>' + value.houseAddress + '</td>'
+                                + '<td>' + value.billingScheduleName + '</td>'
+                                + '<td>' + value.rentalAmount + '</td>'
+                                + '<td>' + value.securityAmount + '</td>'
+                                + '<td>' + value.adate + '</td>'
+
+                                + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayHouseRentAllocation(' + value.houseAllocationId + ');">Select</a></b></td>'
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#tblhouserentdetail').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        }
+
+    function displayHouseRentAllocation(houseAllocationId) {
+
+        $('#hdnHouseAllocationId').val(houseAllocationId);
+      
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetRenewalHouseRentAllocation", "HouseDetails")',
+                    data: {
+                        id: houseAllocationId,
+                    },
+                        success: function (data) {
+                            $('#tblhouseallocation').empty();
+                            $('#houseallocationdetail').show(1000);
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblhouseallocation').append(
+                                    '<tr>'
+                                    + '<td>' + value.billingSchedule + '</td>'
+                                    + '<td>' + value.rentalAmount + '</td>'
+                                    + '<td>' + value.adate + '</td>'
+                                    + '<td>' + value.houseNo + '</td>'
+                                    + '<td>' + value.startDate + '</td>'
+                                    + '<td>' + value.endDate + '</td>'
+
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayStallRenewal(' + value.stallAllocationId + ');">Renew</a></b></td>'
+
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+
+
+                        } else {
+                            $('#tblhouseallocation').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+        //Save Renew
+        $("#SaveRenew").click(function () {
+
+        var myarray = [];
+            var HousePeriodVM = {};
+
+            HousePeriodVM.HouseAllocationId = parseInt($("#hdnHouseAllocationId").val());
+            HousePeriodVM.StartDate = $("#iddstartdate").val();
+            HousePeriodVM.EndDate = $("#iddenddate").val();
+            HousePeriodVM.Remarks = $("#idremarks").val();
+
+            myarray.push(HousePeriodVM);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateRenewHouseRentAllocation", "HouseDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                displayHouseRentAllocation($('#hdnHouseAllocationId').val());
+                $('#renewhouseallocation').hide(1000);
+                $('#closebutton').show(1000);
+
+
+                $('#img').hide();
+                swal(response);
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+
+        });
+
+
+
+    function displayStallRenewal()
+    {
+        $("#iddstartdate").val('');
+        $("#iddenddate").val('');
+        $("#idremarks").val('');
+        $('#closebutton').hide(1000);
+        $('#renewhouseallocation').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#renewhouseallocation").offset().top
+        }, 'slow');
+        }
+
+    $('#CloseButton').click(function () {
+
+        location.reload();
+})
+
+
+</script>
+

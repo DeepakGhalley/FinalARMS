@@ -1,0 +1,131 @@
+﻿@using CORE_BOL
+@model TransactionTypeVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Tax Master</a></li>
+                    <li class="breadcrumb-item active">Create New Transaction Type</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" asp-action="Create" method="post">
+    @*data-ajax="true" data-ajax-method="post">*@
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Transaction Type</h3>
+        </div>
+        <!-- /.card-header -->
+        <!-- form start -->
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transaction Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input type="text" asp-for="TransactionType" class="form-control" placeholder="Enter Transaction Type" required />
+                    <span asp-validation-for="TransactionType" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <div class="col-sm-3">
+                </div>
+                <div>
+                    <span style="font-weight: bold; color: red;">*</span>
+                </div>
+                <div class="col-sm-3">
+                    <div class="custom-control custom-checkbox">
+                        <input class="custom-control-input" type="checkbox" asp-for="HasApprovalProcess" checked>
+                        <label for="HasApprovalProcess" class="custom-control-label">
+                            @Html.DisplayNameFor(model => model.HasApprovalProcess)
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Node<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="Node" type="text" class="form-control" placeholder="Enter Node" required />
+                    <span asp-validation-for="Node" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Section<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="SectionId" id="CheckSectionId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.SectionId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="SectionId" id="sectionerror" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Transaction Type Description</label>
+                <div class="col-sm-4">
+                    <input type="text" asp-for="TransactionTypeDescription" class="form-control" placeholder="Enter Description" />
+                    <span asp-validation-for="TransactionTypeDescription" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="custom-control custom-checkbox">
+                    &nbsp;&nbsp; <input class="custom-control-input" type="checkbox" asp-for="IsActive" checked>
+                    <label for="IsActive" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsActive)
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <button type="submit" class="btn btn-primary" onclick="return save();">Save</button>
+                    <a type="button" asp-action="Index" class="btn btn-warning">Cancel</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.card-body -->
+    <!-- /.card-footer -->
+</form>
+
+<script>
+    //Validation
+    function save() {
+        if ($('#CheckSectionId option:selected').val() == 0) {
+            $('#sectionerror').html('Please Select a Value!');
+            $('#CheckSectionId').focus();
+            return false;
+        }
+        else {
+            $('#sectionerror').html('');
+        }
+    }
+</script>
+

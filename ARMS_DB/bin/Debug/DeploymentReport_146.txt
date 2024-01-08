@@ -1,0 +1,28 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       The column [dbo].[trnConstructionApprovalApplicationFeeDetail].[thramNo] is being dropped, data loss could occur.
+       The column [dbo].[trnConstructionApprovalApplicationFeeDetail].[ttin] is being dropped, data loss could occur.
+       The type for column landOwnershipId in table [dbo].[trnConstructionApprovalApplicationFeeDetail] is currently  VARCHAR
+         (50) NOT NULL but is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column
+         contains data that is incompatible with type  INT NOT NULL.
+
+** User actions
+     Rename
+       [dbo].[trnConstructionApprovalApplicationFeeDetail].[landOwnershipId] (Column)
+     Alter
+       [dbo].[trnConstructionApprovalApplicationFeeDetail] (Table)
+     Create
+       [dbo].[FK_trnConstructionApprovalApplicationFeeDetail_ToTable] (Foreign Key)
+
+** Supporting actions
+
+The column [dbo].[trnConstructionApprovalApplicationFeeDetail].[thramNo] is being dropped, data loss could occur.
+The column [dbo].[trnConstructionApprovalApplicationFeeDetail].[ttin] is being dropped, data loss could occur.
+The type for column landOwnershipId in table [dbo].[trnConstructionApprovalApplicationFeeDetail] is currently  VARCHAR (50) NOT NULL but is being changed to  INT NOT NULL. Data loss could occur and deployment may fail if the column contains data that is incompatible with type  INT NOT NULL.
+

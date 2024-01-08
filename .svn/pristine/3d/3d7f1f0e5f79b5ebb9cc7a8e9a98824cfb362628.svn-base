@@ -1,0 +1,277 @@
+﻿@model List<CORE_BOL.BuildingUnitDetailModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Unit Details</a></li>
+                    <li class="breadcrumb-item active">Revenue Master</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Building Unit Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        @*<div class="form-group row">
+                <label class="col-sm-2 col-form-label">Plot No. <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input class="form-control" placeholder="Search by Plot No." />
+                </div>
+
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-outline-success" onclick="return SearchTaxPayer();">Search</button>
+
+                </div>
+            </div>*@
+        <p>
+            <a asp-action="Create" class="btn btn-outline-danger btn-lg" title="Add New">
+                <b>
+                    <i class="fas fa-plus"></i> Add New
+                </b>
+            </a>
+        </p><hr />
+
+        <div class="row d-flex justify-content-center">
+            <div class="input-group  col-8 float-right">
+                <label class="col-sm-2 col-form-label">Plot No</label>
+                <input id="PlotNo" class="input-group form-control col-6" /> &nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary col-2 " onclick="return displaybuilding();" />
+            </div>
+        </div>
+        <br /> <br />
+        <hr />
+
+        <div class="form-group row" id="showplotno" style="display:none;">
+            <label class="col-sm-2 col-form-label">Plot No:</label>
+            <div class="col-sm-3">
+                <input id="plotno" class="form-control" readonly />
+            </div>
+        </div>
+
+        <table id="example1" class="table table-bordered table-striped" style="display:none;">
+            <thead>
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>Taxpayer Name</th>
+                    <th>Building No</th>
+                    <th>Floor Name</th>
+                    <th>No of units</th>                  
+                    <th>Action</th>
+                </tr>
+
+            </thead>
+            <tbody id="TblBuilding">
+            </tbody>
+        </table>
+    </div>
+
+    <div class="card card-info" id="buildingunitdetails" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">Building Unit Details</h3>
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <table id="" class="table table-bordered table-striped">
+                    <thead style="background-color:mediumaquamarine">
+                        <tr>
+                            <th>Building Unit Class</th>
+                            <th>Building Unit Use Type</th>
+                            <th>Unit Owner Type</th>
+                            <th>Is Main Owner</th>
+                            <th>Is Regularized</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tblbulidingunitdetails">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+
+    function displaybuilding() {
+        $('#showplotno').show(1000);
+        if ($('#PlotNo').val() == "") {
+                swal("WARNING", "Input Field Cannot Be Blank!", "warning");
+            $('#PlotNo').focus();
+
+
+                return false;
+            }
+            var PlotNo = $('#PlotNo').val();
+
+            //Building Details
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("SearchByPlot", "BuildingUnitDetails")',
+                data: {
+                    PlotNo: PlotNo
+                },
+                success: function (data) {
+                    $('#TblBuilding').empty();
+                    if (data.length > 0) {
+                        var plotno = data[0].plotNo;
+                        $('#plotno').val(plotno);
+                        $.each(data, function (key, value) {
+                            $('#example1').show(1000);
+                            $('#TblBuilding').append(
+                                '<tr class="text-center">'
+                                + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.ttin + '</td>'
+                                + '<td>' + value.taxPayerName + '</td>'
+                                + '<td>' + value.buildingNo + '</td>'
+                                + '<td>' + value.floor + '</td>'
+                                + '<td>' + value.noOfUnit + '</td>'
+
+                                + '<td>'
+                                //+ '<a style = "color: #007bff; cursor: pointer;" onclick = "return edit(' + value.buildingUnitDetailId + ' )" title = "EDIT" > <i class="fas fa-edit"></i>  </a >'
+                                + '<a style = "color: #007bff; cursor: pointer;" onclick = "return Select(' + value.buildingUnitDetailId + ' )" title = "Select" >Select</a >'
+                                + '&nbsp; | &nbsp;<a style = "color: #007bff; cursor: pointer;" onclick = "return view(' + value.buildingUnitDetailId + ' )" title = "view" > <i class="fas fa-eye"></i>  </a >'
+                                + '</td>'
+                                + '</tr>')
+                    });
+
+                    }
+                    else {
+
+                        $('#TblBuilding').append(
+                            '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                            swal("WARNING", "No Record Found!", "warning");
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+                });
+        }
+
+    function Select(buildingUnitDetailId) {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetBuildingUnitDetail", "BuildingUnitDetails")',
+                data: {
+                    id: buildingUnitDetailId
+                },
+                success: function (data) {
+
+                    console.log(data);
+                    $('#tblbulidingunitdetails').empty();
+                    $('#buildingunitdetails').show(1000);
+
+                    if (data.length > 0) {
+
+                        $.each(data, function (key, value) {
+                            $('#tblbulidingunitdetails').append(
+                                '<tr>'
+                                + '<td>' + value.buildingUnitClassName + '</td>'
+                                + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                + '<td>' + value.unitOwnerTypename + '</td>'
+                                + '<td>' + value.mainOwner + '</td>'
+                                + '<td>' + value.regularized + '</td>'
+                                + '<td>'
+                                + '<a style = "color: #007bff; cursor: pointer;" onclick = "return edit(' + value.buildingUnitDetailId + ' )" title = "EDIT" > <i class="fas fa-edit"></i>  </a >'
+                                + '&nbsp; | &nbsp;<a style = "color: #007bff; cursor: pointer;" onclick = "return Remove(' + value.buildingUnitDetailId + ' )" title = "Remove" >Remove</a >'
+
+                                + '</td>'
+                                + '</tr>');
+
+
+                        });
+
+                    }
+                    else {
+                        $('#tblbulidingunitdetails').append(
+                            '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        }
+
+    function edit(id) {
+
+        window.location.href = "BuildingUnitDetails/Edit?id=" + id;
+    }
+    function view(id) {
+
+        window.location.href = "BuildingUnitDetails/Details?id=" + id;
+    }
+
+    //REMOVE BUILDING UNIT DETAILS
+    function Remove(buildingUnitDetailId) {
+
+        var r = confirm("Are you sure you want to Remove?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("RemoveBuildingUnitDetail", "BuildingUnitDetails")',
+            data: {
+                id: buildingUnitDetailId
+            },
+            contentType: 'application/json; charset=utf-8',
+            dataType: 'json',
+            success: function (response) {
+
+                Select(buildingUnitDetailId);
+                if (response > 0) {
+                    $('#img').hide();
+                    swal("Successfully removed Building Unit from the selected Building.");
+                } else {
+
+                    swal("This Building Unit cannot be removed!!");
+                    $('#img').hide();
+                }
+
+            },
+            error: function () {
+                swal("Invalid Removal!");
+                $('#img').hide();
+            }
+        });
+    }
+</script>

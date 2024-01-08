@@ -1,0 +1,86 @@
+﻿@*@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers*@
+
+@{
+    ViewData["Title"] = "MissOutReading";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="DailyMinorHeadWiseReport">Report</a></li>
+                        <li class="breadcrumb-item active">Missed Out Reading Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Missed Out Reading Report</h3>
+        </div>
+        <!-- /.card-header -->
+
+        <div class="card-body">
+            
+            
+            <div class="form-group row">
+
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Generate Report" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+    function PrintReport() {
+               $.ajax({
+                   type: "GET",
+                   url: '@Url.Action("PrintMissOutReadingReport", "Report")',
+                   //data: {
+                   //},
+                   success: function (data) {
+                           window.open("@Url.RouteUrl(new
+                                 { Area ="Reports",Controller = "Report", Action = "PrintMissOutReadingReport" })",'_blank');
+
+                       $('#img').hide();
+
+                   },
+                   error: function () {
+                       alert('error');
+                       $('#img').hide();
+                   }
+
+               });
+
+
+   }
+
+
+</script>

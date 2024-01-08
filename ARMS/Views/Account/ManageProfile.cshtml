@@ -1,0 +1,374 @@
+﻿@model List<CORE_BOL.UserProfileVM>
+
+@{ ViewData["Title"] = "ManageProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>User Profile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        .column {
+            float: left;
+            width: 50%;
+            padding: 10px;
+            height: 800px;
+        }
+
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+    </style>
+</head>
+
+<form class="form-horizontal" asp-action="ManageProfile" method="post">
+    <br />
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>}
+
+        <div class="card-header">
+            <h3 class="card-title">Manage Profile</h3>
+
+        </div>
+        <div class="row-sm">
+            <div class="column">
+                <div class="card">
+                    @*<img class="center" src="~/dist/img/avatar.png" alt="Card image" style="width:30%;">*@
+                    <div class="card-header" style="background-color: mediumaquamarine">
+                        <h3 class="card-title"><i class="fas fa-user"></i> View Details</h3>
+                        <input type="hidden" id="hdnEmail" />
+                        <input type="hidden" id="hdnUserId" />
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        @*<div class="form-group row">*@
+
+                        @foreach (var item in Model)
+                        {
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Name</label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.FirstName)
+                                    @Html.DisplayFor(modelItem => item.MiddleName)
+                                    @Html.DisplayFor(modelItem => item.LastName)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Division </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.DivisionName)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Section </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.SectionName)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Role </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.RoleName)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">EID </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.Eid)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">CID </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.Cid)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">DOB </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.Dob)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Phone No</label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.PhoneNo)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">Email </label>
+                                <label class="col-sm-6 col-form-label">
+                                    @Html.DisplayFor(modelItem => item.Email)
+                                </label>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-3 col-form-label">
+                                </label>
+                                <label class="col-sm-6 col-form-label">
+                                    <button type="button" class="btn btn-outline-success" title="Click to edit profile" onclick="return Updateprofile('@item.UserId')">Edit Profile</button>
+                                </label>
+                            </div>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card card-info" id="dispayupdateform" style="display:none;">
+                    <div class="card-header" style="background-color: mediumaquamarine">
+                        <h3 class="card-title">Edit Details</h3>
+                        <input type="hidden" id="hdnEmail" />
+                        <input type="hidden" id="hdnUserId" />
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Division </label>
+                            <div class="col-sm-7">
+                                <input id="idsdivision" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Section</label>
+                            <div class="col-sm-7">
+                                <input id="idssection" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Role</label>
+                            <div class="col-sm-7">
+                                <input id="idsrole" class="form-control" readonly />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">First Name <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input id="idsfirstname" class="form-control" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Middle Name <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control input-group-lg reg_name span2" id="idsmiddlename" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Last Name <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control input-group-lg reg_name span2" id="idslastname" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">CID <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="idscid" type="text" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label"> EID <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="idseid" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label"> Email <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="idsemail" name="emailcheck" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">DOB <span style="font-weight: bold; color: red;">*</span></label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="idddob" type="date" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label">Phone No </label>
+                            <div class="col-sm-7">
+                                <input class="form-control" id="idiphoneno" />
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-4 col-form-label"></label>
+                            <label class="col-sm-6 col-form-label">
+                                <button type="button" class="btn btn-primary" id="UpdateDetails">Update</button>
+                                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                            </label>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+
+    <script>
+
+        function Updateprofile(UserId) {
+            $('#hdnUserId').val(UserId);
+            $('#dispayupdateform').toggle(500);
+            $('html,body').animate({
+                scrollTop: $("#dispayupdateform").offset().top
+            }, 'slow');
+             $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetPersonalDetails", "Account")',
+                    data: {
+                        UserId: UserId
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var firstname = data[0].firstName;
+                            var middlename = data[0].middleName;
+                            var lastname = data[0].lastName;
+                            var email = data[0].email;
+                            var cid = data[0].cid;
+                            var eid = data[0].eid;
+                            var dob = data[0].dob;
+                            const c = new Date(dob);
+                            const DOB = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+                            var phoneno = data[0].phoneNo;
+                            var userid = data[0].userId;
+                            var roleid = data[0].roleName;
+                            var divisionid = data[0].divisionName;
+                            var sectionid = data[0].sectionName;
+                            
+                            $('#idsfirstname').val(firstname);
+                            $('#idsmiddlename').val(middlename);
+                            $('#idslastname').val(lastname);
+                            $('#idscid').val(cid);
+                            $('#idseid').val(eid);
+                            $('#idddob').val(DOB);
+                            $('#idsemail').val(email);
+                            $('#idiphoneno').val(phoneno);
+                            $('#hdnUserId').val(userid);
+                            $('#idsrole').val(roleid);
+                            $('#idsdivision').val(divisionid);
+                            $('#idssection').val(sectionid);
+
+                           
+
+                        }
+                    },
+
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+
+                $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetEmails", "Users")',
+                    data: {
+                        email: $('#idsemail').val()
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+
+                            var email = data[0].email;
+                            var userId = data[0].userId;
+                            $('#hdnEmail').val(email);
+                            $('#userid').val(userId);
+
+                        }
+                    },
+
+                });
+        }
+        
+
+        //User Inforamtion Updation
+        $("#UpdateDetails").click(function () {
+
+        var myarray = [];
+            var UserProfileVM = {};
+            UserProfileVM.UserId = parseInt($("#hdnUserId").val());
+            UserProfileVM.FirstName = $("#idsfirstname").val();
+            UserProfileVM.MiddleName = $("#idsmiddlename").val();
+            UserProfileVM.LastName = $("#idslastname").val();
+            UserProfileVM.Cid = $("#idscid").val();
+            UserProfileVM.Eid = $("#idseid").val();
+            UserProfileVM.Dob = $("#idddob").val();
+            UserProfileVM.PhoneNo = $("#idiphoneno").val();
+            UserProfileVM.Email = $("#idsemail").val();
+
+
+            myarray.push(UserProfileVM);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+            $('#img').show();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdatePersonalInfo", "Account")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                //if (response > 0) {
+                    $('#dispayupdateform').hide(1000);
+                    swal({
+                        title: 'Record Updated',
+                        type: 'success',
+                        showConfirmButton: false,
+                    });
+                   setTimeout(function () {
+                       location.reload();
+                   }, 1500);
+                //} else {
+                //    $('#dispayupdateform').show();
+                //    swal("Duplicate Email Found!");
+                //    $('#img').hide();
+
+                //}
+                
+                $('#img').hide();
+
+            },
+
+           
+
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                   $('#dispayupdateform').show();
+                    swal("Duplicate Email Found!");
+
+            }
+
+        });
+
+        });
+        
+
+
+        $('#btnCancel').click(function () {
+            $('#dispayupdateform').hide(1000);
+        })
+
+       
+
+    </script>
+

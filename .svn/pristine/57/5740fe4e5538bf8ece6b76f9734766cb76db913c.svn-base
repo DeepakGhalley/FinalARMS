@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "YearlyMinorHeadWiseCollection";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="YearlyMinorHeadWiseCollection">Report</a></li>
+                        <li class="breadcrumb-item active">Yearly Minor Head Wise Collection</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Yearly Minor Head Wise Collection</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Calendar Year</label>
+                <div class="col-sm-4">
+                    <select class="form-control" id="idcalendaryear" asp-items="@(new SelectList (@ViewBag.calenderYear,"Value","Text"))">
+                    </select>
+                    
+                </div>
+
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+       function PrintReport() {
+           if ($("#idcalendaryear").val() == "") {
+               swal("Please Select a Year");
+               $("#validationcheck").focus();
+
+               return false;
+           }
+
+           var cyear = ($('#idcalendaryear option:selected').text());
+
+               $.ajax({
+                   type: "GET",
+                   url: '@Url.Action("PrintYearlyMinorHeadWiseCollection", "Report")',
+                   data: {
+                       CalendarYear: $('#idcalendaryear').val(),
+                       cyear: cyear
+                   },
+                   success: function (data) {
+                       if (data.length > 0) {
+                           window.open("@Url.RouteUrl(new
+                                 { Area ="Reports",Controller = "Report", Action = "PrintYearlyMinorHeadWiseCollection" })/?CalendarYear=" + $('#idcalendaryear').val()
+                               + "&cyear=" + cyear
+                               , '_blank');
+
+                       }
+                       console.log(CalendarYear);
+
+                       $('#img').hide();
+
+                   },
+                   error: function () {
+                       alert('error');
+                       $('#img').hide();
+                   }
+
+               });
+
+
+   }
+
+
+</script>

@@ -1,0 +1,28 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[tblDemand] (Table)
+     Create
+       [dbo].[FK_tblDemand_ToTable] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_12] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_2] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_4] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_6] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_7] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_9] (Foreign Key)
+
+** Supporting actions
+
+The column billingDate on table [dbo].[tblDemand] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

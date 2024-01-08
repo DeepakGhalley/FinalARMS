@@ -1,0 +1,46 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstSlab]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstSlab] (Table)
+     Alter
+       [dbo].[tblWaterMeterReading] (Table)
+       [dbo].[trnWaterConnection] (Table)
+     Create
+       [dbo].[FK_tblWaterMeterReading_ToTable_6] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable_10] (Foreign Key)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_5] (Foreign Key)
+     Create
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_5] (Foreign Key)
+     Refresh
+       [dbo].[View_ReadingSeet] (View)
+       [dbo].[rptGetTaxRates] (Procedure)
+       [dbo].[rptDefaulterWaterList] (Procedure)
+       [dbo].[rptGetWaterConsumption] (Procedure)
+       [dbo].[rptMissedOutReadingReport] (Procedure)
+       [dbo].[rptMonthlyMeterReader] (Procedure)

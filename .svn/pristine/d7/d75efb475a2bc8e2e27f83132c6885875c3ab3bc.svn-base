@@ -1,0 +1,695 @@
+﻿@using CORE_BOL
+@model StallRentDemandScheduleModel
+
+@{
+    ViewData["Title"] = "StallRentMonthlyDemand";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Vendor Demand Generate</a></li>
+                    <li class="breadcrumb-item active">Stall Detail Monthly Demand</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<form class="form-horizontal" method="post">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Search Stall Detail Monthly Demand</h3>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">CID</label>
+                    <input id="CIDInput" class="form-control col-6" />
+                </div>
+
+                <div class="input-group d-flex justify-content-center col-5">
+                    <label class="col-sm-4 col-form-label">TTIN</label>
+                    <input id="TTINInput" class="form-control col-6" />
+                </div>
+                <div class="input-group-append col-2">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayStallDetailMonthlyDemand();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<div class="card card-info" style="display:none;" id="stalldetaildiv">
+    <div class="card-header">
+        <h3 class="card-title">Tax payer Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Mobile Number</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="stalldetaildemandtbl_body">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<!--VIEW parking fee DETAILS-->
+<div class="card card-info" style="display:none;" id="stallrentdetails">
+    <div class="card-header">
+        <h3 class="card-title">Stall Rent Details</h3>
+    </div>
+
+    <input type="hidden" id="hdnTaxPayerId" value="" />
+    <input type="hidden" id="hdnScheduleId" value="" />
+    <input type="hidden" id="hdnStall" value="" />
+    <input type="hidden" id="hdnAmt" value="" />
+    <input type="hidden" id="hdnStartdate" value="" />
+    <input type="hidden" id="hdnEnddate" value="" />
+    <input type="hidden" id="hdnYear" value="" />
+    <input type="hidden" id="hdnStallTypeId" value="" />
+
+
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Stall No</th>
+                    <th>Stall Area</th>
+                    <th>Billing Schedule</th>
+                    <th>Rental Amount</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbodyStallRentDetail">
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="card card-info" style="display:none;" id="stallrentperiod">
+    <div class="card-header">
+        <h3 class="card-title">Start & End Dates</h3>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Start Date</label>
+                <input id="StartDate" class="form-control col-6" disabled />
+            </div>
+
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">End Date</label>
+                <input id="EndDate" class="form-control col-6" disabled />
+            </div>
+        </div>
+        <br /><br />
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="yearbody">
+            </tbody>
+        </table>
+        <br /><br />
+        <table id="tblstallperiod" style="display:none;" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr>
+                    <th>#</th>
+                    <th>Year</th>
+                    <th>Month</th>
+                    <th>Days</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="stallrentperiodbody">
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div class="card card-info" id="stallrentDemand" style="display:none;">
+    <div class="card-body" id="toprint">
+        <div class="form-group row">
+
+            <table style="width: 100%">
+                <tr>
+
+                    <td colspan="2">
+                        <img src="~/dist/img/tt_logo.gif"
+                             style="width: 120px; height: 100px" />
+                    </td>
+
+                    <td></td>
+                    <td colspan="8" align="center">
+                        <strong><b style="font-size:large;">Thimphu Thromde</b></strong> <br /> <strong>Demand Recepit </strong>
+                    </td>
+                    <td></td>
+
+                    <td></td>
+
+                    <td colspan="2">
+                        <img id="qrDemandNo" style="width: 120px; height: 100px" />
+                    </td>
+
+                </tr>
+                <tr>
+                    <td colspan="2" style="height: 15px">
+                        &nbsp;
+                    </td>
+                    <td colspan="4" style="color: #CC0000" align="center">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                        <b>Demand Date:</b>&nbsp;<label id="lblDemandDate" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>TTIN:</b> <label id="lblTTIN" value="" />
+
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="2">
+                        <b>Demand No:</b>&nbsp;<label id="lblDemandNo" value="" />
+
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        <b>CID:</b>&nbsp;<label id="lblCID" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="4">
+                        <b>Name:</b>&nbsp;<label id="lblName" value="" />
+                    </td>
+
+
+                    <td colspan="6">
+                        <b>Address:</b>&nbsp;<label id="lblAddress" class="col-form-label" readonly />
+                    </td>
+
+                </tr>
+
+
+                <tr>
+                    <td colspan="4">
+                        <b>Start Date:</b>&nbsp;<label id="lblSDate" class="col-form-label" readonly />
+                    </td>
+
+                    <td colspan="2">
+                        <b>End Date:</b>&nbsp;<label id="lblEDate" class="col-form-label" readonly />
+                    </td>
+
+
+                    <td colspan="2">
+                        <b>Bill For:</b>&nbsp;<label id="lblBill" class="col-form-label" readonly />
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4">
+                    </td>
+
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <br />
+        <div class="form-group row">
+            <table id="example1" border="1" style=" border-collapse: collapse; " width="100%">
+                <thead style="background-color:mediumaquamarine">
+                    <tr>
+                        <th>#</th>
+                        <th>Tax Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody id="tblDemand">
+                </tbody>
+            </table>
+        </div>
+        <div class="form-group row">
+            <table style="width: 100%">
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="2">
+                        &nbsp;
+                    </td>
+                    <td colspan="4">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td colspan="2">
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="4" align="right">
+                        <b>Generated by:</b>&nbsp;<label id="lblUser" value="" />
+                    </td>
+                    <td colspan="4">
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="form-group row">
+            <div class="col-sm-10">
+                <button type="button" class="btn btn-primary" onclick="return ok();">Ok</button>  &nbsp;  &nbsp;
+                <button class="btn btn-warning" onclick="return printPage();"><i class="fas fa-print"></i>Print</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+    function displayStallDetailMonthlyDemand() {
+        if ($('#CIDInput').val() == "" && $('#TTINInput').val() == "") {
+            swal('Empty Fields!', '', 'error');
+            $('#CIDInput').focus();
+            $('#TTINInput').focus();
+            return false;
+        }
+        $('#img').show();
+
+        var Cid = $('#CIDInput').val();
+        var Ttin = $('#TTINInput').val();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetStallRentDemandByCid", "StallDetails")',
+                    data: {
+                        cid: Cid,
+                        ttin: Ttin
+                    },
+                    success: function (data) {
+                        $('#stalldetaildemandtbl_body').empty();
+                        $('#stalldetaildiv').show(1000);
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#stalldetaildemandtbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.name + '</td>'
+                                    + '<td>' + value.mobileNo + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return StallRentDetails(' + value.taxPayerId + ')" >Select</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                            //hideall();
+                            //$('#stalldetaildiv').show(1000);
+                           
+                        } else {
+                            $('#stalldetaildemandtbl_body').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+                            //swal({
+                            //    title: 'Please Enter valid Value!',
+                            //    type: 'error',
+                            //    confirmButtonText: 'OK'
+                            //});
+
+                            //hideall();
+                        }
+                        $('#img').hide();
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                        //hideall();
+                    }
+
+                });    }
+    function StallRentDetails(taxPayerId) {
+
+        $('#hdnTaxPayerId').val(taxPayerId);
+
+        $('#stallrentdetails').show(1000);
+        $('html,body').animate({
+            scrollTop: $("#stallrentdetails").offset().top
+        }, 'slow');
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("StallRentDetails", "StallDetails")',
+                    data: {
+                        id: taxPayerId
+                    },
+                        success: function (data) {
+                            $('#tbodyStallRentDetail').empty();
+                            if (data.length > 0) {
+                                var res1 = null;
+                            $.each(data, function (key, value) {
+                                res1 = (value.isTerminated == false) ? '<b><a style = "color: #007bff; cursor: pointer;" onclick = "return GetYear(' + value.startDate + ',' + value.endDate + ',' + value.stallAllocationId + ',' + value.rentalAmount + ',' + value.sid + ');">Select</a ></b>' : '';
+
+                                $('#tbodyStallRentDetail').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.stallNo + '</td>'
+                                    + '<td>' + value.stallArea + '</td>'
+                                    + '<td>' + value.billingScheduleName + '</td>'
+                                    + '<td>' + value.rentalAmount + '</td>'
+                                    + '<td>' + res1 + '</td>'
+                                    + '</tr>');
+                            });
+                            $('#hdnStallTypeId').val(data[0].stallTypeId);
+
+                        } else {
+                            $('#tbodyStallRentDetail').append(
+                                '<tr><td colspan="6" style="color: red;">No record found!</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });    }
+
+    function GetYear(stDate, enDate, said, amt, sid) {
+        $('#tblstallperiod').hide();
+        $('#stallrentDemand').hide();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetYear", "StallDetails")',
+            data: {
+                startDate: stDate,
+                endDate: enDate
+            },
+
+            success: function (data) {
+                if (data.length > 0) {
+                    $('#StartDate').val(stDate);
+                    $('#EndDate').val(enDate);
+                    $('#yearbody').empty();
+
+                    $.each(data, function (key, value) {
+
+                        $('#yearbody').append(
+                            '<tr>'
+                            + '<td>' + (key + 1) + '</td>'
+                            + '<td>' + value.year + '</td>'
+                            + '<td>'
+                            + '<a style = "color: #007bff; cursor: pointer;" onclick = "return GetStallDemandScheduleMonthly(' + said + ',' + amt + ',' + stDate + ',' + enDate + ',' + sid + ',' + value.year +');" >Select</a >'
+                            + '</td>'
+
+                            + '</tr>');
+
+                    });
+                    $('#stallrentperiod').show();
+                    $('html,body').animate({
+                        scrollTop: $("#stallrentperiod").offset().top
+                    }, 'slow');
+                } else {
+                    swal('no data');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+
+        });
+    }
+
+
+    function GetStallDemandScheduleMonthly(stallAllocationId, amt, stDate, enDate, sid, yr) {
+         $('#hdnStall').val(stallAllocationId);
+        $('#hdnAmt').val(amt);
+        $('#hdnStartdate').val(stDate);
+        $('#hdnEnddate').val(enDate);
+        $('#hdnScheduleId').val(sid);
+        $('#stallrentDemand').hide(1000);
+         $('#hdnYear').val(yr);
+
+                    $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetStallDemandScheduleMonthly", "StallDetails")',
+                    data: {
+                        id: stallAllocationId,
+                        startDate: stDate,
+                        endDate: enDate,
+                        yr: yr
+                        },
+
+                        success: function (data) {
+                            if (data.length > 0) {
+                                console.log(data);
+                                //alert(yr);
+                            $('#StartDate').val(stDate);
+                                $('#EndDate').val(enDate);
+                                var res = null
+                                $('#stallrentperiodbody').empty();
+
+                                $.each(data, function (key, value) {
+
+                                    res = (value.demandNoId != null) ? '<b><a style="cursor: pointer; color: forestgreen;" title="View Demand" onclick="return displayDemand(' + value.demandNoId + ',\'' + value.month +'\');">View</a></b>' : '<b><a style="cursor: pointer; color: forestgreen;" title="Generate Demand" onclick="return GenerateDemand(' + value.id + ',' + value.days + ',' + value.monthId + ',' + value.year + ',' + amt + ',' + value.totalDays +');">Generate</a></b>';
+
+                                    $('#stallrentperiodbody').append(
+                                      '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.year + '</td>'
+                                    + '<td>' + value.month + '</td>'
+                                    + '<td>' + value.days + '</td>'
+                                    + '<td id="tdays" hidden>' + value.totalDays + '</td>'
+                                    + '<td>' + res + '</td>'
+
+                            + '</tr>');
+
+                                    });
+                                $('#tblstallperiod').show();
+                                $('html,body').animate({
+                                    scrollTop: $("#tblstallperiod").offset().top
+                                }, 'slow');
+                        } else {
+                            swal('no data');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+    function GenerateDemand(stallAllocationId, days, month, year, amount, totalDays) {
+                    $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("GenerateDemand", "StallDetails")',
+                    data: {
+                        stallAllocationId: parseInt(stallAllocationId),
+                        pDays: days,
+                        pMonth: month,
+                        pYear: year,
+                        ScheduleId: parseInt($('#hdnScheduleId').val()),
+                        Amount: parseFloat(amount),
+                        taxPayerId: parseInt($('#hdnTaxPayerId').val()),
+                        StallTypeId: parseInt($('#hdnStallTypeId').val()),
+                        totalDays: parseInt(totalDays)
+
+                        },
+
+                        success: function (data) {
+                            //if (data.length > 0) {
+                            swal({
+                                title: "Success",
+                                icon: "Success",
+
+                            });
+                            GetStallDemandScheduleMonthly($('#hdnStall').val(), $('#hdnAmt').val(), $('#hdnStartdate').val(), $('#hdnEnddate').val(), $('#hdnScheduleId').val(), $('#hdnYear').val());
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+    }
+    function displayDemand(demandNoId, mnth) {
+        $('#stallrentDemand').show(1000);
+        $("#lblBill").html(mnth);
+
+
+                $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetStallRentDemand", "StallDetails")',
+                data: {
+                    DemandNoId: demandNoId,
+                },
+                success: function (data) {
+                console.log(data);
+                    $('#tblDemand').empty();
+                    if (data.length > 0) {
+
+                        var datec = data[0].demandDate;
+                        const c = new Date(datec);
+                        const CreatedDate = ("0" + c.getDate()).slice(-2) + "/" + ("0" + (c.getMonth() + 1)).slice(-2) + '/' + c.getFullYear()
+
+                        var sdate = data[0].sDate;
+                        const s = new Date(sdate);
+                        const StartDate = ("0" + s.getDate()).slice(-2) + "/" + ("0" + (s.getMonth() + 1)).slice(-2) + '/' + s.getFullYear()
+
+                        var edate = data[0].eDate;
+                        const e = new Date(edate);
+                        const EndDate = ("0" + e.getDate()).slice(-2) + "/" + ("0" + (e.getMonth() + 1)).slice(-2) + '/' + e.getFullYear()
+
+                       
+
+                        $("#lblName").html(data[0].taxPayerName);
+                        $("#lblTTIN").html(data[0].ttin);
+                        $("#lblCID").html(data[0].cid);
+                        $("#lblAddress").html(data[0].address);
+                        $("#lblDemandDate").html(CreatedDate);
+                        $("#lblDemandNo").html(data[0].demandNo);
+                        $("#lblSDate").html(StartDate);
+                        $("#lblEDate").html(EndDate);
+
+                        $('#qrDemandNo').attr('src', `data:image/png;base64,${data[0].qrImage}`);
+
+
+                        $.each(data, function (key, value) {
+                            $('#tblDemand').append(
+                                '<tr>' + '<td>' + (key + 1) + '</td>'
+                                + '<td>' + value.taxName + '</td>'
+                                + '<td>' + value.totalAmount+ '</td>'
+                                + '</td>'
+                                + '</tr>');
+                        });
+                        $('#img').hide();
+                        $('html,body').animate({
+                            scrollTop: $("#stallrentDemand").offset().top
+                        }, 'slow');
+
+                    }
+                    else {
+                        $('#img').hide();
+                        $("#stallrentDemand").show(1000);
+                        $('#tblDemand').append(
+                            '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+                    }
+
+                },
+                    error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                    }
+                });
+
+
+            $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetUserName", "StallDetails")',
+                    data: {
+                        DemandNoId: demandNoId,
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+
+                            $("#lblUser").html(data[0].userName);
+                        }
+                    },
+
+                });
+
+        }
+
+    function printPage() {
+            var dataToPrint = document.getElementById("toprint");
+            newWin = window.open("");
+            newWin.document.write(dataToPrint.outerHTML);
+            newWin.print();
+            newWin.close();
+        }
+
+    function ok() {
+        location.reload();
+
+        }
+</script>

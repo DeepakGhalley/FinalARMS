@@ -1,0 +1,403 @@
+﻿@using CORE_BOL
+@model MiscellaneousRecordModel
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    var tyid = Model.TransactionTypeId;
+
+    var ti = Model.TaxId;
+    var si = Model.SlabId;
+
+
+}
+
+
+<input type="hidden" value="@tyid" id="hdnTransactionTypeId" />
+<input type="hidden" value="@ti" id="hdnTaxId" />
+<input type="hidden" value="@si" id="hdnSlabId" />
+
+
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Miscellaneous Records</a></li>
+                    <li class="breadcrumb-item active">Update Miscellaneous Records</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Update Miscellaneous Records Model</h3>
+    </div>
+    <form class="form-horizontal" asp-action="Edit" method="post">
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <input type="hidden" asp-for="MiscellaneousRecordId" />
+            <input type="hidden" asp-for="TransactionId" />
+            @*<input type="hidden" asp-for="TaxId" />
+                <input type="hidden" asp-for="SlabId" />*@
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Transaction Type</label>
+                <div class="col-sm-3">
+                    <select asp-for="TransactionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.TransactionTypeId,"Value","Text")) " value="0"></select>
+                </div>
+                <label asp-for="Tax" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="TaxId" class="form-control select2bs4" style="width: 100%;" id="TaxId" onchange="display(this)" value="0">
+                        <option value="0">--Select One--</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Slab" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <select asp-for="SlabId" class="form-control select2bs4" style="width: 100%;" onchange="display(this)" value="0"></select>
+                    <span asp-validation-for="SlabId" class="text-danger"></span>
+                </div>
+                <label asp-for="Name" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Name" class="form-control" required />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="Address" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Address" class="form-control" required />
+                </div>
+                <label class="col-sm-2 col-form-label">CID</label>
+                <div class="col-sm-3">
+                    <input asp-for="Cid" class="form-control" required />
+
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="MobileNo" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="MobileNo" class="form-control" required />
+                </div>
+                <label asp-for="Quantity" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Quantity" class="form-control" id="quantity" OnChange="av(this)" required />
+                </div>
+            </div>
+            <div class="form-group row" id="showrate">
+                <label class="col-sm-2 col-form-label">Rate</label>
+                <div class="col-sm-3">
+                    <input id="rate" class="form-control" OnChange="av(this)" required readonly />
+
+                </div>
+                <label asp-for="Amount" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-3">
+                    <input asp-for="Amount" class="form-control" id="amount" readonly />
+
+                </div>
+            </div>
+
+
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary" id="SaveTransactionDetail">Save</button>
+                    <button asp-action="Index" id="Reset" class="btn btn-warning">Cancel</button>
+
+                </div>
+
+            </div>
+        </div>
+        <!-- /.card-body -->
+        <!-- /.card-footer -->
+
+    </form>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        //alert($('#hdnpvilid').val());
+        displaydropdowns();
+    });
+      //AUTO POPULATE START
+        function displaydropdowns() {
+            //AUTO POPULATE
+            //$('#TransactionTypeId').val($('#hdnTransactionTypeId').val());
+                $.ajax({
+                    type: "POST",
+                    url: '@Url.Action("PopulateTaxByTransactionTypeId", "MiscellaneousRecords")',
+                    data: {
+                        id: parseInt($('#hdnTransactionTypeId').val())
+                    },
+
+                    success: function (data) {
+                        console.log(data);
+                        $('#TaxId').empty();
+                        $('#TaxId').append(
+                            '<option value=0>--Please Select--</option>');
+                        $('#SlabId').empty();
+                        $('#SlabId').append(
+                           '<option value=0>--Please Select--</option>');
+                        if (data.length > 0) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                var newOption = $('<option value=' + data[i].taxId + '>'
+                                    + data[i].taxName
+                                    + '</option>');
+                                $('#TaxId').append(newOption);
+                            }
+                            $('#TaxId').val($('#hdnTaxId').val());
+                                            // slab id start
+
+                                              $.ajax({
+                                                type: "POST",
+                                                url: '@Url.Action("PopulateSlabByTaxId", "MiscellaneousRecords")',
+                                                data: {
+                                                    id: parseInt($('#TaxId').val())
+                                                },
+                                                success: function (data) {
+
+                                                console.log(data);
+                                                    $('#SlabId').empty();
+
+                                                    $('#SlabId').append(
+                                                '<option value=0>--Please Select--</option>');
+
+                                                if (data.length > 0) {
+
+                                                for (var i = 0; i < data.length; i++) {
+                                                    var newOption = $('<option value=' + data[i].slabId + '> '
+                                                        + data[i].slabName
+                                                    + '  </option>');
+                                                    $('#SlabId').append(newOption);
+                                                }
+                                                    $('#SlabId').val($('#hdnSlabId').val());
+                                                                           // get rate start
+                                                                       $.ajax({
+                                                                                type: "POST",
+                                                                                url: '@Url.Action("FetchRate", "MiscellaneousRecords")',
+                                                                                data: {
+                                                                                    id: parseInt($('#hdnSlabId').val())
+                                                                                },
+                                                                                success: function (data) {
+
+                                                                                console.log(data);
+                                                                                $('#rate').empty();
+                                                                                    if (data.length > 0) {
+                                                                                        $("#rate").val(data[0].rate);
+                                                                                       
+                                                                                $('#img').hide();
+                                                                                }
+                                                                                else
+                                                                                {
+                                                                                $('#img').hide();
+                                                                                }
+
+                                                                                },
+                                                                                error: function () {
+                                                                                $('#img').hide();
+                                                                                alert('Error occured');
+                                                                                }
+                                                                          });
+
+                                                                          // get rate end
+                                                $('#img').hide();
+                                                }
+                                                else {
+                                                $('#img').hide();
+                                                }
+
+                                                },
+                                                error: function () {
+                                                $('#img').hide();
+                                                alert('Error occured');
+                                                }
+                                            });
+                                            //slab
+
+
+                            $('#img').hide();
+                        }
+                        else {
+                            $('#img').hide();
+                        }
+
+                    },
+                    error: function () {
+                        $('#img').hide();
+                        alert('Error occured');
+                    }
+                });
+    }
+    //AUTO POPULATE END
+    //POPULATE DROPDOWN
+     $(function () {
+         $('#TransactionTypeId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateTaxByTransactionTypeId", "MiscellaneousRecords")',
+                data: {
+                    id: parseInt($('#TransactionTypeId').val())
+                },
+                success: function (data) {
+                    console.log(data);
+                    $('#TaxId').empty();
+                    $('#TaxId').append(
+                        '<option value=0>--Please Select--</option>');
+                    $('#SlabId').empty();
+                    $('#SlabId').append(
+                       '<option value=0>--Please Select--</option>');
+                    if (data.length > 0) {
+
+                        for (var i = 0; i < data.length; i++) {
+                            var newOption = $('<option value=' + data[i].taxId + '>'
+                                + data[i].taxName
+                                + '</option>');
+                            $('#TaxId').append(newOption);
+                        }
+                        //$('#TaxId').val($('#hdnpgeid').val());
+                        $('#img').hide();
+                    }
+                    else {
+                        $('#img').hide();
+                    }
+
+                },
+                error: function () {
+                    $('#img').hide();
+                    alert('Error occured');
+                }
+            });
+        });
+    });
+     $(function () {
+           $('#TaxId').change(function () {
+            $('#img').show();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("PopulateSlabByTaxId", "MiscellaneousRecords")',
+                data: {
+                    id: parseInt($('#TaxId').val())
+                },
+                success: function (data) {
+
+                console.log(data);
+                    $('#SlabId').empty();
+
+                    $('#SlabId').append(
+                '<option value=0>--Please Select--</option>');
+
+                if (data.length > 0) {
+
+                for (var i = 0; i < data.length; i++) {
+                    var newOption = $('<option value=' + data[i].slabId + '> '
+                        + data[i].slabName
+                    + '  </option>');
+                    $('#SlabId').append(newOption);
+                }
+                    //$('#lusc').val($('#hdnpvilid').val());
+                $('#img').hide();
+                }
+                else {
+                $('#img').hide();
+                }
+
+                },
+                error: function () {
+                $('#img').hide();
+                alert('Error occured');
+                }
+                });
+                });
+
+       });
+
+    $("#SaveTransactionDetail").click(function () {
+
+        var myarray = [];
+        var TransactionDetailModel = {};
+
+        TransactionDetailModel.TransactionId = parseInt($("#lotype").val());
+        TransactionDetailModel.TransactionTypeId = $("#TransactionTypeId").val();
+
+
+        myarray.push(TransactionDetailModel);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+        $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateTransactionDetail", "MiscellaneousRecords")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+    });
+    function av(avSelect) {
+        var one = avSelect.form.quantity.value;
+        var two = avSelect.form.rate.value;
+        var avvy = one * two;
+        avSelect.form.amount.value = avvy;
+    }
+
+    function display(displayselect) {
+        //var tax = $(this).attr("value");
+        //var slab = $(this).attr("value");
+        //var t = document.getElementById('TaxId').$(this).attr("value");
+        //var s = document.getElementById('lusc').$(this).attr("value");
+        //var tax = parseInt($('#TaxId').val());
+        //var slab = parseInt($('#lusc').val());
+        var tax = displayselect.form.taxId.value;
+        var Slab = displayselect.form.SlabId.value;
+        if (slab == tax && tax == slab)
+        {
+            alert("hello");
+            document.getElementById('showrate').style.display = "";
+        } else
+        {
+            document.getElementById('showrate').style.display = "none";
+        }
+    }
+
+
+</script>
+

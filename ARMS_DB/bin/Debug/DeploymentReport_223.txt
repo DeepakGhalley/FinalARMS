@@ -1,0 +1,29 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[tblLandLeaseDemandDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[tblLandLeaseDemandDetail] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+     Create
+       [dbo].[FK_tblDemand_ToTable_8] (Foreign Key)
+       [dbo].[FK_tblLedger_ToTable_3] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblLandLeaseDemandDetail_ToTable_2] (Foreign Key)
+     Refresh
+       [dbo].[GetLandLeaseDemandScheduleMonthly] (Procedure)

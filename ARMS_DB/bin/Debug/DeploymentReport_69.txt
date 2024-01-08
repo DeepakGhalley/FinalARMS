@@ -1,0 +1,44 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstLandDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[mstLandDetail] (Table)
+     Create
+       [dbo].[enumPropertyType] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_mstLandDetail_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstLandDetail_ToTable_5] (Foreign Key)
+       [dbo].[FK_tblLandLease_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_tblLandOwnershipDetail_ToTable] (Foreign Key)
+       [dbo].[FK_trnWaterConnection_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingDetail_ToTable] (Foreign Key)
+
+The column propertyTypeId on table [dbo].[mstLandDetail] must be changed from NULL to NOT NULL. If the table contains data, the ALTER script may not work. To avoid this issue, you must add values to this column for all rows or mark it as allowing NULL values, or enable the generation of smart-defaults as a deployment option.
+

@@ -1,0 +1,822 @@
+﻿@using CORE_BOL
+@model BuildingUnitDetailModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Unit Detail</a></li>
+                    <li class="breadcrumb-item active">Property</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+    <div class="card-header">
+        <h3 class="card-title">Search Plot No</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+        <div class="row d-flex justify-content-center">
+            <div class="input-group  col-8 float-right">
+                <label class="col-sm-2 col-form-label">Plot No</label>
+                <input id="plotno" class="input-group form-control col-6" /> &nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary col-2 " onclick="return displaybuildingUnitDetails();" />
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--Building Details-->
+<div class="card card-info" id="tblBuildingDetails" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Building Details</h3>
+        <input type="hidden" id="hdnBuildingDetailId" />
+        <input type="hidden" id="hdnplotNo" />
+        <input type="hidden" id="hdnLandDetailId" />
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>Building No</th>
+                    <th>BuildUp Area</th>
+                    <th>No of Units</th>
+                    <th>No of Floors</th>
+                    <th>Plinth Area</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="mybody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Existing Building Unit Details-->
+<div class="card card-info" id="tblExistingBuildingUnitDetails" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Existing Building Unit Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>Floor Name</th>
+                    <th>Unit Class</th>
+                    <th>Building Use Type</th>
+                    <th>TTIN</th>
+                    <th>CID</th>
+                    <th>Name</th>
+                    <th>Owner Type</th>
+                    <th>Plot No</th>
+                    <th>Floor Area</th>
+                    <th>No Of Rooms</th>
+                    <th>Is Regularized</th>
+
+                </tr>
+            </thead>
+            <tbody id="tblBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--UnMapped Building Unit Details-->
+<div class="card card-info" id="tblUnMappedBuildingUnitDetails" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Unmapped Building Unit Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>Floor Name</th>
+                    <th>Unit Class</th>
+                    <th>Building Use Type</th>
+                    <th>Plot No</th>
+                    <th>Floor Area</th>
+                    <th>No Of Rooms</th>
+                    <th>Action</th>
+
+                </tr>
+            </thead>
+            <tbody id="tblUnmapped">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--SEARCH BOX FOR UNMAPPED BUILDING UNIT DETAILS-->
+<div class="card card-info" id="UnmappedBuildingDetailSearch" style="display:none;">
+    <div class="card-header">
+        <input type="hidden" id="hdnBuildingUnitDetailId" />
+        <h3 class="card-title">Search Unmapped Building Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row d-flex justify-content-center">
+            <div class="input-group  col-8 float-right">
+                <label class="col-sm-2 col-form-label">CID</label>
+                <input id="UnmappedCID" class="input-group form-control col-4" /> &nbsp;&nbsp;
+                <label class="col-sm-2 col-form-label">TTIN</label>
+                <input id="UnmappedTTIN" class="input-group form-control col-4" /> &nbsp;&nbsp;
+            </div>
+            <div class="input-group  col-4">
+                <input type="button" value="search" class="btn btn-primary col-4 " onclick="return UnMappedBUDSearch();" />
+            </div>
+        </div>
+        <hr />
+        <table class="table table-bordered table-striped" id="UnMappedTaxpayerDetails" style="display:none;">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>CID</th>
+                    <th>TTIN</th>
+                    <th>Name</th>
+                    <th>Mobile No</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="UnMappedTaxPayerBody">
+            </tbody>
+        </table>
+    </div>
+</div>
+<!--Update Building Unit Detail-->
+<div class="card card-info" id="UpdateBuildingUnitdetails" style="display:none;">
+    <div class="card-body">
+        @*<div class="col-sm-3">   </div>*@
+        <div class="col-sm-9">
+            <label class="col-sm-2 col-form-label">Net Area/PLR</label>
+            <input id="txtplr" class="input-group form-control col-6" /> &nbsp;&nbsp;
+
+        </div>
+        <div class="col-sm-3">
+            <input type="button" value="Update" class="btn btn-primary col-4 " onclick="return UpdateBuildingUnitDetails();" />&nbsp; &nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <input type="button" value="Cancel" class="btn btn-primary col-4 " onclick="return CancelUpdate();" />
+        </div>
+    </div>
+    </div>
+<!--Add Building Unit Details Search-->
+<div class="card card-info" id="IdAddBuildingUnitDetailSearch" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Add Building Unit Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="row d-flex justify-content-center">
+            <div class="input-group  col-8 float-right">
+                <label class="col-sm-2 col-form-label">CID</label>
+                <input id="CID" class="input-group form-control col-4" /> &nbsp;&nbsp;
+                <label class="col-sm-2 col-form-label">TTIN</label>
+                <input id="TTIN" class="input-group form-control col-4" /> &nbsp;&nbsp;
+            </div>
+            <div class="input-group  col-4">
+                <input type="button" value="Search" class="btn btn-primary col-4 " onclick="return searchByCidandTtin();" />
+            </div>
+        </div> <hr />
+        <!--Display Tax Payer Profile-->
+        <table class="table table-bordered table-striped" id="tblTaxPayerProfile" style="display:none;">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>CID</th>
+                    <th>TTIN</th>
+                    <th>Name</th>
+                    <th>Mobile No</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody id="TaxPayerProfileBody">
+            </tbody>
+        </table>
+
+        <hr />
+
+        <!--Create Building Unit Details-->
+        <form class="form-horizontal" asp-action="Create" method="post" id="Id_CreateBuildingUnitDetails" style="display:none;">
+            <input type="hidden" id="hdnPlotNo" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group row" style="display:none;">
+                <label asp-for="BuildingDetailId" class="col-sm-2 col-form-label"></label>
+                <div class="col-sm-10">
+                    <input asp-for="BuildingDetailId" class="form-control" id="BuildingDetailId" />
+                    <input asp-for="LandDetailId" class="form-control" id="LandDetailId" />
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label asp-for="PlotNo" class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-4">
+                    <input readonly asp-for="PlotNo" id="plotNo" class="form-control" />
+                </div>
+                <label class="col-sm-2 col-form-label">No of Unit<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" asp-for="NoOfUnit" class="form-control" placeholder="No Of Unit" required />
+                    <span asp-validation-for="NoOfUnit" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Use Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="BuildingUnitUseTypeId" id="BUnitUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitUseTypeId" id="bterror" class="text-danger"></span>
+                </div>
+                <div class="custom-control custom-checkbox">
+
+                    <input class="custom-control-input" type="checkbox" asp-for="IsRegularized" checked>
+                    <label for="IsRegularized" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsRegularized)
+                    </label>
+                    <span style="font-weight: bold; color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Class<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="BuildingUnitClassId" id="BUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="BuildingUnitClassId" id="bcerror" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Floor Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="FloorNameId" id="FNameId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.FloorNameId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="FloorNameId" id="fnerror" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Unit Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <select asp-for="UnitOwnerTypeId" id="UOwnerTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="UnitOwnerTypeId" id="uoterror" class="text-danger"></span>
+                </div>
+                <div class="custom-control custom-checkbox">
+                    <span style="font-weight: bold; color: red;">*</span>
+                    &nbsp;&nbsp;<input class="custom-control-input" type="checkbox" asp-for="IsMainOwner" checked>
+                    <label for="IsMainOwner" class="custom-control-label">
+                        @Html.DisplayNameFor(model => model.IsMainOwner)
+                    </label><span style="font-weight: bold; color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Floor Area<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input type="number" step="any" min="0" asp-for="FloorArea" class="form-control" placeholder="Enter Floor Area" required />
+                    <span asp-validation-for="FloorArea" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">Floor No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" asp-for="FloorNo" class="form-control" placeholder="Enter Floor Number" min="0" required />
+                    <span asp-validation-for="FloorNo" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Flat No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-4">
+                    <input asp-for="FlatNo" class="form-control" placeholder="Enter Flat No" min="0" required />
+                    <span asp-validation-for="FlatNo" class="text-danger"></span>
+                </div>
+                <label class="col-sm-2 col-form-label">No of Rooms<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfrooms" class="form-control" placeholder="Enter Number of rooms" min="0" required />
+                    <span asp-validation-for="NoOfrooms" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-4" style="display:none;">
+                    <input asp-for="TaxPayerId" id="hdnTaxPayerID" class="form-control" placeholder="Tax Payer" />
+                    <span asp-validation-for="TaxPayerId" class="text-danger"></span>
+                </div>
+
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-4">
+                    <button type="submit" class="btn btn-primary" onclick="return save();">Save</button>
+                    <button id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+     //VALIDATION//
+    function save() {
+        if ($('#BUnitUseTypeId option:selected').val() == 0) {
+            $('#bterror').html('Please Select a Value!');
+            $('#BUnitUseTypeId').focus();
+            return false;
+        }
+        else {
+            $('#bterror').html('');
+        }
+        if ($('#BUnitClassId option:selected').val() == 0) {
+            $('#bcerror').html('Please Select a Value!');
+            $('#BUnitClassId').focus();
+            return false;
+        }
+        else {
+            $('#bcerror').html('');
+        }
+        if ($('#UOwnerTypeId option:selected').val() == 0) {
+            $('#uoterror').html('Please Select a Value!');
+            $('#UOwnerTypeId').focus();
+            return false;
+        }
+        else {
+            $('#uoterror').html('');
+        }
+        if ($('#FNameId option:selected').val() == 0) {
+            $('#fnerror').html('Please Select a Value!');
+            $('#FNameId').focus();
+            return false;
+        }
+        else {
+            $('#fnerror').html('');
+        }
+    }
+    //Search Land Details
+    function displaybuildingUnitDetails() {
+        //alert('dd');
+        if ($('#plotno').val() == "") {
+            swal("WARNING", "Input Field Cannot Be Blank!", "warning");
+            $('#plotno').focus();
+            $('#Id_CreateBuildingUnitDetails').hide(1000);
+            $('#IdAddBuildingUnitDetailSearch').hide(1000);
+            $('#tblUnMappedBuildingUnitDetails').hide(1000);
+            $('#UnmappedBuildingDetailSearch').hide(1000);
+            $('#UpdateBuildingUnitdetails').hide(1000);
+
+            return false;
+        }
+
+        $('#Id_CreateBuildingUnitDetails').hide(1000);
+        $('#IdAddBuildingUnitDetailSearch').hide(1000);
+        $('#tblUnMappedBuildingUnitDetails').hide(1000);
+        $('#UnmappedBuildingDetailSearch').hide(1000);
+        $('#UpdateBuildingUnitdetails').hide(1000);
+
+            var plotno = $('#plotno').val();
+
+                //Building Details
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchBuildingDetailsPlotNo", "BuildingUnitDetails")',
+                    data: {
+                        plotno: plotno
+                    },
+                    success: function (data) {
+                        $('#mybody').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblBuildingDetails').show(1000);
+                                $('#mybody').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.buildingNo + '</td>'
+                                    + '<td>' + value.buildUpArea + '</td>'
+                                    + '<td>' + value.noOfUnit + '</td>'
+                                    + '<td>' + value.noofFloors + '</td>'
+                                    + '<td>' + value.plinthArea + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return displayBuildingUnitDetails(' + value.buildingDetailId + ',' + value.landDetailId + ',\'' + value.plotNo + '\');" title = "BuiildingUnitDetails" > <i class="fas fa-eye"></i></a>&nbsp;'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+
+                        } else {
+                            $('#tblExistingBuildingUnitDetails').hide(1000);
+                            $('#Id_CreateBuildingUnitDetails').hide(1000);
+                            $('#IdAddBuildingUnitDetailSearch').hide(1000);
+                            $('#tblBuildingDetails').hide(1000);
+
+                            swal("WARNING", "No Record Found!", "warning");
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+    }
+
+    //Existing Building Unit Details
+    function displayBuildingUnitDetails(buildingDetailId, landDetailId, plotNo) {
+        //alert('44');
+        $('#BuildingDetailId').val(buildingDetailId);
+        $('#plotNo').val(plotNo);
+        $('#LandDetailId').val(landDetailId);
+        $('#hdnBuildingDetailId').val(buildingDetailId);
+        $('#hdnplotNo').val(plotNo);
+        $('#hdnLandDetailId').val(landDetailId);
+        $('#CID').val('');
+        $('#TTIN').val('');
+        $('#Id_CreateBuildingUnitDetails').hide();
+        
+        $('#TaxPayerProfileBody').empty();
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("getExisitingBuildingUnitDetails", "BuildingUnitDetails")',
+                    data: {
+                        id: buildingDetailId
+                    },
+                    success: function (data) {
+                        $('#tblBody').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblExistingBuildingUnitDetails').show(1000);
+                                $('#tblBody').show(1000);
+                                $('#IdAddBuildingUnitDetailSearch').show(1000);
+                                $('#UnmappedBuildingDetailSearch').hide(1000);
+                                $('#tblUnmapped').show(1000);
+                                $('#tblUnMappedBuildingUnitDetails').show(1000);
+
+                                $('#tblBody').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.floor + '</td>'
+                                    + '<td>' + value.buildingUnitClassName + '</td>'
+                                    + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.unitOwnerTypename + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.floorArea + '</td>'
+                                    + '<td>' + value.noOfrooms + '</td>'
+                                    + '<td>' + value.regularized + '</td>'
+                                    + '</tr>');
+                            });
+
+                    } else {
+                           
+                            $('#tblBody').empty();
+                            $('#tblBody').append(
+                                '<tr><td colspan="7" style="color: red;">There is No record found! Please Add the Record</td></tr>');
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+                        //Unmapped
+
+                             $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("getUnMappedBuildingUnitDetails", "BuildingUnitDetails")',
+                    data: {
+                        id: buildingDetailId
+                    },
+                    success: function (data) {
+                        $('#tblUnmapped').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblUnMappedBuildingUnitDetails').show(1000);
+                                $('#UnmappedBuildingDetailSearch').hide(1000);
+                                $('#IdAddBuildingUnitDetailSearch').show(1000);
+                                $('#tblExistingBuildingUnitDetails').show(1000);
+                                $('#TaxPayerProfileBody').show(1000);
+                                $('#tblBody').show(1000);
+                                $('#tblUnmapped').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.floor + '</td>'
+                                    + '<td>' + value.buildingUnitClassName + '</td>'
+                                    + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.floorArea + '</td>'
+                                    + '<td>' + value.noOfrooms + '</td>'
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayUnamppedBuilding(' + value.buildingUnitDetailId + ');">Select</a></b></td>'
+                                    + '</tr>');
+                            });
+                        } else {
+
+                            $('#tblUnMappedBuildingUnitDetails').toggle(1000);
+
+                            $('#tblUnmapped').empty();
+                            $('#tblUnmapped').append(
+                                    '<tr>'
+                                    +'<td colspan="12" style="color: red;"> No record found.</td>'
+                                    +'</tr>');
+
+                        }
+                            
+
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            
+                        ///Unmapped end
+
+    }
+
+    //Enter Building Unit Details
+    function searchByCidandTtin() {
+        if ($('#CID').val() == "" && $('#TTIN').val() == "") {
+            swal('WARNING', 'Input Fields Cannot be Blank!', 'warning');
+            $('#tblTaxPayerProfile').hide(1000);
+            $('#Id_CreateBuildingUnitDetails').hide(1000);
+
+            return false;
+        }
+            var Cid = $('#CID').val();
+            var Ttin = $('#TTIN').val();
+
+                //Building Details
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchDetailsByCid", "BuildingUnitDetails")',
+                    data: {
+                        cid: Cid,
+                        ttin: Ttin
+                    },
+                    success: function (data) {
+                        $('#TaxPayerProfileBody').empty();
+                        if (data.length > 0) {
+                            //$.each(data, function (key, value) {
+                            var CID = data[0].cid;
+                            var TTIN = data[0].ttin;
+                            var TaxPayerName = data[0].taxPayerName;
+                            var Mobileno = data[0].mobileNo;
+                            var Email = data[0].email;
+                            var taxpayer = data[0].taxPayerId;
+                            $('#hdnTaxPayerID').val(taxpayer);
+
+                                $('#tblTaxPayerProfile').show(1000);
+                                $('#Id_CreateBuildingUnitDetails').show(1000);
+
+                                $('#TaxPayerProfileBody').append(
+                                    '<tr class="text-center">'
+                                    //+ '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + CID + '</td>'
+                                    + '<td>' + TTIN + '</td>'
+                                    + '<td>' + TaxPayerName + '</td>'
+                                    + '<td>' + Mobileno + '</td>'
+                                    + '<td>' + Email + '</td>'
+                                    + '</tr>');
+                            //});
+
+                        } else {
+                            $('#tblTaxPayerProfile').hide(1000);
+                            $('#Id_CreateBuildingUnitDetails').hide(1000);
+
+                            swal("WARNING", "No Record Found!", "warning");
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+    }
+    $('#btnCancel').click(function () {
+        $('#Id_CreateBuildingUnitDetails').hide(1000);
+        $('#tblTaxPayerProfile').hide(1000);
+
+    })
+
+    //UnMapped Building Unit Details
+    function displayUnMappedBUDetails(buildingDetailId) {
+        $('#BuildingDetailId').val(buildingDetailId);
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("getUnMappedBuildingUnitDetails", "BuildingUnitDetails")',
+                    data: {
+                        id: buildingDetailId
+                    },
+                    success: function (data) {
+                        $('#tblUnmapped').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblUnMappedBuildingUnitDetails').show(1000);
+                                $('#IdAddBuildingUnitDetailSearch').hide(1000);
+                                $('#UnmappedBuildingDetailSearch').hide(1000);
+                                $('#tblExistingBuildingUnitDetails').hide(1000);
+                                $('#TaxPayerProfileBody').show(1000);
+                                $('#tblBody').hide(1000);
+                                $('#tblUnmapped').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.floor + '</td>'
+                                    + '<td>' + value.buildingUnitClassName + '</td>'
+                                    + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.cid + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.unitOwnerTypename + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.floorArea + '</td>'
+                                    + '<td>' + value.noOfrooms + '</td>'
+                                    + '<td><b><a style="cursor: pointer; color: forestgreen;" onclick="return displayUnamppedBuilding(' + value.buildingUnitDetailId + ');">Select</a></b></td>'
+                                    + '</tr>');
+                            });
+                        } else {
+
+                            $('#tblUnMappedBuildingUnitDetails').toggle(1000);
+
+                            $('#tblUnmapped').empty();
+                            $('#tblUnmapped').append(
+                                    '<tr>'
+                                    +'<td colspan="12" style="color: red;"> There is No record found! Please Add the Record</td>'
+                                    +'</tr>');
+
+                        }
+                            //$('#UnmappedBuildingDetailSearch').hide(1000);
+                            //$('#IdAddBuildingUnitDetailSearch').hide(1000);
+                            //$('#TaxPayerProfileBody').hide(1000);
+                            //$('#tblExistingBuildingUnitDetails').hide(1000);
+
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+
+    function displayUnamppedBuilding(buildingUnitDetailId) {
+        $('#hdnBuildingUnitDetailId').val(buildingUnitDetailId);
+        $('#IdAddBuildingUnitDetailSearch').hide(1000);
+        $('#UnmappedBuildingDetailSearch').show(1000);
+
+    }
+            //UNMAPPED BUILDING UNIT DETAILS SEARCH
+ function UnMappedBUDSearch() {
+                 if ($('#UnmappedCID').val() == "" && $('#UnmappedTTIN').val() == "") {
+            swal('WARNING', 'Input Fields Cannot be Blank!', 'warning');
+
+            return false;
+        }
+                 var Cid = $('#UnmappedCID').val();
+                 var Ttin = $('#UnmappedTTIN').val();
+
+                //Building Details
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchDetailsByCid", "BuildingUnitDetails")',
+                    data: {
+                        cid: Cid,
+                        ttin: Ttin
+                    },
+                    success: function (data) {
+                        $('#UnMappedTaxPayerBody').empty();
+                        if (data.length > 0) {
+                            //$.each(data, function (key, value) {
+                            var CID = data[0].cid;
+                            var TTIN = data[0].ttin;
+                            var TaxPayerName = data[0].taxPayerName;
+                            var Mobileno = data[0].mobileNo;
+                            var Email = data[0].email;
+                            var taxpayer = data[0].taxPayerId;
+                            $('#hdnTaxPayerID').val(taxpayer);
+
+                            $('#UnMappedTaxpayerDetails').show(1000);
+                            $('#UpdateBuildingUnitdetails').show(1000);
+                            $('#UnMappedTaxPayerBody').append(
+                                    '<tr class="text-center">'
+                                    //+ '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + CID + '</td>'
+                                    + '<td>' + TTIN + '</td>'
+                                    + '<td>' + TaxPayerName + '</td>'
+                                    + '<td>' + Mobileno + '</td>'
+                                    + '<td>' + Email + '</td>'
+                                    + '</tr>');
+                            //});
+
+                        } else {
+                            $('#UnMappedTaxpayerDetails').hide(1000);
+                            $('#UpdateBuildingUnitdetails').hide(1000);
+                            swal("WARNING", "No Record Found!", "warning");
+
+
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+            }
+
+            //UPDATE BUILDING UNIT DETAILS
+ function UpdateBuildingUnitDetails() {
+
+        var myarray = [];
+     var BuildingUnitDetail = {};
+    // alert($("#txtplr").val());
+
+                 BuildingUnitDetail.TaxPayerId = parseInt($("#hdnTaxPayerID").val());
+                 BuildingUnitDetail.BuildingUnitDetailId = parseInt($("#hdnBuildingUnitDetailId").val());
+                 BuildingUnitDetail.plr = parseFloat($("#txtplr").val());
+
+                myarray.push(BuildingUnitDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+
+     $('#img').hide();
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateBuildingUnitDetails", "BuildingUnitDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#tblUnMappedBuildingUnitDetails').show(1000);
+                $('#tblUnmapped').show(1000);
+                $('#tblBody').show(1000);
+                $('#tblExistingBuildingUnitDetails').show(1000);
+                $('#UnmappedBuildingDetailSearch').hide(1000);
+                $('#UnMappedTaxPayerBody').hide(1000);
+                $('#IdAddBuildingUnitDetailSearch').show(1000);
+                $('#UpdateBuildingUnitdetails').hide(1000);
+                var BUD = $('#hdnBuildingDetailId').val();
+                var PN = $('#hdnplotNo').val();
+                var LD = $('#hdnLandDetailId').val();
+                swal('Building Unit Updated!');
+                displayBuildingUnitDetails(BUD, PN, LD);
+                //if (response > 0) {
+                $('#img').hide();
+
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+            }
+        });
+
+    }
+
+    function CancelUpdate() {
+        $('#tblBody').hide(1000);
+        $('#tblExistingBuildingUnitDetails').hide(1000);
+        $('#tblUnMappedBuildingUnitDetails').hide(1000);
+        $('#tblUnmapped').hide(1000);
+        $('#UnmappedBuildingDetailSearch').hide(1000);
+        $('#UnMappedTaxPayerBody').hide(1000);
+        $('#tblTaxPayerProfile').hide(1000);
+        $('#IdAddBuildingUnitDetailSearch').hide(1000);
+        $('#UpdateBuildingUnitdetails').hide(1000);
+    }
+</script>
+

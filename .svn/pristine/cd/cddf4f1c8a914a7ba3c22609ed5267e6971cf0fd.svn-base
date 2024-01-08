@@ -1,0 +1,200 @@
+﻿
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!-- Info boxes -->
+
+
+
+
+
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-faucet"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Pay Your Water Bill(s)</span>
+                <span class="info-box-number">
+                    @*10
+                        <small>No(s)</small>*@
+                    <a asp-controller="Home" asp-action="OnlineWaterBillPayment">Click Pay Your Water Bill</a>
+
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-home"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Pay Your Property Tax</span>
+                <span class="info-box-number">
+                    <a asp-controller="Home" asp-action="OnlinePropertyTaxPayment">Click Pay Your Property Tax</a>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-level-up-alt"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Betterment</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-hard-hat"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Construction Approval</span>
+                <span class="info-box-number">
+                    <a asp-controller="Home" asp-action="ConstructionApproval">Consturction Approval</a>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.row -->
+<!-- Second Row -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="far fa-list-alt"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Miscellaneous</span>
+                <span class="info-box-number">
+                    <a asp-controller="Home" asp-action="Miscellaneous">Miscellaneous</a>
+                </span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-truck"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Vacuum Tanker</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 3</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 4</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.end of second row -->
+
+<!-- Third Row -->
+<div class="row">
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box">
+            <span class="info-box-icon bg-info elevation-1"><i class="fas fa-cog"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 5</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-danger elevation-1"><i class="fas fa-thumbs-up"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 6</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <!-- fix for small devices only -->
+    <div class="clearfix hidden-md-up"></div>
+
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-success elevation-1"><i class="fas fa-shopping-cart"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 7</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+    <div class="col-12 col-sm-6 col-md-3">
+        <div class="info-box mb-3">
+            <span class="info-box-icon bg-warning elevation-1"><i class="fas fa-users"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">SAMPLE 8</span>
+                <span class="info-box-number">760</span>
+            </div>
+            <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
+    </div>
+    <!-- /.col -->
+</div>
+<!-- /.end of third row -->

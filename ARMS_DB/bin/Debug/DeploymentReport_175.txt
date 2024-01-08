@@ -1,0 +1,47 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstBuildingUnitDetail]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[DF__tmp_ms_xx__build__48A5B54C] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__floor__47B19113] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__build__46BD6CDA] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isAct__55FFB06A] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__trans__550B8C31] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__modif__541767F8] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__modif__532343BF] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__creat__522F1F86] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__creat__513AFB4D] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__isMai__5046D714] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__unitO__4F52B2DB] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__taxPa__4E5E8EA2] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__noOfr__4D6A6A69] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__floor__4C764630] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__noOfU__4B8221F7] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__flatN__4A8DFDBE] (Default Constraint)
+       [dbo].[DF__tmp_ms_xx__floor__4999D985] (Default Constraint)
+     Table rebuild
+       [dbo].[mstBuildingUnitDetail] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_4] (Foreign Key)
+     Create
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstBuildingUnitDetail_ToTable_4] (Foreign Key)

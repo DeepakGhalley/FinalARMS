@@ -1,0 +1,16 @@
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.exe
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.deps.json
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.runtimeconfig.json
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.runtimeconfig.dev.json
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.dll
+D:\TT\Finalarms\ARMS_REPORT\bin\Release\netcoreapp3.1\ARMS_REPORT.pdb
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.csproj.AssemblyReference.cache
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.Form1.resources
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.csproj.GenerateResource.cache
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.GeneratedMSBuildEditorConfig.editorconfig
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.AssemblyInfoInputs.cache
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.AssemblyInfo.cs
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.csproj.CoreCompileInputs.cache
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.dll
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.pdb
+D:\TT\Finalarms\ARMS_REPORT\obj\Release\netcoreapp3.1\ARMS_REPORT.genruntimeconfig.cache

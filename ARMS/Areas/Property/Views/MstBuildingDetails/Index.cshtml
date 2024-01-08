@@ -1,0 +1,324 @@
+﻿@model IEnumerable<CORE_BOL.Entities.MstBuildingDetail>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.BuildingClassId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BuildingNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BuildupArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PlinthArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfUnits)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberOfFloors)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyCertificateNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.YearOfConstruction)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyCertificateIssued)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyCertificateIssueDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PaymentCompletionStatusId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterConnection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SewerageConnection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Attic)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ArchFeature)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Roofing)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TraditionalPainting)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Plantation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumberDisplayed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FireExtingusher)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoadAccess)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DrainToStormWaterDrain)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateOfFinalInspection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyAlteredOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyAlteredBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OccupancyReferenceId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdvanceInfoFedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AdvanceInfoInfoFedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModificationRemarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModificationReasonId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ModifiedOn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BoundaryType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BuildingColour)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConstructionType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.GarbagServiceAccessibility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LandDetail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MaterialType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ParkingSlot)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RoofingType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StreetLightAccessibility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StructureCategory)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StructureType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterSupplyAccessibility)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterTankLocation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildingClassId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildingNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildupArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PlinthArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfUnits)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberOfFloors)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyCertificateNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.YearOfConstruction)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyCertificateIssued)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyCertificateIssueDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PaymentCompletionStatusId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterConnection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SewerageConnection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Attic)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ArchFeature)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Roofing)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TraditionalPainting)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Plantation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumberDisplayed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FireExtingusher)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoadAccess)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DrainToStormWaterDrain)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateOfFinalInspection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyAlteredOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyAlteredBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OccupancyReferenceId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdvanceInfoFedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AdvanceInfoInfoFedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModificationRemarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModificationReasonId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CreatedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ModifiedOn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BoundaryType.BoundaryType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BuildingColour.BuildingColourType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConstructionType.ConstructionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.GarbagServiceAccessibility.ServiceAccessibilityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LandDetail.PlotAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MaterialType.MaterialType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ParkingSlot.ParkingSlotName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RoofingType.RoofingType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StreetLightAccessibility.ServiceAccessibilityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StructureCategory.StructureCategory)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StructureType.StructureType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterSupplyAccessibility.ServiceAccessibilityType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterTankLocation.WaterTankLocation)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.BuildingDetailId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.BuildingDetailId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.BuildingDetailId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,162 @@
+﻿@model IEnumerable<CORE_BOL.Entities.TrnWaterMeterReading>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Bucid)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Reading)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousReading)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PreviousReadingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReadBy)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReadingDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NoOfUnit)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Consumption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StandardConsumption)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPermanentConnection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Sewerage)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SolidWaste)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Remarks)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BillingAddress)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TransactionId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PrimaryMobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SecondaryMobileNo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TrnWaterConnection)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterConnectionStatus)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterConnectionType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterLineType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.WaterMeterType)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Bucid)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Reading)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviousReading)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PreviousReadingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReadBy)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReadingDate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NoOfUnit)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Consumption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StandardConsumption)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPermanentConnection)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sewerage)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SolidWaste)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Remarks)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BillingAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TransactionId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PrimaryMobileNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SecondaryMobileNo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TrnWaterConnection.BillingAddress)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterConnectionStatus.WaterConnectionStatus)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterConnectionType.WaterConnectionType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterLineType.WaterLineType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WaterMeterType.WaterMeterType)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.TrnWaterMeterReadingId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.TrnWaterMeterReadingId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.TrnWaterMeterReadingId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

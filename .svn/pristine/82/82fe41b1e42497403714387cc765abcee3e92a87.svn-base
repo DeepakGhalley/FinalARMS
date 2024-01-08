@@ -1,0 +1,122 @@
+﻿@using CORE_BOL
+@model BuildingUnitDetailModel
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="dialog-background" style="display:none" id="img">
+    <div class="dialog-loading-wrapper">
+        <span class="dialog-loading-icon"><img src="~/dist/img/loader.gif" style="width: 100px; height: 100px;" /></span>
+    </div>
+</div>
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Unit Detail</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+<!--BUILDING UNIT DETAILS-->
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Building Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Building Unit Class</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.BuildingUnitClassName)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">Tax Payer</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.TaxPayerName)</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Building Unit Use Type</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.BuildingUnitUseTypeName)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">IsRegularized</label>
+            <div class="custom-control custom-checkbox">
+                <label class="col-sm-2 col-form-label">@Html.DisplayFor(model => model.IsRegularized)</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Unit Owner Type</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.UnitOwnerTypename)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">IsMainOwner</label>
+            <div class="custom-control custom-checkbox">
+                <label class="col-sm-3 col-form-label">@Html.DisplayFor(model => model.IsMainOwner)</label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Plot No</label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.PlotNo)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">Floor Area</label>
+            <div class="col-sm-2">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.FloorArea)</label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Building No</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.BuildingNo)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">Floor No</label>
+            <div class="col-sm-3">
+                <label class="col-sm-10 col-form-label">@Html.DisplayFor(model => model.FloorNo)</label>
+            </div>           
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">No Of units</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.NoOfUnit)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">Floor Name</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Floor)</label>
+            </div>
+        </div>          
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Flat No</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.FlatNo)</label>
+            </div>
+            <label class="col-sm-2 col-form-label">No Of Rooms</label>
+            <div class="col-sm-3">
+                <label class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.NoOfrooms)</label>
+            </div>
+        </div>       
+
+            @*<div class="form-group row">
+                <label class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-12">
+                    <a asp-action="Edit" asp-route-id="@Model.BuildingUnitDetailId" title="Go Back" class="btn btn-primary fas fa-edit"
+                       onclick="return saveme();">Edit</a>
+                </div>
+            </div>*@
+        </div>
+    </div>

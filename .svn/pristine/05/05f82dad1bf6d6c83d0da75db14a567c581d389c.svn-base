@@ -1,0 +1,412 @@
+﻿@model List<CORE_BOL.LandDetailModel>
+
+@{
+    ViewData["Title"] = "GetTaxPayerDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Property</a></li>
+                    <li class="breadcrumb-item active">Betterment Charges</li>
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+
+
+<div class="card card-info">
+    @if (TempData["msg"] != null)
+    {
+        <div class="alert alert-success alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-check"></i> Alert!</h5>
+            <p>@TempData["msg"]</p>
+        </div>
+    }
+
+    <div class="card-header">
+        <h3 class="card-title">Search Details</h3>
+    </div>
+    <!-- /.card-header -->
+    <div class="card-body">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">CID</label>
+                <input  id="CIDInput" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Plot No</label>
+                <input id="PlotNoInput" class="form-control col-6" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">TTIN</label>
+                <input id="TTINInput" class="form-control col-6" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Thram No</label>
+                <input id="ThramNoInput" class="form-control col-6" />
+            </div>
+            <div class="input-group-append col-2">
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary" onclick="return SearchDetails();" />
+            </div>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_ownershipdetails" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">Ownership Details</h3>
+        </div>
+
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>CID</th>
+                        <th>TTIN</th>
+                        <th>Name</th>
+                        <th>Mobile No</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_taxpyer">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_landdetails" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">Land Details</h3>
+        </div>
+
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Thram No</th>
+                        <th>Plot No</th>
+                        <th>Land Acerage</th>
+                        <th>Location</th>
+                        <th>Ownership Percentage</th>
+                        <th>Land Use Sub-Category</th>
+                        <th>Structure Available</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_land">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_buildingdetails" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">Building Details</h3>
+        </div>
+
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>BuildUp Area</th>
+                        <th>No Of Floors</th>
+                        <th>Building No</th>
+                        <th>Construction Type</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_buildingdetail">
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="card card-info" id="tbl_buildingunitdetails" style="display: none;">
+        <div class="card-header">
+            <h3 class="card-title">Building Unit Details</h3>
+        </div>
+
+        <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+                <thead style="background-color:mediumaquamarine">
+
+                    <tr>
+                        <th>Building Type</th>
+                        <th>No Of Units</th>
+                        <th>Floor Area</th>
+                    </tr>
+                </thead>
+                <tbody id="tbl_buildingunitdetail">
+                </tbody>
+            </table>
+        </div>
+        <div class="card-header">
+            <h3 class="card-title">Land Pooling Compensation</h3>
+            <input type="hidden" id="hdnLandDetailId" />
+        </div>
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Land Pooling Rate <span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-2">
+                    <input class="form-control" id="iddpoolingrate" />
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-primary" id="Savepoolingrate">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+
+<script>
+
+    function SearchDetails() {
+
+        if ($('#CIDInput').val() == "" && $('#TTINInput').val() == "" && $('#PlotNoInput').val() == "" && $('#ThramNoInput').val() == "") {
+            swal('Empty Fields!', '', 'error');
+            $('#CIDInput').focus();
+            $('#TTINInput').focus();
+            $('#PlotNoInput').focus();
+            $('#ThramNoInput').focus();
+            return false;
+        }
+      
+        var Cid = $('#CIDInput').val();
+        var Ttin = $('#TTINInput').val();
+        var PlotNo = $('#PlotNoInput').val();
+        var ThramNo = $('#ThramNoInput').val();
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetTaxPayerDetails", "BettermentCharges")',
+            data: {
+                cid: Cid,
+                ttin: Ttin,
+                plotno: PlotNo,
+                thramno: ThramNo
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#tbl_taxpyer').empty();
+                if (data.length > 0) {
+
+                    $.each(data, function (key, value) {
+                        $('#tbl_ownershipdetails').show(1000);
+                        $('#tbl_landdetails').hide(1000);
+                        $('#tbl_buildingdetails').hide(1000);
+                        $('#tbl_buildingunitdetails').hide(1000);
+                        $('#tbl_taxpyer').append(
+                            '<tr>'
+                            + '<td>' + value.cid + '</td>'
+                            + '<td>' + value.ttin + '</td>'
+                            + '<td>' + value.name + '</td>'
+                            + '<td>' + value.mobileNo + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayLandDetails(' + value.taxPayerId + ');">Select</a></b></td>'
+
+                            + '</tr>');
+                    });
+                } else {
+                    //$('#tbl_ownershipdetails').show(1000);
+
+                    $('#tbl_taxpyer').append(
+                        '<tr><td colspan="5" style="color: red;">No record found!</td></tr>');
+                    swal({
+                        title: 'Please Enter valid Value!',
+                        type: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                    
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+    function displayLandDetails(taxPayerId) {
+        $('#tbl_landdetails').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#tbl_landdetails").offset().top
+        }, 'slow');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetLandDetails", "BettermentCharges")',
+            data: {
+                id: taxPayerId
+
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#tbl_land').empty();
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+
+                        $('#tbl_land').append(
+                            '<tr>'
+                            + '<td>' + value.thramNo + '</td>'
+                            + '<td>' + value.plotNo + '</td>'
+                            + '<td>' + value.landAcerage + '</td>'
+                            + '<td>' + value.location + '</td>'
+                            + '<td>' + value.ownershipPercentage + '</td>'
+                            + '<td>' + value.landUseSubCategory + '</td>'
+                            + '<td>' + value.structureAvailable + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayBuildingDetails(' + value.landDetailId + ');">Select</a></b></td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#tbl_land').append(
+                        '<tr><td colspan="8" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+    function displayBuildingDetails(landDetailId) {
+        $('#tbl_buildingdetails').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#tbl_buildingdetails").offset().top
+        }, 'slow');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingDetails", "BettermentCharges")',
+            data: {
+                id: landDetailId
+
+            },
+            dataType: "json",
+            success: function (data) {
+                $('#tbl_buildingdetail').empty();
+                if (data.length > 0) {
+                    $.each(data, function (key, value) {
+
+                        $('#tbl_buildingdetail').append(
+                            '<tr>'
+                            + '<td>' + value.buildUpArea + '</td>'
+                            + '<td>' + value.noOfFloors + '</td>'
+                            + '<td>' + value.buildingNo + '</td>'
+                            + '<td>' + value.constructionType + '</td>'
+                            + '<td><b><a style="cursor: pointer; color: forestgreen;" title="Select" onclick="return displayBuildingUnitDetails(' + value.landDetailId + ');">Select</a></b></td>'
+                            + '</tr>');
+                    });
+                } else {
+                    $('#tbl_buildingdetail').append(
+                        '<tr><td colspan="5" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });
+    }
+
+    function displayBuildingUnitDetails(landDetailId) {
+        $('#tbl_buildingunitdetails').toggle(1000);
+        $('html,body').animate({
+            scrollTop: $("#tbl_buildingunitdetails").offset().top
+        }, 'slow');
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("GetBuildingUnitDetails", "BettermentCharges")',
+            data: {
+                id: landDetailId
+            },
+            dataType: "json",
+            success: function (data) {                 
+                $('#tbl_buildingunitdetail').empty();
+                if (data.length > 0) {
+                    var trnlanddetail = data[0].trnLandDetailId;
+                    $('#hdnLandDetailId').val(trnlanddetail);
+
+                    $.each(data, function (key, value) {
+
+                        $('#tbl_buildingunitdetail').append(
+                            '<tr>'
+                            + '<td>' + value.buildingType + '</td>'
+                            + '<td>' + value.noOfUnits + '</td>'
+                            + '<td>' + value.floorArea + '</td>'
+                            + '</tr>');
+                    });
+                     
+                } else {
+                    $('#tbl_buildingunitdetail').append(
+                        '<tr><td colspan="3" style="color: red;">No record found!</td></tr>');
+
+                }
+
+            },
+
+            error: function () {
+                alert('error');
+            }
+        });       
+    }
+    $("#Savepoolingrate").click(function () {
+        $('#hdnLandDetailId').val();
+
+            var myarray = [];
+        var trnLandDetailVM = {};
+
+        trnLandDetailVM.TrnLandDetailId = parseInt($("#hdnLandDetailId").val());
+        trnLandDetailVM.LandPoolingRate = parseInt($("#iddpoolingrate").val());
+        myarray.push(trnLandDetailVM);
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+
+            $('#img').show();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("SaveLandPoolingRate", "BettermentCharges")',
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    $('#img').hide();
+                    swal(response);
+                },
+                failure: function (response) {
+                    $('#img').hide();
+                    swal("Creation Failed");
+                },
+                error: function (response) {
+                    $('#img').hide();
+                    swal("Error while inserting");
+                }
+
+            });
+
+        });
+
+  
+    
+</script>

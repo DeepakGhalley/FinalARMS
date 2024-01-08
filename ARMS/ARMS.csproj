@@ -1,0 +1,282 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UserSecretsId>a5ea09b2-e437-4ac7-b81c-d960a9d5526a</UserSecretsId>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <GenerateSerializationAssemblies>Off</GenerateSerializationAssemblies>
+    <WarningLevel>0</WarningLevel>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Areas\HouseRent\**" />
+    <Content Remove="Areas\HouseRent\**" />
+    <EmbeddedResource Remove="Areas\HouseRent\**" />
+    <None Remove="Areas\HouseRent\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\Report1.rdlc" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet1.xsc" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet1.xsd" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet1.xss" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet2.xsc" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet2.xsd" />
+    <Content Remove="wwwroot\ReportDatasets\DataSet2.xss" />
+    <Content Remove="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xsc" />
+    <Content Remove="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xsd" />
+    <Content Remove="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xss" />
+    <Content Remove="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xsc" />
+    <Content Remove="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xsd" />
+    <Content Remove="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xss" />
+    <Content Remove="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.Designer.cs" />
+    <Content Remove="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xsc" />
+    <Content Remove="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xsd" />
+    <Content Remove="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xss" />
+    <Content Remove="wwwroot\Reports\Report1.rdlc" />
+    <Content Remove="wwwroot\Reports\Report2.rdlc" />
+    <Content Remove="wwwroot\Reports\rptDailyRecepitWiseCollection.rdlc" />
+    <Content Remove="wwwroot\Reports\rptIndividualReceiptWiseCollection.rdlc" />
+    <Content Remove="wwwroot\Reports\rptOnlinePaymentByFromDateToDate.rdlc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Areas\HouseRent\Controllers\HouseDetailsController.cs" />
+    <Compile Include="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.Designer.cs">
+      <DependentUpon>dsOnlinePaymentByFromDateToDate.xsd</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AspNetCore.Reporting" Version="2.1.0" />
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="Castle.Core" Version="4.4.1" />
+    <PackageReference Include="Dapper" Version="2.0.90" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="3.1.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.10" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.10">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.5" />
+    <PackageReference Include="QRCoder" Version="1.4.1" />
+    <PackageReference Include="System.CodeDom" Version="5.0.0" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Areas\Account\Data\" />
+    <Folder Include="Areas\Account\Models\" />
+    <Folder Include="Areas\ActivityType\Data\" />
+    <Folder Include="Areas\ActivityType\Models\" />
+    <Folder Include="Areas\AssetAccountHead\Data\" />
+    <Folder Include="Areas\AssetAccountHead\Models\" />
+    <Folder Include="Areas\AssetDetails\Data\" />
+    <Folder Include="Areas\AssetDetails\Models\" />
+    <Folder Include="Areas\OpeningBalance\Data\" />
+    <Folder Include="Areas\OpeningBalance\Models\" />
+    <Folder Include="Areas\Revenuetransfer\Data\" />
+    <Folder Include="Areas\Revenuetransfer\Models\" />
+    <Folder Include="Areas\Mannualreceipt\Data\" />
+    <Folder Include="Areas\Mannualreceipt\Models\" />
+    <Folder Include="Areas\Report\Data\" />
+    <Folder Include="Areas\Report\Models\" />
+    <Folder Include="Areas\AssetRegister\Data\" />
+    <Folder Include="Areas\AssetRegister\Models\" />
+    <Folder Include="Areas\AssetStatus\Data\" />
+    <Folder Include="Areas\AssetStatus\Models\" />
+    <Folder Include="Areas\Attribute\Data\" />
+    <Folder Include="Areas\Attribute\Models\" />
+    <Folder Include="Areas\Bank\Data\" />
+    <Folder Include="Areas\Bank\Models\" />
+    <Folder Include="Areas\BuildingMaster\Data\" />
+    <Folder Include="Areas\BuildingMaster\Models\" />
+    <Folder Include="Areas\BuildingType\Data\" />
+    <Folder Include="Areas\BuildingType\Models\" />
+    <Folder Include="Areas\BuildingUnitClass\Data\" />
+    <Folder Include="Areas\BuildingUnitClass\Models\" />
+    <Folder Include="Areas\BuildingUnitMaster\Controllers\" />
+    <Folder Include="Areas\BuildingUnitMaster\Data\" />
+    <Folder Include="Areas\BuildingUnitMaster\Models\" />
+    <Folder Include="Areas\BuildingUnitMaster\Views\" />
+    <Folder Include="Areas\BuildingUnit\Data\" />
+    <Folder Include="Areas\BuildingUnit\Models\" />
+    <Folder Include="Areas\Complain\Data\" />
+    <Folder Include="Areas\Complain\Models\" />
+    <Folder Include="Areas\ConditionRating\Data\" />
+    <Folder Include="Areas\ConditionRating\Models\" />
+    <Folder Include="Areas\DepreciationType\Controllers\" />
+    <Folder Include="Areas\DepreciationType\Data\" />
+    <Folder Include="Areas\DepreciationType\Models\" />
+    <Folder Include="Areas\DepreciationType\Views\" />
+    <Folder Include="Areas\DisposalType\Data\" />
+    <Folder Include="Areas\DisposalType\Models\" />
+    <Folder Include="Areas\EnvironmentClearance\Data\" />
+    <Folder Include="Areas\EnvironmentClearance\Models\" />
+    <Folder Include="Areas\HouseRent\Data\" />
+    <Folder Include="Areas\HouseRent\Models\" />
+    <Folder Include="Areas\InspectionType\Data\" />
+    <Folder Include="Areas\InspectionType\Models\" />
+    <Folder Include="Areas\LandType\Data\" />
+    <Folder Include="Areas\LandType\Models\" />
+    <Folder Include="Areas\Lease\Data\" />
+    <Folder Include="Areas\Lease\Models\" />
+    <Folder Include="Areas\LetterHeadUpload\Data\" />
+    <Folder Include="Areas\LetterHeadUpload\Models\" />
+    <Folder Include="Areas\Location\Data\" />
+    <Folder Include="Areas\Location\Models\" />
+    <Folder Include="Areas\MaintenanceType\Data\" />
+    <Folder Include="Areas\MaintenanceType\Models\" />
+    <Folder Include="Areas\Maintenance\Data\" />
+    <Folder Include="Areas\Maintenance\Models\" />
+    <Folder Include="Areas\MiscellaneousRecord\Data\" />
+    <Folder Include="Areas\MiscellaneousRecord\Models\" />
+    <Folder Include="Areas\Occupation\Data\" />
+    <Folder Include="Areas\Occupation\Models\" />
+    <Folder Include="Areas\Organization\Data\" />
+    <Folder Include="Areas\Organization\Models\" />
+    <Folder Include="Areas\ParkingFee\Data\" />
+    <Folder Include="Areas\ParkingFee\Models\" />
+    <Folder Include="Areas\Payment\Data\" />
+    <Folder Include="Areas\Payment\Models\" />
+    <Folder Include="Areas\Precinct\Data\" />
+    <Folder Include="Areas\Precinct\Models\" />
+    <Folder Include="Areas\PropertyTax\Data\" />
+    <Folder Include="Areas\PropertyTax\Models\" />
+    <Folder Include="Areas\Property\Data\" />
+    <Folder Include="Areas\Property\Models\" />
+    <Folder Include="Areas\Public\Controllers\" />
+    <Folder Include="Areas\Public\Data\" />
+    <Folder Include="Areas\Public\Models\" />
+    <Folder Include="Areas\Public\Views\" />
+    <Folder Include="Areas\Rate\Data\" />
+    <Folder Include="Areas\Rate\Models\" />
+    <Folder Include="Areas\Reports\Data\" />
+    <Folder Include="Areas\Reports\Models\" />
+    <Folder Include="Areas\RevenueHead\Data\" />
+    <Folder Include="Areas\RevenueHead\Models\" />
+    <Folder Include="Areas\Stall\Data\" />
+    <Folder Include="Areas\Stall\Models\" />
+    <Folder Include="Areas\Suppliers\Data\" />
+    <Folder Include="Areas\Suppliers\Models\" />
+    <Folder Include="Areas\TaxMaster\Data\" />
+    <Folder Include="Areas\TaxMaster\Models\" />
+    <Folder Include="Areas\TaxPayer\Data\" />
+    <Folder Include="Areas\TaxPayer\Models\" />
+    <Folder Include="Areas\VendorMaster\Data\" />
+    <Folder Include="Areas\VendorMaster\Models\" />
+    <Folder Include="Areas\WaterMaster\Data\" />
+    <Folder Include="Areas\WaterMaster\Models\" />
+    <Folder Include="Areas\Water\Data\" />
+    <Folder Include="Areas\Water\Models\" />
+    <Folder Include="Areas\Year\Data\" />
+    <Folder Include="Areas\Year\Models\" />
+    <Folder Include="wwwroot\LetterHead\" />
+    <Folder Include="wwwroot\Logo\" />
+    <Folder Include="wwwroot\Uploads\DCDSign\" />
+    <Folder Include="wwwroot\Uploads\ESSign\" />
+    <Folder Include="wwwroot\Uploads\LetterHead\" />
+    <Folder Include="wwwroot\Uploads\Logo\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Areas\HouseRent\Views\HouseDetails\Create.cshtml" />
+    <None Include="Areas\HouseRent\Views\HouseDetails\Delete.cshtml" />
+    <None Include="Areas\HouseRent\Views\HouseDetails\Details.cshtml" />
+    <Content Include="Areas\HouseRent\Views\HouseDetails\Edit.cshtml" />
+    <Content Include="Areas\HouseRent\Views\HouseDetails\HouseRentMonthlyDemand.cshtml" />
+    <Content Include="Areas\HouseRent\Views\HouseDetails\Index.cshtml" />
+    <Content Include="Areas\HouseRent\Views\HouseDetails\Terminate.cshtml" />
+    <Content Include="Areas\HouseRent\Views\HouseDetails\HouseRentRenewal.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Create.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Delete.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Details.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Edit.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Index.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\ParkingFeeMonthlyDemand.cshtml" />
+    <None Include="Areas\ParkingFee\Views\ParkingfeeDetails\Terminate.cshtml" />
+    <None Include="wwwroot\plugins\sweetalert\sweetalert.init.js" />
+    <None Include="wwwroot\plugins\sweetalert\sweetalert.min.js" />
+    <None Include="wwwroot\ReportDatasets\DataSet1.xsc" />
+    <None Include="wwwroot\ReportDatasets\DataSet1.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\ReportDatasets\DataSet1.xss" />
+    <None Include="wwwroot\ReportDatasets\DataSet2.xsc" />
+    <None Include="wwwroot\ReportDatasets\DataSet2.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>DataSet2.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\ReportDatasets\DataSet2.xss" />
+    <None Include="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xsc" />
+    <None Include="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDailyPaymentModeWiseDemand.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="wwwroot\ReportDatasets\dsDailyPaymentModeWiseDemand.xss" />
+    <None Include="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xsc" />
+    <None Include="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsIndividualReceiptWiseCollection.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="wwwroot\ReportDatasets\dsIndividualReceiptWiseCollection.xss" />
+    <None Include="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xsc" />
+    <None Include="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xsd">
+      <SubType>Designer</SubType>
+      <LastGenOutput>dsOnlinePaymentByFromDateToDate.Designer.cs</LastGenOutput>
+      <Generator>MSDataSetGenerator</Generator>
+    </None>
+    <None Include="wwwroot\ReportDatasets\dsOnlinePaymentByFromDateToDate.xss" />
+    <None Include="wwwroot\Reports\Report1.rdlc" />
+    <None Include="wwwroot\Reports\Report2.rdlc" />
+    <None Include="wwwroot\Reports\rptDailyRecepitWiseCollection.rdlc" />
+    <None Include="wwwroot\Reports\rptIndividualReceiptWiseCollection.rdlc" />
+    <None Include="wwwroot\Reports\rptOnlinePaymentByFromDateToDate.rdlc" />
+    <None Include="wwwroot\thromde_BFS_key\BE10000062.key" />
+    <None Include="wwwroot\thromde_BFS_key\thromdepk.key" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CORE_BLL\CORE_BLL.csproj" />
+    <ProjectReference Include="..\CORE_BOL\CORE_BOL.csproj" />
+    <ProjectReference Include="..\CORE_DLL\CORE_DLL.csproj" />
+    <ProjectReference Include="..\EmailService\EmailService.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="wwwroot\ReportDatasets\DataSet1.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\ReportDatasets\dsDefaulterPropertyList.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsDefaulterPropertyList.Designer.cs</LastGenOutput>
+    </Content>
+    <Content Update="wwwroot\ReportDatasets\dsReconcilReport.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>dsReconcilReport.xsd</DependentUpon>
+    </Content>
+    <Content Update="wwwroot\ReportDatasets\dsReconcilReport.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsReconcilReport.Designer.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+
+</Project>

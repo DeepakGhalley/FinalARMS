@@ -1,0 +1,24 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[enumOccupancyType]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Table rebuild
+       [dbo].[enumOccupancyType] (Table)
+     Alter
+       [dbo].[trnConstructionApprovalApplicationFeeDetail] (Table)
+     Create
+       [dbo].[trnOccupancyCertificateApplication] (Table)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_1] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_3] (Foreign Key)
+       [dbo].[FK_trnOccupancyCertificateApplication_ToTable_4] (Foreign Key)
+
+** Supporting actions

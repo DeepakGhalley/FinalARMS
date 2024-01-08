@@ -1,0 +1,19 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       None
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Alter
+       [dbo].[trnSewerageConnection] (Table)
+       [dbo].[rptDailyPaymentWiseDemandCollection] (Procedure)
+       [dbo].[rptIndividualReceiptWiseCollection] (Procedure)
+     Create
+       [dbo].[FK_trnSewerageConnection_ToTable_2] (Foreign Key)
+
+** Supporting actions

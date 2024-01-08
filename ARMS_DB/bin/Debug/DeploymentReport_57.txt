@@ -1,0 +1,47 @@
+﻿** Highlights
+     Tables that will be rebuilt
+       [dbo].[mstSlab]
+       [dbo].[mstTaxMaster]
+     Clustered indexes that will be dropped
+       None
+     Clustered indexes that will be created
+       None
+     Possible data issues
+       None
+
+** User actions
+     Drop
+       [dbo].[FK_tblLedger_ToTable_0] (Foreign Key)
+     Table rebuild
+       [dbo].[mstSlab] (Table)
+       [dbo].[mstTaxMaster] (Table)
+
+** Supporting actions
+     Drop
+       [dbo].[FK_mstSlab_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnTaxDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstTransactionTypeTaxMap_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxMaster_ToTable] (Foreign Key)
+     Create
+       [dbo].[FK_mstSlab_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_2] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable_4] (Foreign Key)
+       [dbo].[FK_mstSlab_ToTable] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_2] (Foreign Key)
+       [dbo].[FK_trnTaxDetail_ToTable] (Foreign Key)
+       [dbo].[FK_mstTransactionTypeTaxMap_ToTable_1] (Foreign Key)
+       [dbo].[FK_tblDemand_ToTable_3] (Foreign Key)
+       [dbo].[FK_mstRate_ToTable] (Foreign Key)
+       [dbo].[FK_tblMiscellaneousRecord_ToTable_1] (Foreign Key)
+       [dbo].[FK_mstTaxMaster_ToTable] (Foreign Key)

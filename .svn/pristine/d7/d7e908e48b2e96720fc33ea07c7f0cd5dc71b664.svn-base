@@ -1,0 +1,21 @@
+﻿CREATE TABLE [dbo].[tblAssetMaintenance]
+(
+	[assetMaintenanceId] INT NOT NULL PRIMARY KEY IDENTITY, 
+    [assetId] INT NOT NULL, 
+    [maintenanceTypeId] INT NOT NULL, 
+     [maintainedById] INT NULL, 
+    [maintenanceDate] DATE NOT NULL, 
+    [maintenanceCost] DECIMAL(18, 2) NOT NULL,    
+    [reason] VARCHAR(350) NULL, 
+    [sparePartUsed] VARCHAR(350) NULL,    
+    [serviceOrderNo] VARCHAR(250) NULL, 
+    [serviceOrderDate] DATE NULL, 
+    [dateofNextMaintenance] DATE NULL,
+    [createdOn] [datetime] NOT NULL,
+	[createdBy] [int] NOT NULL,
+	[modifiedOn] [datetime] NULL,
+	[modifiedBy] [int] NULL, 
+     [remarks] VARCHAR(350) NULL, 
+    CONSTRAINT [FK_tblAssetMaintenance_ToTable] FOREIGN KEY ([assetId]) REFERENCES [mstAsset]([assetId]), 
+    CONSTRAINT [FK_tblAssetMaintenance_ToTable_1] FOREIGN KEY ([maintenanceTypeId]) REFERENCES [mstMaintenanceType]([maintenanceTypeId]), 
+)

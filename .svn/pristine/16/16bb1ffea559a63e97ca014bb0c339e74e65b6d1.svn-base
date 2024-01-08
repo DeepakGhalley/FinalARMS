@@ -1,0 +1,214 @@
+﻿@using CORE_BOL
+@model BuildingDetailModel
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!-- Content Header (Page header) -->
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Building Details</a></li>
+                    <li class="breadcrumb-item active">Create New Building Details</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Search-->
+<div class="card card-info">
+    <div class="card-header">
+        <h3 class="card-title">Search Land Details</h3>
+    </div>
+    <div class="card-body">
+        <p>
+            <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+        </p>
+        <div class="row d-flex justify-content-center">
+            <div class="input-group  col-8 float-right">
+                <label class="col-sm-2 col-form-label">Plot No</label>
+                <input id="plotno" class="input-group form-control col-6" /> &nbsp;&nbsp;
+                <input type="button" value="Search" class="btn btn-primary col-2 " onclick="return displayLandDetails();" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Land Details-->
+<div class="card card-info" id="tblLanddetail" style="display:none;">
+    <div class="card-header">
+        <h3 class="card-title">Land Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+                <tr class="text-center">
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>Plot Address</th>
+                    <th>Location</th>
+                    <th>Land Acerage</th>
+                    <th>Is Approved</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="mybody">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!--Building Detail Entry-->
+<form class="form-horizontal" asp-action="Create" method="post" id="IDCreateBuildingDetails" style="display:none;">
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-ban"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+        <div class="card-header">
+            <h3 class="card-title">Create Building Details</h3>
+        </div>
+        <div class="card-body">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+            <div class="form-group row">
+                    <div class="col-sm-3" style="display:none;">
+                        <input asp-for="LandDetailId" id="landdetailId" class="form-control"/>
+                        <span asp-validation-for="LandDetailId" class="text-danger"></span>
+                    </div>
+                <label class="col-sm-3 col-form-label">Building No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="BuildingNo" class="form-control" placeholder="Building Number" />
+                    <span asp-validation-for="BuildingNo" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Construction Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="ConstructionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="ConstructionTypeId" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">BuildUp Area <span style="font-weight: bold; color: red;">*</span> </label>
+                <div class="col-sm-3">
+                    <input type="number" min="0" asp-for="BuildupArea" class="form-control" placeholder="Buildup Area" />
+                    <span asp-validation-for="BuildupArea" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-3 col-form-label">No of units<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NoOfUnits" min="0" class="form-control" placeholder="Number of units" />
+                    <span asp-validation-for="NoOfUnits" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Year Of Construction<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="YearOfConstruction" min="0" class="form-control" placeholder="Year of construction" />
+                    <span asp-validation-for="YearOfConstruction" class="text-danger"></span>
+                </div>
+
+                <label class="col-sm-3 col-form-label">No of Floors<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input asp-for="NumberOfFloors" min="0" class="form-control" placeholder="Number of Floors" />
+                    <span asp-validation-for="NumberOfFloors" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Storey Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select asp-for="StoryTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StoreyTypeId,"Value","Text")) " value="0"></select>
+                    <span asp-validation-for="StoryTypeId" class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-4 col-form-label"></label>
+                <div class="col-sm-10">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    //Search Land Details
+            function displayLandDetails() {
+        $('#IDCreateBuildingDetails').hide(1000);
+            var plotno = $('#plotno').val();
+        if ($('#plotno').val() == "") {
+            swal('WARNING', 'Input Field Cannot be Blank!', 'warning');
+            $('#plotno').focus();
+            $('#IDCreateBuildingDetails').hide(1000);
+            $('#tblLanddetail').hide(1000);
+
+            return false;
+        }
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("SearchLAndDetailsByPlotNo", "BuildingDetails")',
+                    data: {
+                        plotno: plotno
+                    },
+                    success: function (data) {
+                        $('#mybody').empty();
+                        if (data.length > 0) {
+                            $.each(data, function (key, value) {
+                                $('#tblLanddetail').show(1000);
+                                $('#mybody').append(
+                                    '<tr class="text-center">'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.location + '</td>'
+                                    + '<td>' + value.plotAddress + '</td>'
+                                    + '<td>' + value.landAcerage + '</td>'
+                                    + '<td>' + value.isApproved + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return CreateBuildingDetails(' + value.landDetailId + ')" title = "RENEW EC" > <i class="fas fa-plus-circle"></i>  </a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+                        } else {
+                            $('#tblLanddetail').hide(1000);
+                            $('#IDCreateBuildingDetails').hide(1000);
+
+                            swal('ERROR','Please Enter Valid Plot Number!','error');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+    }
+
+    function CreateBuildingDetails(landDetailId) {
+        $('#IDCreateBuildingDetails').toggle(1000);
+        $('#landdetailId').val(landDetailId);
+    }
+</script>
+
+
+
+

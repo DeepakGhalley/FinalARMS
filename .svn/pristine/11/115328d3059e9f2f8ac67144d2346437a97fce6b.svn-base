@@ -1,0 +1,230 @@
+﻿@using CORE_BOL
+@model WaterMeterReadingModel
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0 text-dark"></h1>
+            </div>
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a asp-action="Index">Water Meter Reading</a></li>
+                    <li class="breadcrumb-item active">Water Transaction</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form class="form-horizontal" method="get">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Search Details</h3>
+        </div>
+        <div class="card-body">
+            <p>
+                <a asp-action="Index" class="btn btn-outline-danger btn-lg" title="Go Back"><i class="fas fa-backward"></i> Go Back</a>
+            </p>
+            <div class="row d-flex justify-content-center">
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-4 col-form-label">Zone</label>
+                    <select id="id_zoneid" class="form-control col-sm-8 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.ZoneId,"Value","Text")) " value="0"></select>
+                </div>
+                <div class="input-group d-flex justify-content-center col-3">
+                    <label class="col-sm-4 col-form-label">Year</label>
+                    <select id="id_yearid" class="form-control col-sm-8 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.YearId,"Value","Text")) " value="0"></select>
+                </div>
+                <div class="input-group d-flex justify-content-center col-4">
+                    <label class="col-6 col-form-label">Previous Month</label>
+                    <select id="id_Pmonthid" class="form-control col-sm-6 select2bs4"
+                            asp-items="@(new SelectList (@ViewBag.MonthId,"Value","Text")) " value="0"></select>
+                </div>
+                <div class="input-group-append col-2">
+                    <input type="button" value="search" class="btn btn-primary" onclick="return createWaterMeterReading();" />
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<!--Water Meter Reading-->
+<div id="WMR_table" style="display:none;">
+    <div class="card card-info">
+        <div class="card-header">
+            <h3 class="card-title">Water Meter Reading</h3>
+        </div>
+        <div class="form-group row card-body">
+            <table id="tbl_id_WaterMeterReading" class="table table-bordered table-striped">
+                <thead>
+
+                    <tr>
+                        <th>#</th>
+                        @*<th>Name & Address</th>*@
+                        <th>Acc No</th>
+                        <th>Meter No</th>
+                        <th>Prev. Reading</th>
+                        <th>Prev. Reading Date</th>
+                        <th>Current Meter Reading</th>
+                        <th>Consumption</th>
+                        <th>Current Meter Reading Date</th>
+                        <th>Meter Read By</th>
+                    </tr>
+                </thead>
+                <tbody id="mybody">
+                </tbody>
+            </table>
+            <div class="input-group-append col-2 pt-2">
+                <input type="button" value="Submit" class="btn btn-primary" id="id_SaveWMR"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+    //Display Tax Prayer Profile By CID
+    function createWaterMeterReading() {
+                $('#WMR_table').hide(1000);
+                $('#id_zoneid').insertAfter(function () {
+                    var zoneId = $('#id_zoneid').val();
+                    var yearId = $('#id_yearid').val();
+                    var PmonthId = $('#id_Pmonthid').val();
+
+                    if (zoneId == zoneId && yearId == yearId && PmonthId == PmonthId ) {
+                        $.ajax({
+                            type: "GET",
+                            url: '@Url.Action("getWaterMeterReadingDetails", "WaterMeterReadings")',
+                            data: {
+                                zone: zoneId,
+                                year: yearId,
+                                month: PmonthId
+                            },
+                            success: function (data) {
+                                console.log(data);
+                                $('#mybody').empty();
+
+                                if (data.length > 0) {
+                                    $.each(data, function (key, value) {
+                                        $('#WMR_table').show(1000);
+
+                                        //Displaying Date
+                                        const d = new Date(value.previousReadingDate);
+                                        const previousReadingDate = d.getFullYear() + '-' + ("0" + (d.getMonth() + 1)).slice(-2) + '-' + ("0" + d.getDate()).slice(-2)
+
+                                        $('#mybody').append(
+                                            '<tr>'
+                                            + '<td hidden> <input id="hdnWCid" class="form-control" value=' + value.waterConnectionId + ' /> </td>'
+                                            + '<td hidden> <input id="hdnWCSid" class="form-control" value=' + value.waterConnectionStatusId + ' /> </td>'
+                                            + '<td hidden> <input id="hdnWCTid" class="form-control" value=' + value.waterConnectionTypeId + ' /> </td>'
+                                            + '<td hidden> <input id="hdnWLTid" class="form-control" value=' + value.waterLineTypeId + ' /> </td>'
+                                            + '<td hidden> <input id="hdnWMTid" class="form-control" value=' + value.waterMeterTypeId + ' /> </td>'
+                                            + '<td hidden> <input id="hdnBillingAddress"  class="form-control" value=' + value.billingAddress + ' /> </td>'
+                                            + '<td hidden> <input id="hdnNoOfUnits"  class="form-control" value=' + value.noOfUnit + ' /> </td>'
+                                            + '<td hidden> <input id="hdnPMNo"  class="form-control" value=' + value.primaryMobileNo + ' /> </td>'
+                                            + '<td hidden> <input id="id_MeterReadBy" class="form-control" value=' + value.zoneId + ' readonly /> </td>'
+                                            + '<td hidden> <input id="hdnTransactionId" class="form-control" value=' + value.transactionId + ' readonly /> </td>'
+                                            + '<td hidden> <input id="hdnSConsumption" class="form-control" value=' + value.standardConsumption + ' readonly /> </td>'
+
+                                            + '<td>' + (key + 1) + '</td>'
+                                            //+ '<td>' + null + '</td>'
+                                            + '<td>' + value.consumerNo + '</td>'
+                                            + '<td>' + value.waterMeterNo + '</td>'
+                                            + '<td hidden> <input id="hdnPreviousReading"  class="form-control" value=' + value.previousReading + ' /> </td>'
+                                            + '<td>' + value.previousReading + '</td>'
+                                            + '<td>' + previousReadingDate + '</td>'
+                                            + '<td> <input id="id_CMReading" type="number" class="form-control" /> </td>'
+                                            + '<td> <input id="id_Consumption" onChange="display(this)" type="number" class="form-control" value=' + value.consumption + ' readonly /> </td>'
+                                            + '<td> <input id="id_CMRDate" type="date" class="form-control" /></td>'
+                                            + '<td> <input style="width: 100%;"  class="form-control" value=' + value.zoneReader + ' readonly /> </td>');
+                                    });
+                                    
+
+                                }
+                                else {
+                                    $('#WMR_table').hide(1000);
+
+                                    swal({
+                                        title: 'Please Enter valid Data',
+                                        type: 'error',
+                                        confirmButtonText: 'OK'
+                                    });
+                                }
+                            },
+                            error: function () {
+                                alert('error');
+                            }
+
+                        });
+                    } else {
+
+                        swal({
+                            title: 'Fields cannot be empty!',
+                            type: 'error',
+                            confirmButtonText: 'OK'
+                        });
+                    }
+
+                });
+            }
+
+    //Saving WMR data
+    $("#id_SaveWMR").click(function () {
+
+        var myarray = [];
+        //for (i = 0; i < $("#tbl_id_WaterMeterReading TBODY TR").length - 1; i++) {
+            var WaterMeterReadingModel = {};
+
+        WaterMeterReadingModel.Reading = parseInt($("#id_CMReading").val());
+        WaterMeterReadingModel.Consumption = parseInt($("#id_Consumption").val());
+        WaterMeterReadingModel.ReadingDate = $("#id_CMRDate").val();
+        WaterMeterReadingModel.ReadBy = parseInt($("#id_MeterReadBy").val());
+
+        WaterMeterReadingModel.WaterConnectionId = parseInt($('#hdnWCid').val());
+        WaterMeterReadingModel.WaterConnectionStatusId = parseInt($('#hdnWCSid').val());
+        WaterMeterReadingModel.WaterConnectionTypeId = parseInt($('#hdnWCTid').val());
+        WaterMeterReadingModel.WaterLineTypeId = parseInt($('#hdnWLTid').val());
+        WaterMeterReadingModel.WaterMeterTypeId = parseInt($('#hdnWMTid').val());
+        WaterMeterReadingModel.NoOfUnit = parseInt($('#hdnNoOfUnits').val());
+        WaterMeterReadingModel.BillingAddress = $('#hdnBillingAddress').val();
+        WaterMeterReadingModel.PrimaryMobileNo = $('#hdnPMNo').val();
+        WaterMeterReadingModel.PreviousReading = parseInt($('#hdnPreviousReading').val());
+        WaterMeterReadingModel.TransactionId = parseInt($('#hdnTransactionId').val());
+        WaterMeterReadingModel.StandardConsumption = parseInt($('#hdnSConsumption').val());
+
+            myarray.push(WaterMeterReadingModel);
+        //}
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        
+         $('#img').show();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateWMR", "WaterMeterReadings")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                $('#img').hide();
+                swal(response);
+                               
+            },
+            failure: function () {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function () {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    });
+
+</script>
+

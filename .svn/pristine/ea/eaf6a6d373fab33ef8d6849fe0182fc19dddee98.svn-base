@@ -1,0 +1,2171 @@
+﻿@model List<CORE_BOL.BuildingDetailModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="Index">Revenue Master</a></li>
+                        <li class="breadcrumb-item active">Building Details</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Building Details</h3>
+        </div>
+        @* SEARCH LAND OWNERSHIP *@
+
+    <div class="card-body">
+        <div class="row">
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">Plot No: <span style="font-weight: bold; color: red;"></span></label>
+                <input id="PlotNoSearch" class="form-control col-6" style="text-transform:uppercase" />
+            </div>
+            <div class="input-group d-flex justify-content-center col-5">
+                <label class="col-sm-4 col-form-label">CID/TTIN: <span style="font-weight: bold; color: red;"></span></label>
+                <input id="CIDSearch" class="form-control col-6" />
+                <div class="input-group-append col-3">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return displayLandOwnershipDetails();" />
+                </div>
+            </div>      
+           <input type="hidden" id="TaxPayerId" />
+        </div>
+    </div>
+    </div>
+</form>
+
+@* DISPLAY LAND OWNERSHIP DETAILS *@
+
+<div class="card card-info" style="display:none;" id="landownershipdetails">
+    <div class="card-header">
+        <h3 class="card-title">Land Ownership Details</h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Plot No</th>
+                    <th>TTIN</th>
+                    <th>Tax Payer Name</th>
+                    <th>Thram No</th>
+                    <th>PLR</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_landownership">
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="buildingdetailtbl">
+    <div class="card-header">
+        <h3 class="card-title">Building Details</h3>
+    </div>
+    <div class="card-body">
+        <table id="example1" class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Building No.</th>
+                    <th>Build up Area</th>
+                    <th>No of Floors</th>
+                    <th>Year of construction</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_body">
+            </tbody>
+        </table>
+    </div>
+    <div class="input-group-append col-2">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Add Building Details" id="Add" class="btn btn-primary" onclick=" return AddBuildingDetails();" />
+    </div>
+    <br />
+</div>
+
+<div class="card card-info" style="display:none;" id="CreateBuilding">
+    <div class="card-header">
+        <input type="hidden" id="hdnLandDetailId" />
+        <h3 class="card-title">Create Building Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row bg-secondary">
+            &nbsp;<b>Plot No:</b>&nbsp;<p id="DisplayPlot" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>TTIN:</b>&nbsp; <p id="DisplayTTIN" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>CID:</b>&nbsp; <p id="DisplayCID" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Name:</b>&nbsp; <p id="DisplayName" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Thram No:</b>&nbsp; <p id="DisplayThram" readonly></p>
+        </div>
+        <div class="form-group row">
+            @*<div class="col-sm-3" style="display:none;">
+                <input id="landdetailId" class="form-control" />
+            </div>*@
+            <label class="col-sm-3 col-form-label">Building No</label>
+            <div class="col-sm-3">
+                <input id="BuildingNo" class="form-control" placeholder="Building Number" />
+            </div>
+            <label class="col-sm-3 col-form-label">Construction Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="ConstructionType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionTypeId,"Value","Text")) " value="0">
+                </select>
+                <span id="errorConstructionTypeId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">BuildUp Area <span style="font-weight: bold; color: red;">*</span> </label>
+            <div class="col-sm-3">
+                <input type="number" min="0" id="BuildUpArea" class="form-control" placeholder="Buildup Area" />
+                <span id="ErBuildUpArea" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Year Of Construction</label>
+            <div class="col-sm-3">
+                <input id="YearOfConstruction" min="0" class="form-control" placeholder="Year of construction" />
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Storey Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="StoryType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StoreyTypeId,"Value","Text")) " value="0" onchange="FunctionNoOfFloors();"></select>
+                <span id="errorStoryTypeId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">No of Floors<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="NoOfFloors" min="0" class="form-control" placeholder="Number of Floors" readonly />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Structure Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="StructureType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureTypeId,"Value","Text")) " value="0"></select>
+                <span id="errorStructureTypeId" class="text-danger"></span>
+            </div>
+            @*<label class="col-sm-3 col-form-label">Construction Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="ConstructionType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionTypeId,"Value","Text")) " value="0"></select>
+                <span id="errorConstructionTypeId" class="text-danger"></span>
+            </div>*@
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Garbage Service Accessibility<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="GarbageServiceAccessibility" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="errorGarbageServiceAccessibilityId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Street Light Accessibility<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="StreetLightAccessibility" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="errorStreetLightAccessibilityId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Structure Category<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="StructureCategory" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureCategoryId,"Value","Text")) " value="0"></select>
+                <span id="errorStructureCategoryId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Boundry Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="BoundryType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BoundaryTypeId,"Value","Text")) " value="0"></select>
+                <span id="errorBoundryTypeId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Roofing Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="RoofingType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.RoofingTypeId,"Value","Text")) " value="0"></select>
+                <span id="errorRoofingTypeId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Building Color<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="BuildingColor" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingColourId,"Value","Text")) " value="0"></select>
+                <span id="errorBuildingColorId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Material Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="MaterialType" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MaterialTypeId,"Value","Text")) " value="0"></select>
+                <span id="errorMaterialTypeId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Parking Slot<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="ParkingSlot" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ParkingSlotId,"Value","Text")) " value="0"></select>
+                <span id="errorParkingSlotId" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Water Tank Location<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="WaterTankLocation" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterTankLocationId,"Value","Text")) " value="0"></select>
+                <span id="errorWaterTankLocationId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Date of Final Inspection<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="DateOfFinalInspection" min="0" type="date" class="form-control" placeholder="Date of Final Inspection" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Water Supply Accessibility<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="WaterSupplyAccessibility" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="errorWaterSupplyAccessibilityId" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Plinth Area<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="PlinthArea" min="0" class="form-control" placeholder="Plith Area" />
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3 ">
+                <input class="form-check-input" type="checkbox" value="" id="SwereageConnection">
+                <label class="form-check-label" for="SewerageConnection">
+                    <b>Sewerage Connection</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="Attic">
+                <label class="form-check-label" for="Attic">
+                    <b>Attic</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="WaterConnection">
+                <label class="form-check-label" for="WaterConnection">
+                    <b>Water Connection</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="ArchFeature">
+                <label class="form-check-label" for="ArchFeature">
+                    <b>Arch Feature</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="TraditionalPainting">
+                <label class="form-check-label" for="TraditionalPainting">
+                    <b>Traditional Painting</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="Plantation">
+                <label class="form-check-label" for="Plantation">
+                    <b>Plantation</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="NumberDisplayed">
+                <label class="form-check-label" for="NumberDisplayed">
+                    <b>Number Displayed</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="FireExtingusher">
+                <label class="form-check-label" for="FireExtingusher">
+                    <b>Fire Extingusher</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="DrainToStormWaterDrain">
+                <label class="form-check-label" for="DrainToStormWaterDrain">
+                    <b>Drain To Storm Water Drain</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="RoadAccess">
+                <label class="form-check-label" for="RoadAccess">
+                    <b>Road Access</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="OccupancyCertificateIssued">
+                <label class="form-check-label" for="OccupancyCertificateIssued">
+                    <b>Occupancy Certificate Issued</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="Roofing">
+                <label class="form-check-label" for="Roofing">
+                    <b>Roofing</b>
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-3">
+                <button type="submit" class="btn btn-primary" onclick="return SaveBuildingDetail();">Save</button>
+                <button type="reset" id="btnCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+    </div>
+
+<div class="card card-info" style="display:none;" id="BuildingUnitDetails">
+    <div class="card-header">
+        <h3 class="card-title">Building Unit Details For Building No: <label id="DisplayBuildingUnit"></label></h3>
+    </div>
+    <div class="card-body">
+        <table class="table table-bordered table-striped">
+            <thead style="background-color:mediumaquamarine">
+
+                <tr>
+                    <th>#</th>
+                    <th>Unit Class</th>
+                    <th>Unit Use Type</th>
+                    <th>Unit Owner Type</th>
+                    <th>Floor Name</th>
+                    <th>No Of Units</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="tbl_BuildingUnitDetails">
+            </tbody>
+        </table>
+    </div>
+    <div class="input-group-append col-2">
+        &nbsp;&nbsp;&nbsp;&nbsp;
+        <input type="button" value="Add Building Unit" id="AddUnit" class="btn btn-primary" onclick=" return AddBuildingUnit();" />
+    </div>
+    <br />
+</div>
+
+<div class="card card-info" style="display:none;" id="CreateBuildingUnit">
+    <div class="card-header">
+        <input type="hidden" id="hdnBuildingDetailId" />
+        <input type="hidden" id="hdnLandDetailId" />
+        <h3 class="card-title">Create Building Unit Details</h3>
+    </div>
+    <div class="card-body">
+        <div class="form-group row bg-secondary">
+            &nbsp;<b>Building No:</b>&nbsp;<p id="DisplayUnitBN" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>TTIN:</b>&nbsp; <p id="DisplayUnitTTIN" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>CID:</b>&nbsp; <p id="DisplayUnitCID" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Name:</b>&nbsp; <p id="DisplayUnitName" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Thram No:</b>&nbsp; <p id="DisplayUnitThram" readonly></p>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Building Unit Use Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="BUnitUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                <span id="BUUTerror" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="IsRegularized" checked>
+                <label class="form-check-label" for="IsRegularized">
+                    <b>IsRegularized</b>
+                </label>
+                <span style="font-weight: bold; color: red;">*</span>
+            </div>
+
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Building Unit Class<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="BUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                <span id="BUCerror" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Floor Name<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="FNameId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.FloorNameId,"Value","Text")) " value="0"></select>
+                <span id="FNameerror" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Unit Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <select id="UOwnerTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                <span id="UOTerror" class="text-danger"></span>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="IsMainOwner" checked>
+                <label class="form-check-label" for="IsMainOwner">
+                    <b>IsMainOwner</b>
+                </label>
+            </div>
+            <span style="font-weight: bold; color: red;">*</span>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">No of Unit<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="number" id="NoOfUnit" class="form-control" placeholder="Enter No Of Unit" required />
+                <span id="NOUerror" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Floor No<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input type="number" id="FloorNo" class="form-control" placeholder="Enter Floor Number" min="0" required />
+                <span id="FNoerror" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Floor Area<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input type="number" id="FloorArea" class="form-control" placeholder="Enter Floor Area"/>
+                <span id="FAerror" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">No of Rooms<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="NoOfRooms" class="form-control" placeholder="Enter Number of rooms" min="0" required />
+                <span id="NORerror" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Flat No<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-4">
+                <input id="FlatNo" class="form-control" placeholder="Enter Flat No" min="0" required />
+                <span id="FlatNoerror" class="text-danger"></span>
+            </div>
+            <label class="col-sm-2 col-form-label">Remarks</label>
+            <div class="col-sm-3">
+                <input id="Remarks" class="form-control" placeholder="Enter Remarks"/>
+                <span class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary" onclick=" return SaveBuildingUnitDetail();">Save</button>
+                <button id="btnCancel1" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="UpdateBuilding">
+    <div class="card-header">
+        <h3 class="card-title">Update Building Details For Building No: <label id="DisplayBuilding"></label></h3>
+        <input type="hidden" id="UBBuildingDetailId" />
+    </div>
+    <div class="card-body">
+        <div class="form-group row">
+            <div class="col-sm-3" style="display:none;">
+                <input id="UBLandDetailId" class="form-control" />
+            </div>
+            <label class="col-sm-3 col-form-label">Year Construction</label>
+            <div class="col-sm-3">
+                <input id="UBYearConstruction" class="form-control" placeholder="Year of construction" />
+                <span id="UBYearConstructionEr" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Building No</label>
+            <div class="col-sm-3">
+                <input id="UBBuildingNo" class="form-control" placeholder="Building Number" />
+                <span class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Build Up Area<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="UBBuildUpArea" class="form-control" placeholder="Buildup Area" required />
+                <span id="UBBuildUpAreaEr" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Story Type</label>
+            <div class="col-sm-3">
+                <select id="UBStoryTypeId" class="form-control select2bs4" name="ubstorytype" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StoreyTypeId,"Value","Text"))" value="0"></select>
+                <span id="UBStoryTypeIdEr" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">No Of Units<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="UBNoOfUnits" class="form-control" placeholder="Number of units" readonly />
+                <span id="UBNoOfUnitsEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">No Of Floors<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <input id="UBNoOfFloors" class="form-control" placeholder="Number of Floors" required />
+                <span id="UBNoofFloors" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Structure Type</label>
+            <div class="col-sm-3">
+                <select id="UBStructureTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureTypeId,"Value","Text")) " value="0"></select>
+                <span id="StructureTypeIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Construction Type<span style="font-weight: bold; color: red;">*</span></label>
+            <div class="col-sm-3">
+                <select id="UBConstructionTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ConstructionTypeId,"Value","Text")) " value="0"></select>
+                <span id="UBConstructionTypeId" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Garbage Service Accessibility</label>
+            <div class="col-sm-3">
+                <select id="UBGarbagServiceAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="UBGarbagServiceAccessibilityIdEr" class="text-danger"></span>
+            </div>
+            <label class="col-sm-3 col-form-label">Street Light Accessibility</label>
+            <div class="col-sm-3">
+                <select id="UBStreetLightAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="UBStreetLightAccessibilityIdEr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Structure Category</label>
+            <div class="col-sm-3">
+                <select id="UBStructureCategoryId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.StructureCategoryId,"Value","Text")) " value="0"></select>
+                <span id="UBStructureCategoryIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Boundry Type</label>
+            <div class="col-sm-3">
+                <select id="UBBoundaryTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BoundaryTypeId,"Value","Text")) " value="0"></select>
+                <span id="BoundaryTypeIdEr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Roofing Type</label>
+            <div class="col-sm-3">
+                <select id="UBRoofingTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.RoofingTypeId,"Value","Text")) " value="0"></select>
+                <span id="UBRoofingTypeIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Building Color</label>
+            <div class="col-sm-3">
+                <select id="UBBuildingColourId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingColourId,"Value","Text")) " value="0"></select>
+                <span id="BuildingColourIdEr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Material Type</label>
+            <div class="col-sm-3">
+                <select id="UBMaterialTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.MaterialTypeId,"Value","Text")) " value="0"></select>
+                <span id="UBMaterialTypeIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Parking Slot</label>
+            <div class="col-sm-3">
+                <select id="UBParkingSlotId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ParkingSlotId,"Value","Text")) " value="0"></select>
+                <span id="UBParkingSlotIdEr" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Water Tank Location</label>
+            <div class="col-sm-3">
+                <select id="UBWaterTankLocationId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.WaterTankLocationId,"Value","Text")) " value="0"></select>
+                <span id="UBWaterTankLocationIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Date Of Final Inspection</label>
+            <div class="col-sm-3">
+                <input id="UBDateOfFinalInspection" type="date" class="form-control" placeholder="Date of final inspection" required />
+                <span id="UBDateOfFinalInspectionEr" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Remarks</label>
+            <div class="col-sm-3">
+                <input id="UBRemarks" class="form-control" placeholder="Remarks" />
+                <span id="UBRemarks" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label">Water Supply Accessibility</label>
+            <div class="col-sm-3">
+                <select id="UBWaterSupplyAccessibilityId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.ServiceAccessibility,"Value","Text")) " value="0"></select>
+                <span id="UBWaterSupplyAccessibilityIdEr" class="text-danger"></span>
+            </div>
+
+            <label class="col-sm-3 col-form-label">Plinth Area</label>
+            <div class="col-sm-3">
+                <input id="UBPlinthArea" class="form-control" placeholder="Plinth Area" />
+                <span id="UBPlinthAreaEr" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3 ">
+                <input class="form-check-input" type="checkbox" value="" id="UBSwereageConnection">
+                <label class="form-check-label" for="SewerageConnection">
+                    <b>Sewerage Connection</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBAttic">
+                <label class="form-check-label" for="Attic">
+                    <b>Attic</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="UBWaterConnection">
+                <label class="form-check-label" for="WaterConnection">
+                    <b>Water Connection</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBArchFeature">
+                <label class="form-check-label" for="ArchFeature">
+                    <b>Arch Feature</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="UBTraditionalPainting">
+                <label class="form-check-label" for="TraditionalPainting">
+                    <b>Traditional Painting</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBPlantation">
+                <label class="form-check-label" for="Plantation">
+                    <b>Plantation</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="UBNumberDisplayed">
+                <label class="form-check-label" for="NumberDisplayed">
+                    <b>Number Displayed</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBFireExtingusher">
+                <label class="form-check-label" for="FireExtingusher">
+                    <b>Fire Extingusher</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="UBDrainToStormWaterDrain">
+                <label class="form-check-label" for="DrainToStormWaterDrain">
+                    <b>Drain To Storm Water Drain</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBRoadAccess">
+                <label class="form-check-label" for="RoadAccess">
+                    <b>Road Access</b>
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="form-check col-sm-3">
+                <input class="form-check-input" type="checkbox" value="" id="UBOccupancyCertificateIssued">
+                <label class="form-check-label" for="OccupancyCertificateIssued">
+                    <b>Occupancy Certificate Issued</b>
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="" id="UBRoofing">
+                <label class="form-check-label" for="Roofing">
+                    <b>Roofing</b>
+                </label>
+            </div>
+        </div>
+        <div class="form-group row">
+            <label class="col-sm-3 col-form-label"></label>
+            <div class="col-sm-4">
+                <button type="submit" class="btn btn-primary" onclick=" return UpdateBuildingDetail();">Update</button>
+                <button id="UBCancel" class="btn btn-warning">Cancel</button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="card card-info" style="display:none;" id="UpdateBuildingUnit">
+    <div class="card-header">
+        <h3 class="card-title">Update Building Unit Details</h3>
+        <input type="hidden" id="UBUTaxPayerId" />
+        <input type="hidden" id="UBULandDetailId" />
+        <input type="hidden" id="UBUBuildingDetailId" />
+        <input type="hidden" id="UBUBuildingUnitDetailId" />
+    </div>
+    <div class="card-body">
+        <div class="form-group row bg-secondary">
+            &nbsp;<b>Building No:</b>&nbsp;<p id="DisplayUnitUpdateBN" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>TTIN:</b>&nbsp; <p id="DisplayUnitUpdateTTIN" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>CID:</b>&nbsp; <p id="DisplayUnitUpdateCID" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Name:</b>&nbsp; <p id="DisplayUnitUpdateName" readonly></p>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+            <b>Thram No:</b>&nbsp; <p id="DisplayUnitUpdateThram" readonly></p>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Use Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select id="UBUBUseTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitUseTypeId,"Value","Text")) " value="0"></select>
+                    <span id="UBUBUseTypeEr" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="UBUIsRegularized">
+                    <label class="form-check-label" for="IsRegularized">
+                        <b>IsRegularized</b>
+                    </label>
+                    <span style="font-weight: bold; color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Building Unit Class<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select id="UBUUnitClassId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.BuildingUnitClassId,"Value","Text")) " value="0"></select>
+                    <span id="UBUUnitClassEr" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Floor Name<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select id="UBUFNameId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.FloorNameId,"Value","Text")) " value="0"></select>
+                    <span id="UBUFloorNameEr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Unit Owner Type<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <select id="UBUUOwnerTypeId" class="form-control select2bs4" style="width: 100%;" asp-items="@(new SelectList (@ViewBag.OwnerTypeId,"Value","Text")) " value="0"></select>
+                    <span id="UBUUOwnerTypeEr" class="text-danger"></span>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="UBUIsMainOwner">
+                    <label class="form-check-label" for="IsMainOwner">
+                        <b>IsMainOwner</b>
+                    </label>
+                    <span style="font-weight: bold; color: red;">*</span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">No of Unit<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" id="UBUNoOfUnits" class="form-control" placeholder="No Of Unit" required />
+                    <span id="UBUNoOfUnistEr" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Floor No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" id="UBUFloorNo" class="form-control" placeholder="Enter Floor number" required />
+                    <span id="UBUFloorNoEr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Floor Area<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input type="number" id="UBUFloorArea" class="form-control" placeholder="Enter Floor Area" required />
+                    <span id="UBUFloorAreaEr" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">No Of Rooms<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input id="UBUNoOfRooms" class="form-control" placeholder="Enter Number of rooms" required />
+                    <span id="UBUNoOfRoomsEr" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Flat No<span style="font-weight: bold; color: red;">*</span></label>
+                <div class="col-sm-3">
+                    <input id="UBUFlatNo" class="form-control" min="0" required />
+                    <span id="UBUFlatNoEr" class="text-danger"></span>
+                </div>
+                <label class="col-sm-3 col-form-label">Remarks</label>
+                <div class="col-sm-3">
+                    <input id="UBURemarks" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-3 col-form-label"></label>
+                    <div class="col-sm-3">
+                        <button type="submit" class="btn btn-primary" onclick="return UpdateBuildingUnit();">Update</button>
+                        <button id="btnUBUCancel" class="btn btn-warning">Cancel</button>
+                    </div>
+                </div>
+            </div>
+    </div>
+
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script>
+
+//*************************************************************      LAND OWNERSHIP DETAILS      ********************************************************************************************
+
+    function displayLandOwnershipDetails() {
+        if ($('#PlotNoSearch').val() == "" && $('#CIDSearch').val() == "") {
+                swal('Empty Fields!', '', 'error');
+                $('#PlotNoSearch').focus();
+                $('#CIDSearch').focus();
+                return false;
+                }
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetLandOwnershipDetails", "BuildingDetails")',
+                    data: {
+                        plotno: $('#PlotNoSearch').val(),
+                        cid: $('#CIDSearch').val()
+                    },
+                    success: function (data) {
+                        $('#tbl_landownership').empty();
+                        if (data.length > 0) {
+                            $('#buildingdetailtbl').hide(1000);
+                            $('#CreateBuilding').hide(1000);
+                            $('#CreateBuildingUnit').hide(1000);
+                            $('#BuildingUnitDetails').hide(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#Add').show();
+                            $.each(data, function (key, value) {
+                                $('#landownershipdetails').show(1000);
+                                $('#tbl_landownership').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.plotNo + '</td>'
+                                    + '<td>' + value.ttin + '</td>'
+                                    + '<td>' + value.taxPayerName + '</td>'
+                                    + '<td>' + value.thramNo + '</td>'
+                                    + '<td>' + value.plr + '</td>'
+                                    + '<td>'
+                                    + '<input id="hdnTaxPayerId' + key + '" type="hidden" value="' + value.taxPayerId + '" />'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return ViewBuilding(' + value.landDetailId + ',' + value.taxPayerId + ',' + value.landOwnershipId + ' )" title = "ViewBuildingDetails">View Building</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                                $('#DisplayPlot').html(data[0].plotNo);
+                                
+                            });
+
+                        } else {
+                            $('#landownershipdetails').show(1000);
+                            $('#buildingdetailtbl').hide(1000);
+                            $('#CreateBuilding').hide(1000);
+                            $('#CreateBuildingUnit').hide(1000);
+                            $('#BuildingUnitDetails').hide(1000);
+                            $('#Add').hide(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#tbl_landownership').append(
+                                '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+        }
+
+//******************************************************         BUILDING DETAILS       ***********************************************************************************
+
+    function ViewBuilding(landDetailId, taxPayerId, landOwnershipId) {
+     /*   alert(landDetailId+","+ taxPayerId+","+ landOwnershipId);*/
+        $('#hdnLandDetailId').val(landDetailId);
+        $('#hdnlandOwnershipId').val(landOwnershipId);
+        $('#TaxPayerId').val(taxPayerId);
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetBuildingdata", "BuildingDetails")',
+                    data: {
+                        LandDetailId: landDetailId,
+                        TaxPayerId: taxPayerId
+                    },
+                    success: function (data) {
+                        $('#tbl_body').empty();
+                        if (data.length > 0) {
+                            $('#CreateBuildingUnit').hide(1000);
+                            $('#CreateBuilding').hide(1000);
+                            $('#BuildingUnitDetails').hide(1000);
+                            $('#buildingdetailtbl').show(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#UpdateBuildingUnit').hide(1000);
+
+                            $.each(data, function (key, value) {
+                                $('#tbl_body').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.buildingNo + '</td>'
+                                    + '<td>' + value.buildupArea + '</td>'
+                                    + '<td>' + value.numberOfFloors + '</td>'
+                                    + '<td>' + value.yearOfConstruction + '</td>'
+                                    + '<td>'
+                                    + '<a style = "color: #007bff; cursor: pointer;" onclick = "return ViewBuildingUnit(' + value.buildingDetailId + ' )" title = "ViewBuildingUnit">View Unit</a >'
+                                    + '&nbsp; | &nbsp;<a onclick="return edit(' + value.buildingDetailId + ');" title="EDIT"><i class="fas fa-edit"></i></a>&nbsp; | &nbsp;<a onclick="return details(' + value.buildingDetailId + ');" title="View"><i class="fas fa-eye"></i> </a>'
+                                    + '&nbsp; | &nbsp;<a style = "color: red; cursor: pointer;" onclick = "return Remove(' + value.buildingDetailId + ',' + value.ownershipId + ')" title = "Delete" >Delete</a >'
+                                    + '</td>'
+                                    + '</tr>');
+
+
+                            });
+
+                        } else {
+                            $('#buildingdetailtbl').show(1000);                         
+                            $('#Add').show(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#tbl_body').append(
+                                '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+         $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetTaxPayerName", "BuildingDetails")',
+                 data: {
+                         TaxPayerId: taxPayerId,
+                         LandOwnershipId: landOwnershipId
+                        },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $('#buildingdetailtbl').show(1000);
+                            $('#DisplayName').html(data[0].taxPayerName);
+                            $('#DisplayUnitName').html(data[0].taxPayerName);
+                            $('#DisplayTTIN').html(data[0].ttin);
+                            $('#DisplayUnitTTIN').html(data[0].ttin);
+                            $('#DisplayCID').html(data[0].cid);
+                            $('#DisplayUnitCID').html(data[0].cid);
+                            $('#DisplayThram').html(data[0].thramNo);
+                            $('#DisplayUnitThram').html(data[0].thramNo);                          
+                            $('#DisplayUnitUpdateThram').html(data[0].thramNo);
+                        }
+                        else {
+                            $('#buildingdetailtbl').show(1000);
+                            $('#Add').show(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#tbl_body').append(
+                                '<tr><td colspan="7" style="color: red;">No record found!</td></tr>');;
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+
+//*****************************************************        BUILDING DETAILS FOR UPDATE       ********************************************************************************
+
+    function edit(buildingDetailId) {
+        $('#UpdateBuilding').show(1000);
+        $('#CreateBuilding').hide(1000);
+        $('#UpdateBuildingUnit').hide(1000);
+        $('#BuildingUnitDetails').hide(1000);
+        $('#CreateBuildingUnit').hide(1000);
+                $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetBuildingForUpdate", "BuildingDetails")',
+                    data: {
+                        BuildingDetailId: buildingDetailId
+                    },
+                    success: function (data) {
+
+                        if (data.length > 0) {
+                            var LandDetailId = data[0].landDetailId; var YearConstruction = data[0].yearOfConstruction;
+                            var BuildingNo = data[0].buildingNo; var BuildUpArea = data[0].buildupArea;
+                            var StoryTypeId = data[0].storyTypeId; var NoOfUnits = data[0].noOfUnits;
+                            var NoOfFloors = data[0].numberOfFloors; var StructureTypeId = data[0].structureTypeId;
+                            var ConstructionTypeId = data[0].constructionTypeId; var GarbagServiceAccessibilityId = data[0].garbagServiceAccessibilityId;
+                            var StreetLightAccessibilityId = data[0].streetLightAccessibilityId; var StructureCategoryId = data[0].structureCategoryId;
+                            var BoundaryTypeId = data[0].boundaryTypeId; var RoofingTypeId = data[0].roofingTypeId;
+                            var BuildingColourId = data[0].buildingColourId; var MaterialTypeId = data[0].materialTypeId;
+                            var ParkingSlotId = data[0].parkingSlotId; var WaterTankLocationId = data[0].waterTankLocationId;
+                            var DateOfFinalInspection = data[0].dateOfFinalInspection;
+                            const c = new Date(DateOfFinalInspection);
+                            const DOFP = c.getFullYear() + '-' + ("0" + (c.getMonth() + 1)).slice(-2) + '-' + ("0" + c.getDate()).slice(-2)
+                            var Remarks = data[0].remarks; var WaterSupplyAccessibilityId = data[0].waterSupplyAccessibilityId;
+                            var PlinthArea = data[0].plinthArea; var BuildingDetailId = data[0].buildingDetailId
+
+                            $('#DisplayBuilding').html(BuildingNo);
+
+//*****************************************************     SELECTED DROPDOWN VALUE DISPLAY IN JQUERY    ***********************************************************************************
+                            if (StoryTypeId > 0) {
+                                $('select#UBStoryTypeId').val(StoryTypeId).change();
+                            }
+                            else {
+                                $('select#UBStoryTypeId').val(StoryTypeId).change(0);
+                            }
+                            if (StructureTypeId > 0) {
+                                $('select#UBStructureTypeId').val(StructureTypeId).change();
+                            }
+                            else {
+                                $('select#UBStructureTypeId').val(StructureTypeId).change(0);
+                            }
+                            if (ConstructionTypeId > 0) {
+                                $('select#UBConstructionTypeId').val(ConstructionTypeId).change();
+                            }
+                            else {
+                                $('select#UBConstructionTypeId').val(ConstructionTypeId).change(0);
+                            }
+                            if (GarbagServiceAccessibilityId > 0) {
+                                $('select#UBGarbagServiceAccessibilityId').val(GarbagServiceAccessibilityId).change();
+                            }
+                            else {
+                                $('select#UBGarbagServiceAccessibilityId').val(GarbagServiceAccessibilityId).change(0);
+                            }
+                            if (StreetLightAccessibilityId > 0) {
+                                $('select#UBStreetLightAccessibilityId').val(StreetLightAccessibilityId).change();
+                            }
+                            else {
+                                $('select#UBStreetLightAccessibilityId').val(StreetLightAccessibilityId).change(0);
+                            }
+                            if (StructureCategoryId > 0) {
+                                $('select#UBStructureCategoryId').val(StructureCategoryId).change();
+                            }
+                            else {
+                                $('select#UBStructureCategoryId').val(StructureCategoryId).change(0);
+                            }
+                            if (BoundaryTypeId > 0) {
+                                $('select#UBBoundaryTypeId').val(BoundaryTypeId).change();
+                            }
+                            else {
+                                $('select#UBBoundaryTypeId').val(BoundaryTypeId).change(0);
+                            }
+                            if (RoofingTypeId > 0) {
+                                $('select#UBRoofingTypeId').val(RoofingTypeId).change();
+                            }
+                            else {
+                                $('select#UBRoofingTypeId').val(RoofingTypeId).change(0);
+                            }
+                            if (BuildingColourId > 0) {
+                                $('select#UBBuildingColourId').val(BuildingColourId).change();
+                            }
+                            else {
+                                $('select#UBBuildingColourId').val(BuildingColourId).change(0);
+                            }
+                            if (MaterialTypeId > 0) {
+                                $('select#UBMaterialTypeId').val(MaterialTypeId).change();
+                            }
+                            else {
+                                $('select#UBMaterialTypeId').val(MaterialTypeId).change(0);
+                            }
+                            if (ParkingSlotId > 0) {
+                                $('select#UBParkingSlotId').val(ParkingSlotId).change();
+                            }
+                            else {
+                                $('select#UBParkingSlotId').val(ParkingSlotId).change(0);
+                            }
+                            if (WaterTankLocationId > 0) {
+                                $('select#UBWaterTankLocationId').val(WaterTankLocationId).change();
+                            }
+                            else {
+                                $('select#UBWaterTankLocationId').val(WaterTankLocationId).change(0);
+                            }
+                            if (WaterSupplyAccessibilityId > 0) {
+                                $('select#UBWaterSupplyAccessibilityId').val(WaterSupplyAccessibilityId).change();
+                            }
+                            else {
+                                $('select#UBWaterSupplyAccessibilityId').val(WaterSupplyAccessibilityId).change(0);
+                            }
+
+//*******************************************     CHECKBOX VALUE DISPLAY IN JQUERY      ******************************************************************
+                            var SwereageConnection = data[0].sewerageConnection;
+                            if (SwereageConnection == true) {
+                                $('#UBSwereageConnection').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBSwereageConnection').prop('checked', 0);
+                            }
+                            var Attic = data[0].attic;
+                            if (Attic == true) {
+                                $('#UBAttic').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBAttic').prop('checked', 0);
+                            }
+                            var WaterConnection = data[0].waterConnection;
+                            if (WaterConnection == true) {
+                                $('#UBWaterConnection').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBWaterConnection').prop('checked', 0);
+                            }
+                            var ArchFeature = data[0].archFeature;
+                            if (ArchFeature == true) {
+                                $('#UBArchFeature').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBArchFeature').prop('checked', 0);
+                            }
+                            var TraditionalPainting = data[0].traditionalPainting;
+                            if (TraditionalPainting == true) {
+                                $('#UBTraditionalPainting').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBTraditionalPainting').prop('checked', 0);
+                            }
+                            var Plantation = data[0].plantation;
+                            if (Plantation == true) {
+                                $('#UBPlantation').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBPlantation').prop('checked', 0);
+                            }
+                            var NumberDisplayed = data[0].numberDisplayed;
+                            if (NumberDisplayed == true) {
+                                $('#UBNumberDisplayed').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBNumberDisplayed').prop('checked', 0);
+                            }
+                            var FireExtingusher = data[0].fireExtingusher;
+                            if (FireExtingusher == true) {
+                                $('#UBFireExtingusher').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBFireExtingusher').prop('checked', 0);
+                            }
+                            var DrainToStormWaterDrain = data[0].drainToStormWaterDrain;
+                            if (DrainToStormWaterDrain == true) {
+                                $('#UBDrainToStormWaterDrain').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBDrainToStormWaterDrain').prop('checked', 0);
+                            }
+                            var RoadAccess = data[0].roadAccess;
+                            if (RoadAccess == true) {
+                                $('#UBRoadAccess').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBRoadAccess').prop('checked', 0);
+                            }
+                            var OccupancyCertificateIssued = data[0].occupancyCertificateIssued;
+                            if (OccupancyCertificateIssued == true) {
+                                $('#UBOccupancyCertificateIssued').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBOccupancyCertificateIssued').prop('checked', 0);
+                            }
+                            var Roofing = data[0].roofing;
+                            if (Roofing == true) {
+                                $('#UBRoofing').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBRoofing').prop('checked', 0);
+                            }
+                            $('#UBLandDetailId').val(LandDetailId);
+                            $('#UBBuildingDetailId').val(BuildingDetailId);
+                            $('#UBYearConstruction').val(YearConstruction);
+                            $('#UBBuildingNo').val(BuildingNo);
+                            $('#UBBuildUpArea').val(BuildUpArea);
+                            $('#UBNoOfUnits').val(NoOfUnits);
+                            $('#UBNoOfFloors').val(NoOfFloors);
+                            $('#UBDateOfFinalInspection').val(DOFP);
+                            $('#UBRemarks').val(Remarks);
+                            $('#UBPlinthArea').val(PlinthArea);
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+    }
+
+    //****************************************************     SAVE BUILDING DETAILS     ******************************************************************************
+
+    function SaveBuildingDetail() {
+        if ($('#StoryType option:selected').val() == 0) {
+            $('#errorStoryTypeId').html('Please Select a value');
+            $('#StoryType').focus();
+            return false;
+        }
+        else {
+            $('#errorStoryTypeId').html('');
+        }
+
+        if ($('#ConstructionType option:selected').val() == 0) {
+            $('#errorConstructionTypeId').html('Please Select a value');
+            $('#ConstructionType').focus();
+            return false;
+        }
+        else {
+            $('#errorConstructionTypeId').html('');
+        }
+        if ($('#BuildUpArea').val() == '') {
+            $('#ErBuildUpArea').html('Please Enter BuildUpArea!');
+            return false;
+        }
+        else {
+            $('#ErBuildUpArea').html('');
+        }
+        var myarray = [];
+        var BuildingDetail = {};
+
+        BuildingDetail.LandDetailId = parseInt($('#hdnLandDetailId').val());
+        BuildingDetail.StoryTypeId = parseInt($("#StoryType").val());
+        BuildingDetail.BuildingNo = $("#BuildingNo").val();
+        BuildingDetail.BuildupArea = parseFloat($("#BuildUpArea").val());
+        BuildingDetail.ConstructionTypeId = parseInt($("#ConstructionType").val());
+        BuildingDetail.YearOfConstruction = parseInt($("#YearOfConstruction").val());
+        BuildingDetail.NumberOfFloors = parseInt($("#NoOfFloors").val());
+        BuildingDetail.StructureTypeId = parseInt($("#StructureType").val());
+        BuildingDetail.GarbagServiceAccessibilityId = parseInt($("#GarbageServiceAccessibility").val());
+        BuildingDetail.StreetLightAccessibilityId = parseInt($("#StreetLightAccessibility").val());
+        BuildingDetail.StructureCategoryId = parseInt($("#StructureCategory").val());
+        BuildingDetail.BoundaryTypeId = parseInt($("#BoundryType").val());
+        BuildingDetail.RoofingTypeId = parseInt($("#RoofingType").val());
+        BuildingDetail.BuildingColourId = parseInt($("#BuildingColor").val());
+        BuildingDetail.MaterialTypeId = parseInt($("#MaterialType").val());
+        BuildingDetail.ParkingSlotId = parseInt($("#ParkingSlot").val());
+        BuildingDetail.WaterTankLocationId = parseInt($("#WaterTankLocation").val());
+        BuildingDetail.DateOfFinalInspection = $("#DateOfFinalInspection").val();
+        BuildingDetail.WaterSupplyAccessibilityId = parseInt($("#WaterSupplyAccessibility").val());
+        BuildingDetail.PlinthArea = parseInt($("#PlinthArea").val());
+        if ($('#SwereageConnection').is(':checked')) {
+            BuildingDetail.SC = 1;
+        }
+        else {
+            BuildingDetail.SC = 0;
+        }
+        if ($('#Attic').is(':checked')) {
+            BuildingDetail.AT = 1;
+        }
+        else {
+            BuildingDetail.AT = 0;
+        }
+        if ($('#WaterConnection').is(':checked')) {
+            BuildingDetail.WC = 1;
+        }
+        else {
+            BuildingDetail.WC = 0;
+        }
+        if ($('#ArchFeature').is(':checked')) {
+            BuildingDetail.AF = 1;
+        }
+        else {
+            BuildingDetail.AF = 0;
+        }
+        if ($('#TraditionalPainting').is(':checked')) {
+            BuildingDetail.TP = 1;
+        }
+        else {
+            BuildingDetail.TP = 0;
+        }
+        if ($('#Plantation').is(':checked')) {
+            BuildingDetail.PT = 1;
+        }
+        else {
+            BuildingDetail.PT = 0;
+        }
+        if ($('#NumberDisplayed').is(':checked')) {
+            BuildingDetail.ND = 1;
+        }
+        else {
+            BuildingDetail.ND = 0;
+        }
+        if ($('#FireExtingusher').is(':checked')) {
+            BuildingDetail.FE = 1;
+        }
+        else {
+            BuildingDetail.FE = 0;
+        }
+        if ($('#DrainToStormWaterDrain').is(':checked')) {
+            BuildingDetail.DTSWD = 1;
+        }
+        else {
+            BuildingDetail.DTSWD = 0;
+        }
+        if ($('#RoadAccess').is(':checked')) {
+            BuildingDetail.RA = 1;
+        }
+        else {
+            BuildingDetail.RA = 0;
+        }
+        if ($('#OccupancyCertificateIssued').is(':checked')) {
+            BuildingDetail.OCI = 1;
+        }
+        else {
+            BuildingDetail.OCI = 0;
+        }
+        if ($('#Roofing').is(':checked')) {
+            BuildingDetail.RF = 1;
+        }
+        else {
+            BuildingDetail.RF = 0;
+        }
+        myarray.push(BuildingDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateBuildingDetail", "BuildingDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Building Detail Saved Successfully!');
+                    ViewBuilding($('#hdnLandDetailId').val(), $('#TaxPayerId').val(), $('#hdnlandOwnershipId').val());
+
+                    //$('#buildingdetailtbl').show(1000);
+                    $('#CreateBuilding').hide(1000);
+
+                }
+                else {
+                    swal('Building Detail Saving Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+//******************************************************   UPDATING BUILDING DETAILS       *********************************************************************
+
+    function UpdateBuildingDetail() {
+
+        var myarray = [];
+        var UpdateBuildingDetail = {};
+
+        UpdateBuildingDetail.BuildingDetailId = parseInt($("#UBBuildingDetailId").val());
+        UpdateBuildingDetail.StoryTypeId = parseInt($("#UBStoryTypeId").val());
+        UpdateBuildingDetail.StructureTypeId = parseInt($("#UBStructureTypeId").val());
+        UpdateBuildingDetail.ConstructionTypeId = parseInt($("#UBConstructionTypeId").val());
+        UpdateBuildingDetail.GarbagServiceAccessibilityId = parseInt($("#UBConstructionTypeId").val());
+        UpdateBuildingDetail.GarbagServiceAccessibilityId = parseInt($("#UBGarbagServiceAccessibilityId").val());
+        UpdateBuildingDetail.StreetLightAccessibilityId = parseInt($("#UBStreetLightAccessibilityId").val());
+        UpdateBuildingDetail.StructureCategoryId = parseInt($("#UBStructureCategoryId").val());
+        UpdateBuildingDetail.BoundaryTypeId = parseInt($("#UBBoundaryTypeId").val());
+        UpdateBuildingDetail.RoofingTypeId = parseInt($("#UBRoofingTypeId").val());
+        UpdateBuildingDetail.BuildingColourId = parseInt($("#UBBuildingColourId").val());
+        UpdateBuildingDetail.MaterialTypeId = parseInt($("#UBMaterialTypeId").val());
+        UpdateBuildingDetail.ParkingSlotId = parseInt($("#UBParkingSlotId").val());
+        UpdateBuildingDetail.WaterTankLocationId = parseInt($("#UBWaterTankLocationId").val());
+        UpdateBuildingDetail.WaterSupplyAccessibilityId = parseInt($("#UBWaterSupplyAccessibilityId").val());
+        UpdateBuildingDetail.LandDetailId = parseInt($("#UBLandDetailId").val());
+        UpdateBuildingDetail.YearOfConstruction = parseInt($("#UBYearConstruction").val());
+        UpdateBuildingDetail.BuildingNo = $("#UBBuildingNo").val();
+        UpdateBuildingDetail.BuildupArea = parseFloat($("#UBBuildUpArea").val());
+        UpdateBuildingDetail.NoOfUnits = parseInt($("#UBNoOfUnits").val());
+        UpdateBuildingDetail.NumberOfFloors = parseInt($("#UBNoOfFloors").val());
+        UpdateBuildingDetail.DateOfFinalInspection = $("#UBDateOfFinalInspection").val();
+        UpdateBuildingDetail.Remarks = $("#UBRemarks").val();
+        UpdateBuildingDetail.PlinthArea = parseFloat($("#UBPlinthArea").val());
+        if ($('#UBSwereageConnection').is(':checked')) {
+            UpdateBuildingDetail.SC = 1;
+        }
+        else {
+            UpdateBuildingDetail.SC = 0;
+        }
+        if ($('#UBAttic').is(':checked')) {
+            UpdateBuildingDetail.AT = 1;
+        }
+        else {
+            UpdateBuildingDetail.AT = 0;
+        }
+        if ($('#UBWaterConnection').is(':checked')) {
+            UpdateBuildingDetail.WC = 1;
+        }
+        else {
+            UpdateBuildingDetail.WC = 0;
+        }
+        if ($('#UBArchFeature').is(':checked')) {
+            UpdateBuildingDetail.AF = 1;
+        }
+        else {
+            UpdateBuildingDetail.AF = 0;
+        }
+        if ($('#UBTraditionalPainting').is(':checked')) {
+            UpdateBuildingDetail.TP = 1;
+        }
+        else {
+            UpdateBuildingDetail.TP = 0;
+        }
+        if ($('#UBPlantation').is(':checked')) {
+            UpdateBuildingDetail.PT = 1;
+        }
+        else {
+            UpdateBuildingDetail.TP = 0;
+        }
+        if ($('#UBNumberDisplayed').is(':checked')) {
+            UpdateBuildingDetail.ND = 1;
+        }
+        else {
+            UpdateBuildingDetail.ND = 0;
+        }
+        if ($('#UBFireExtingusher').is(':checked')) {
+            UpdateBuildingDetail.FE = 1;
+        }
+        else {
+            UpdateBuildingDetail.FE = 0;
+        }
+        if ($('#UBDrainToStormWaterDrain').is(':checked')) {
+            UpdateBuildingDetail.DTSWD = 1;
+        }
+        else {
+            UpdateBuildingDetail.DTSWD = 0;
+        }
+        if ($('#UBRoadAccess').is(':checked')) {
+            UpdateBuildingDetail.RA = 1;
+        }
+        else {
+            UpdateBuildingDetail.RA = 0;
+        }
+        if ($('#UBOccupancyCertificateIssued').is(':checked')) {
+            UpdateBuildingDetail.OCI = 1;
+        }
+        else {
+            UpdateBuildingDetail.OCI = 0;
+        }
+        if ($('#UBRoofing').is(':checked')) {
+            UpdateBuildingDetail.RF = 1;
+        }
+        else {
+            UpdateBuildingDetail.RF = 0;
+        }
+        myarray.push(UpdateBuildingDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateBuildingDetail", "BuildingDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Building Detail Updated Successfully!');
+                    ViewBuilding($('#hdnLandDetailId').val(), $('#TaxPayerId').val(), $('#hdnlandOwnershipId').val());
+                    $('#UpdateBuilding').hide(1000);
+                    $('#CreateBuildingUnit').hide(1000);
+
+                }
+                else {
+                    swal('Building Detail Updating Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+//****************************************************     REMOVING BUILDING DETAILS        *************************************************************************
+
+    function Remove(buildingDetailId, ownershipId) {
+
+        var r = confirm("Are you sure you want to Delete?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("RemoveBuildingDetail", "BuildingDetails")',
+            data: {
+                id: buildingDetailId,
+                id1: ownershipId,
+                id2: parseInt($('#TaxPayerId').val())
+            },
+
+            success: function (data) {
+
+                if (data == "sorry") {
+                    $('#img').hide();
+                    swal("Selected Building Detail Contains Building Unit!");
+                    return false;
+
+                }
+                else if (data == "MultipleOwner"){
+                    $('#img').hide();
+                    swal("Selected Building Detail Contains Owner!");
+                    return false;
+                }
+                else if (data == "OCGenerated") {
+                    $('#img').hide();
+                    swal("Selected Building has OC generated! Please delete the OC first.");
+                    return false;
+                }
+
+
+                else {
+                    $('#img').hide();
+                    swal("Building Detail has successfully deleted!");
+                    ViewBuilding($('#hdnLandDetailId').val(), $('#TaxPayerId').val(), $('#hdnlandOwnershipId').val());
+
+                }
+
+            },
+            error: function () {
+                $('#img').hide();
+                swal("This Building is Owned by someone else!");
+
+            }
+        });
+    }
+
+//**************************************************       BUILDING UNIT DETAILS       ******************************************************************************
+
+    function ViewBuildingUnit(buildingDetailId) {
+        $('#hdnBuildingDetailId').val(buildingDetailId);
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetBuildingUnit", "BuildingDetails")',
+                    data: {
+                        BuildingDetailId: buildingDetailId,
+                        TaxPayerId: $('#TaxPayerId').val()
+                    },
+                    success: function (data) {
+
+                        $('#tbl_BuildingUnitDetails').empty();
+                        $('#CreateBuilding').hide(1000);
+                        $('#CreateBuildingUnit').hide(1000);
+                        $('#UpdateBuilding').hide(1000);
+                        if (data.length > 0) {
+                            $('#BuildingUnitDetails').show(1000);
+                            $('#AddUnit').show(1000);
+                            $.each(data, function (key, value) {
+                                $('#tbl_BuildingUnitDetails').append(
+                                    '<tr>'
+                                    + '<td>' + (key + 1) + '</td>'
+                                    + '<td>' + value.buildingUnitClassName + '</td>'
+                                    + '<td>' + value.buildingUnitUseTypeName + '</td>'
+                                    + '<td>' + value.unitOwnerTypename + '</td>'
+                                    + '<td>' + value.floor + '</td>'
+                                    + '<td>' + value.noOfUnit + '</td>'
+                                    + '<td>'
+                                    + '<a onclick="return EditBuildingUnit(' + value.buildingUnitDetailId + ');" title="EDITBuildingUnit"><i class="fas fa-edit"></i></a>&nbsp; | &nbsp;<a onclick="return UnitDetails(' + value.buildingDetailId + ');" title="UnitDetails"><i class="fas fa-eye"></i> </a>'
+                                    + '&nbsp; | &nbsp;<a style = "color: red; cursor: pointer;" onclick = "return RemoveBuildingUnit(' + value.buildingUnitDetailId +' )" title = "DeleteBuildingUnit" >Delete</a >'
+                                    + '</td>'
+                                    + '</tr>');
+                            });
+
+                        }
+                        else {
+                            $('#BuildingUnitDetails').show(1000);
+                            $('#AddUnit').show(1000);
+                            $('#CreateBuildingUnit').hide(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#tbl_BuildingUnitDetails').append(
+                                '<tr><td colspan="10" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+
+        $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("GetBDetail", "BuildingDetails")',
+                    data: {
+                        BuildingDetailId: buildingDetailId
+                    },
+                    success: function (data) {
+                        $('#tbl_BuildingUnitDetails').empty();
+                        if (data.length > 0) {
+
+                            $('#DisplayBuildingUnit').html(data[0].buildingNo);
+                            $('#DisplayUnitBN').html(data[0].buildingNo);
+                            $('#DisplayUnitUpdateBN').html(data[0].buildingNo);
+                        }
+                        else {
+                            $('#BuildingUnitDetails').show(1000);
+                            $('#AddUnit').show(1000);
+                            $('#CreateBuildingUnit').hide(1000);
+                            $('#UpdateBuilding').hide(1000);
+                            $('#tbl_BuildingUnitDetails').append(
+                                '<tr><td colspan="10" style="color: red;">No record found!</td></tr>');
+                        }
+
+                    },
+
+                    error: function () {
+                        alert('error');
+                    }
+
+                });
+            }
+
+//*******************************************     SAVE BUILDING UNIT DETAILS      ******************************************************************
+
+    function SaveBuildingUnitDetail() {
+        if ($('#BUnitUseTypeId option:selected').val() == 0) {
+            $('#BUUTerror').html('Please Select a value');
+            $('#BUnitUseTypeId').focus();
+            return false;
+        }
+        else {
+            $('#BUUTerror').html('');
+
+        }
+        if ($('#BUnitClassId option:selected').val() == 0) {
+            $('#BUCerror').html('Please Select a value');
+            $('#BUnitClassId').focus();
+            return false;
+        }
+        else {
+            $('#BUCerror').html('');
+        }
+        if ($('#FNameId option:selected').val() == 0) {
+            $('#FNameerror').html('Please Select a value');
+            $('#FNameId').focus();
+            return false;
+        }
+        else {
+            $('#FNameerror').html('');
+        }
+        if ($('#UOwnerTypeId option:selected').val() == 0) {
+            $('#UOTerror').html('Please Select a value');
+            $('#UOwnerTypeId').focus();
+            return false;
+        }
+        else {
+            $('#UOTerror').html('');
+        }
+        if ($('#NoOfUnit option:selected').val() == '') {
+            $('#NOUerror').html('Please Enter No Of Unit!');
+            $('#NoOfUnit').focus();
+            return false;
+        }
+        else {
+            $('#NOUerror').html('');
+
+        }
+        
+        if ($('#FloorArea').val() == '0') {
+            $('#FAerror').html('Please Enter Floor Area greater than 0!');
+            $('#FAerror').focus();
+            return false;
+        }
+        else {
+            $('#FAerror').html('');
+        }
+        var index = 0;
+        var myarray = [];
+        var BuildingUnitDetailModel = {};
+        //var TaxPayerId = $('#hdnTaxPayerId' + parseInt(index)).val();
+
+        BuildingUnitDetailModel.LandDetailId = parseInt($('#hdnLandDetailId').val());
+        BuildingUnitDetailModel.BuildingDetailId = parseInt($("#hdnBuildingDetailId").val());
+        BuildingUnitDetailModel.BuildingUnitClassId = parseInt($("#BUnitClassId").val());
+        BuildingUnitDetailModel.FloorNameId = parseInt($("#FNameId").val());
+        BuildingUnitDetailModel.BuildingUnitUseTypeId = parseInt($("#BUnitUseTypeId").val());
+                if ($('#IsRegularized').is(':checked')) {
+                    BuildingUnitDetailModel.IsR = 1;
+                }
+                else {
+                    BuildingUnitDetailModel.IsR = 0;
+                }
+
+
+        BuildingUnitDetailModel.FloorNo = $("#FloorNo").val();
+        BuildingUnitDetailModel.FlatNo = $("#FlatNo").val();
+        BuildingUnitDetailModel.NoOfUnit = parseInt($("#NoOfUnit").val());
+        BuildingUnitDetailModel.FloorArea = parseFloat($("#FloorArea").val());
+        BuildingUnitDetailModel.NoOfRooms = parseInt($("#NoOfRooms").val());
+        BuildingUnitDetailModel.TaxPayerId = parseInt($("#TaxPayerId").val());
+        BuildingUnitDetailModel.UnitOwnerTypeId = parseInt($("#UOwnerTypeId").val());
+        BuildingUnitDetailModel.Remarks = $("#Remarks").val();
+                if ($('#IsMainOwner').is(':checked')) {
+                    BuildingUnitDetailModel.IsMOwner = 1;
+                }
+                else {
+                    BuildingUnitDetailModel.IsMOwner = 0;
+                }
+
+                myarray.push(BuildingUnitDetailModel);
+                index = index + 1
+
+            var json_data = JSON.stringify(myarray);
+            console.log(json_data);
+            $('#img').hide();
+
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("CreateBuildingUnitDetail", "BuildingDetails")',
+                data: json_data,
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (response) {
+                    console.log(response);
+                    if (response > 0) {
+                        swal('Building Unit Detail Saved Successfully!');
+                        ViewBuildingUnit($('#hdnBuildingDetailId').val());
+                        $('#BuildingUnitDetails').show(1000);
+                        $('#CreateBuildingUnit').hide(1000);
+                        $('#TaxPayerDetail').hide(1000);
+                        $('#img').hide();
+
+                    }
+                    else {
+                        swal('Building Unit Detail Saving Failed!');
+                        $('#img').hide();
+                        return false;
+                    }
+                         },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+
+        });
+        }
+
+    //*****************************************************       BUILDING UNIT DETAILS FOR UPDATE      ********************************************************************************
+    function EditBuildingUnit(buildingUnitDetailId) {
+        $('#UpdateBuildingUnit').show(1000);
+        $('#CreateBuildingUnit').hide(1000);
+                $.ajax({
+             type: "GET",
+                url: '@Url.Action("GetBuildingUnitForUpdate", "BuildingDetails")',
+                    data: {
+                        BuildingUnitDetailId: buildingUnitDetailId
+                },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            var BuildingUnitDetailId = data[0].buildingUnitDetailId; var BuildingDetailId = data[0].buildingDetailId;
+                            var LandDetailId = data[0].landDetailId; var BuildingUnitClassId = data[0].buildingUnitClassId;
+                            var FloorNameId = data[0].floorNameId; var BuildingUnitUseTypeId = data[0].buildingUnitUseTypeId;
+                            var TaxPayerId = data[0].taxPayerId; var TaxPayerName = data[0].taxPayerName;
+                            var CID = data[0].cid; var TTIN = data[0].ttin;
+                            var UnitOwnerTypeId = data[0].unitOwnerTypeId; var FloorNo = data[0].floorNo;
+                            var FlatNo = data[0].flatNo; var FloorArea = data[0].floorArea;
+                            var NoOfUnit = data[0].noOfUnit; var NoOfRooms = data[0].noOfrooms;
+                            var Remarks = data[0].remarks;
+//*****************************************************   SELECTED DROPDOWN VALUE DISPLAY IN JQUERY   ***********************************************************************************
+                            if (BuildingUnitUseTypeId > 0) {
+                                $('select#UBUBUseTypeId').val(BuildingUnitUseTypeId).change();
+                            }
+                            else {
+                                $('select#UBUBUseTypeId').val(BuildingUnitUseTypeId).change(0);
+                            }
+                            if (BuildingUnitClassId > 0) {
+                                $('select#UBUUnitClassId').val(BuildingUnitClassId).change();
+                            }
+                            else {
+                                $('select#UBUUnitClassId').val(BuildingUnitClassId).change(0);
+                            }
+                            if (FloorNameId > 0) {
+                                $('select#UBUFNameId').val(FloorNameId).change();
+                            }
+                            else {
+                                $('select#UBUFNameId').val(FloorNameId).change(0);
+                            }
+                            if (UnitOwnerTypeId > 0) {
+                                $('select#UBUUOwnerTypeId').val(UnitOwnerTypeId).change();
+                            }
+                            else {
+                                $('select#UBUUOwnerTypeId').val(UnitOwnerTypeId).change(0);
+                            }
+//*******************************************      CHECKBOX VALUE DISPLAY IN JQUERY    ******************************************************************
+                            var IsRegularized = data[0].isRegularized;
+                            if (IsRegularized == true) {
+                                $('#UBUIsRegularized').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBUIsRegularized').prop('checked', 0);
+                            }
+                            var IsMainOwner = data[0].isMainOwner;
+                            if (IsMainOwner == true) {
+                                $('#UBUIsMainOwner').prop('checked', 1);
+                            }
+                            else {
+                                $('#UBUIsMainOwner').prop('checked', 0);
+                            }
+                            $('#UBUBuildingUnitDetailId').val(BuildingUnitDetailId);
+                            $('#UBUBuildingDetailId').val(BuildingDetailId);
+                            $('#UBULandDetailId').val(LandDetailId);
+                            $('#UBUTaxPayerId').val(TaxPayerId);
+                            $('#UBUFloorNo').val(FloorNo);
+                            $('#UBUFlatNo').val(FlatNo);
+                            $('#UBUFloorArea').val(FloorArea);
+                            $('#UBUNoOfUnits').val(NoOfUnit);
+                            $('#UBUNoOfRooms').val(NoOfRooms);
+                            $('#UBURemarks').val(Remarks);
+                            $('#DisplayUnitUpdateName').html(TaxPayerName);
+                            $('#DisplayUnitUpdateCID').html(CID);
+                            $('#DisplayUnitUpdateTTIN').html(TTIN);
+
+                        }
+                    },
+                    error: function () {
+                        alert('error');
+                    }
+                });
+    }
+
+//************************************************         REMOVING BUILDING UNIT DETAILS       *******************************************************************
+
+    function RemoveBuildingUnit(buildingUnitDetailId) {
+
+        var r = confirm("Are you sure you want to Delete?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+        $.ajax({
+            type: "GET",
+            url: '@Url.Action("RemoveBuildingUnitDetail", "BuildingDetails")',
+            data: {
+                id: buildingUnitDetailId
+            },
+            success: function (data) {
+                if (data == "Deleted") {
+                    $('#CreateBuildingUnit').hide(1000);
+                    $('#img').hide();
+                    swal("Successfully removed Building Unit from the selected Building.");
+                     ViewBuildingUnit($('#hdnBuildingDetailId').val());
+
+                } else {
+
+                    swal("This Building Unit cannot be removed!!");
+                    $('#img').hide();
+                }
+
+            },
+            error: function () {
+                swal("Invalid Removal!");
+                $('#img').hide();
+            }
+        });
+    }
+
+//**************************************************       UPDATING BUILDING UNIT DETAILS      ************************************************************************
+
+    function UpdateBuildingUnit() {
+               
+        if ($('#UBUBUseTypeId option:selected').val() == 0) {
+             
+            $('#UBUBUseTypeEr').html('Please Select a value');
+            $('#UBUBUnitUseTypeId').focus();
+            return false;
+        }
+        else {
+            $('#UBUBUseTypeEr').html('');
+        }
+        if ($('#UBUUnitClassId option:selected').val() == 0) {
+               
+            $('#UBUUnitClassEr').html('Please Select a value');
+            $('#UBUUnitClassId').focus();
+            return false;
+        }
+        else {
+            $('#UBUUnitClassEr').html('');
+        }
+        if ($('#UBUFNameId option:selected').val() == 0) {
+            $('#UBUFloorNameEr').html('Please Select a value');
+            $('#UBUFNameId').focus();
+            return false;
+        }
+        else {
+            $('#UBUFloorNameEr').html('');
+        }
+        if ($('#UBUUOwnerTypeId option:selected').val() == 0) {
+            $('#UBUUOwnerTypeEr').html('Please Select a value');
+            $('#UBUUOwnerTypeId').focus();
+            return false;
+        }
+        else {
+            $('#UBUUOwnerTypeEr').html('');
+        }
+        if ($('#UBUNoOfUnits option:selected').val() == '') {
+            $('#UBUNoOfUnistEr').html('Please Enter No Of Unit!');
+            $('#UBUNoOfUnits').focus();
+            return false;
+        }
+        else {
+            $('#UBUNoOfUnistEr').html('');
+
+        }
+
+        if ($('#UBUFloorArea').val() == '0') {
+         
+            $('#UBUFloorAreaEr').html('Please Enter Floor Area greater than 0!');
+            $('#UBUFloorArea').focus();
+            return false;
+        }
+        else {
+            $('#UBUFloorAreaEr').html('');
+        }
+        
+
+        var myarray = [];
+        var UpdateBuildingUnitDetail = {};
+
+        UpdateBuildingUnitDetail.BuildingUnitDetailId = parseInt($("#UBUBuildingUnitDetailId").val());
+        UpdateBuildingUnitDetail.BuildingDetailId = parseInt($("#UBUBuildingDetailId").val());
+        UpdateBuildingUnitDetail.LandDetailId = parseInt($("#UBULandDetailId").val());
+        UpdateBuildingUnitDetail.BuildingUnitClassId = parseInt($("#UBUUnitClassId").val());
+        UpdateBuildingUnitDetail.FloorNameId = parseInt($("#UBUFNameId").val());
+        UpdateBuildingUnitDetail.BuildingUnitUseTypeId = parseInt($("#UBUBUseTypeId").val());
+        UpdateBuildingUnitDetail.TaxPayerId = parseInt($("#UBUTaxPayerId").val());
+        UpdateBuildingUnitDetail.UnitOwnerTypeId = parseInt($("#UBUUOwnerTypeId").val());
+        UpdateBuildingUnitDetail.FloorNo = $("#UBUFloorNo").val();
+        UpdateBuildingUnitDetail.FlatNo = $("#UBUFlatNo").val();
+        UpdateBuildingUnitDetail.FloorArea = parseFloat($("#UBUFloorArea").val());
+        UpdateBuildingUnitDetail.NoOfUnit = parseInt($("#UBUNoOfUnits").val());
+        UpdateBuildingUnitDetail.NoOfRooms = parseInt($("#UBUNoOfRooms").val());
+        UpdateBuildingUnitDetail.Remarks = $("#UBURemarks").val();
+
+
+        if ($('#UBUIsRegularized').is(':checked')) {
+            UpdateBuildingUnitDetail.IsR = 1;
+        }
+        else {
+            UpdateBuildingUnitDetail.IsR = 0;
+        }
+        if ($('#UBUIsMainOwner').is(':checked')) {
+            UpdateBuildingUnitDetail.IsMOwner = 1;
+        }
+        else {
+            UpdateBuildingUnitDetail.IsMOwner = 0;
+        }
+    
+        myarray.push(UpdateBuildingUnitDetail);
+
+        var json_data = JSON.stringify(myarray);
+        console.log(json_data);
+        $('#img').hide();
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateBuildingUnitDetail", "BuildingDetails")',
+            data: json_data,
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (response) {
+                if (response > 0) {
+                    swal('Building Unit Detail Updated Successfully!');
+                    ViewBuildingUnit($('#hdnBuildingDetailId').val());
+                    $('#UpdateBuildingUnit').hide(1000);
+
+                }
+                else {
+                    swal('Building Unit Detail Updating Failed!');
+                    $('#img').hide();
+                    return false;
+                }
+            },
+            failure: function (response) {
+                $('#img').hide();
+                swal("Creation Failed");
+            },
+            error: function (response) {
+                $('#img').hide();
+                swal("Error while inserting");
+            }
+        });
+    }
+
+//**************************************************      ADD BUILDING BUTTON     ***************************************************************************
+
+    function AddBuildingDetails() {
+        $('#StoryType').val(0).trigger('change')
+        $('#ConstructionType').val(0).trigger('change')
+        $('#BuildingNo').val('');
+        $('#BuildUpArea').val('');
+        $('#NoOfUnits').val('');
+        $('#YearOfConstruction').val('');
+        $('#NoOfFloors').val('');
+        $('#CreateBuilding').show(1000);
+        $('#CreateBuildingUnit').hide(1000);
+        $('#BuildingUnitDetails').hide(1000);
+        $('#UpdateBuilding').hide(1000);
+    }
+
+//************************************************    ADD BUILDING UNIT BUTTON    ****************************************************************
+    function AddBuildingUnit() {
+        $('#CreateBuilding').hide();
+        $('#UpdateBuildingUnit').hide(1000);
+        $('#UpdateBuilding').hide(1000);
+        $('#CreateBuildingUnit').show(1000);
+        $('#BUnitClassId').val(0).trigger('change')
+        $('#FNameId').val(0).trigger('change')
+        $('#BUnitUseTypeId').val(0).trigger('change')
+        $('#UOwnerTypeId').val(0).trigger('change')
+        $('#FloorNo').val(0);
+        $('#FlatNo').val('-');
+        $('#NoOfUnit').val('');
+        $('#FloorArea').val(0);
+        $('#NoOfRooms').val(0);
+        $('#Remarks').val('');
+        $('#IsRegularized').prop('checked', value == 0);
+        $('#IsMainOwner').prop('checked', value == 0);
+    }
+
+//****************************************       BUILDING DETAIL PAGE       *****************************************************************
+
+    function details(id) {
+        window.location.href = "BuildingDetails/Details?id=" + id;
+    }
+
+//****************************************       BUILDING UNIT DETAIL PAGE       *****************************************************************
+
+    function UnitDetails(id) {
+        window.location.href = "BuildingDetails/UnitDetails?id=" + id;
+    }
+
+//****************************************      CANCEL BUTTONS      *****************************************************************
+
+    $('#btnCancel').click(function () {
+        $('#CreateBuilding').hide(1000);
+    })
+    $('#btnCancel1').click(function () {
+        $('#CreateBuildingUnit').hide(1000);
+    })
+    $('#btnUBUCancel').click(function () {
+        $('#UpdateBuildingUnit').hide(1000);
+    })
+    $('#UBCancel').click(function () {
+        $('#UpdateBuilding').hide(1000);
+    })
+
+    function FunctionNoOfFloors() {
+        var floor = 0;
+        var x = document.getElementById("StoryType").value;
+        if (x == 1) {
+            floor = 1;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 2) {
+            floor = 2;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 3) {
+            floor = 3;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 4) {
+            floor = 3;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 5) {
+            floor = 4;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 6) {
+            floor = 4;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 7) {
+            floor = 5;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 8) {
+            floor = 4;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 9) {
+            floor = 5;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 10) {
+            floor = 5;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 11) {
+            floor = 6;
+            $('#NoOfFloors').val(floor);
+        }
+        else if (x == 12) {
+            floor = 5;
+            $('#NoOfFloors').val(floor);
+        }
+        else {
+            floor = 6;
+            $('#NoOfFloors').val(floor);
+        }
+    }
+</script>

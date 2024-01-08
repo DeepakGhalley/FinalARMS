@@ -1,0 +1,96 @@
+﻿@*List<CORE_BOL.TaxRateVM>*@
+@model List<CORE_BOL.TaxRateVM>
+
+@{
+    ViewData["Title"] = "GetTaxRate";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<form class="form-horizontal" method="get">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-6">
+                    <h1 class="m-0 text-dark"></h1>
+                </div><!-- /.col -->
+                <div class="col-sm-6">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a asp-action="GetTaxRate">Report</a></li>
+                        <li class="breadcrumb-item active">Get Tax Rate Report</li>
+                    </ol>
+                </div><!-- /.col -->
+            </div><!-- /.row -->
+        </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+
+    <div class="card card-info">
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-success alert-dismissible">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                <h5><i class="icon fas fa-check"></i> Alert!</h5>
+                <p>@TempData["msg"]</p>
+            </div>
+        }
+
+        <div class="card-header">
+            <h3 class="card-title">Tax Rate Report</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <hr />
+            <div class="form-group row">
+                <label class="col-sm-2 col-form-label">Transaction Type</label>
+                <div class="col-sm-4">
+                    <select id="TransactionTypeId" class="form-control select2" style="width: 100%;"
+                            asp-items="@(new SelectList (@ViewBag.TransactionTypeId,"Value","Text"))" value="0"></select>
+
+                </div>
+
+                <div class="input-group-append col-2">
+                    <input type="button" value="Search" class="btn btn-primary" onclick="return PrintReport();" />
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</form>
+
+
+<script>
+
+        function PrintReport() {
+            var TransactionTypeId = $('#TransactionTypeId').val();
+
+                $.ajax({
+                    type: "GET",
+                    url: '@Url.Action("PrintTaxRate", "Report")',
+                    data: {
+                        TransactionTypeId: TransactionTypeId,
+
+                    },
+                    success: function (data) {
+                        if (data.length > 0) {
+                            window.open("@Url.RouteUrl(new
+                                  { Area ="Reports",Controller = "Report", Action = "PrintTaxRate" })/?TransactionTypeId=" + $("#TransactionTypeId").val(), '_blank');
+
+                        }
+                       
+
+                        $('#img').hide();
+
+                    },
+                    error: function () {
+                        swal('Information','No Report for selected Transaction Type!','warning')
+                    }
+
+                });
+
+
+    }
+
+
+</script>
